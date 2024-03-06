@@ -1,8 +1,3 @@
-# Subscription
-    Red Hat for Developers
-    user: danilo01.arrudal@gmail.com
-    pasw: UTnTm4@t$i_zkPB
-
 ### Red Hat Labs Registration Assistant
         
 We have an online tool to assist you in selecting the most appropriate registration technology for your system. If you would prefer to use this tool, please visit https://access.redhat.com/labs/registrationassistant/.
