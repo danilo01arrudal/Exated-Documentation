@@ -2,6 +2,7 @@
 
     To set up a KVM hypervisor and create virtual machines (VMs) on an AMD64 or Intel 64 system running RHEL 9, 
     follow the instructions below. 
+    *This document focuses on Intel System 64 running RHEL 9c*
 
 ## Prerequisites
 
