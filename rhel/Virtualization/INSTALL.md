@@ -1,10 +1,10 @@
-#### Notes ####
+## Notes ##
 
     To set up a KVM hypervisor and create virtual machines (VMs) on an AMD64 or Intel 64 system running RHEL 9, 
     follow the instructions below. 
     *This document focuses on Intel System 64 running RHEL 9c*
 
-#### Prerequisites ####
+## Prerequisites ##
 
     Red Hat Enterprise Linux 9 is installed and registered on your host machine.
     Your system meets the following hardware requirements to work as a virtualization host:
@@ -13,16 +13,15 @@
        6 GB free disk space for the host, plus another 6 GB for each intended VM.
        2 GB of RAM for the host, plus another 2 GB for each intended VM. 
 
-#### Procedure ####
-    ## Install the virtualization hypervisor packages ##
-        ``` diff 
-        dnf install -y qemu-kvm libvirt virt-install virt-viewer
-        ```
-    ## 2. Start the virtualization services: 
-        ``` diff 
-        # for drv in qemu network nodedev nwfilter secret storage interface; do systemctl start virt${drv}d{,-ro,-admin}.socket; done
-        ```
-#### Verification ####
+## Procedure ##
+
+    1.Install the virtualization hypervisor packages
+            dnf install -y qemu-kvm libvirt virt-install virt-viewer
+            
+    2. Start the virtualization services: 
+            for drv in qemu network nodedev nwfilter secret storage interface; do systemctl start virt${drv}d{,-ro,-admin}.socket; done
+
+## Verification ##
     ## 1. Verify that your system is prepared to be a virtualization host: 
         # virt-host-validate
           QEMU: Checking for hardware virtualization                                 : PASS
