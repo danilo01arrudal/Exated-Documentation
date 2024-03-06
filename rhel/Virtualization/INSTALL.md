@@ -35,10 +35,10 @@ For Intel, boot the machine, and append intel_iommu=on to the end of the GRUB_CM
 ###### Refresh the grub.cfg file and reboot the host for these changes to take effect: 
         grubby --update-kernel=ALL --args="intel_iommu=on"
         reboot
-
-###### If all virt-host-validate checks return a PASS value, your system is prepared for creating VMs.         
-
-
         
+###### Managing virtual machines in the web console
+       https://$ip:9090
+
+
         
     
