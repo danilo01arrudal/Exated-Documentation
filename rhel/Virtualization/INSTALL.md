@@ -14,11 +14,14 @@
        2 GB of RAM for the host, plus another 2 GB for each intended VM. 
 
 #### Procedure ####
-    ## 1. Install the virtualization hypervisor packages.
-        # dnf install -y qemu-kvm libvirt virt-install virt-viewer
+    ## Install the virtualization hypervisor packages ##
+        ``` diff 
+        dnf install -y qemu-kvm libvirt virt-install virt-viewer
+        ```
     ## 2. Start the virtualization services: 
+        ``` diff 
         # for drv in qemu network nodedev nwfilter secret storage interface; do systemctl start virt${drv}d{,-ro,-admin}.socket; done
-    
+        ```
 #### Verification ####
     ## 1. Verify that your system is prepared to be a virtualization host: 
         # virt-host-validate
