@@ -25,14 +25,8 @@ The following minimum system resources are available:
         virt-host-validate
         
 ###### Enabling IOMMU Manually
-For Intel, boot the machine, and append intel_iommu=on to the end of the GRUB_CMDLINE_LINUX line in the grub configuration file. 
-
-        vi /etc/default/grub
-        ...
-        GRUB_CMDLINE_LINUX="nofb splash=quiet console=tty0 ... intel_iommu=on
-        ...
-
-###### Refresh the grub.cfg file and reboot the host for these changes to take effect: 
+For Intel, boot the machine, and append intel_iommu=on to the end of the GRUB_CMDLINE_LINUX line in the grub configuration file
+        
         grubby --update-kernel=ALL --args="intel_iommu=on"
         reboot
         
