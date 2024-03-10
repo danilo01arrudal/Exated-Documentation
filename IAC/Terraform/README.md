@@ -3,7 +3,7 @@
 Terraform é uma ferramenta de infraestrutura como código que permite construir, alterar e versionar infraestrutura com segurança e eficiência. 
 Isso inclui componentes de baixo nível, como instâncias de computação, armazenamento e rede; e componentes de alto nível, como entradas DNS e recursos SaaS.
 
-![Texto Alternativo](https://media.licdn.com/dms/image/D5612AQGFoBkjoEBfKg/article-cover_image-shrink_600_2000/0/1703848228796?e=2147483647&v=beta&t=em8d0uGOz1Rs7YLCq6GO962leuNEfYeb43R2-bjMKPE)
+![Texto Alternativo](https://res.cloudinary.com/practicaldev/image/fetch/s--VSmUkECU--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/2xxbvlvs531kq8by535n.png)
 
 ## Entregue infraestrutura como código
 
