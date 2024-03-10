@@ -5,4 +5,4 @@ capacidade de resposta às mudanças por meio de entregas de serviços rápidas 
 Isso tudo é possível por meio da disponibilização de serviços de TI iterativa e rápida. 
 Adotar o DevOps significa conectar aplicações legadas a uma infraestrutura e aplicações modernas e nativas em nuvem.
 
-https://pbs.twimg.com/media/E5Dx6emWQAMGb3q?format=png&name=small
+![Texto Alternativo](https://pbs.twimg.com/media/E5Dx6emWQAMGb3q?format=png&name=small)
