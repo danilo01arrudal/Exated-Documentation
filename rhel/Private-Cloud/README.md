@@ -3,30 +3,18 @@
 Nuvens privadas são ambientes de nuvem dedicados exclusivamente ao usuário final, geralmente dentro do firewall do usuário. 
 Embora as nuvens privadas tradicionalmente funcionassem no local, as organizações agora estão construindo nuvens privadas em data centers alugados, de propriedade de fornecedores, localizados fora do local.
 
-## Nuvens privadas gerenciadas
+## Virtualização Red Hat
 
-Com nuvens privadas, você é totalmente responsável por todos os custos em todos os momentos. 
-Você contrata, gerencia e mantém toda a infraestrutura subjacente. Mas as nuvens privadas também podem ser fornecidas por fornecedores de nuvem como parte de uma abordagem de nuvem privada gerenciada.
-As nuvens privadas gerenciadas permitem que os clientes criem e usem uma nuvem privada implantada, configurada e gerenciada por um fornecedor terceirizado. 
-É uma opção de entrega em nuvem que ajuda empresas com equipes de TI com falta de pessoal ou qualificadas a fornecer melhores serviços e infraestrutura de nuvem privada aos usuários, 
-sem as complexidades diárias de gerenciar elas próprias uma nuvem privada.A infraestrutura de TI bare-metal usada pelos provedores de nuvem também pode ser abstraída 
-e vendida como infraestrutura como serviço (IaaS) ou pode ser desenvolvida em uma plataforma vendida como plataforma como serviço (PaaS).
+O Red Hat Virtualization (RHV) é uma infraestrutura aberta, definida por software, fácil de usar, eficiente e uma plataforma de gerenciamento centralizado para cargas de trabalho virtualizadas de Linux e Windows. Desenvolvido com base nas tecnologias Red Hat Enterprise Linux e Máquina Virtual Baseada em Kernel (KVM), ele permite que os clientes virtualizem aplicativos tradicionais e construam uma base para cargas de trabalho nativas da nuvem e baseadas em contêineres. O RHV oferece uma plataforma de alto desempenho, altamente disponível e mais segura para cargas de trabalho de missão crítica, fornecendo às empresas uma infraestrutura estável que pode ser facilmente dimensionada. Oferecendo gerenciamento integrado com um portal de usuário de autoatendimento, o RHV ajuda os clientes a aumentar a eficiência por meio da consolidação e fornece valor e despesas previsíveis de infraestrutura virtual.
 
-## Por que usar nuvens privadas?
+## Por que a Virtualização Red Hat?
+Além de evitar a dependência do fornecedor usando uma solução de código aberto para virtualização, o RHV fornece gerenciamento centralizado para o hipervisor KVM, bem como para recursos de computação, rede e armazenamento. O RHV também inclui recursos de nível empresarial para oferecer suporte a aplicativos de missão crítica, como migrações ao vivo, suporte a vários sistemas operacionais convidados e vários back-ends de armazenamento com arquiteturas hiperconvergentes disponíveis. O RHV pode aproveitar as habilidades de sua equipe existente, com um retorno do investimento mais rápido, incluindo integração OpenStack e segurança aprimorada do SELinux e sVirt.
 
-As nuvens privadas são a solução ideal para líderes de TI que desejam disponibilizar recursos empresariais sob demanda, mas não podem (ou não querem) migrar para a nuvem pública. Isto pode ser devido a políticas de segurança, orçamentos, requisitos de conformidade ou regulamentos, como aqueles que definem os setores de saúde e serviços financeiros.
-As empresas destas indústrias utilizam protocolos de encriptação e firewalls para proteger os seus sistemas de TI, 
-mas as nuvens privadas acrescentam um nível extra de segurança – em comparação com as nuvens públicas – porque o acesso é limitado.
-Investir ou não em infraestrutura de nuvem privada também depende das cargas de trabalho que precisam ser suportadas. Cargas de trabalho tradicionais e com estado são bem suportadas por produtos de virtualização empresarial. Mas cargas de trabalho sem estado e fracamente acopladas — normalmente encontradas em desenvolvimento, 
-pesquisa e telecomunicações (particularmente na virtualização de funções de rede) — são melhor suportadas por nuvens privadas.
+## Red Hat CloudForms
+ 
+O Red Hat CloudForms oferece gerenciamento unificado para ambientes híbridos, proporcionando experiência e funcionalidade consistentes em infraestruturas baseadas em contêineres, virtualização e plataformas de nuvem pública e privada. O Red Hat CloudForms permite que as empresas acelerem a entrega de serviços fornecendo autoatendimento, incluindo gerenciamento operacional completo e do ciclo de vida dos serviços implantados. Ele fornece maior visibilidade operacional por meio de descoberta contínua, monitoramento e inspeção profunda dos recursos gerenciados. E fornece conformidade e governança por meio de aplicação e correção automatizada de políticas. Assim como o RHV, o CloudForms pode reduzir custos operacionais reduzindo ou eliminando os processos manuais que sobrecarregam a equipe de TI.
 
-## Benefícios da nuvem privada
+## Por que o Red Hat Cloudforms?
+ 
+CloudForms pode gerenciar suas máquinas virtuais em infraestrutura heterogênea já em produção e otimizar a utilização de recursos virtuais. Ao usar o Red Hat CloudForms, as organizações podem evitar o problema de dependência de fornecedor, migrando máquinas virtuais para plataformas de infraestrutura virtual de custo mais baixo e obtendo operações mais integradas em vários hipervisores. Além disso, o Cloudforms apresenta integração com Ansible Automation. Ao integrar a automação Ansible em seu portfólio de gerenciamento, a Red Hat está fornecendo recursos estratégicos de gerenciamento e automação para empresas em grande escala. Abaixo estão alguns destaques da integração do Ansible com o Red Hat CloudForms:
 
-As nuvens privadas reduzem os casos de capacidade subutilizada. Eles permitem que a empresa configure e reconfigure automaticamente os recursos da maneira que desejar, uma vez que esses recursos não são restritos às suas instalações físicas.
-
-As nuvens privadas oferecem benefícios adicionais, como:
-
-  * Maior capacidade de infraestrutura para lidar com grandes demandas de computação e armazenamento
-  * Serviços sob demanda usando interfaces de usuário de autoatendimento e gerenciamento baseado em políticas
-  * Alocação eficiente de recursos com base nas necessidades do usuário
-  * Maior visibilidade dos recursos em toda a infraestrutura
