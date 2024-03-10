@@ -18,3 +18,22 @@ O Red Hat CloudForms oferece gerenciamento unificado para ambientes híbridos, p
  
 CloudForms pode gerenciar suas máquinas virtuais em infraestrutura heterogênea já em produção e otimizar a utilização de recursos virtuais. Ao usar o Red Hat CloudForms, as organizações podem evitar o problema de dependência de fornecedor, migrando máquinas virtuais para plataformas de infraestrutura virtual de custo mais baixo e obtendo operações mais integradas em vários hipervisores. Além disso, o Cloudforms apresenta integração com Ansible Automation. Ao integrar a automação Ansible em seu portfólio de gerenciamento, a Red Hat está fornecendo recursos estratégicos de gerenciamento e automação para empresas em grande escala. Abaixo estão alguns destaques da integração do Ansible com o Red Hat CloudForms:
 
+  * Catálogo de serviços. Os itens do catálogo de serviços agora podem consistir em Ansible Playbooks, além de modelos OpenStack Orchestration,
+    modelos Amazon Web Services CloudFormation, imagens Microsoft Azure Stack, imagens RHV, imagens VMware e muito mais,
+    permitindo que os administradores definam e publiquem mais rapidamente um maior número de serviços para seus Usuários.
+  * Governança. Os administradores agora podem usar os Ansible Playbooks para aplicar diversos modelos de políticas de TI
+    e avaliar mais facilmente se os sistemas implantados permanecem em conformidade, aplicam padrões de segurança e otimizam recursos.
+  * Acesso ao ecossistema Ansible. Mais de 10.000 Ansible Playbooks pré-construídos e mais de 1.000 módulos de integração
+    agora podem ser usados diretamente no Red Hat CloudForms, entregues como serviços de TI e usados para aplicação e conformidade de políticas.
+
+## Nuvem privada, Together
+
+A solução combinada do Red Hat CloudForms e do Red Hat Virtualization permite aproveitar plataformas de infraestrutura virtual tradicionais e transformá-las em modelos de nuvem privada. 
+A solução fornece visibilidade e controle, bem como um console de gerenciamento simples para gerenciar facilmente uma infraestrutura global. 
+Com o Red Hat Virtualization e o Red Hat CloudForms, você pode obter transparência em infraestruturas de nuvem virtual, pública e privada, 
+capacitando os usuários a expandir e flexibilizar cargas de trabalho em ambientes de nuvem pública e híbrida. 
+Esta solução permitirá que você aproveite a computação em nuvem como um processo contínuo e eficiente, ao mesmo tempo que reduz custos e evita a dependência de fornecedores.
+
+![Texto Alternativo](https://www.redhat.com/rhdc/managed-files/2017/11/screen-shot-2017-11-27-at-3-50-35-pm.png)
+
+
