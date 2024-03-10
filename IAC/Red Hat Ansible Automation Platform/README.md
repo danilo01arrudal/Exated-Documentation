@@ -3,7 +3,7 @@
 O Red Hat® Ansible® Automation Platform é uma plataforma de automação de ponta a ponta para configurar sistemas, implantar software e orquestrar fluxos de trabalho avançados. 
 Ele inclui recursos de criação, gerenciamento e escalabilidade para usar em toda a empresa.
 
-https://www.redhat.com/rhdc/managed-files/ansible-screen-clouds.png
+![Texto Alternativo](https://www.redhat.com/rhdc/managed-files/ansible-screen-clouds.png)
 
 ## O que você deseja automatizar?
 
