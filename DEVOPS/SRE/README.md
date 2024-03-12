@@ -37,4 +37,18 @@ A automação é uma parte importante da função do engenheiro de confiabilidad
 
 Manter o equilíbrio entre o trabalho operacional e de desenvolvimento é essencial na abordagem de SRE. 
 
+## DevOps e SRE: principais diferenças
+
+A metodologia DevOps é uma abordagem de cultura, automação e design de plataforma, cujo objetivo é agregar mais valor aos negócios e aumentar a capacidade de resposta às mudanças por meio de entregas de serviços rápidas e de alta qualidade. A SRE pode ser considerada uma forma de implementar a metodologia DevOps.
+
+Assim como o DevOps, a SRE tem como foco a cultura e os relacionamentos. Ambas as abordagens visam aproximar as equipes de operações e desenvolvimento para acelerar a entrega de serviços. 
+Ciclos de desenvolvimento mais rápidos, melhor qualidade de serviço, maior confiabilidade e redução no tempo gasto pela TI em cada aplicação desenvolvida são alguns dos possíveis benefícios alcançáveis com as práticas de DevOps e SRE.
+
+No entanto, a SRE é diferente do DevOps porque depende dos engenheiros de confiabilidade de sites da equipe de desenvolvimento que também têm experiência em operações de TI para eliminar problemas de comunicação e fluxo de trabalho.
+
+A função do engenheiro de confiabilidade de sites combina as habilidades das equipes de desenvolvimento com as de operações porque tem responsabilidades que abrangem ambas as áreas. 
+Um engenheiro de confiabilidade pode auxiliar as equipes de DevOps cujos desenvolvedores estão sobrecarregados com as tarefas operacionais e precisam de alguém com habilidades mais especializadas nessa área. 
+Ao codificar e criar novas funcionalidades, o DevOps se concentra em percorrer o pipeline de desenvolvimento eficientemente. Já a abordagem de SRE se concentra no equilíbrio entre os esforços de manter a confiabilidade de sites e a criação de novas funcionalidades. 
+As plataformas de aplicações modernas baseadas em tecnologia de containers, Kubernetes e microsserviços são essenciais para as práticas de DevOps por ajudarem a entregar segurança e inovação nos serviços de software.
+
 
