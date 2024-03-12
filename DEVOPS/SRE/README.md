@@ -51,4 +51,21 @@ Um engenheiro de confiabilidade pode auxiliar as equipes de DevOps cujos desenvo
 Ao codificar e criar novas funcionalidades, o DevOps se concentra em percorrer o pipeline de desenvolvimento eficientemente. Já a abordagem de SRE se concentra no equilíbrio entre os esforços de manter a confiabilidade de sites e a criação de novas funcionalidades. 
 As plataformas de aplicações modernas baseadas em tecnologia de containers, Kubernetes e microsserviços são essenciais para as práticas de DevOps por ajudarem a entregar segurança e inovação nos serviços de software.
 
+## Tecnologia que viabiliza a SRE
 
+SRE depende da automação de tarefas operacionais rotineiras e da padronização ao longo do ciclo de vida de uma aplicação. 
+
+O Red Hat® Ansible® Automation Platform é uma plataforma abrangente e integrada que ajuda as equipes de SRE a automatizar para ter velocidade, colaboração e crescimento, além de oferecer segurança e suporte em todas as funções técnicas, operacionais e financeiras da empresa. 
+
+O Ansible Automation Platform oferece especificamente:
+
+Orquestração de infraestrutura na nuvem e on-premise para instâncias, roteamento, balanceamento de carga, firewalls e muito mais. 
+Otimização de infraestrutura, incluindo recursos de nuvem de tamanho certo e adição ou remoção de recursos como unidade de processamento central (CPU) e memória de acesso aleatório (RAM), conforme necessário. 
+Operações na nuvem, incluindo implantações de aplicações com pipelines de entrega e integração contínuas (CI/CD), aplicação de patches no sistema operacional e manutenção.
+Continuidade de negócios, com movimentação e cópia de recursos da nuvem, criação e gerenciamento de políticas para backups e gerenciamento de interrupções e falhas.
+Red Hat Ansible Automation Platform: um guia para iniciantes
+A SRE também conta com uma base projetada para um estilo de desenvolvimento nativo em nuvem. Os containers Linux® dão suporte a um ambiente unificado para desenvolvimento, entrega, integração e automação.
+
+O Kubernetes é o meio mais moderno de automatizar as operações de containers Linux. Ele ajuda as equipes a gerenciar com mais eficiência os clusters que executam containers Linux em nuvens públicas, privadas e híbridas.
+
+Como uma plataforma Kubernetes pronta para empresas que oferece suporte a iniciativas de SRE, o Red Hat® OpenShift® ajuda as equipes a implementar a cultura e a transformação de processos que modernizam a infraestrutura de TI e posiciona as organizações para atender melhor seus clientes e atingir as metas de negócios. 
