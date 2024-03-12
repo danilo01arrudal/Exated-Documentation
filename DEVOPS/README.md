@@ -43,4 +43,11 @@ Fazer essas mudanças pode exigir muito esforço. No entanto, com a tecnologia c
 
 Nossos especialistas podem ajudar sua organização a desenvolver as práticas, as ferramentas e a cultura necessárias para modernizar e criar aplicações de forma mais eficiente.
 
+# Plataforma e ferramentas DevOps
+
+Selecionar as ferramentas que servirão de base para os seus processos é essencial para o sucesso do DevOps. Para as operações acompanharem os rápidos ciclos de desenvolvimento, elas precisarão usar plataformas muito flexíveis e cuidar da infraestrutura da mesma forma que as equipes de desenvolvimento cuidam do código. Implantações manuais são lentas e sujeitas a erros.
+
+É possível simplificar o provisionamento e a implantação da plataforma por meio da automação. A engenharia de confiabilidade de sites (SRE) usa software e automação para gerenciar as tarefas manuais de operações. Portanto, adotar a abordagem de SRE é uma maneira de avançar os objetivos da equipe de DevOps.
+
+Com os containers, é mais fácil migrar aplicações entre ambientes de desenvolvimento, teste e produção. Com os containers, os desenvolvedores podem empacotar e isolar aplicações com tudo que é necessário para executá-las, incluindo arquivos da aplicação, ambientes de execução, bibliotecas dependentes e configurações.
 
