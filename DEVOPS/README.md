@@ -29,7 +29,7 @@ Com a liderança e os programas de incentivo certos, as equipes de desenvolvimen
 
 A cultura da Red Hat é baseada em relações abertas e transparência. E tem funcionado para nós há mais de 25 anos. Nossa experiência nos possibilita ajudar os clientes a tornarem a abordagem aberta e a cultura do DevOps uma realidade em suas empresas.
 
-# Processo DevOps
+## Processo DevOps
 
 O desenvolvimento de aplicações modernas exige abordagens diferentes daquelas usadas no passado. Muitas equipes usam abordagens ágeis para o desenvolvimento de aplicações. Para essas equipes, DevOps não é algo que deve ser deixado para depois. Na verdade, a "satisfação do cliente por meio da entrega antecipada e contínua de aplicações" é o primeiro dos 12 princípios do Manifesto Ágil. É por isso que a abordagem de integração e implantação contínuas (CI/DI) é muito importante para as equipes de DevOps.
 
@@ -43,7 +43,7 @@ Fazer essas mudanças pode exigir muito esforço. No entanto, com a tecnologia c
 
 Nossos especialistas podem ajudar sua organização a desenvolver as práticas, as ferramentas e a cultura necessárias para modernizar e criar aplicações de forma mais eficiente.
 
-# Plataforma e ferramentas DevOps
+## Plataforma e ferramentas DevOps
 
 Selecionar as ferramentas que servirão de base para os seus processos é essencial para o sucesso do DevOps. Para as operações acompanharem os rápidos ciclos de desenvolvimento, elas precisarão usar plataformas muito flexíveis e cuidar da infraestrutura da mesma forma que as equipes de desenvolvimento cuidam do código. Implantações manuais são lentas e sujeitas a erros.
 
@@ -51,3 +51,24 @@ Selecionar as ferramentas que servirão de base para os seus processos é essenc
 
 Com os containers, é mais fácil migrar aplicações entre ambientes de desenvolvimento, teste e produção. Com os containers, os desenvolvedores podem empacotar e isolar aplicações com tudo que é necessário para executá-las, incluindo arquivos da aplicação, ambientes de execução, bibliotecas dependentes e configurações.
 
+# DevOps e Kubernetes
+
+A abordagem de DevOps é ideal para os containers Linux®, o que dá à sua equipe a tecnologia subjacente necessária para o desenvolvimento nativo em nuvem. Os containers são compatíveis com um ambiente unificado para desenvolvimento, entrega, integração e automação.
+
+E o Kubernetes é o meio mais moderno de automatizar as operações de containers Linux. Ele possibilita o gerenciamento fácil e eficiente dos clusters que executam containers Linux em nuvens públicas, privadas e híbridas. 
+
+Escolher plataformas confiáveis, dentro e fora dos containers, como o Red Hat® Enterprise Linux e o Red Hat OpenShift®, dá a certeza de que não haverá falhas de escalonamento e automação quando forem mais necessários. Com as plataformas certas, você aproveita ao máximo as mudanças que implementou na cultura e nos processos.
+
+## Com o DevOps, é possível escalar por meio da implantação contínua
+
+Uma dos principais resultados obtidos com a implementação do DevOps é o pipeline de integração e implantação contínuas (CI/CD). Com as práticas de CI/CD, é possível disponibilizar aplicações para os clientes com maior frequência e validar a qualidade delas com o mínimo de intervenção humana.
+
+Mais especificamente, essas práticas implementam monitoramento e automação contínuos ao longo de todo ciclo de vida das aplicações, desde as etapas de teste e integração até as fases de entrega e implantação. Assim, é possível identificar e corrigir problemas e defeitos rapidamente. Juntas, essas práticas relacionadas são muitas vezes chamadas de "pipeline de CI/CD" e são compatíveis com o trabalho conjunto das equipes de operações e desenvolvimento com métodos ágeis.
+
+## DevOps e segurança
+
+Como mencionado anteriormente, a metodologia DevOps não envolve apenas as equipes de desenvolvimento e de operações. Para aproveitar todos os benefícios da abordagem DevOps, as empresas devem considerar qual é o papel da segurança no ciclo de vida das aplicações. Isso significa pensar na segurança central, da fase de planejamento em diante. Também significa automatizar algumas funcionalidades de segurança para impedir a desaceleração do fluxo de trabalho de DevOps. Selecionar as ferramentas certas para integrar segurança pode ajudar você a alcançar seus objetivos de segurança de DevOps.
+
+No entanto, uma segurança DevOps eficaz requer mais do que ferramentas novas: ela deve ser construída a partir das mudanças culturais geradas pelo DevOps e se integrar ao trabalho das equipes de segurança o quanto antes. O DevOps acelera os processos ao aproximar as equipes de desenvolvimento e de operações. No entanto, essa agilidade pode ser prejudicada por um planejamento de segurança ineficiente.
+
+Antigamente, a segurança era responsabilidade exclusiva de uma equipe isolada e incluída de qualquer jeito apenas no estágio final do desenvolvimento. No framework colaborativo do DevOps, a segurança é uma responsabilidade compartilhada e integrada desde o início.
