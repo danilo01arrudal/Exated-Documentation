@@ -15,3 +15,26 @@ A abordagem SRE ajuda as equipes a encontrar um equilíbrio entre lançar novas 
 Padronização e automação são dois componentes importantes do modelo de SRE. Engenheiros de confiabilidade de sites buscam sempre uma maneira de aprimorar e automatizar as tarefas operacionais.
 Dessa forma, a SRE ajuda a melhorar a confiabilidade do sistema hoje e à medida que cresce ao longo do tempo. 
 As práticas de SRE facilitam o trabalho das equipes que estão migrando as operações de TI da abordagem mais tradicional para uma abordagem nativa em nuvem.
+
+## Funções do engenheiro de confiabilidade de sites
+
+A função do engenheiro de confiabilidade de sites é singular e requer experiência com administração de sistemas (sysadmin), desenvolvimento de software com uma base adicional em operações ou alguém em uma função de operações de TI que também tenha habilidades de desenvolvimento de software. 
+As equipes de SRE são responsáveis pela maneira como o código é implantado, configurado e monitorado, bem como pela disponibilidade, latência, gerenciamento de mudanças, resposta a emergências e gerenciamento de capacidade dos serviços em produção.
+As equipes de SRE determinam o lançamento de novas funcionalidades usando acordos de nível de serviço (SLAs) para definir a confiabilidade obrigatória do sistema por meio de indicadores de nível de serviço (SLI) e objetivos de nível de serviço (SLO). 
+
+O SLI mede aspectos específicos dos níveis de serviços oferecidos. Os principais indicadores incluem latência de solicitação, disponibilidade, taxa de erro e capacidade do sistema. O SLO é baseado no intervalo ou valor desejado para um nível de serviço com base no SLI.
+Um SLO para a confiabilidade exigida do sistema é então baseado no downtime determinado como aceitável. Esse nível de downtime é chamado de "orçamento de erro", o limite máximo permitido para erros e interrupções. 
+Na abordagem de SRE, não se espera que haja 100% de confiabilidade, mas as falhas são planejadas e esperadas.
+Uma vez já estabelecida, a equipe de desenvolvimento pode "gastar" o orçamento de erro ao lançar uma funcionalidade nova. Com base no SLO e no orçamento de erro disponível, a equipe determina se é viável ou não lançar uma certa solução, ou serviço.
+
+Se um serviço em execução está dentro desse orçamento, então, a equipe de desenvolvimento pode lançar esse serviço quando desejar. No entanto, se o sistema apresentar muitos erros ou permanecer inativo por um tempo maior do que o permitido pelo orçamento de erro, nenhum lançamento novo deverá ser realizado até que as falhas estejam no parâmetro.   
+A equipe de desenvolvimento conduz testes automatizados nas operações para demonstrar a confiabilidade. 
+Os engenheiros de confiabilidade de sites dividem seu tempo entre a execução de tarefas operacionais e o trabalho em projetos. Conforme as práticas recomendadas pelo Google para SRE, os engenheiros de confiabilidade de sites só podem passar no máximo 50% do tempo trabalhando nas operações, o que deve ser monitorado para assegurar que essa porcentagem não seja ultrapassada.  
+
+O restante do tempo é gasto em tarefas de desenvolvimento, como criação de funcionalidades novas, escalonamento do sistema e implementação da automação.
+O excesso de trabalho operacional e o baixo desempenho dos serviços podem ser redirecionados para que a equipe de desenvolvimento solucione esses problemas. Assim, o engenheiro de confiabilidade de sites não passa tanto tempo nas operações de uma aplicação ou um serviço. 
+A automação é uma parte importante da função do engenheiro de confiabilidade de sites. Se eles estiverem enfrentando um problema que se repete, então devem criar uma solução automatizada. 
+
+Manter o equilíbrio entre o trabalho operacional e de desenvolvimento é essencial na abordagem de SRE. 
+
+
