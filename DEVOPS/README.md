@@ -51,7 +51,7 @@ Selecionar as ferramentas que servirão de base para os seus processos é essenc
 
 Com os containers, é mais fácil migrar aplicações entre ambientes de desenvolvimento, teste e produção. Com os containers, os desenvolvedores podem empacotar e isolar aplicações com tudo que é necessário para executá-las, incluindo arquivos da aplicação, ambientes de execução, bibliotecas dependentes e configurações.
 
-# DevOps e Kubernetes
+## DevOps e Kubernetes
 
 A abordagem de DevOps é ideal para os containers Linux®, o que dá à sua equipe a tecnologia subjacente necessária para o desenvolvimento nativo em nuvem. Os containers são compatíveis com um ambiente unificado para desenvolvimento, entrega, integração e automação.
 
