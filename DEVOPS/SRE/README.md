@@ -1,6 +1,6 @@
 # Site Reliability Engineering: o que é SRE?
 
-https://www.redhat.com/rhdc/managed-files/RH_BRAND_7764_01_MECH_Open%20Hybrid%20Cloud_Full%20Color_Grey_0.png
+![Texto Alternativo](https://www.redhat.com/rhdc/managed-files/RH_BRAND_7764_01_MECH_Open%20Hybrid%20Cloud_Full%20Color_Grey_0.png)
 
 ## O que é engenharia de confiabilidade de sites?
 
