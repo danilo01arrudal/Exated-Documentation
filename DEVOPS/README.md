@@ -1,4 +1,4 @@
-# DEVOPS
+# DevOps
 
 DevOps é uma abordagem de cultura, automação e design de plataforma que tem como objetivo agregar mais valor aos negócios e aumentar a capacidade de resposta às mudanças por meio de entregas de serviços rápidas e de alta qualidade. Isso tudo é possível por meio da disponibilização de serviços de TI iterativa e rápida. Adotar o DevOps significa conectar aplicações legadas a uma infraestrutura e aplicações modernas e nativas em nuvem.
 
@@ -28,4 +28,19 @@ A abordagem de projetos de software open source pode ser um blueprint sobre como
 Com a liderança e os programas de incentivo certos, as equipes de desenvolvimento e operações podem contribuir para viabilizar a adoção da cultura aberta. No entanto, o DevOps é mais eficiente quando essa cultura já está disseminada pela empresa. É claro que o nome se refere aos termos "desenvolvimento" e "operações", mas o DevOps serve para todos.
 
 A cultura da Red Hat é baseada em relações abertas e transparência. E tem funcionado para nós há mais de 25 anos. Nossa experiência nos possibilita ajudar os clientes a tornarem a abordagem aberta e a cultura do DevOps uma realidade em suas empresas.
+
+# Processo DevOps
+
+O desenvolvimento de aplicações modernas exige abordagens diferentes daquelas usadas no passado. Muitas equipes usam abordagens ágeis para o desenvolvimento de aplicações. Para essas equipes, DevOps não é algo que deve ser deixado para depois. Na verdade, a "satisfação do cliente por meio da entrega antecipada e contínua de aplicações" é o primeiro dos 12 princípios do Manifesto Ágil. É por isso que a abordagem de integração e implantação contínuas (CI/DI) é muito importante para as equipes de DevOps.
+
+Mas apenas mudar seus processos de desenvolvimento e operações não é suficiente. Será necessário aplicar o pensamento sistêmico para otimizar de fato a maneira como é feita a entrega de aplicações. Isso significa que o DevOps levará a mudanças nas unidades de negócios que solicitam trabalho de desenvolvimento e nos grupos que dão suporte aos usuários finais. Um ciclo contínuo de feedback dos usuários finais é essencial para os negócios.
+
+O processo precisará evoluir para além de uma mera mudança em COMO o trabalho é feito. É inevitável que O QUE você faz também mude. O DevOps não se limita a apenas acelerar a criação daquelas mesmas aplicações monolíticas ultrapassadas. Ele tem como objetivo criar novos tipos de aplicações compatíveis com o ritmo da entrega contínua.
+
+É por isso que as equipes de DevOps, muitas vezes, criam aplicações usando uma arquitetura de microsserviços, conectando os serviços por meio de APIs. As equipes aceleram a entrega ao focar na criação de partes menores da funcionalidade. Assim, elas podem se concentrar no gerenciamento desses serviços e APIs, bem como adotar uma estratégia – como a integração ágil, por exemplo – para unir todos os elementos.
+
+Fazer essas mudanças pode exigir muito esforço. No entanto, com a tecnologia certa, é possível começar imediatamente. A automação ajuda a acelerar processos e, eventualmente, permite a migração de cargas de trabalho DevOps para a nuvem. Um estudo da IDC1 constatou que 85% dos líderes de TI consideram a automação uma tecnologia essencial para a estratégia de DevOps adotada por eles. Isso se deve ao fato de que a automação permite que a infraestrutura ofereça suporte às constantes alterações no código geradas pela metodologia DevOps. Além disso, ela permite que os ambientes sejam escalados continuamente com facilidade. Com a automação de tarefas repetitivas e triviais, seus funcionários mais especializados se concentram no que é mais importante.
+
+Nossos especialistas podem ajudar sua organização a desenvolver as práticas, as ferramentas e a cultura necessárias para modernizar e criar aplicações de forma mais eficiente.
+
 
