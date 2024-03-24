@@ -29,7 +29,7 @@ For Intel, boot the machine, and append intel_iommu=on to the end of the GRUB_CM
         
         grubby --update-kernel=ALL --args="intel_iommu=on"
 
-...
+###### Reboot system
         
         reboot
         
