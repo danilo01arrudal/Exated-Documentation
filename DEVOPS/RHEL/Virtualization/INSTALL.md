@@ -28,6 +28,9 @@ The following minimum system resources are available:
 For Intel, boot the machine, and append intel_iommu=on to the end of the GRUB_CMDLINE_LINUX line in the grub configuration file
         
         grubby --update-kernel=ALL --args="intel_iommu=on"
+
+...
+        
         reboot
         
 ###### Managing virtual machines in the web console
