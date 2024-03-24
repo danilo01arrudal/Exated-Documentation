@@ -1,67 +1,74 @@
 ### Notes 
   This step is very important. If you want to connect on one cloud environment or in an on premise environment. You need to made this setup.
 
-[Set up an Oracle Cloud Infrastructure API singing key for use with Oracle Functions]([https://pages.github.com/](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionssetupapikey.htm)).
+[Set up an Oracle Cloud Infrastructure API singing key for use with Oracle Functions](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionssetupapikey.htm)
 
+### Procedure 
+#### Set up Oracle Cloud Infrastructure API singing key
 
-root@raspberrypi:~# mkdir ~/.oci
-root@raspberrypi:~# openssl genrsa -out ~/.oci/oci_api_key.pem 2048
-root@raspberrypi:~# chmod go-rwx ~/.oci/oci_api_key.pem
-root@raspberrypi:~# openssl rsa-pubout -in ~/.oci/oci_api_key.pem -out ~/.oci/oci_api_key_public.pem
-root@raspberrypi:~# ssh-keygen -t rsa -N "" -b 2048
+###### Create sshkey directory
+	mkdir ~/.oci
 
-#CONFIGURE ACCESS ON ORACLE CLOUD
+###### Generate an private rsa key
+	openssl genrsa -out ~/.oci/oci_api_key.pem 2048
 
-#ACCESS ORACLE CLOUD OCI
-https://cloud.oracle.com/
+###### Give permission
+	chmod go-rwx ~/.oci/oci_api_key.pem
 
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@ FINGERPRINT @
-@@@@@@@@@@@@@@@
+###### Generate an public key
+	openssl rsa-pubout -in ~/.oci/oci_api_key.pem -out ~/.oci/oci_api_key_public.pem
+	
+ ###### Generate an ssh key
+ 	ssh-keygen -t rsa -N "" -b 2048
 
-#IN DASHBOARD OF CLOUD, NAVIGATE TO GOVERNANCE AND ADMINISTRATION > SELECT IDENTITY 
+#### Configure access on Oracle Cloud
+[Access Oracle Cloud OCI](https://cloud.oracle.com/)
 
-Users
-
-Create or manage federated users instead?
-This tenancy has a federation with one or more identity providers (IdP), which means users typically sign in as federated users. 
-This page creates local users, manages their local capabilities, and lets them sign in to Oracle Cloud Infrastructure if the federated IdP is unavailable. 
-To create and manage federated users, go to the Federation page to find the appropriate IdP Details page.
-
-[Create user]		[Delete]
-
-+------------------------------------------------------ +---------------+-----------------------+---------------+--------------------------------+-------------------------------+-----------------------------------------------------------------------------
-| Name							| Status	| Email			| Federated	| Created			 | Last Sign In			 | Row Header								      |
-+------------------------------------------------------ +---------------+-----------------------+---------------+--------------------------------+-------------------------------+-----------------------------------------------------------------------------
-oracleidentitycloudservice/****.*****@gmail.com	 	 Active		 -			 Yes		 Fri, Mar 19, 2021, 18:34:05 UTC  -				  ocid1.user.oc1..aaaaaaaacq7exbpx3vza7zqih4bqvly2myco7vbumgtblniw7qmojvfr2gwq
-****.*****@gmail.com					 Active		 ****.*****@gmail.com 	 No		 Fri, Mar 19, 2021, 18:28:36 UTC  Fri, Mar 19, 2021, 18:29:11 UTC ocid1.user.oc1..aaaaaaaaowzy2wjytlpgijbb4ep4tqu43vzmkquixgwpctn7ymbjnu2sac4q
-+------------------------------------------------------ +---------------+-----------------------+---------------+--------------------------------+-------------------------------+-----------------------------------------------------------------------------
-
-#SELECT THE SECOND EMAIL 
-YOU WILL REDIRECTED TO Identity > Users > User Details
-
-#SELECT API KEYS OPTION AND CLICK ON ADD API KEYS
-
-Note: An API key is an RSA key pair in PEM format used for signing API requests. 
-You can generate the key pair here and download the private key. 
-If you already have a key pair, you can choose to upload or paste your public key file instead. Learn more
-
-( ) Generate API Key Pair	( ) Choose Public Key File	(#) Paste Public Key
-
-#YOU WILL PAST THE CONTENT OF FILE ~/.oci/oci_api_key_public.pem HERE
-
-#SAVE AND RETURN TO Identity > Users > User Details
-#THE PAGE WILL SHOW YOUR FINGERPRINT
-
-API Keys
-
-[Add API Key]
-
-+-----------------------------------------------+--------------------------------------------
-| Fingerprint					| Created				    |	
-**:**:**:**:**:**:**:**:**:**:**:**:**:**:**:**	 Sun, Mar 21, 2021, 01:11:20 UTC
-+-----------------------------------------------+-------------------------------------------+
-									Displaying 1 API Key
+	+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 	| FINGERPRINT 
+	|
+	| * IN DASHBOARD OF CLOUD, NAVIGATE TO GOVERNANCE AND ADMINISTRATION > SELECT IDENTITY 
+	|	
+	| Users
+ 	| Create or manage federated users instead?
+	| This tenancy has a federation with one or more identity providers (IdP), which means users typically sign in as federated users. 
+	| This page creates local users, manages their local capabilities, and lets them sign in to Oracle Cloud Infrastructure if the federated IdP is unavailable. 
+	| To create and manage federated users, go to the Federation page to find the appropriate IdP Details page.
+	| 
+	| [Create user]		[Delete]
+	|+------------------------------------------------------+---------------+-----------------------+---------------+---------------------------------+--------------------------------+-------------------------------------------------------------------------------------+
+	|| Name						        | Status	| Email			| Federated	| Created			  | Last Sign In		   | Row Header 	    
+ 	|+------------------------------------------------------+---------------+-----------------------+---------------+---------------------------------+--------------------------------+-------------------------------------------------------------------------------------+
+	|| oracleidentitycloudservice/****.*****@gmail.com	| Active	| -			| Yes		| Fri, Mar 19, 2021, 18:34:05 UTC |  -				   | ocid1.user.oc1..aaaaaaaacq7exbpx3vza7zqih4bqvly2myco7vbumgtblniw7qmojvfr2gwq
+	|| ****.*****@gmail.com					| Active	| ****.*****@gmail.com 	| No		| Fri, Mar 19, 2021, 18:28:36 UTC  Fri, Mar 19, 2021, 18:29:11 UTC | ocid1.user.oc1..aaaaaaaaowzy2wjytlpgijbb4ep4tqu43vzmkquixgwpctn7ymbjnu2sac4q
+ 	|+------------------------------------------------------+---------------+-----------------------+---------------+---------------------------------+--------------------------------+-------------------------------------------------------------------------------------+
+	|	
+	| 
+ 	| YOU WILL REDIRECTED TO Identity > Users > User Details
+	| Note: An API key is an RSA key pair in PEM format used for signing API requests. 
+	| You can generate the key pair here and download the private key. 
+	| If you already have a key pair, you can choose to upload or paste your public key file instead. Learn more
+	|
+	| ( ) Generate API Key Pair	( ) Choose Public Key File	(#) Paste Public Key
+	|
+ 	|
+	| YOU WILL PAST THE CONTENT OF FILE ~/.oci/oci_api_key_public.pem HERE
+	|
+	| SAVE AND RETURN TO Identity > Users > User Details
+	| THE PAGE WILL SHOW YOUR FINGERPRINT
+	|
+ 	|
+	| API Keys
+	|
+	| [Add API Key]
+	|
+	|+------------------------------------------------------+-------------------------------------------+
+	|| Fingerprint						| Created				    
+ 	|+------------------------------------------------------+-------------------------------------------+
+	|| **:**:**:**:**:**:**:**:**:**:**:**:**:**:**:**	| Sun, Mar 21, 2021, 01:11:20 UTC	    
+	|+------------------------------------------------------+-------------------------------------------+
+									
+	 			Displaying 1 API Key
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @ USER OCI @
