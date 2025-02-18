@@ -23,3 +23,4 @@
     enp1s0  82e45657-ca14-380d-adfc-ac71a5aa7281  ethernet  enp1s0 
     lo      c30f3777-2d34-40f9-9fdb-da73383b9848  loopback  lo  
 
+The background color is `#ffffff` for light mode and `#000000` for dark mode.
