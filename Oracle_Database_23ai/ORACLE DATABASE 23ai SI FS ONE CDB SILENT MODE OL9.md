@@ -351,5 +351,35 @@
 	[root@ol923ai ~]# vi /etc/oratab
  				appscdb1:/u01/app/oracle/product/23.5.0/dbhome_1:Y
 
+###### CONFIGURE ORACLE DATABASE DAEMON 
+
+	[root@ol923ai ~]# vi /lib/systemd/system/dbora.service
+				[Unit]
+				Description=The Oracle Database Service
+				After=syslog.target network.target
+
+				[Service]
+				# systemd ignores PAM limits, so set any necessary limits in the service.
+				# Not really a bug, but a feature.
+				# https://bugzilla.redhat.com/show_bug.cgi?id=754285
+				LimitMEMLOCK=infinity
+				LimitNOFILE=65535
+
+				#Type=simple
+				# idle: similar to simple, the actual execution of the service binary is delayed
+				#       until all jobs are finished, which avoids mixing the status output with shell output of services.
+				RemainAfterExit=yes
+				User=oracle
+				Group=oinstall
+				Restart=no
+				ExecStart=/bin/bash -c '/home/oracle/scripts/start_all.sh'
+				ExecStop=/bin/bash -c '/home/oracle/scripts/stop_all.sh'
+
+				[Install]
+				WantedBy=multi-user.target
+
+	[root@ol923ai ~]# systemctl daemon-reload
+	[root@ol923ai ~]# systemctl enable dbora.service
+
 ###### writed by: Danilo Arruda
 ###### ter 18 fev 2025
