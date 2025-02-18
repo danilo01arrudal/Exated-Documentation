@@ -59,47 +59,47 @@
     [root@ol923ai ~]# su - oracle
     [oracle@ol923ai ~]$ mkdir /home/oracle/scripts
     [oracle@ol923ai ~]$ cat > /home/oracle/scripts/setEnv.sh <<EOF
-			# Oracle Settings
-			export TMP=/tmp
-			export TMPDIR=\$TMP
+				# Oracle Settings
+				export TMP=/tmp
+				export TMPDIR=\$TMP
 
-			export ORACLE_HOSTNAME=ol7db1
-			export ORACLE_UNQNAME=appscdb
-			export ORACLE_BASE=/u01/app/oracle
-			export ORACLE_HOME=\$ORACLE_BASE/product/19.3.0/dbhome_1
-			export ORA_INVENTORY=/u01/app/oraInventory
-			export ORACLE_SID=appscdb1
+				export ORACLE_HOSTNAME=ol7db1
+				export ORACLE_UNQNAME=appscdb
+				export ORACLE_BASE=/u01/app/oracle
+				export ORACLE_HOME=\$ORACLE_BASE/product/19.3.0/dbhome_1
+				export ORA_INVENTORY=/u01/app/oraInventory
+				export ORACLE_SID=appscdb1
 
-			export PATH=/usr/sbin:/usr/local/bin:\$PATH
-			export PATH=\$ORACLE_HOME/bin:\$PATH
+				export PATH=/usr/sbin:/usr/local/bin:\$PATH
+				export PATH=\$ORACLE_HOME/bin:\$PATH
 
-			export LD_LIBRARY_PATH=\$ORACLE_HOME/lib:/lib:/usr/lib
-			export CLASSPATH=\$ORACLE_HOME/jlib:\$ORACLE_HOME/rdbms/jlib
-			EOF
+				export LD_LIBRARY_PATH=\$ORACLE_HOME/lib:/lib:/usr/lib
+				export CLASSPATH=\$ORACLE_HOME/jlib:\$ORACLE_HOME/rdbms/jlib
+				EOF
 
     [oracle@ol923ai ~]$ echo ". /home/oracle/scripts/setEnv.sh" >> /home/oracle/.bash_profile
 
     [oracle@ol923ai ~]$ cat > /home/oracle/scripts/start_all.sh <<EOF
-			#!/bin/bash
-			. /home/oracle/scripts/setEnv.sh
+				#!/bin/bash
+				. /home/oracle/scripts/setEnv.sh
 
-			export ORAENV_ASK=NO
-			. oraenv
-			export ORAENV_ASK=YES
+				export ORAENV_ASK=NO
+				. oraenv
+				export ORAENV_ASK=YES
 
-			dbstart \$ORACLE_HOME
-			EOF
+				dbstart \$ORACLE_HOME
+				EOF
 
     [oracle@ol923ai ~]$ cat > /home/oracle/scripts/stop_all.sh <<EOF
-			#!/bin/bash
-			. /home/oracle/scripts/setEnv.sh
+				#!/bin/bash
+				. /home/oracle/scripts/setEnv.sh
 
-			export ORAENV_ASK=NO
-			. oraenv
-			export ORAENV_ASK=YES
+				export ORAENV_ASK=NO
+				. oraenv
+				export ORAENV_ASK=YES
 
-			dbshut \$ORACLE_HOME
-			EOF
+				dbshut \$ORACLE_HOME
+				EOF
 
     [oracle@ol923ai ~]$ chown -R oracle:oinstall /home/oracle/scripts
     [oracle@ol923ai ~]$ chmod u+x /home/oracle/scripts/*.sh
