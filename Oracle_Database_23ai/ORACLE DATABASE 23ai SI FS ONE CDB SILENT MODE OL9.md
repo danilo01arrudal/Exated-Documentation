@@ -254,5 +254,5 @@
 	[oracle@ol923ai ~]$ netca -silent -responsefile /home/oracle/netca.rsp
 
 
--- writed by: Danilo Arruda
--- ter 18 fev 2025
+######## writed by: Danilo Arruda
+######## ter 18 fev 2025
