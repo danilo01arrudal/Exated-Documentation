@@ -226,3 +226,32 @@
 				databaseType=MULTIPURPOSE
 				automaticMemoryManagement=false
 				totalMemory=0
+
+###### CREATE netca.rsp response file
+
+	[oracle@ol923ai ~]$ vi netca.rsp
+				[GENERAL]
+				RESPONSEFILE_VERSION="23.0"
+				CREATE_TYPE="CUSTOM"
+				INSTALLED_COMPONENTS={"server","net8","javavm"}
+				INSTALL_TYPE=""typical""
+				LISTENER_NUMBER=1
+				LISTENER_NAMES={"LISTENER"}
+				LISTENER_START=""LISTENER""
+				NAMING_METHODS={"TNSNAMES","ONAMES","HOSTNAME"}
+				NSN_NUMBER=1
+				NSN_NAMES={"EXTPROC_CONNECTION_DATA"}
+				NSN_SERVICE={"PLSExtProc"}
+    				NSN_SERVICE={"PLSExtProc"}
+				NSN_PROTOCOLS={"TCP;HOSTNAME;1521"}
+
+###### CREATE DATABASE 
+
+	[oracle@ol923ai ~]$ dbca -silent -createDatabase -responseFile /home/oracle/dbca.rsp
+
+###### CREATE LISTENER
+
+	[oracle@ol923ai ~]$ netca -silent -responsefile /home/oracle/netca.rsp
+
+writed by: Danilo Arruda
+ter 18 fev 2025
