@@ -105,13 +105,16 @@
     [oracle@ol923ai ~]$ chmod u+x /home/oracle/scripts/*.sh
 
 ###### DOWNLOAD ORACLE DATABASE SOFTWARE
+   
     V1043785-01.zip
 
 ###### MOVE AND UNZIP DATABASE SOFTWARE
+ 
     [oracle@ol923ai ~]$ mv V1043785-01.zip /u01/app/oracle/product/23.5.0/dbhome_1/
     [oracle@ol923ai dbhome_1]$ gunzip V1043785-01.zip 
 
 ###### CREATE db_install.rsp INSTALL RESPONSE FILE
+
     [oracle@ol923ai ~]$ vi db_install.rsp
                             oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v23.0.0
                             installOption=INSTALL_DB_SWONLY
@@ -158,5 +161,68 @@
 ###### EXECUTE runInstaller 
     [oracle@ol923ai ~]$ cd $ORACLE_HOME
     [oracle@ol923ai ~]$ ./runInstaller -silent -responseFile /home/oracle/db_install.rsp
+    [oracle@ol923ai ~]$ exit
+    [root@ol923ai ~]# /u01/app/oraInventory/orainstRoot.sh
+    [root@ol923ai ~]# /u01/app/oracle/product/23.5.0/dbhome_1/root.sh
 
+###### CREATE dbca.rsp response file
 
+	[oracle@ol923ai ~]$ vi dbca.rsp
+				responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v23.0.0
+				gdbName=appscdb
+				sid=appscdb1
+				databaseConfigType=SI
+				RACOneNodeServiceName=
+				policyManaged=false
+				managementPolicy=
+				createServerPool=false
+				serverPoolName=
+				cardinality=
+				force=
+				pqPoolName=
+				pqCardinality=
+				createAsContainerDatabase=true
+				numberOfPDBs=1
+				pdbName=appspdb
+				useLocalUndoForPDBs=true
+				pdbAdminPassword=
+				nodelist=
+				templateName=/u01/app/oracle/product/23.5.0/dbhome_1/assistants/dbca/templates/General_Purpose.dbc
+				sysPassword=
+				systemPassword= 
+				oracleHomeUserPassword=
+				emConfiguration=
+				runCVUChecks=FALSE
+				dbsnmpPassword=
+				omsHost=
+				omsPort=
+				emUser=
+				emPassword=
+				dvConfiguration=false
+				dvUserName=
+				dvUserPassword=
+				dvAccountManagerName=
+				dvAccountManagerPassword=
+				olsConfiguration=
+				datafileJarLocation={ORACLE_HOME}/assistants/dbca/templates/
+				datafileDestination={ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/
+				recoveryAreaDestination={ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME}
+				storageType=FS
+				diskGroupName=
+				asmsnmpPassword=
+				recoveryGroupName=
+				characterSet=AL32UTF8
+				nationalCharacterSet=AL16UTF16
+				registerWithDirService=false
+				dirServiceUserName=
+				dirServicePassword=
+				walletPassword=
+				listeners=
+				variablesFile=
+				variables=ORACLE_BASE_HOME=/u01/app/oracle/product/23.5.0/dbhome_1,DB_UNIQUE_NAME=appscdb,ORACLE_BASE=/u01/app/oracle,PDB_NAME=,DB_NAME=appscdb,ORACLE_HOME=/u01/app/oracle/product/23.5.0/dbhome_1,SID=appscdb1
+initParams=_exadata_feature_on=true,undo_tablespace=UNDOTBS1,sga_target=2047MB,db_block_size=8192BYTES,log_archive_dest_1='LOCATION={ORACLE_BASE}/oradata/archivelog/',nls_language=AMERICAN,dispatchers=(PROTOCOL=TCP) (SERVICE=appscdb1XDB),diagnostic_dest={ORACLE_BASE},control_files=("{ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/control01.ctl", "{ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME}/control02.ctl"),remote_login_passwordfile=EXCLUSIVE,audit_file_dest={ORACLE_BASE}/admin/{DB_UNIQUE_NAME}/adump,processes=600,pga_aggregate_target=683MB,nls_territory=AMERICA,db_recovery_file_dest_size=12732MB,open_cursors=300,log_archive_format=%t_%s_%r.dbf,compatible=23.0.0,db_name=appscdb,db_recovery_file_dest={ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME},audit_trail=db
+				sampleSchema=false
+				memoryPercentage=40
+				databaseType=MULTIPURPOSE
+				automaticMemoryManagement=false
+				totalMemory=0
