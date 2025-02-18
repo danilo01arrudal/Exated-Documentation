@@ -1,7 +1,7 @@
 **ORACLE DATABASE 23ai SI FS ONE CDB SILENT MODE OL9.5**
 
 
-> *The main purpose of installing an Oracle database is to provide a robust and scalable platform for data management. It allows companies to store, organize and access information efficiently, ensuring data integrity and security. In addition, Oracle offers advanced features for application development and data analysis, aiding in strategic decision-making.*
+	> *The main purpose of installing an Oracle database is to provide a robust and scalable platform for data management. It allows companies to store, organize and access information efficiently, ensuring data integrity and security. In addition, Oracle offers advanced features for application development and data analysis, aiding in strategic decision-making.*
 
 
 ###### BUILD VIRTUAL MACHINE ON VIRTUALIZER
