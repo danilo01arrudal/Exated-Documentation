@@ -5,19 +5,19 @@
     
     [root@exated ~]# virt-install --virt-type kvm --name ol9 --memory 2048 --vcpus 2 --os-variant ol9.5 --cdrom /root/Downloads/OracleLinux-R9-U5-x86_64-dvd.iso --network bridge=br0,model=virtio --disk path=/var/lib/libvirt/images/ol9.qcow2,size=50
 
-CONFIGURE HOSTNAME
+###### CONFIGURE HOSTNAME
 
     [root@ ~]# hostnamectl set-hostname ol923ai
 
-INSTALL PRE-INSTALL PACKAGES
+###### INSTALL PRE-INSTALL PACKAGES
 
     [root@ol923ai ~]# yum install oracle-database-preinstall-23ai
 
-DISABLE SELINUX
+###### DISABLE SELINUX
 
     [root@ol923ai ~]# sed -i 's/SELINUX=.*/SELINUX=disabled/' /etc/selinux/config && setenforce 0
 
-CONFIGURE STATIC NETWORK
+###### CONFIGURE STATIC NETWORK
     
     [root@ol923ai ~]# nmcli device
     DEVICE  TYPE      STATE                   CONNECTION 
@@ -28,5 +28,31 @@ CONFIGURE STATIC NETWORK
     NAME    UUID                                  TYPE      DEVICE 
     enp1s0  82e45657-ca14-380d-adfc-ac71a5aa7281  ethernet  enp1s0 
     lo      c30f3777-2d34-40f9-9fdb-da73383b9848  loopback  lo  
+
+    [root@ol923ai ~]# nmcli con modify 'enp1s0' iframe enp1s0 ipv4.method manual ipv4.addresses 192.168.18.101/24 gw4 192.168.18.1
+    [root@ol923ai ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.201
+    [root@ol923ai ~]# nmcli con down 'enp1s0'
+    [root@ol923ai ~]# nmcli con up 'enp1s0'
+
+    [root@ol923ai ~]# ip addr show enp1s0
+    2: enp1s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 52:54:00:bc:5a:a4 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.18.101/24 brd 192.168.18.255 scope global noprefixroute enp1s0
+       valid_lft forever preferred_lft forever
+    inet6 2804:248:f65e:2800:5054:ff:febc:5aa4/64 scope global dynamic noprefixroute 
+       valid_lft 86197sec preferred_lft 86197sec
+    inet6 fe80::5054:ff:febc:5aa4/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+
+    [root@ol923ai ~]# ip route show
+    default via 192.168.18.1 dev enp1s0 proto static metric 100 
+    192.168.18.0/24 dev enp1s0 proto kernel scope link src 192.168.18.101 metric 100 
+
+###### CREATE ORACLE_BASE AND ORACLE_HOME DIRECTORIES
+
+    [root@ol923ai ~]# mkdir -p /u01/app/oracle/product/23.5.0/dbhome_1/
+    [root@ol923ai ~]# chown -R oracle:oinstall /u01
+    [root@ol923ai ~]# chmod -R 775 /u01
+
 
 
