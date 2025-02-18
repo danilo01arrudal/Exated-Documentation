@@ -257,6 +257,99 @@
 
 	[oracle@ol923ai ~]$ netca -silent -responsefile /home/oracle/netca.rsp
 
+###### START LISTENER
+
+	[oracle@ol923ai ~]$ lsnrctl status
+ 	LSNRCTL for Linux: Version 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on 15-FEB-2025 16:10:08
+
+	Copyright (c) 1991, 2024, Oracle.  All rights reserved.
+
+	Connecting to (ADDRESS=(PROTOCOL=tcp)(HOST=)(PORT=1521))
+	STATUS of the LISTENER
+	------------------------
+	Alias                     LISTENER
+	Version                   TNSLSNR for Linux: Version 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
+	Start Date                15-FEB-2025 16:10:08
+	Uptime                    0 days 0 hr. 0 min. 6 sec
+	Trace Level               off
+	Security                  ON: Local OS Authentication
+	SNMP                      OFF
+	Listener Log File         /u01/app/oracle/diag/tnslsnr/ol923ai/listener/alert/log.xml
+	Listening Endpoints Summary...
+  	(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=ol923ai)(PORT=1521)))
+	The listener supports no services
+	The command completed successfully
+
+###### ENABLE AUTOMATIC START PDB
+
+	[oracle@ol923ai ~]$ sqlplus / as sysdba
+
+	SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Tue Feb 18 16:20:09 2025
+	Version 23.5.0.24.07
+
+	Copyright (c) 1982, 2024, Oracle.  All rights reserved.
+
+
+	Connected to:
+	Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
+	Version 23.5.0.24.07
+
+	SQL> ALTER PLUGGABLE DATABASE APPSPDB OPEN;
+
+	Pluggable database altered.
+
+	SQL> @state
+	SQL> col col_name for a30
+	SQL> select con_name, state from dba_pdb_saved_states
+	  2 / 
+
+	no rows selected
+
+ 	SQL> ALTER PLUGGABLE DATABASE APPSPDB SAVE STATE;
+
+   	Pluggable database altered.
+
+	SQL> @state
+	SQL> col col_name for a30
+	SQL> select con_name, state from dba_pdb_saved_states
+	  2 / 
+
+	CON_NAME			STATE
+	------------------------------- -------------
+	APPSPDB
+    
+	SQL> exit
+	Disconnected from Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
+	Version 23.5.0.24.07
+
+###### CONFIGURE TNSNAMES.ORA
+
+	[oracle@ol923ai ~]$ cat > /u01/app/oracle/product/23.5.0/dbhome_1/network/admin/tnsnames.ora <<EOF
+				appspdb =
+				  (DESCRIPTION =
+				    (ADDRESS_LIST =
+				      (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.18.101)(PORT = 1521))
+				    )
+				    (CONNECT_DATA =
+				      (SERVICE_NAME = appspdb)
+				    )
+				  )
+
+				appscdb =
+				  (DESCRIPTION =
+				    (ADDRESS_LIST =
+				      (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.18.101)(PORT = 1521))
+				    )
+				    (CONNECT_DATA =
+				      (SERVICE_NAME = appscdb)
+				    )
+				  )
+				EOF  
+
+###### AUTOMATIC START SERVICE ORACLE
+
+	[root@ol923ai ~]# vi /etc/oratab
+ 				appscdb1:/u01/app/oracle/product/23.5.0/dbhome_1:Y
 
 ###### writed by: Danilo Arruda
 ###### ter 18 fev 2025
