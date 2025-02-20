@@ -128,6 +128,11 @@
     [root@ol9dns ~]# firewall-cmd --reload
     [root@ol9dns ~]# firewall-cmd --list-all
 
+###### INSTALL NET TOOLS
+
+    [root@ol9dns ~]# yum install -y netstat
+    [root@ol9dns ~]# yum install -y net-tools
+
 ###### CHECK SERVICE
 
     [root@ol9dns ~]# netstat -tulpn | grep ":53"
