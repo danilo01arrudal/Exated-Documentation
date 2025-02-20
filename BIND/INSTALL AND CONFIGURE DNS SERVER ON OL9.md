@@ -2,7 +2,7 @@
 
 > *The main purpose of installing an Oracle database is to provide a robust and scalable platform for data management. It allows companies to store, organize and access information efficiently, ensuring data integrity and security. In addition, Oracle offers advanced features for application development and data analysis, aiding in strategic decision-making.*
 
-![oracle database 23ai logo.](https://github.com/danilo01arrudal/Exated/blob/main/Oracle_Database_23ai/images/1714697079871.png)
+![bind9 logo.](https://github.com/danilo01arrudal/Exated/blob/main/BIND/images/bind.png)
 
 ###### REMOVE DNSMASQ AND AVAHI-DAEMON
     [root@localhost ~]# systemctl stop dnsmasq
