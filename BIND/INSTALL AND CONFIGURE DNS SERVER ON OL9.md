@@ -116,8 +116,8 @@
                 201     IN      PTR     ol9dns.appsdba.info.
                 121     IN      PTR     ol9n1.appsdba.info.
                 122     IN      PTR     ol9n2.appsdba.info.
-                151	    IN	PTR	ol9n1-vip.appsdba.info.
-                152	    IN	PTR	ol9n2-vip.appsdba.info.
+                151	    IN	    PTR	    ol9n1-vip.appsdba.info.
+                152	    IN	    PTR	    ol9n2-vip.appsdba.info.
                 184     IN      PTR     ol9n-scan.appsdba.info.
                 185     IN      PTR     ol9n-scan.appsdba.info.
                 186     IN      PTR     ol9n-scan.appsdba.info.
