@@ -105,16 +105,24 @@
 
     [root@ol9dns ~]# vi /var/named/data/192.168.18.zone
                 $ttl 38400
-                @       IN      SOA     ol7dns.appsdba.info.     root.appsdba.info. (
+                @       IN      SOA     ol9dns.appsdba.info.     root.appsdba.info. (
                         2020032701      ;
                         3600    ;
                         3600    ;
                         604800  ;
                         86400 ) ;
 
-                @       IN      NS      ol7dns.appsdba.info.
-                20      IN      PTR     ol7dns.appsdba.info.
-                19      IN      PTR     ol7apps1.appsdba.info.    
+                @       IN      NS      ol9dns.appsdba.info.
+                201     IN      PTR     ol9dns.appsdba.info.
+                121     IN      PTR     ol9n1.appsdba.info.
+                122     IN      PTR     ol9n2.appsdba.info.
+                151	IN	PTR	ol9n1-vip.appsdba.info.
+                152	IN	PTR	ol9n2-vip.appsdba.info.
+                184     IN      PTR     ol9n-scan.appsdba.info.
+                185     IN      PTR     ol9n-scan.appsdba.info.
+                186     IN      PTR     ol9n-scan.appsdba.info.
+                187     IN      PTR     ol9n-scan.appsdba.info.
+
 
 ###### START AND ENABLE NAMED SERVICE 
 
