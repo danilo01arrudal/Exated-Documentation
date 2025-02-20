@@ -92,7 +92,7 @@
 
                 @       IN      NS      ol9dns.appsdba.info.
                 ol9dns          IN      A       192.168.18.201
-                ol9n1        	IN      A       192.168.18.121
+                ol9n1           IN      A       192.168.18.121
                 ol9n2           IN      A       192.168.18.122
                 ol9n1-vip	    IN	    A	    192.168.18.151
                 ol9n2-vip	    IN	    A	    192.168.18.152
