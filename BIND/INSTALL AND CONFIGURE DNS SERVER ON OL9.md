@@ -94,9 +94,9 @@
                 ol9dns          IN      A       192.168.18.201
                 ol9n1        	IN      A       192.168.18.121
                 ol9n2           IN      A       192.168.18.122
-                ol9n1-vip	IN	A	192.168.18.151
-                ol9n2-vip	IN	A	192.168.18.152
-                ol9n-scan       IN      A	192.168.18.184
+                ol9n1-vip	    IN	    A	    192.168.18.151
+                ol9n2-vip	    IN	    A	    192.168.18.152
+                ol9n-scan       IN      A	    192.168.18.184
                 ol9n-scan       IN      A       192.168.18.185
                 ol9n-scan       IN      A       192.168.18.186
                 ol9n-scan       IN      A       192.168.18.187 
