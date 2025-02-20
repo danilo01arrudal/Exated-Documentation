@@ -1,6 +1,6 @@
 **INSTALL AND CONFIGURE DNS SERVER ON OL9.5**
 
-> *The main purpose of installing an Oracle database is to provide a robust and scalable platform for data management. It allows companies to store, organize and access information efficiently, ensuring data integrity and security. In addition, Oracle offers advanced features for application development and data analysis, aiding in strategic decision-making.*
+> *BIND (Berkeley Internet Name Domain) is a DNS (Domain Name System) server software essential to the functioning of the Internet. Its main use is to translate domain names (such as "google.com") into IP addresses (such as "172.217.160.142"), which are the numeric identifiers that computers use to communicate with each other..*
 
 ![bind9 logo.](https://github.com/danilo01arrudal/Exated/blob/main/BIND/images/bind.png)
 
