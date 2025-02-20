@@ -57,4 +57,82 @@
                     ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
                     192.168.18.201	ol9dns
 
+###### INSTALL PACKAGE DNS BIND
+
+    [root@ol9dns ~]# yum install bind bind-utils -y
+
+###### CREATE NAMED FILE
+    
+    [root@ol9dns ~]# mv /etc/named.conf /etc/named.conf.bkp
+    [root@ol9dns ~]# vi /etc/named.conf
+                options {
+                        directory "/var/named";
+                };
+
+                zone "appsdba.info" IN {
+                        type master;
+                        file "data/appsdba.info.zone";
+                };
+
+                zone "18.168.192.in-addr.arpa" IN {
+                        type master;
+                        file "data/192.168.18.zone";
+                };                
+
+###### CREATE APPSDBA.INFO.ZONE FOR RESOLUTION UNDER /VAR/NAMED/DATA/
+
+    [root@ol9dns ~]# vi /var/named/data/appsdba.info.zone 
+                $ttl 38400
+                @       IN      SOA     ol9dns.appsdba.info.    root.appsdba.info. (
+                        2020032701      ;
+                        3600    ;
+                        3600    ;
+                        604800  ;
+                        86400 ) ;
+
+                @       IN      NS      ol9dns.appsdba.info.
+                ol9dns          IN      A       192.168.18.201
+                ol9n1        	IN      A       192.168.18.121
+                ol9n2           IN      A       192.168.18.122
+                ol9n1-vip	IN	A	192.168.18.151
+                ol9n2-vip	IN	A	192.168.18.152
+                ol9n-scan       IN      A	192.168.18.184
+                ol9n-scan       IN      A       192.168.18.185
+                ol9n-scan       IN      A       192.168.18.186
+                ol9n-scan       IN      A       192.168.18.187 
+
+###### CREATE 192.168.18.ZONE FOR REVERSE RESOLUTION UNDER /VAR/NAMED/DATA/
+
+    [root@ol9dns ~]# vi /var/named/data/192.168.18.zone
+                $ttl 38400
+                @       IN      SOA     ol7dns.appsdba.info.     root.appsdba.info. (
+                        2020032701      ;
+                        3600    ;
+                        3600    ;
+                        604800  ;
+                        86400 ) ;
+
+                @       IN      NS      ol7dns.appsdba.info.
+                20      IN      PTR     ol7dns.appsdba.info.
+                19      IN      PTR     ol7apps1.appsdba.info.    
+
+###### START AND ENABLE NAMED SERVICE 
+
+    [root@ol9dns ~]# systemctl enable named
+    [root@ol9dns ~]# systemctl start named
+
+###### OPEN FIREWALL 
+
+    [root@ol9dns ~]# firewall-cmd --zone=public --add-port=53/tcp --permanent
+    [root@ol9dns ~]# firewall-cmd --zone=public --add-port=53/udp --permanent
+    [root@ol9dns ~]# firewall-cmd --reload
+    [root@ol9dns ~]# firewall-cmd --list-all
+
+###### CHECK SERVICE
+
+    [root@ol9dns ~]# netstat -tulpn | grep ":53"
+                tcp        0      0 192.168.18.201:53       0.0.0.0:*               LISTEN      970/named
+                tcp        0      0 127.0.0.1:53            0.0.0.0:*               LISTEN      970/named
+                udp        0      0 192.168.18.201:53       0.0.0.0:*                           970/named
+                udp        0      0 127.0.0.1:53            0.0.0.0:*                           970/named
 
