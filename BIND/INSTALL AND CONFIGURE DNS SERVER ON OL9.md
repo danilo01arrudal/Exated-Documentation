@@ -26,15 +26,15 @@
     enp1s0  82e45657-ca14-380d-adfc-ac71a5aa7281  ethernet  enp1s0 
     lo      c30f3777-2d34-40f9-9fdb-da73383b9848  loopback  lo  
 
-    [root@localhost ~]# nmcli con modify 'enp1s0' iframe enp1s0 ipv4.method manual ipv4.addresses 192.168.18.101/24 gw4 192.168.18.1
-    [root@localhost ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.201
+    [root@localhost ~]# nmcli con modify 'enp1s0' iframe enp1s0 ipv4.method manual ipv4.addresses 192.168.18.201/24 gw4 192.168.18.1
+    [root@localhost ~]# nmcli con modify 'enp1s0' ipv4.dns 8.8.8.8
     [root@localhost ~]# nmcli con down 'enp1s0'
     [root@localhost ~]# nmcli con up 'enp1s0'
 
     [root@localhost ~]# ip addr show enp1s0
     2: enp1s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 52:54:00:bc:5a:a4 brd ff:ff:ff:ff:ff:ff
-    inet 192.168.18.101/24 brd 192.168.18.255 scope global noprefixroute enp1s0
+    inet 192.168.18.201/24 brd 192.168.18.255 scope global noprefixroute enp1s0
        valid_lft forever preferred_lft forever
     inet6 2804:248:f65e:2800:5054:ff:febc:5aa4/64 scope global dynamic noprefixroute 
        valid_lft 86197sec preferred_lft 86197sec
