@@ -6,3 +6,5 @@ Em termos mais simples, o LIO permite que um servidor Linux compartilhe seus dis
 >    *(1) O LIO transforma um servidor Linux em um servidor de armazenamento em rede.*
 
 >    *(2) Ele permite que esse servidor exponha dispositivos de armazenamento como "alvos" para outros computadores ("iniciadores") acessarem.*
+
+![oracle linux iscsi logo.](https://github.com/danilo01arrudal/Exated/blob/main/SCSI/images/iSCSI.png)
