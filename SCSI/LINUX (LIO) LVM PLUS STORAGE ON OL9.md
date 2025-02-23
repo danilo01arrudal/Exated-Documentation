@@ -68,6 +68,7 @@ Em termos mais simples, o LIO permite que um servidor Linux compartilhe seus dis
     lv_lun_storage_l3 vg_lun_storage -wi-a----- 20,00g                                                    
     lv_lun_storage_l4 vg_lun_storage -wi-a----- 20,00g
 
+
 > *O targetcli é uma interface de linha de comando (CLI) para configurar o subsistema de destino Linux (LIO), que permite que um servidor Linux exponha dispositivos de armazenamento como destinos iSCSI, Fibre Channel ou outros protocolos de armazenamento em rede.*
 
 >    *Criação de destinos iSCSI: Permite que você configure e gerencie destinos iSCSI, que são dispositivos de armazenamento em rede que podem ser acessados por outros servidores (iniciadores iSCSI) através de uma rede IP.*
