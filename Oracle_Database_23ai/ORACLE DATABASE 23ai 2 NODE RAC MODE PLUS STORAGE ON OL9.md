@@ -234,3 +234,46 @@
     EOF
     [root@ol9n2 ~]# chattr +i /etc/resolv.conf
 
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( ENVIRONMENT VARIABLES )
+
+    [root@ol9n1 ~]# cat <<EOF > /home/grid/.bash_profile 
+    # .bash_profile
+
+    # Get the aliases and functions
+    if [ -f ~/.bashrc ]; then
+            . ~/.bashrc
+    fi
+
+    # User specific environment and startup program
+
+    PATH=$PATH:$HOME/.local/bin:$HOME/bin
+    export ORACLE_SID=+ASM1
+    export ORACLE_BASE=/u01/app/grid
+    export ORACLE_HOME=/u01/app/19.3/grid
+    export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch:$PATH
+    umask 22
+    export PATH
+    EOF
+    [root@ol9n1 ~]# chown grid:oinstall /home/grid/.bash_profile
+
+    [root@ol9n1 ~]# cat <<EOF > /home/oracle/.bash_profile
+    # .bash_profile
+
+    # Get the aliases and functions
+    if [ -f ~/.bashrc ]; then
+        . ~/.bashrc
+    fi
+
+    # User specific environment and startup programs
+
+    PATH=$PATH:$HOME/.local/bin:$HOME/bin
+    export ORACLE_SID=oradbc1
+    export ORACLE_BASE=/u01/app/oracle
+    export ORACLE_HOME=$ORACLE_BASE/product/19.3/dbhome_1
+    export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch:$PATH
+    umask 22
+    export PATH
+    EOF
+    [root@ol9n1 ~]# chown oracle:oinstall /home/oracle/.bash_profile
+
+    
