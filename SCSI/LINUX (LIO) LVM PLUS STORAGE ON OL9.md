@@ -1,26 +1,26 @@
 LINUX (LIO) LVM PLUS STORAGE ON OL9.5
 
-> *O Linux-IO Target (LIO) é uma implementação de destino SCSI (Small Computer System Interface) de código aberto incluída no kernel do Linux. 
-Em termos mais simples, o LIO permite que um servidor Linux compartilhe seus dispositivos de armazenamento (como discos rígidos) com outros computadores através de uma rede.*
+> *Linux-IO Target (LIO) is an open-source Small Computer System Interface (SCSI) target implementation included in the Linux kernel.
+In simple terms, LIO allows a Linux server to share its storage devices (such as hard drives) with other computers over a network.*
 
->    *(1) O LIO transforma um servidor Linux em um servidor de armazenamento em rede.*
+>    *(1) LIO turns a Linux server into a network storage server.*
 
->    *(2) Ele permite que esse servidor exponha dispositivos de armazenamento como "alvos" para outros computadores ("iniciadores") acessarem.*
+>    *(2) It allows this server to expose storage devices as "targets" for other computers ("initiators") to access.*
 
 ![oracle linux iscsi logo.](https://github.com/danilo01arrudal/Exated/blob/main/SCSI/images/iSCSI.png)
 
 
-> *LVM, ou Gerenciador de Volume Lógico (Logical Volume Manager), é uma ferramenta poderosa no Linux que oferece uma maneira flexível e eficiente de gerenciar dispositivos de armazenamento. Em vez de particionar discos físicos diretamente, o LVM cria uma camada de abstração que permite manipular o armazenamento de forma lógica.*
+> *LVM, or Logical Volume Manager, is a powerful tool in Linux that provides a flexible and efficient way to manage storage devices. Instead of partitioning physical disks directly, LVM creates an abstraction layer that allows you to manipulate storage logically.*
 
->    *Flexibilidade: Permite redimensionar volumes lógicos sem precisar reiniciar o sistema, o que é ideal para ambientes dinâmicos.*
+>    *Flexibility: Allows you to resize logical volumes without having to restart the system, which is ideal for dynamic environments.*
 
->    *Snapshots: Permite criar snapshots de volumes lógicos, que são cópias instantâneas que podem ser usadas para backups ou testes.*
+>    *Snapshots: Allows you to create snapshots of logical volumes, which are instantaneous copies that can be used for backups or testing.*
 
->    *Concatenação de discos: É possível combinar vários discos físicos em um único Grupo de Volumes, aumentando a capacidade de armazenamento.*
+>    *Disk Concatenation: It is possible to combine multiple physical disks into a single Volume Group, increasing storage capacity.*
 
->    *Gerenciamento simplificado: Facilita o gerenciamento de grandes quantidades de armazenamento, especialmente em servidores e data centers.*
+>    *Simplified management: Makes it easier to manage large amounts of storage, especially in servers and data centers.*
 
->    *Redimensionamento Online: a capacidade de aumentar ou diminuir o tamanho dos Volumes Lógicos sem a necessidade de desmontar os mesmos.*
+>    *Online Resizing: The ability to increase or decrease the size of Logical Volumes without having to dismount them.*
 
 ###### INSTALL LVM2
 
@@ -69,17 +69,17 @@ Em termos mais simples, o LIO permite que um servidor Linux compartilhe seus dis
     lv_lun_storage_l4 vg_lun_storage -wi-a----- 20,00g
 
 
-> *O targetcli é uma interface de linha de comando (CLI) para configurar o subsistema de destino Linux (LIO), que permite que um servidor Linux exponha dispositivos de armazenamento como destinos iSCSI, Fibre Channel ou outros protocolos de armazenamento em rede.*
+> *targetcli is a command-line interface (CLI) for configuring the Linux Target Subsystem (LIO), which allows a Linux server to expose storage devices as iSCSI, Fibre Channel, or other network storage protocol targets.*
 
->    *Criação de destinos iSCSI: Permite que você configure e gerencie destinos iSCSI, que são dispositivos de armazenamento em rede que podem ser acessados por outros servidores (iniciadores iSCSI) através de uma rede IP.*
+>    *Creating iSCSI Targets: Allows you to configure and manage iSCSI targets, which are networked storage devices that can be accessed by other servers (iSCSI initiators) over an IP network.*
 
->    *Gerenciamento de outros protocolos de armazenamento: Além do iSCSI, o targetcli também suporta outros protocolos de armazenamento em rede, como Fibre Channel (FC) e Fibre Channel over Ethernet (FCoE).*
+>    *Managing other storage protocols: In addition to iSCSI, targetcli also supports other network storage protocols such as Fibre Channel (FC) and Fibre Channel over Ethernet (FCoE).*
 
->    *Configuração de LUNs (Logical Unit Numbers): Permite que você crie e gerencie LUNs, que são representações lógicas de dispositivos de armazenamento que são expostos aos iniciadores.*
+>    *Configuring LUNs (Logical Unit Numbers): Allows you to create and manage LUNs, which are logical representations of storage devices that are exposed to initiators.*
 
->    *Controle de acesso: Permite que você configure o controle de acesso para seus destinos de armazenamento, definindo quais iniciadores podem acessar quais LUNs.*
+>    *Access Control: Allows you to configure access control for your storage targets by defining which initiators can access which LUNs.*
 
->    *Gerenciamento de snapshots e clones: Em conjunto com outros softwares, o targetcli pode ser usado para gerenciar snapshots e clones de dispositivos de armazenamento.*
+>    *Snapshot and clone management: In conjunction with other software, targetcli can be used to manage snapshots and clones of storage devices.*
 
 ###### INSTALL AND CONFIGURE TARGETCLI
 
