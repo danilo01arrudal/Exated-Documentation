@@ -346,4 +346,43 @@
     export PATH
     EOF
 
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE ORACLE ASM LIBRARY NODE 1 )
     
+    [root@ol9n1 ~]# source /root/.bash_profile
+    [root@ol9n1 ~]# oracleasm configure -i
+    Configuring the Oracle ASM library driver.
+
+    This will configure the on-boot properties of the Oracle ASM library
+    driver.  The following questions will determine whether the driver is
+    loaded on boot and what permissions it will have.  The current values
+    will be shown in brackets ('[]').  Hitting <ENTER> without typing an
+    answer will keep that current value.  Ctrl-C will abort.
+
+    Default user to own the driver interface []: oracle
+    Default group to own the driver interface []: oinstall
+    Start Oracle ASM library driver on boot (y/n) [n]: y
+    Scan for Oracle ASM disks on boot (y/n) [y]: y
+    Maximum number of disks that may be used in ASM system [2048]: 
+    Enable iofilter if kernel supports it (y/n) [y]: y
+    Writing Oracle ASM library driver configuration: done
+
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE ORACLE ASM LIBRARY NODE 2 )
+
+    [root@ol9n2 ~]# source /root/.bash_profile
+    [root@ol9n2 ~]# oracleasm configure -i
+    Configuring the Oracle ASM library driver.
+
+    This will configure the on-boot properties of the Oracle ASM library
+    driver.  The following questions will determine whether the driver is
+    loaded on boot and what permissions it will have.  The current values
+    will be shown in brackets ('[]').  Hitting <ENTER> without typing an
+    answer will keep that current value.  Ctrl-C will abort.
+
+    Default user to own the driver interface []: oracle
+    Default group to own the driver interface []: oinstall
+    Start Oracle ASM library driver on boot (y/n) [n]: y
+    Scan for Oracle ASM disks on boot (y/n) [y]: y
+    Maximum number of disks that may be used in ASM system [2048]: 
+    Enable iofilter if kernel supports it (y/n) [y]: y
+    Writing Oracle ASM library driver configuration: done
+
