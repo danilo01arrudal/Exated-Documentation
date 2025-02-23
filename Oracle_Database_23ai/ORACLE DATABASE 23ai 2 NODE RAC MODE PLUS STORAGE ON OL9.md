@@ -12,7 +12,7 @@
 
     virt-install --virt-type kvm --name ol9n2 --memory 8192 --vcpus 2 --os-variant ol9.5 --cdrom /var/lib/libvirt/images/OracleLinux-R9-U5-x86_64-dvd.iso --network bridge=br0,model=virtio --network bridge=br0,model=virtio --network network=priv0,model=virtio --disk path=/var/lib/libvirt/images/ol9n2.qcow2,size=59
 
-###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE STATIC NETWORK )
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE STATIC NETWORK NODE 1)
 
     [root@ol9n1 ~]# nmcli device
     DEVICE  TYPE      STATE                   CONNECTION 
@@ -59,6 +59,8 @@
     enp3s0  5e71fb5c-912d-3e64-9093-67f57b60bf34  ethernet  enp3s0 
     lo      a5fbe03a-188f-4b0d-948c-93045f58939b  loopback  lo     
     enp2s0  3a982c55-28e5-3dd6-a476-a8d37a2eb1de  ethernet  --       
+
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE STATIC NETWORK NODE 2)
 
     [root@ol9n2 ~]# nmcli device
     DEVICE  TYPE      STATE                   CONNECTION 
