@@ -12,6 +12,54 @@
 
     virt-install --virt-type kvm --name ol9n2 --memory 8192 --vcpus 2 --os-variant ol9.5 --cdrom /var/lib/libvirt/images/OracleLinux-R9-U5-x86_64-dvd.iso --network bridge=br0,model=virtio --network bridge=br0,model=virtio --network network=priv0,model=virtio --disk path=/var/lib/libvirt/images/ol9n2.qcow2,size=59
 
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE STATIC NETWORK )
+
+    [root@ol9n1 ~]# nmcli device
+    DEVICE  TYPE      STATE                   CONNECTION 
+    enp1s0  ethernet  conectado               enp1s0     
+    enp2s0  ethernet  conectado               enp2s0     
+    enp3s0  ethernet  conectado               enp3s0     
+    lo      loopback  connected (externally)  lo   
+    
+    [root@ol9n1 ~]# nmcli connection show  
+    NAME    UUID                                  TYPE      DEVICE 
+    enp1s0  266c6c59-2242-376f-932a-2fada4e31d3a  ethernet  enp1s0 
+    enp2s0  3a982c55-28e5-3dd6-a476-a8d37a2eb1de  ethernet  enp2s0 
+    enp3s0  5e71fb5c-912d-3e64-9093-67f57b60bf34  ethernet  enp3s0 
+    lo      a5fbe03a-188f-4b0d-948c-93045f58939b  loopback  lo
+    
+    [root@ol9n1 ~]# nmcli con modify 'enp1s0' ifname enp1s0 ipv4.method manual ipv4.addresses 192.168.18.121/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled
+    
+    [root@ol9n1 ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.201 
+    
+    [root@ol9n1 ~]# nmcli con down 'enp1s0'; nmcli con up 'enp1s0'
+    
+    [root@ol9n1 ~]# ip addr show enp1s0
+    2: enp1s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 52:54:00:28:86:aa brd ff:ff:ff:ff:ff:ff
+    inet 192.168.18.121/24 brd 192.168.18.255 scope global noprefixroute enp1s0
+       valid_lft forever preferred_lft forever
+    
+    [root@ol9n1 ~]# nmcli con modify 'enp2s0' ifname enp2s0 ipv4.method manual ipv4.addresses 192.168.18.151/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
+    
+    [root@ol9n1 ~]# nmcli con modify 'enp2s0' ipv4.dns 192.168.18.201 
+    
+    [root@ol9n1 ~]# nmcli con down 'enp2s0'
+    
+    [root@ol9n1 ~]# ip addr show enp2s0
+    3: enp2s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 52:54:00:40:74:a1 brd ff:ff:ff:ff:ff:ff
+    
+    [root@ol9n1 ~]# nmcli con modify 'enp3s0' ifname enp3s0 ipv4.method manual ipv4.addresses 192.168.100.101/24 ipv4.gateway 192.168.100.1 autoconnect yes ipv6.method disabled
+    
+    [root@ol9n1 ~]# nmcli con down 'enp3s0'; nmcli con up 'enp3s0'
+    
+    [root@ol9n1 ~]# ip addr show enp3s0 
+    4: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 52:54:00:7f:44:40 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.100.101/24 brd 192.168.100.255 scope global noprefixroute enp3s0
+       valid_lft forever preferred_lft forever
+
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( DISABLE FIREWALL AND SELINUX )
 
     [root@ol9n1 ~]# sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
