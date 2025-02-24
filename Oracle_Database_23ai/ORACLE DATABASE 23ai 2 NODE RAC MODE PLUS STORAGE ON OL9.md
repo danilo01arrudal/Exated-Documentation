@@ -469,5 +469,28 @@
     KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/$parent", RESULT=="3600140590bc1307e3a44a679c89c7014", SYMLINK+="asm-disk5", OWNER="grid", GROUP="asmadmin", MODE="0660"
     EOF
 
+    [root@ol9n1 ~]# udevadm test /block/sda/sda1
+    [root@ol9n1 ~]# udevadm test /block/sdb/sdb1
+    [root@ol9n1 ~]# udevadm test /block/sdc/sdc1
+    [root@ol9n1 ~]# udevadm test /block/sdd/sdd1
+    [root@ol9n1 ~]# udevadm test /block/sde/sde1
+    [root@ol9n1 ~]# udevadm control --reload-rules
+    [root@ol9n1 ~]# /sbin/udevadm trigger
+    [root@ol9n2 ~]# udevadm test /block/sda/sda1
+    [root@ol9n2 ~]# udevadm test /block/sdb/sdb1
+    [root@ol9n2 ~]# udevadm test /block/sdc/sdc1
+    [root@ol9n2 ~]# udevadm test /block/sdd/sdd1
+    [root@ol9n2 ~]# udevadm test /block/sde/sde1
+    [root@ol9n2 ~]# udevadm control --reload-rules
+    [root@ol9n2 ~]# /sbin/udevadm trigger
+
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CHECK ASM DEVICES RULES )
+
+
+
+
+
+
+
 
 
