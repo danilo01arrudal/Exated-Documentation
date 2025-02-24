@@ -214,7 +214,8 @@ In simple terms, LIO allows a Linux server to share its storage devices (such as
     [root@exated ~]# firewall-cmd --zone=public --add-port=3260/tcp --permanent
     [root@exated ~]# firewall-cmd --reload
 
-
+###### writed by: Danilo Arruda
+###### ter 23 fev 2025
 
 
 
