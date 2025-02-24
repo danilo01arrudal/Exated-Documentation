@@ -409,6 +409,7 @@
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( AUTOMATIC LOGIN ISCSI )
 
 [root@ol9n1 ~]# iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0 -p 192.168.18.200 -o update -n node.startup -v automatic
+
 [root@ol9n2 ~]# iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0 -p 192.168.18.200 -o update -n node.startup -v automatic
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CHECK ISCSI DISKS )
