@@ -150,4 +150,4 @@
                 udp        0      0 127.0.0.1:53            0.0.0.0:*                           970/named
 
 ###### writed by: Danilo Arruda
-###### ter 18 fev 2025
+###### ter 19 fev 2025
