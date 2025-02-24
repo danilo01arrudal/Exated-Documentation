@@ -426,6 +426,32 @@
     Disco /dev/sde: 20 GiB, 21474836480 bytes, 41943040 setores
     Disco /dev/sdc: 20 GiB, 21474836480 bytes, 41943040 setores
 
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CREATE PARTITION ISCSI DISKS )
+
+    [root@ol9n1 ~]# fdisk /dev/sda
+    n > p > 1 > w
+    [root@ol9n1 ~]# fdisk /dev/sdb
+    n > p > 1 > w
+    [root@ol9n1 ~]# fdisk /dev/sdc
+    n > p > 1 > w
+    [root@ol9n1 ~]# fdisk /dev/sdd
+    n > p > 1 > w
+    [root@ol9n1 ~]# fdisk /dev/sde
+    n > p > 1 > w
+
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( GET ISCSI DISKS UUID )
+
+    [root@ol9n1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sda1 
+    36001405c2b1cd5d2f25490fa18a78e36
+    [root@ol9n1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sdb1 
+    360014058c1b0ce71fe24475aa4139ecc
+    [root@ol9n1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sdc1 
+    360014051c3e44ceaf57418fa35d05cb5
+    [root@ol9n1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sdd1 
+    36001405e87d20fdda164e60bd17dac7d
+    [root@ol9n1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sde1 
+    3600140590bc1307e3a44a679c89c7014
+
 
 
 
