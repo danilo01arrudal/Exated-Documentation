@@ -388,10 +388,45 @@
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( GET ISCSI ID )
 
+    [root@ol9n1 ~]# iscsiadm -m discovery -t sendtargets -p 192.168.18.200 
+    192.168.18.200:3260,1 iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0
+    [root@ol9n2 ~]# iscsiadm -m discovery -t sendtargets -p 192.168.18.200
+    192.168.18.200:3260,1 iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0
     [root@ol9n1 ~]# cat /etc/iscsi/initiatorname.iscsi
     InitiatorName=iqn.1988-12.com.oracle:58e84cb3eaf6
     [root@ol9n2 ~]# cat /etc/iscsi/initiatorname.iscsi
     InitiatorName=iqn.1988-12.com.oracle:e647892de987
+    
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( LOGIN ISCSI )
+    
+    [root@ol9n1 ~]# iscsiadm -m node -T  iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0 -p 192.168.18.200 -l
+    Logging in to [iface: default, target: iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0, portal: 192.168.18.200,3260]
+    Login to [iface: default, target: iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0, portal: 192.168.18.200,3260] successful.
+    [root@ol9n2 ~]# iscsiadm -m node -T  iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0 -p 192.168.18.200 -l 
+    Logging in to [iface: default, target: iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0, portal: 192.168.18.200,3260]
+    Login to [iface: default, target: iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0, portal: 192.168.18.200,3260] successful.
+    
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( AUTOMATIC LOGIN ISCSI )
+
+[root@ol9n1 ~]# iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0 -p 192.168.18.200 -o update -n node.startup -v automatic
+[root@ol9n2 ~]# iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0 -p 192.168.18.200 -o update -n node.startup -v automatic
+
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CHECK ISCSI DISKS )
+
+    [root@ol9n1 ~]# fdisk -l | grep "Disco /dev/sd"
+    Disco /dev/sda: 20 GiB, 21474836480 bytes, 41943040 setores
+    Disco /dev/sde: 20 GiB, 21474836480 bytes, 41943040 setores
+    Disco /dev/sdb: 20 GiB, 21474836480 bytes, 41943040 setores
+    Disco /dev/sdd: 20 GiB, 21474836480 bytes, 41943040 setores
+    Disco /dev/sdc: 20 GiB, 21474836480 bytes, 41943040 setores
+    [root@ol9n2 ~]# fdisk -l | grep "Disco /dev/sd" 
+    Disco /dev/sda: 20 GiB, 21474836480 bytes, 41943040 setores
+    Disco /dev/sdb: 20 GiB, 21474836480 bytes, 41943040 setores
+    Disco /dev/sdd: 20 GiB, 21474836480 bytes, 41943040 setores
+    Disco /dev/sde: 20 GiB, 21474836480 bytes, 41943040 setores
+    Disco /dev/sdc: 20 GiB, 21474836480 bytes, 41943040 setores
+
+
 
 
 
