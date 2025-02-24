@@ -209,8 +209,10 @@ In simple terms, LIO allows a Linux server to share its storage devices (such as
     Global pref auto_save_on_exit=true
     Configuration saved to /etc/target/saveconfig.json
 
+###### OPEN ON FIREWALL ISCSI COMMUNICATION
 
-
+    [root@exated ~]# firewall-cmd --zone=public --add-port=3260/tcp --permanent
+    [root@exated ~]# firewall-cmd --reload
 
 
 
