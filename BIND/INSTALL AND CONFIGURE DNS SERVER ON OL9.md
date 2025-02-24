@@ -149,3 +149,5 @@
                 udp        0      0 192.168.18.201:53       0.0.0.0:*                           970/named
                 udp        0      0 127.0.0.1:53            0.0.0.0:*                           970/named
 
+###### writed by: Danilo Arruda
+###### ter 18 fev 2025
