@@ -386,3 +386,11 @@
     Enable iofilter if kernel supports it (y/n) [y]: y
     Writing Oracle ASM library driver configuration: done
 
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( GET ISCSI ID )
+
+    [root@ol9n1 ~]# cat /etc/iscsi/initiatorname.iscsi
+    InitiatorName=iqn.1988-12.com.oracle:58e84cb3eaf6
+    [root@ol9n2 ~]# cat /etc/iscsi/initiatorname.iscsi
+    InitiatorName=iqn.1988-12.com.oracle:e647892de987
+
+
