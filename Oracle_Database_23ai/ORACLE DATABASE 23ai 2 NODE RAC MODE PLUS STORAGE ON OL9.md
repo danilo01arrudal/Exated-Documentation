@@ -125,11 +125,19 @@
     Removed "/etc/systemd/system/multi-user.target.wants/avahi-daemon.service".
     Removed "/etc/systemd/system/sockets.target.wants/avahi-daemon.socket".
     Removed "/etc/systemd/system/dbus-org.freedesktop.Avahi.service".
+    [root@ol9n1 ~]# systemctl mask avahi-daemon.socket avahi-daemon.service 
+    Created symlink /etc/systemd/system/avahi-daemon.socket → /dev/null.
+    Created symlink /etc/systemd/system/avahi-daemon.service → /dev/null.
+    [root@ol9n1 ~]# systemctl stop avahi-daemon.socket avahi-daemon.service
 
     [root@ol9n2 ~]# systemctl disable avahi-daemon.socket avahi-daemon.service
     Removed "/etc/systemd/system/multi-user.target.wants/avahi-daemon.service".
     Removed "/etc/systemd/system/dbus-org.freedesktop.Avahi.service".
     Removed "/etc/systemd/system/sockets.target.wants/avahi-daemon.socket".
+    [root@ol9n2 ~]# systemctl mask avahi-daemon.socket avahi-daemon.service 
+    Created symlink /etc/systemd/system/avahi-daemon.socket → /dev/null.
+    Created symlink /etc/systemd/system/avahi-daemon.service → /dev/null.
+    [root@ol9n2 ~]# systemctl stop avahi-daemon.socket avahi-daemon.service
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( DISABLE FIREWALL AND SELINUX )
 
