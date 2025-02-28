@@ -199,32 +199,32 @@
     [root@ol9n1 ~]# cat <<EOF >> /etc/hosts 
     # bridge
     # Public Network - (enp1s0)
-    192.168.1.121 ol9n1.appsdba.info ol9n1
-    192.168.1.122 ol9n2.appsdba.info ol9n2
- 
+    192.168.1.121 ol9n1 ol9n1.appsdba.info 
+    192.168.1.122 ol9n2 ol9n2.appsdba.info 
+
     # Internal Network
     # Private Interconnect - (enp3s0)
-    192.168.100.101 ol9n1-priv.appsdba.info ol9n1-priv
-    192.168.100.102 ol9n2-priv.appsdba.info ol9n2-priv
- 
+    192.168.100.101 ol9n1-priv ol9n1-priv.appsdba.info 
+    192.168.100.102 ol9n2-priv ol9n2-priv.appsdba.info 
+
     # Public Virtual IP (VIP) addresses for - (enp2s0)
-    192.168.18.151 ol9n1-vip.appsdba.info ol9n1-vip
-    192.168.18.152 ol9n2-vip.appsdba.info ol9n2-vip
+    192.168.18.151 ol9n1-vip ol9n1-vip.appsdba.info
+    192.168.18.152 ol9n2-vip ol9n2-vip.appsdba.info
     EOF
     [root@ol9n2 ~]# cat <<EOF >> /etc/hosts 
     # bridge
     # Public Network - (enp1s0)
-    192.168.1.121 ol9n1.appsdba.info ol9n1
-    192.168.1.122 ol9n2.appsdba.info ol9n2
- 
+    192.168.1.121 ol9n1 ol9n1.appsdba.info 
+    192.168.1.122 ol9n2 ol9n2.appsdba.info 
+
     # Internal Network
     # Private Interconnect - (enp3s0)
-    192.168.100.101 ol9n1-priv.appsdba.info ol9n1-priv
-    192.168.100.102 ol9n2-priv.appsdba.info ol9n2-priv
- 
+    192.168.100.101 ol9n1-priv ol9n1-priv.appsdba.info 
+    192.168.100.102 ol9n2-priv ol9n2-priv.appsdba.info 
+
     # Public Virtual IP (VIP) addresses for - (enp2s0)
-    192.168.18.151 ol9n1-vip.appsdba.info ol9n1-vip
-    192.168.18.152 ol9n2-vip.appsdba.info ol9n2-vip
+    192.168.18.151 ol9n1-vip ol9n1-vip.appsdba.info
+    192.168.18.152 ol9n2-vip ol9n2-vip.appsdba.info
     EOF
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE /ETC/RESOLV.CONF )
