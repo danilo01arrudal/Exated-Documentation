@@ -507,6 +507,16 @@
     [root@ol9n1 ~]# su - root -c "cat /root/.ssh/id_rsa.pub > /root/.ssh/authorized_keys"
     [root@ol9n1 ~]# su - oracle -c "cat /home/oracle/.ssh/id_rsa.pub > /home/oracle/.ssh/authorized_keys"
     [root@ol9n1 ~]# su - grid -c "cat /home/grid/.ssh/id_rsa.pub > /home/grid/.ssh/authorized_keys"
+    [root@ol9n1 ~]# chmod 600 /root/.ssh/authorized_keys
+    [root@ol9n1 ~]# chmod 600 /home/oracle/.ssh/authorized_keys
+    [root@ol9n1 ~]# chmod 600 /home/grid/.ssh/authorized_keys
+    [root@ol9n1 ~]# ssh-copy-id -i .ssh/id_rsa.pub root@192.168.18.122
+    [root@ol9n1 ~]# su - oracle
+    [oracle@ol9n1 ~]$ ssh-copy-id -i .ssh/id_rsa.pub oracle@192.168.18.122
+    [oracle@ol9n1 ~]$ exit
+    [root@ol9n1 ~]# su - grid
+    [grid@ol9n1 ~]$ ssh-copy-id -i .ssh/id_rsa.pub grid@192.168.18.122
+    [grid@ol9n1 ~]$ exit
     
 ###### SSH KEY EXCHANGE ( NODE 2 )
 
@@ -516,7 +526,17 @@
     [root@ol9n2 ~]# su - root -c "cat /root/.ssh/id_rsa.pub > /root/.ssh/authorized_keys"
     [root@ol9n2 ~]# su - oracle -c "cat /home/oracle/.ssh/id_rsa.pub > /home/oracle/.ssh/authorized_keys"
     [root@ol9n2 ~]# su - grid -c "cat /home/grid/.ssh/id_rsa.pub > /home/grid/.ssh/authorized_keys"
-
+    [root@ol9n2 ~]# chmod 600 /root/.ssh/authorized_keys
+    [root@ol9n2 ~]# chmod 600 /home/oracle/.ssh/authorized_keys
+    [root@ol9n2 ~]# chmod 600 /home/grid/.ssh/authorized_keys
+    [root@ol9n2 ~]# ssh-copy-id -i .ssh/id_rsa.pub root@192.168.18.121
+    [root@ol9n2 ~]# su - oracle
+    [oracle@ol9n2 ~]$ ssh-copy-id -i .ssh/id_rsa.pub oracle@192.168.18.121
+    [oracle@ol9n2 ~]$ exit
+    [root@ol9n2 ~]# su - grid
+    [grid@ol9n2 ~]$ ssh-copy-id -i .ssh/id_rsa.pub grid@192.168.18.121
+    [grid@ol9n2 ~]$ exit
+    
 ###### COPY GRID INFRASTRUCTURE SOFTWARE
 
     [root@exated Downloads]# scp p37370503_230000_Linux-x86-64.zip grid@192.168.18.121:/u01/app/23.7.0/grid
