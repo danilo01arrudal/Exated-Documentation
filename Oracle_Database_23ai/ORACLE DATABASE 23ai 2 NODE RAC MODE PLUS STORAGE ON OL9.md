@@ -506,6 +506,33 @@
 
     [root@exated Downloads]# scp p37370503_230000_Linux-x86-64.zip grid@192.168.18.121:/u01/app/23.7.0/grid
 
+###### UNZIP GRID INFRASTRUCTURE SOFTWARE
+
+    [root@ol9n1 ~]# su - grid
+    [grid@ol9n1 grid]$ cd /u01/app/23.7.0/grid/
+    [grid@ol9n1 grid]$ unzip p37370503_230000_Linux-x86-64.zip
+    [grid@ol9n1 grid]$ rm -vf p37370503_230000_Linux-x86-64.zip
+
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( INSTALL CVU PACKAGE )
+
+    [root@ol9n1 ~]# rpm -ivh /u01/app/23.7.0/grid/cv/rpm/cvuqdisk-1.0.10-1.rpm 
+    aviso: /u01/app/23.7.0/grid/cv/rpm/cvuqdisk-1.0.10-1.rpm: Cabeçalho V3 RSA/SHA256 Signature, ID da chave ad986da3: NOKEY
+    Verifying...                          ################################# [100%]
+    Preparando...                         ################################# [100%]
+    Using default group oinstall to install package
+    Updating / installing...
+        1:cvuqdisk-1.0.10-1                ################################# [100%]
+    [root@ol9n1 ~]# scp /u01/app/23.7.0/grid/cv/rpm/cvuqdisk-1.0.10-1.rpm root@ol9n2:/root/
+    [root@ol9n1 ~]# ssh root@ol9n2
+    [root@ol9n2 ~]# rpm -ivh cvuqdisk-1.0.10-1.rpm 
+    aviso: cvuqdisk-1.0.10-1.rpm: Cabeçalho V3 RSA/SHA256 Signature, ID da chave ad986da3: NOKEY
+    Verifying...                          ################################# [100%]
+    Preparando...                         ################################# [100%]
+    Using default group oinstall to install package
+    Updating / installing...
+       1:cvuqdisk-1.0.10-1                ################################# [100%]
+    [root@ol9n2 ~]# exit
+
 
 
 
