@@ -14,6 +14,14 @@
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE STATIC NETWORK NODE 1)
 
+    [root@ol9n1 ~]# hostnamectl set-hostname ol9n1
+
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE STATIC NETWORK NODE 2)
+
+    [root@ol9n2 ~]# hostnamectl set-hostname ol9n2
+
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE STATIC NETWORK NODE 1)
+
     [root@ol9n1 ~]# nmcli device
     DEVICE  TYPE      STATE                   CONNECTION 
     enp1s0  ethernet  conectado               enp1s0     
@@ -485,6 +493,7 @@
     [root@ol9n2 ~]# /sbin/udevadm trigger
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CHECK ASM DEVICES RULES )
+
 
 
 
