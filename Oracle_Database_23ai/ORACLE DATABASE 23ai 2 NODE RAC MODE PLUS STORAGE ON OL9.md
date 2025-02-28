@@ -494,7 +494,32 @@
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CHECK ASM DEVICES RULES )
 
+    [root@ol9n1 ~]# ls -ltr /dev/asm-disk*
+    lrwxrwxrwx 1 root root 4 fev 28 14:34 /dev/asm-disk1 -> sda1
+    [root@ol9n1 ~]# ls -ltr /dev/sda1
+    brw-rw---- 1 grid asmadmin 8, 1 fev 28 14:34 /dev/sda1
 
+###### SSH KEY EXCHANGE ( NODE 1 )
+
+    [root@ol9n1 ~]# su - root -c "ssh-keygen -t rsa"
+    [root@ol9n1 ~]# su - oracle -c "ssh-keygen -t rsa"
+    [root@ol9n1 ~]# su - grid -c "ssh-keygen -t rsa"
+    [root@ol9n1 ~]# su - root -c "cat /root/.ssh/id_rsa.pub > /root/.ssh/authorized_keys"
+    [root@ol9n1 ~]# su - oracle -c "cat /home/oracle/.ssh/id_rsa.pub > /home/oracle/.ssh/authorized_keys"
+    [root@ol9n1 ~]# su - grid -c "cat /home/grid/.ssh/id_rsa.pub > /home/grid/.ssh/authorized_keys"
+    
+###### SSH KEY EXCHANGE ( NODE 2 )
+
+    [root@ol9n2 ~]# su - root -c "ssh-keygen -t rsa"
+    [root@ol9n2 ~]# su - oracle -c "ssh-keygen -t rsa"
+    [root@ol9n2 ~]# su - grid -c "ssh-keygen -t rsa"
+    [root@ol9n2 ~]# su - root -c "cat /root/.ssh/id_rsa.pub > /root/.ssh/authorized_keys"
+    [root@ol9n2 ~]# su - oracle -c "cat /home/oracle/.ssh/id_rsa.pub > /home/oracle/.ssh/authorized_keys"
+    [root@ol9n2 ~]# su - grid -c "cat /home/grid/.ssh/id_rsa.pub > /home/grid/.ssh/authorized_keys"
+
+###### COPY GRID INFRASTRUCTURE SOFTWARE
+
+    [root@exated Downloads]# scp p37370503_230000_Linux-x86-64.zip grid@192.168.18.121:/u01/app/23.7.0/grid
 
 
 
