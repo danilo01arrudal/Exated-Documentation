@@ -553,7 +553,485 @@
        1:cvuqdisk-1.0.10-1                ################################# [100%]
     [root@ol9n2 ~]# exit
 
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( RUNCLUVFY )
 
+    [root@ol9n1 ~]# su - grid
+    [grid@ol9n1 ~]$ /u01/app/23.7.0/grid/runcluvfy.sh stage -pre crsinst -n ol9n1,ol9n2 -verbose -method root
+    Digite a senha de "ROOT":
+
+    Performing following verification checks ...
+
+    Memória Física ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         7,7478GB (8124168.0KB)    8GB (8388608.0KB)         aprovado  
+    ol9n1         7,7478GB (8124160.0KB)    8GB (8388608.0KB)         aprovado  
+    Memória Física ...APROVADO
+    Memória Física Disponível ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         7,3125GB (7667700.0KB)    50MB (51200.0KB)          aprovado  
+    ol9n1         7,0345GB (7376172.0KB)    50MB (51200.0KB)          aprovado  
+    Memória Física Disponível ...APROVADO
+    Tamanho de Swap ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         8GB (8388604.0KB)         7,7478GB (8124168.0KB)    aprovado  
+    ol9n1         8GB (8388604.0KB)         7,7478GB (8124160.0KB)    aprovado  
+    Tamanho de Swap ...APROVADO
+    Espaço Livre: ol9n2:/usr,ol9n2:/var,ol9n2:/etc,ol9n2:/sbin,ol9n2:/tmp ...
+    Caminho           Nome do Nó    Ponto de montagem  Disponível    Necessário    Status      
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    /usr              ol9n2         /             42,4229GB     25MB          aprovado    
+    /var              ol9n2         /             42,4229GB     5MB           aprovado    
+    /etc              ol9n2         /             42,4229GB     25MB          aprovado    
+    /sbin             ol9n2         /             42,4229GB     10MB          aprovado    
+    /tmp              ol9n2         /             42,4229GB     1GB           aprovado    
+    Espaço Livre: ol9n2:/usr,ol9n2:/var,ol9n2:/etc,ol9n2:/sbin,ol9n2:/tmp ...APROVADO
+    Espaço Livre: ol9n1:/usr,ol9n1:/var,ol9n1:/etc,ol9n1:/sbin,ol9n1:/tmp ...
+    Caminho           Nome do Nó    Ponto de montagem  Disponível    Necessário    Status      
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    /usr              ol9n1         /             39,7291GB     25MB          aprovado    
+    /var              ol9n1         /             39,7291GB     5MB           aprovado    
+    /etc              ol9n1         /             39,7291GB     25MB          aprovado    
+    /sbin             ol9n1         /             39,7291GB     10MB          aprovado    
+    /tmp              ol9n1         /             39,7291GB     1GB           aprovado    
+    Espaço Livre: ol9n1:/usr,ol9n1:/var,ol9n1:/etc,ol9n1:/sbin,ol9n1:/tmp ...APROVADO
+    Existência de Usuário: grid ...
+    Nome do Nó    Status                    Comentário              
+    ------------  ------------------------  ------------------------
+    ol9n2         aprovado                  existe(54332)           
+    ol9n1         aprovado                  existe(54332)           
+
+    Usuários com o Mesmo UID: 54332 ...APROVADO
+    Existência de Usuário: grid ...APROVADO
+    Existência de Grupo: asmadmin ...
+    Nome do Nó    Status                    Comentário              
+    ------------  ------------------------  ------------------------
+    ol9n2         aprovado                  existe                  
+    ol9n1         aprovado                  existe                  
+    Existência de Grupo: asmadmin ...APROVADO
+    Existência de Grupo: asmdba ...
+    Nome do Nó    Status                    Comentário              
+    ------------  ------------------------  ------------------------
+    ol9n2         aprovado                  existe                  
+    ol9n1         aprovado                  existe                  
+    Existência de Grupo: asmdba ...APROVADO
+    Existência de Grupo: oinstall ...
+    Nome do Nó    Status                    Comentário              
+    ------------  ------------------------  ------------------------
+    ol9n2         aprovado                  existe                  
+    ol9n1         aprovado                  existe                  
+    Existência de Grupo: oinstall ...APROVADO
+    Participação em Grupos: asmdba ...
+    Nome do Nó        O Usuário Já Existe  O Grupo Já Existe  Usuário no Grupo  Status          
+    ----------------  ------------  ------------  ------------  ----------------
+    ol9n2             sim           sim           sim           aprovado        
+    ol9n1             sim           sim           sim           aprovado        
+    Participação em Grupos: asmdba ...APROVADO
+    Participação em Grupos: asmadmin ...
+    Nome do Nó        O Usuário Já Existe  O Grupo Já Existe  Usuário no Grupo  Status          
+    ----------------  ------------  ------------  ------------  ----------------
+    ol9n2             sim           sim           sim           aprovado        
+    ol9n1             sim           sim           sim           aprovado        
+    Participação em Grupos: asmadmin ...APROVADO
+    Participação em Grupos: oinstall(Principal) ...
+    Nome do Nó        O Usuário Já Existe  O Grupo Já Existe  Usuário no Grupo  Principal     Status      
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol9n2             sim           sim           sim           sim           aprovado    
+    ol9n1             sim           sim           sim           sim           aprovado    
+    Participação em Grupos: oinstall(Principal) ...APROVADO
+    Nível da Execução ...
+    Nome do Nó    nível de execução         Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         5                         3,5                       aprovado  
+    ol9n1         5                         3,5                       aprovado  
+    Nível da Execução ...APROVADO
+    Arquitetura ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         x86_64                    x86_64                    aprovado  
+    ol9n1         x86_64                    x86_64                    aprovado  
+    Arquitetura ...APROVADO
+    Versão do Kernel do SO ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         5.15.0-302.167.6.el9uek.x86_64  5.15.0              aprovado  
+    ol9n1         5.15.0-302.167.6.el9uek.x86_64  5.15.0              aprovado  
+    Versão do Kernel do SO ...APROVADO
+    Parâmetro de Kernel do SO: semmsl ...
+    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol9n1             250           250           250           aprovado    
+    ol9n2             250           250           250           aprovado    
+    Parâmetro de Kernel do SO: semmsl ...APROVADO
+    Parâmetro de Kernel do SO: semmns ...
+    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol9n1             32000         32000         32000         aprovado    
+    ol9n2             32000         32000         32000         aprovado    
+    Parâmetro de Kernel do SO: semmns ...APROVADO
+    Parâmetro de Kernel do SO: semopm ...
+    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol9n1             100           100           100           aprovado    
+    ol9n2             100           100           100           aprovado    
+    Parâmetro de Kernel do SO: semopm ...APROVADO
+    Parâmetro de Kernel do SO: semmni ...
+    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol9n1             128           128           128           aprovado    
+    ol9n2             128           128           128           aprovado    
+    Parâmetro de Kernel do SO: semmni ...APROVADO
+    Parâmetro de Kernel do SO: shmmax ...
+    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol9n1             4398046511104  4398046511104  4159569920  aprovado    
+    ol9n2             4398046511104  4398046511104  4159574016  aprovado    
+    Parâmetro de Kernel do SO: shmmax ...APROVADO
+    Parâmetro de Kernel do SO: shmmni ...
+    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol9n1             4096          4096          4096          aprovado    
+    ol9n2             4096          4096          4096          aprovado    
+    Parâmetro de Kernel do SO: shmmni ...APROVADO
+    Parâmetro de Kernel do SO: shmall ...
+    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol9n1             1073741824    1073741824    1073741824    aprovado    
+    ol9n2             1073741824    1073741824    1073741824    aprovado    
+    Parâmetro de Kernel do SO: shmall ...APROVADO
+    Parâmetro de Kernel do SO: file-max ...
+    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol9n1             6815744       6815744       6815744       aprovado    
+    ol9n2             6815744       6815744       6815744       aprovado    
+    Parâmetro de Kernel do SO: file-max ...APROVADO
+    Parâmetro de Kernel do SO: ip_local_port_range ...
+    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol9n1             between 9000 & 65535  between 9000 & 65535  between 9000 & 65535  aprovado    
+    ol9n2             between 9000 & 65535  between 9000 & 65535  between 9000 & 65535  aprovado    
+    Parâmetro de Kernel do SO: ip_local_port_range ...APROVADO
+    Parâmetro de Kernel do SO: rmem_default ...
+    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol9n1             262144        262144        262144        aprovado    
+    ol9n2             262144        262144        262144        aprovado    
+    Parâmetro de Kernel do SO: rmem_default ...APROVADO
+    Parâmetro de Kernel do SO: rmem_max ...
+    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol9n1             4194304       4194304       4194304       aprovado    
+    ol9n2             4194304       4194304       4194304       aprovado    
+    Parâmetro de Kernel do SO: rmem_max ...APROVADO
+    Parâmetro de Kernel do SO: wmem_default ...
+    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol9n1             262144        262144        262144        aprovado    
+    ol9n2             262144        262144        262144        aprovado    
+    Parâmetro de Kernel do SO: wmem_default ...APROVADO
+    Parâmetro de Kernel do SO: wmem_max ...
+    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol9n1             1048576       1048576       1048576       aprovado    
+    ol9n2             1048576       1048576       1048576       aprovado    
+    Parâmetro de Kernel do SO: wmem_max ...APROVADO
+    Parâmetro de Kernel do SO: aio-max-nr ...
+    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol9n1             1048576       1048576       1048576       aprovado    
+    ol9n2             1048576       1048576       1048576       aprovado    
+    Parâmetro de Kernel do SO: aio-max-nr ...APROVADO
+    Parâmetro de Kernel do SO: panic_on_oops ...
+    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol9n1             1             1             1             aprovado    
+    ol9n2             1             1             1             aprovado    
+    Parâmetro de Kernel do SO: panic_on_oops ...APROVADO
+    Parâmetro de Kernel do SO: kernel.panic ...
+    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol9n1             10            10            at least 1    aprovado    
+    ol9n2             10            10            at least 1    aprovado    
+    Parâmetro de Kernel do SO: kernel.panic ...APROVADO
+    Pacote: kmod-20-21 (x86_64) ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         kmod(x86_64)-28-10.0.1.el9  kmod(x86_64)-20-21        aprovado  
+    ol9n1         kmod(x86_64)-28-10.0.1.el9  kmod(x86_64)-20-21        aprovado  
+    Pacote: kmod-20-21 (x86_64) ...APROVADO
+    Pacote: kmod-libs-20-21 (x86_64) ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         kmod-libs(x86_64)-28-10.0.1.el9  kmod-libs(x86_64)-20-21   aprovado  
+    ol9n1         kmod-libs(x86_64)-28-10.0.1.el9  kmod-libs(x86_64)-20-21   aprovado  
+    Pacote: kmod-libs-20-21 (x86_64) ...APROVADO
+    Pacote: binutils-2.35.2 ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         binutils-2.35.2-54.0.1.el9  binutils-2.35.2           aprovado  
+    ol9n1         binutils-2.35.2-54.0.1.el9  binutils-2.35.2           aprovado  
+    Pacote: binutils-2.35.2 ...APROVADO
+    Pacote: fontconfig-2.14.0 (x86_64) ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         fontconfig(x86_64)-2.14.0-2.el9_1  fontconfig(x86_64)-2.14.0  aprovado  
+    ol9n1         fontconfig(x86_64)-2.14.0-2.el9_1  fontconfig(x86_64)-2.14.0  aprovado  
+    Pacote: fontconfig-2.14.0 (x86_64) ...APROVADO
+    Pacote: libxcrypt-compat-4.4.18 ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         libxcrypt-compat-4.4.18-3.el9  libxcrypt-compat-4.4.18   aprovado  
+    ol9n1         libxcrypt-compat-4.4.18-3.el9  libxcrypt-compat-4.4.18   aprovado  
+    Pacote: libxcrypt-compat-4.4.18 ...APROVADO
+    Pacote: libgcc-11.3.1 (x86_64) ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         libgcc(x86_64)-11.5.0-2.0.1.el9  libgcc(x86_64)-11.3.1     aprovado  
+    ol9n1         libgcc(x86_64)-11.5.0-2.0.1.el9  libgcc(x86_64)-11.3.1     aprovado  
+    Pacote: libgcc-11.3.1 (x86_64) ...APROVADO
+    Pacote: libstdc++-11.3.1 (x86_64) ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         libstdc++(x86_64)-11.5.0-2.0.1.el9  libstdc++(x86_64)-11.3.1  aprovado  
+    ol9n1         libstdc++(x86_64)-11.5.0-2.0.1.el9  libstdc++(x86_64)-11.3.1  aprovado  
+    Pacote: libstdc++-11.3.1 (x86_64) ...APROVADO
+    Pacote: sysstat-12.5.4 ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         sysstat-12.5.4-9.0.2.el9  sysstat-12.5.4            aprovado  
+    ol9n1         sysstat-12.5.4-9.0.2.el9  sysstat-12.5.4            aprovado  
+    Pacote: sysstat-12.5.4 ...APROVADO
+    Pacote: ksh ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         ksh                       ksh                       aprovado  
+    ol9n1         ksh                       ksh                       aprovado  
+    Pacote: ksh ...APROVADO
+    Pacote: make-4.3 ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         make-4.3-8.el9            make-4.3                  aprovado  
+    ol9n1         make-4.3-8.el9            make-4.3                  aprovado  
+    Pacote: make-4.3 ...APROVADO
+    Pacote: glibc-2.34 (x86_64) ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         glibc(x86_64)-2.34-125.0.1.el9_5.1  glibc(x86_64)-2.34        aprovado  
+    ol9n1         glibc(x86_64)-2.34-125.0.1.el9_5.1  glibc(x86_64)-2.34        aprovado  
+    Pacote: glibc-2.34 (x86_64) ...APROVADO
+    Pacote: glibc-devel-2.34 (x86_64) ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         glibc-devel(x86_64)-2.34-125.0.1.el9_5.1  glibc-devel(x86_64)-2.34  aprovado  
+    ol9n1         glibc-devel(x86_64)-2.34-125.0.1.el9_5.1  glibc-devel(x86_64)-2.34  aprovado  
+    Pacote: glibc-devel-2.34 (x86_64) ...APROVADO
+    Pacote: libaio-0.3.111 (x86_64) ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         libaio(x86_64)-0.3.111-13.el9  libaio(x86_64)-0.3.111    aprovado  
+    ol9n1         libaio(x86_64)-0.3.111-13.el9  libaio(x86_64)-0.3.111    aprovado  
+    Pacote: libaio-0.3.111 (x86_64) ...APROVADO
+    Pacote: nfs-utils-2.5.4 ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         nfs-utils-2.5.4-27.0.1.el9  nfs-utils-2.5.4           aprovado  
+    ol9n1         nfs-utils-2.5.4-27.0.1.el9  nfs-utils-2.5.4           aprovado  
+    Pacote: nfs-utils-2.5.4 ...APROVADO
+    Pacote: smartmontools-7.2-6 ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         smartmontools-7.2-9.el9   smartmontools-7.2-6       aprovado  
+    ol9n1         smartmontools-7.2-9.el9   smartmontools-7.2-6       aprovado  
+    Pacote: smartmontools-7.2-6 ...APROVADO
+    Pacote: net-tools-2.0-0.62 ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         net-tools-2.0-0.64.20160912git.el9  net-tools-2.0-0.62        aprovado  
+    ol9n1         net-tools-2.0-0.64.20160912git.el9  net-tools-2.0-0.62        aprovado  
+    Pacote: net-tools-2.0-0.62 ...APROVADO
+    Pacote: policycoreutils-3.5-1 ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         policycoreutils-3.6-2.1.el9  policycoreutils-3.5-1     aprovado  
+    ol9n1         policycoreutils-3.6-2.1.el9  policycoreutils-3.5-1     aprovado  
+    Pacote: policycoreutils-3.5-1 ...APROVADO
+    Pacote: policycoreutils-python-utils-3.5-1 ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         policycoreutils-python-utils-3.6-2.1.el9  policycoreutils-python-utils-3.5-1  aprovado  
+    ol9n1         policycoreutils-python-utils-3.6-2.1.el9  policycoreutils-python-utils-3.5-1  aprovado  
+    Pacote: policycoreutils-python-utils-3.5-1 ...APROVADO
+    Usuários com o Mesmo UID: 0 ...APROVADO
+    ID do Grupo Atual ...APROVADO
+    Consistência de usuário-raiz ...
+    Nome do Nó                            Status                  
+    ------------------------------------  ------------------------
+    ol9n2                                 aprovado                
+    ol9n1                                 aprovado                
+    Consistência de usuário-raiz ...APROVADO
+    Pacote: psmisc-22.6-19 ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         psmisc-23.4-3.el9         psmisc-22.6-19            aprovado  
+    ol9n1         psmisc-23.4-3.el9         psmisc-22.6-19            aprovado  
+    Pacote: psmisc-22.6-19 ...APROVADO
+    Nome do host ...APROVADO
+    Conectividade de Nó ...
+    Arquivo dos Hosts ...
+    Nome do Nó                            Status                  
+    ------------------------------------  ------------------------
+    ol9n1                                 aprovado                
+    ol9n2                                 aprovado                
+    Arquivo dos Hosts ...APROVADO
+    Informações de interface para o nó "ol9n1"
+
+    Nome   Endereço IP     Sub-rede        Gateway         Gateway Def.    Endereço HW       MTU   
+    ------ --------------- --------------- --------------- --------------- ----------------- ------
+    enp1s0 192.168.18.121  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:28:86:AA 1500  
+    enp3s0 192.168.100.101 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:7F:44:40 1500  
+    
+    Informações de interface para o nó "ol9n2"
+    Nome   Endereço IP     Sub-rede        Gateway         Gateway Def.    Endereço HW       MTU   
+    ------ --------------- --------------- --------------- --------------- ----------------- ------
+    enp1s0 192.168.18.122  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:6B:00:2D 1500  
+    enp3s0 192.168.100.102 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:5D:35:1F 1500  
+    
+    Verificar: Consistência de MTU da sub-rede "192.168.18.0".
+    Nó                Nome          Endereço IP   Sub-rede      MTU             
+    ----------------  ------------  ------------  ------------  ----------------
+    ol9n1             enp1s0        192.168.18.121  192.168.18.0  1500            
+    ol9n2             enp1s0        192.168.18.122  192.168.18.0  1500            
+    
+    Verificar: Consistência de MTU da sub-rede "192.168.100.0".
+    Nó                Nome          Endereço IP   Sub-rede      MTU             
+    ----------------  ------------  ------------  ------------  ----------------
+    ol9n1             enp3s0        192.168.100.101  192.168.100.0  1500            
+    ol9n2             enp3s0        192.168.100.102  192.168.100.0  1500            
+
+    Origem                      Destino                     Conectado?                
+    --------------------------  --------------------------  --------------------------
+    ol9n1[enp1s0:192.168.18.121]  ol9n2[enp1s0:192.168.18.122]  sim                       
+
+    Origem                      Destino                     Conectado?                
+    --------------------------  --------------------------  --------------------------
+    ol9n1[enp3s0:192.168.100.101]  ol9n2[enp3s0:192.168.100.102]  sim                       
+    Verifique se o tamanho máximo (MTU) do pacote passa pela sub-rede ...APROVADO
+    consistência de máscara para a sub-rede "192.168.18.0" ...APROVADO
+    consistência de máscara para a sub-rede "192.168.100.0" ...APROVADO
+    Conectividade de Nó ...APROVADO
+    Verificação de multicast ou broadcast ...    
+    Verificando sub-rede "192.168.18.0" para comunicação multicast com o grupo multicast "224.0.0.251"
+    Verificação de multicast ou broadcast ...APROVADO
+    Verificação da instalação e da configuração de ASMLib ...
+    '/etc/init.d/oracleasm' ...APROVADO
+    '/dev/oracleasm' ...APROVADO
+
+    Nome do Nó                            Status                  
+    ------------------------------------  ------------------------
+    ol9n1                                 aprovado                
+    ol9n2                                 aprovado                
+    Verificação da instalação e da configuração de ASMLib ...APROVADO
+    NTP (Network Time Protocol) ...
+    Daemon 'chronyd' ...
+    Nome do Nó                            Em execução?            
+    ------------------------------------  ------------------------
+    ol9n2                                 sim                     
+    ol9n1                                 sim                     
+
+    Daemon 'chronyd' ...APROVADO
+    Daemon ou serviço NTP usando a porta UDP 123 ...
+    Nome do Nó                            Porta Aberta?           
+    ------------------------------------  ------------------------
+    ol9n2                                 sim                     
+    ol9n1                                 sim                     
+
+    Daemon ou serviço NTP usando a porta UDP 123 ...APROVADO
+    O daemon chrony está sincronizado com pelo menos uma origem de tempo externa ...APROVADO
+    NTP (Network Time Protocol) ...APROVADO
+    Padrão do nome do arquivo central igual ...APROVADO
+    Máscara do Usuário ...
+    Nome do Nó    Disponível                Necessário                Comentário
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         0022                      0022                      aprovado  
+    ol9n1         0022                      0022                      aprovado  
+    Máscara do Usuário ...APROVADO
+    O Usuário Não Está no Grupo "root": grid ...
+    Nome do Nó    Status                    Comentário              
+    ------------  ------------------------  ------------------------
+    ol9n2         aprovado                  não existe              
+    ol9n1         aprovado                  não existe              
+    O Usuário Não Está no Grupo "root": grid ...APROVADO
+    Consistência do fuso horário ...APROVADO
+    Path existence, ownership, permissions and attributes ...
+    Path "/var" ...APROVADO
+    Path "/dev/shm" ...APROVADO
+    Path existence, ownership, permissions and attributes ...APROVADO
+    Diferença de horário entre os nós ...APROVADO
+    Integridade de resolv.conf ...
+    Nome do Nó                            Status                  
+    ------------------------------------  ------------------------
+    ol9n1                                 aprovado                
+    ol9n2                                 aprovado                
+    
+    verificando resposta para o nome "ol9n2" de cada um dos servidores de nome
+    especificados em "/etc/resolv.conf"
+
+    Nome do Nó    Origem                    Comentário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         192.168.18.201            IPv4                      aprovado  
+    
+    verificando resposta para o nome "ol9n1" de cada um dos servidores de nome especificados em "/etc/resolv.conf"
+
+    Nome do Nó    Origem                    Comentário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n1         192.168.18.201            IPv4                      aprovado  
+    Integridade de resolv.conf ...APROVADO
+    Serviço do nome DNS/NIS ...APROVADO
+    O daemon "avahi-daemon" não está configurado e em execução ...
+    Nome do Nó    Configurado               Status                  
+    ------------  ------------------------  ------------------------
+    ol9n2         não                       aprovado                
+    ol9n1         não                       aprovado                
+
+    Nome do Nó    Em execução?              Status                  
+    ------------  ------------------------  ------------------------
+    ol9n2         não                       aprovado                
+    ol9n1         não                       aprovado                
+    O daemon "avahi-daemon" não está configurado e em execução ...APROVADO
+    O daemon "proxyt" não está configurado e em execução ...
+    Nome do Nó    Configurado               Status                  
+    ------------  ------------------------  ------------------------
+    ol9n2         não                       aprovado                
+    ol9n1         não                       aprovado                
+
+    Nome do Nó    Em execução?              Status                  
+    ------------  ------------------------  ------------------------
+    ol9n2         não                       aprovado                
+    ol9n1         não                       aprovado                
+    O daemon "proxyt" não está configurado e em execução ...APROVADO
+    Soquetes do domínio ...APROVADO
+    Equivalência de Usuário ...APROVADO
+    Banco de dados do Gerenciador de Pacotes do RPM ...APROVADO
+    Verificação de máximo de memória bloqueada ...APROVADO
+    /dev/shm montado como sistema de arquivos temporários ...APROVADO
+    Opção de montagem do sistema de arquivos hidepid para o sistema de arquivos proc ...APROVADO
+    Configuração do Driver de Filtro do ASM ...APROVADO
+    Parâmetro IPC do gerenciador de log-in no systemd ...APROVADO
+    ORAchk health score ...INFORMAÇÕES (PRVH-1507)
+
+    A pré-verificação de configuração de serviços de cluster foi bem-sucedida. 
+    ORAchk health score ...INFORMAÇÕES
+    PRVH-1507 : ORAchk/EXAchk checks are skipped.
+
+
+    Operação do CVU executada:    stage -pre crsinst
+    Data:                         28 de fev de 2025 16:45:22
+    Versão do CVU:                23.7.0.25.1 (011525x8664)
+    Home do CVU:                  /u01/app/23.7.0/grid
+    Usuário:                      grid
+    Sistema operacional:          Linux5.15.0-302.167.6.el9uek.x86_64
 
 
 
