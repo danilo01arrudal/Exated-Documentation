@@ -14,11 +14,11 @@
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE STATIC NETWORK NODE 1)
 
-    [root@ol9n1 ~]# hostnamectl set-hostname ol9n1
+    [root@ol9n1 ~]# hostnamectl set-hostname ol9n1.appsdba.info
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE STATIC NETWORK NODE 2)
 
-    [root@ol9n2 ~]# hostnamectl set-hostname ol9n2
+    [root@ol9n2 ~]# hostnamectl set-hostname ol9n2.appsdba.info
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE STATIC NETWORK NODE 1)
 
