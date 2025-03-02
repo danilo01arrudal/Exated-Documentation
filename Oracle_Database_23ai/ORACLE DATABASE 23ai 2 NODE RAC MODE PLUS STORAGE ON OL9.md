@@ -1049,7 +1049,511 @@
     ASMCA_ARGS=-param "_exadata_feature_on=true"
     [grid@ol9n2 ~]$ exit
 
+###### POST INSTALL CHECK ENVIRONMENT ( RUNCLUVFY )
+
+
+    [root@ol9n1 ~]# su - grid
+    [grid@ol9n1 ~]$ /u01/app/23.7.0/grid/runcluvfy.sh stage -post crsinst -n ol9n1,ol9n2 -verbose -method root
+    Digite a senha de "ROOT":
+
+    Initializing ...
+
+    Performing following verification checks ...
+
+    Conectividade de Nó ...
+    Arquivo dos Hosts ...
+    Nome do Nó                            Status                  
+    ------------------------------------  ------------------------
+    ol9n1                                 aprovado                
+    ol9n2                                 aprovado                
+    Arquivo dos Hosts ...APROVADO
+
+    Informações de interface para o nó "ol9n1"
+
+    Nome   Endereço IP     Sub-rede        Gateway         Gateway Def.    Endereço HW       MTU   
+    ------ --------------- --------------- --------------- --------------- ----------------- ------
+    enp1s0 192.168.18.121  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:28:86:AA 1500  
+    enp1s0 192.168.18.185  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:28:86:AA 1500  
+    enp1s0 192.168.18.151  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:28:86:AA 1500  
+    enp1s0 192.168.18.184  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:28:86:AA 1500  
+    enp1s0 192.168.18.187  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:28:86:AA 1500  
+    enp3s0 192.168.100.101 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:7F:44:40 1500  
+
+    Informações de interface para o nó "ol9n2"
+
+    Nome   Endereço IP     Sub-rede        Gateway         Gateway Def.    Endereço HW       MTU   
+    ------ --------------- --------------- --------------- --------------- ----------------- ------
+    enp1s0 192.168.18.122  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:6B:00:2D 1500  
+    enp1s0 192.168.18.152  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:6B:00:2D 1500  
+    enp1s0 192.168.18.186  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:6B:00:2D 1500  
+    enp3s0 192.168.100.102 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:5D:35:1F 1500  
     
+    Verificar: Consistência de MTU das interfaces privadas da sub-rede "192.168.100.0"
+
+    Nó                Nome          Endereço IP   Sub-rede      MTU             
+    ----------------  ------------  ------------  ------------  ----------------
+    ol9n1             enp3s0        192.168.100.101  192.168.100.0  1500            
+    ol9n2             enp3s0        192.168.100.102  192.168.100.0  1500            
+
+    Verificar: Consistência de MTU da sub-rede "192.168.18.0".
+
+    Nó                Nome          Endereço IP   Sub-rede      MTU             
+    ----------------  ------------  ------------  ------------  ----------------
+    ol9n1             enp1s0        192.168.18.121  192.168.18.0  1500            
+    ol9n1             enp1s0        192.168.18.185  192.168.18.0  1500            
+    ol9n1             enp1s0        192.168.18.151  192.168.18.0  1500            
+    ol9n1             enp1s0        192.168.18.184  192.168.18.0  1500            
+    ol9n1             enp1s0        192.168.18.187  192.168.18.0  1500            
+    ol9n2             enp1s0        192.168.18.122  192.168.18.0  1500            
+    ol9n2             enp1s0        192.168.18.152  192.168.18.0  1500            
+    ol9n2             enp1s0        192.168.18.186  192.168.18.0  1500            
+
+    Origem                      Destino                     Conectado?                
+    --------------------------  --------------------------  --------------------------
+    ol9n1[enp1s0:192.168.18.121]  ol9n2[enp1s0:192.168.18.122]  sim                       
+    ol9n1[enp1s0:192.168.18.121]  ol9n2[enp1s0:192.168.18.152]  sim                       
+    ol9n1[enp1s0:192.168.18.121]  ol9n2[enp1s0:192.168.18.186]  sim                       
+    ol9n1[enp1s0:192.168.18.185]  ol9n2[enp1s0:192.168.18.122]  sim                       
+    ol9n1[enp1s0:192.168.18.185]  ol9n2[enp1s0:192.168.18.152]  sim                       
+    ol9n1[enp1s0:192.168.18.185]  ol9n2[enp1s0:192.168.18.186]  sim                       
+    ol9n1[enp1s0:192.168.18.151]  ol9n2[enp1s0:192.168.18.122]  sim                       
+    ol9n1[enp1s0:192.168.18.151]  ol9n2[enp1s0:192.168.18.152]  sim                       
+    ol9n1[enp1s0:192.168.18.151]  ol9n2[enp1s0:192.168.18.186]  sim                       
+    ol9n1[enp1s0:192.168.18.184]  ol9n2[enp1s0:192.168.18.122]  sim                       
+    ol9n1[enp1s0:192.168.18.184]  ol9n2[enp1s0:192.168.18.152]  sim                       
+    ol9n1[enp1s0:192.168.18.184]  ol9n2[enp1s0:192.168.18.186]  sim                       
+    ol9n1[enp1s0:192.168.18.187]  ol9n2[enp1s0:192.168.18.122]  sim                       
+    ol9n1[enp1s0:192.168.18.187]  ol9n2[enp1s0:192.168.18.152]  sim                       
+    ol9n1[enp1s0:192.168.18.187]  ol9n2[enp1s0:192.168.18.186]  sim                       
+
+    Origem                      Destino                     Conectado?                
+    --------------------------  --------------------------  --------------------------
+    ol9n1[enp3s0:192.168.100.101]  ol9n2[enp3s0:192.168.100.102]  sim                       
+
+    Origem                      Destino                     Conectado?                
+    --------------------------  --------------------------  --------------------------
+    ol9n1[enp3s0:169.254.6.91]  ol9n2[enp3s0:169.254.9.106]  sim                       
+    Verifique se o tamanho máximo (MTU) do pacote passa pela sub-rede ...APROVADO
+    consistência de máscara para a sub-rede "192.168.18.0" ...APROVADO
+    consistência de máscara para a sub-rede "192.168.100.0" ...APROVADO
+    Conectividade de Nó ...APROVADO
+    Verificação de multicast ou broadcast ...    
+    Verificando sub-rede "192.168.100.0" para comunicação multicast com o grupo multicast "224.0.0.251"
+    Verificação de multicast ou broadcast ...APROVADO
+    Consistência do fuso horário ...APROVADO
+    Vendor cluster check ...APROVADO
+    Path existence, ownership, permissions and attributes ...
+    Path "/var" ...APROVADO
+    Path "/var/lib/oracle" ...APROVADO
+    Path "/u01/app/oraInventory/ContentsXML/inventory.xml" ...APROVADO
+    Path "/dev/asm" ...APROVADO
+    Path "/dev/shm" ...APROVADO
+    Path "/etc/init.d/ohasd" ...APROVADO
+    Path "/etc/init.d/init.ohasd" ...APROVADO
+    Path "/etc/init.d/init.tfa" ...APROVADO
+    Path "/etc/oracle/maps" ...APROVADO
+    Path "/etc/oraInst.loc" ...APROVADO
+    Path "/etc/tmpfiles.d/oracleGI.conf" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol9n1/crs/metadata" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol9n1/crs/lck" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol9n1/crs/log" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol9n1/crs/trace" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol9n1/crs/cdump" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol9n1/crs/metadata_pv" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol9n1/crs/alert" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol9n1/crs/sweep" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol9n1/crs/stage" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol9n1/crs/metadata_dgif" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol9n1/crs/incpkg" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol9n1/crs/incident" ...APROVADO
+    Path "/u01/app/23.7.0/grid/gpnp/wallets/peer/cwallet.sso" ...APROVADO
+    Path "/u01/app/23.7.0/grid/gpnp/wallets/root/ewallet.p12" ...APROVADO
+    Path "/u01/app/23.7.0/grid/gpnp/profiles/peer/profile.xml" ...APROVADO
+    Path existence, ownership, permissions and attributes ...APROVADO
+    Integridade de Gerenciador de Cluster ...
+    Nome do Nó                            Status                  
+    ------------------------------------  ------------------------
+    ol9n1                                 em execução             
+    ol9n2                                 em execução             
+    Integridade de Gerenciador de Cluster ...APROVADO
+    Máscara do Usuário ...
+    Nome do Nó    Disponível                Necessário                Comentário
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         0022                      0022                      aprovado  
+    ol9n1         0022                      0022                      aprovado  
+    Máscara do Usuário ...APROVADO
+    Integridade de Cluster ...
+    Nome do Nó                          
+    ------------------------------------
+    ol9n1                               
+    ol9n2                               
+    Integridade de Cluster ...APROVADO
+    Integridade do OCR ...APROVADO
+    Integridade CRS ...
+    Consistência da Versão do Clusterware ...APROVADO
+    Integridade CRS ...APROVADO
+    Existência de Aplicativo de Nó ...
+    
+    Verificando a existência do aplicativo de nó VIP (obrigatório)
+
+    Nome do Nó    Necessário                Em execução?              Comentário
+    ------------  ------------------------  ------------------------  ----------
+    ol9n1         sim                       sim                       aprovado  
+    ol9n2         sim                       sim                       aprovado  
+
+    Verificando a existência do aplicativo de nó NETWORK (obrigatório)
+
+    Nome do Nó    Necessário                Em execução?              Comentário
+    ------------  ------------------------  ------------------------  ----------
+    ol9n1         sim                       sim                       aprovado  
+    ol9n2         sim                       sim                       aprovado  
+
+    Verificando a existência do aplicativo de nó ONS (opcional)
+
+    Nome do Nó    Necessário                Em execução?              Comentário
+    ------------  ------------------------  ------------------------  ----------
+    ol9n1         não                       sim                       aprovado  
+    ol9n2         não                       sim                       aprovado  
+    
+    Existência de Aplicativo de Nó ...APROVADO
+    SCAN ("Single Client Access Name", Nome de Acesso de Cliente Único) ...
+    Nome do SCAN      Nó            Em execução?  ListenerName  Porta         Em execução?
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol9n-scan         ol9n1         true          LISTENER_SCAN1  1521          true        
+    ol9n-scan         ol9n1         true          LISTENER_SCAN2  1521          true        
+    ol9n-scan         ol9n1         true          LISTENER_SCAN3  1521          true        
+    ol9n-scan         ol9n2         true          LISTENER_SCAN4  1521          true        
+
+    Verificando a conectividade TCP com os listeners SCAN...
+
+    Nó            ListenerName              Conectividade do TCP?   
+    ------------  ------------------------  ------------------------
+    ol9n1         LISTENER_SCAN1            sim                     
+    ol9n1         LISTENER_SCAN2            sim                     
+    ol9n1         LISTENER_SCAN3            sim                     
+    ol9n1         LISTENER_SCAN4            sim                     
+
+    Serviço do nome DNS/NIS 'ol9n-scan' ...
+      Integridade do Arquivo de Configuração da Switch do Serviço de Nome ...APROVADO
+
+    Nome do SCAN  Endereço IP               Status                    Comentário
+    ------------  ------------------------  ------------------------  ----------
+    ol9n-scan     192.168.18.184            aprovado                            
+    ol9n-scan     192.168.18.186            aprovado                            
+    ol9n-scan     192.168.18.185            aprovado                            
+    ol9n-scan     192.168.18.187            aprovado                            
+    Serviço do nome DNS/NIS 'ol9n-scan' ...APROVADO
+    
+    SCAN ("Single Client Access Name", Nome de Acesso de Cliente Único) ...APROVADO
+    Integridade de OLR ...APROVADO
+    Voting Disk ...APROVADO
+    Integridade de ASM ...
+    Nó                                    Em execução?            
+    ------------------------------------  ------------------------
+    ol9n1                                 sim                     
+    ol9n2                                 sim                     
+  
+    Integridade de ASM ...APROVADO
+    ASM Network ...APROVADO
+    Espaço livre do grupo de discos do ASM ...APROVADO
+    O Usuário Não Está no Grupo "root": grid ...
+    Nome do Nó    Status                    Comentário              
+    ------------  ------------------------  ------------------------
+    ol9n2         aprovado                  não existe              
+    ol9n1         aprovado                  não existe              
+  
+    O Usuário Não Está no Grupo "root": grid ...APROVADO
+    Sincronização do Relógio ...
+    NTP (Network Time Protocol) ...
+    Daemon 'chronyd' ...
+    Nome do Nó                            Em execução?            
+    ------------------------------------  ------------------------
+    ol9n2                                 sim                     
+    ol9n1                                 sim                     
+
+    Daemon 'chronyd' ...APROVADO
+    Daemon ou serviço NTP usando a porta UDP 123 ...
+    Nome do Nó                            Porta Aberta?           
+    ------------------------------------  ------------------------
+    ol9n2                                 sim                     
+    ol9n1                                 sim                     
+
+    Daemon ou serviço NTP usando a porta UDP 123 ...APROVADO
+    O daemon chrony está sincronizado com pelo menos uma origem de tempo externa ...APROVADO
+    NTP (Network Time Protocol) ...APROVADO
+    Sincronização do Relógio ...APROVADO
+    Verificação da configuração de sub-rede VIP ...APROVADO
+    Oracle Net Services configuration ...APROVADO
+    
+    Verificações de consistência de configuração de rede ...APROVADO
+    Pacote: psmisc-22.6-19 ...
+    Nome do Nó    Disponível                Necessário                Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol9n2         psmisc-23.4-3.el9         psmisc-22.6-19            aprovado  
+    ol9n1         psmisc-23.4-3.el9         psmisc-22.6-19            aprovado  
+    Pacote: psmisc-22.6-19 ...APROVADO
+  
+    Opções de montagem do sistema de arquivos para o caminho GI_HOME ...APROVADO
+    Opção de montagem do sistema de arquivos hidepid para o sistema de arquivos proc ...APROVADO
+    Limpeza de arquivos socket de comunicação ...APROVADO
+    Soquetes do domínio ...APROVADO
+    ORAchk health score ...
+
+    CSS reboot time ...APROVADO
+    Verify clusterware internal patch metadata matches grid home OPatch inventory ...APROVADO
+    GI/CRS - Private interconnect interface name check ...APROVADO
+    TFA Collector status ...APROVADO
+    VIP NIC bonding config. ...APROVADO
+    Verify Cluster health Monitor(CHM) configuration ...APROVADO
+    Clusterware version comparison ...APROVADO
+    Clusterware software version comparison ...APROVADO
+    Verify / at the end of ORACLE_HOME ...APROVADO
+    HAIP and Bonded interface ...APROVADO
+    RAC interconnect network card speed ...APROVADO
+    Operating System Version comparison ...APROVADO
+    Root  time zone ...APROVADO
+    Verify Cluster health analyzer (CHA)  configuration ...APROVADO
+    Public interface existence ...APROVADO
+    Verify private and public network subnet configuration in Oracle Clusterware registry ...APROVADO
+    Check the integrity of key GI startup files ...APROVADO
+    CSS log file size ...APROVADO
+    CSS disktimeout ...APROVADO
+    Old log files in client directory in crs_home ...APROVADO
+    3rd Party Clusterware Node Numbering ...APROVADO
+    Non-routable network for interconnect ...APROVADO
+    Jumbo frames configuration for interconnect ...APROVADO
+    Verify Cluster Synchronization Services (CSS) misscount value ...APROVADO
+    Verify CRS Attribute RESOURCE_USE_ENABLED ...APROVADO
+    Hang and Deadlock material ...APROVADO
+    GI/CRS software owner across cluster ...APROVADO
+    Verify online (hot) patches are not applied on CRS_HOME ...APROVADO
+    ORAchk health score 91% ...APROVADO
+
+    A pós-verificação de configuração de serviços de cluster foi bem-sucedida. 
+
+    Operação do CVU executada:    stage -post crsinst
+    Data:                         1 de mar de 2025 22:09:30
+    Versão do CVU:                23.7.0.25.1 (011525x8664)
+    Versão do Clusterware:        23.0.0.0.0
+    Home do CVU:                  /u01/app/23.7.0/grid
+    Home do Grid:                 /u01/app/23.7.0/grid
+    Usuário:                      grid
+    Sistema operacional:          Linux5.15.0-302.167.6.el9uek.x86_64
+    [grid@ol9n1 ~]$ exit
+
+###### CHECK CLUSTER STATUS ( CRSCTL )
+
+    [grid@ol9n1 ~]$ /u01/app/23.7.0/grid/bin/crsctl check cluster -all
+    **************************************************************
+    ol9n1:
+    CRS-4537: Cluster Ready Services is online
+    CRS-4529: Cluster Synchronization Services is online
+    CRS-4533: Event Manager is online
+    **************************************************************
+    ol9n2:
+    CRS-4537: Cluster Ready Services is online
+    CRS-4529: Cluster Synchronization Services is online
+    CRS-4533: Event Manager is online
+    **************************************************************
+
+    [grid@ol9n1 ~]$ /u01/app/23.7.0/grid/bin/crsctl stat res -t 
+    --------------------------------------------------------------------------------
+    Name           Target  State        Server                   State details       
+    --------------------------------------------------------------------------------
+    Local Resources
+    --------------------------------------------------------------------------------
+    ora.LISTENER.lsnr
+               ONLINE  ONLINE       ol9n1                    STABLE
+               ONLINE  ONLINE       ol9n2                    STABLE
+    ora.chad
+               ONLINE  ONLINE       ol9n1                    STABLE
+               ONLINE  ONLINE       ol9n2                    STABLE
+    ora.helper
+               OFFLINE OFFLINE      ol9n1                    STABLE
+               OFFLINE OFFLINE      ol9n2                    IDLE,STABLE
+    ora.net1.network
+               ONLINE  ONLINE       ol9n1                    STABLE
+               ONLINE  ONLINE       ol9n2                    STABLE
+    ora.ons
+               ONLINE  ONLINE       ol9n1                    STABLE
+               ONLINE  ONLINE       ol9n2                    STABLE
+    --------------------------------------------------------------------------------
+    Cluster Resources
+    --------------------------------------------------------------------------------
+    ora.ASMNET1LSNR_ASM.lsnr(ora.asmgroup)
+      1        ONLINE  ONLINE       ol9n1                    STABLE
+      2        ONLINE  ONLINE       ol9n2                    STABLE
+    ora.DATA.dg(ora.asmgroup)
+      1        ONLINE  ONLINE       ol9n1                    STABLE
+      2        ONLINE  ONLINE       ol9n2                    STABLE
+    ora.LISTENER_SCAN1.lsnr
+      1        ONLINE  ONLINE       ol9n1                    STABLE
+    ora.LISTENER_SCAN2.lsnr
+      1        ONLINE  ONLINE       ol9n1                    STABLE
+    ora.LISTENER_SCAN3.lsnr
+      1        ONLINE  ONLINE       ol9n1                    STABLE
+    ora.LISTENER_SCAN4.lsnr
+      1        ONLINE  ONLINE       ol9n2                    STABLE
+    ora.asm(ora.asmgroup)
+      1        ONLINE  ONLINE       ol9n1                    Started,STABLE
+      2        ONLINE  ONLINE       ol9n2                    Started,STABLE
+    ora.asmnet1.asmnetwork(ora.asmgroup)
+      1        ONLINE  ONLINE       ol9n1                    STABLE
+      2        ONLINE  ONLINE       ol9n2                    STABLE
+    ora.cdp1.cdp
+      1        ONLINE  ONLINE       ol9n1                    STABLE
+    ora.cdp2.cdp
+      1        ONLINE  ONLINE       ol9n1                    STABLE
+    ora.cdp3.cdp
+      1        ONLINE  ONLINE       ol9n1                    STABLE
+    ora.cdp4.cdp
+      1        ONLINE  ONLINE       ol9n2                    STABLE
+    ora.cvu
+      1        ONLINE  ONLINE       ol9n1                    STABLE
+    ora.ol9n1.vip
+      1        ONLINE  ONLINE       ol9n1                    STABLE
+    ora.ol9n2.vip
+      1        ONLINE  ONLINE       ol9n2                    STABLE
+    ora.rhpserver
+      1        OFFLINE OFFLINE                               STABLE
+    ora.scan1.vip
+      1        ONLINE  ONLINE       ol9n1                    STABLE
+    ora.scan2.vip
+      1        ONLINE  ONLINE       ol9n1                    STABLE
+    ora.scan3.vip
+      1        ONLINE  ONLINE       ol9n1                    STABLE
+    ora.scan4.vip
+      1        ONLINE  ONLINE       ol9n2                    STABLE
+    --------------------------------------------------------------------------------
+    [grid@ol9n1 ~]$ exit
+
+    [root@ol9n1 ~]# export ORACLE_HOME=/u01/app/23.7.0/grid
+    [root@ol9n1 ~]# export PATH=$PATH:$ORACLE_HOME/bin
+    [root@ol9n1 ~]# crsctl status resource
+    NAME=ora.ASMNET1LSNR_ASM.lsnr(ora.asmgroup)
+    TYPE=ora.asm_listener.type
+    TARGET=ONLINE         , ONLINE
+    STATE=ONLINE on ol9n1, ONLINE on ol9n2
+
+    NAME=ora.DATA.dg(ora.asmgroup)
+    TYPE=ora.diskgroup.type
+    TARGET=ONLINE         , ONLINE
+    STATE=ONLINE on ol9n1, ONLINE on ol9n2
+
+    NAME=ora.LISTENER.lsnr
+    TYPE=ora.listener.type
+    TARGET=ONLINE         , ONLINE
+    STATE=ONLINE on ol9n1, ONLINE on ol9n2
+
+    NAME=ora.LISTENER_SCAN1.lsnr
+    TYPE=ora.scan_listener.type
+    TARGET=ONLINE
+    STATE=ONLINE on ol9n1
+
+    NAME=ora.LISTENER_SCAN2.lsnr
+    TYPE=ora.scan_listener.type
+    TARGET=ONLINE
+    STATE=ONLINE on ol9n1
+
+    NAME=ora.LISTENER_SCAN3.lsnr
+    TYPE=ora.scan_listener.type
+    TARGET=ONLINE
+    STATE=ONLINE on ol9n1
+
+    NAME=ora.LISTENER_SCAN4.lsnr
+    TYPE=ora.scan_listener.type
+    TARGET=ONLINE
+    STATE=ONLINE on ol9n2
+
+    NAME=ora.asm(ora.asmgroup)
+    TYPE=ora.asm.type
+    TARGET=ONLINE         , ONLINE
+    STATE=ONLINE on ol9n1, ONLINE on ol9n2
+
+    NAME=ora.asmnet1.asmnetwork(ora.asmgroup)
+    TYPE=ora.asm_network.type
+    TARGET=ONLINE         , ONLINE
+    STATE=ONLINE on ol9n1, ONLINE on ol9n2
+
+    NAME=ora.cdp1.cdp
+    TYPE=ora.cdp.type
+    TARGET=ONLINE
+    STATE=ONLINE on ol9n1
+
+    NAME=ora.cdp2.cdp
+    TYPE=ora.cdp.type
+    TARGET=ONLINE
+    STATE=ONLINE on ol9n1
+
+    NAME=ora.cdp3.cdp
+    TYPE=ora.cdp.type
+    TARGET=ONLINE
+    STATE=ONLINE on ol9n1
+
+    NAME=ora.cdp4.cdp
+    TYPE=ora.cdp.type
+    TARGET=ONLINE
+    STATE=ONLINE on ol9n2
+
+    NAME=ora.chad
+    TYPE=ora.chad.type
+    TARGET=ONLINE         , ONLINE
+    STATE=ONLINE on ol9n1, ONLINE on ol9n2
+
+    NAME=ora.cvu
+    TYPE=ora.cvu.type
+    TARGET=ONLINE
+    STATE=ONLINE on ol9n1
+
+    NAME=ora.helper
+    TYPE=ora.helper.type
+    TARGET=OFFLINE, OFFLINE
+    STATE=OFFLINE, OFFLINE
+
+    NAME=ora.net1.network
+    TYPE=ora.network.type
+    TARGET=ONLINE         , ONLINE
+    STATE=ONLINE on ol9n1, ONLINE on ol9n2
+
+    NAME=ora.ol9n1.vip
+    TYPE=ora.cluster_vip_net1.type
+    TARGET=ONLINE
+    STATE=ONLINE on ol9n1
+
+    NAME=ora.ol9n2.vip
+    TYPE=ora.cluster_vip_net1.type
+    TARGET=ONLINE
+    STATE=ONLINE on ol9n2
+
+    NAME=ora.ons
+    TYPE=ora.ons.type
+    TARGET=ONLINE         , ONLINE
+    STATE=ONLINE on ol9n1, ONLINE on ol9n2
+
+    NAME=ora.rhpserver
+    TYPE=ora.rhpserver.type
+    TARGET=OFFLINE
+    STATE=OFFLINE
+
+    NAME=ora.scan1.vip
+    TYPE=ora.scan_vip.type
+    TARGET=ONLINE
+    STATE=ONLINE on ol9n1
+
+    NAME=ora.scan2.vip
+    TYPE=ora.scan_vip.type
+    TARGET=ONLINE
+    STATE=ONLINE on ol9n1
+
+    NAME=ora.scan3.vip
+    TYPE=ora.scan_vip.type
+    TARGET=ONLINE
+    STATE=ONLINE on ol9n1
+
+    NAME=ora.scan4.vip
+    TYPE=ora.scan_vip.type
+    TARGET=ONLINE
+    STATE=ONLINE on ol9n2
     
     
 
