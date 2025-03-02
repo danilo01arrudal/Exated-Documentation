@@ -243,7 +243,7 @@
     export ORACLE_SID=+ASM1
     export ORACLE_BASE=/u01/app/grid
     export ORACLE_HOME=/u01/app/23.7.0/grid
-    export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch:$PATH
+    export PATH=\$ORACLE_HOME/bin:\$ORACLE_HOME/OPatch:\$PATH
     umask 22
     export PATH
     EOF
@@ -261,8 +261,8 @@
     PATH=$PATH:$HOME/.local/bin:$HOME/bin
     export ORACLE_SID=oradbc1
     export ORACLE_BASE=/u01/app/oracle
-    export ORACLE_HOME=$ORACLE_BASE/product/23.7.0/dbhome_1
-    export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch:$PATH
+    export ORACLE_HOME=\$ORACLE_BASE/product/23.7.0/dbhome_1
+    export PATH=\$ORACLE_HOME/bin:\$ORACLE_HOME/OPatch:\$PATH
     umask 22
     export PATH
     EOF
@@ -279,7 +279,7 @@
 
     PATH=$PATH:$HOME/bin
     export ORACLE_HOME=/u01/app/23.7.0/grid
-    export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch:$PATH
+    export PATH=\$ORACLE_HOME/bin:\$ORACLE_HOME/OPatch:\$PATH
     export PATH
     EOF
     
@@ -299,7 +299,7 @@
     export ORACLE_SID=+ASM2
     export ORACLE_BASE=/u01/app/grid
     export ORACLE_HOME=/u01/app/23.7.0/grid
-    export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch:$PATH
+    export PATH=\$ORACLE_HOME/bin:\$ORACLE_HOME/OPatch:\$PATH
     umask 22
     export PATH
     EOF
@@ -317,8 +317,8 @@
     PATH=$PATH:$HOME/.local/bin:$HOME/bin
     export ORACLE_SID=oradbc2
     export ORACLE_BASE=/u01/app/oracle
-    export ORACLE_HOME=$ORACLE_BASE/product/23.7.0/dbhome_1
-    export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch:$PATH
+    export ORACLE_HOME=\$ORACLE_BASE/product/23.7.0/dbhome_1
+    export PATH=\$ORACLE_HOME/bin:\$ORACLE_HOME/OPatch:\$PATH
     umask 22
     export PATH
     EOF
@@ -335,7 +335,7 @@
 
     PATH=$PATH:$HOME/bin
     export ORACLE_HOME=/u01/app/23.7.0/grid
-    export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch:$PATH
+    export PATH=\$ORACLE_HOME/bin:\$ORACLE_HOME/OPatch:\$PATH
     export PATH
     EOF
 
