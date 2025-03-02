@@ -1033,8 +1033,24 @@
     Usuário:                      grid
     Sistema operacional:          Linux5.15.0-302.167.6.el9uek.x86_64
 
+###### CLUSTER INSTALL ( SET EXADATA PARAMETER )
 
+    [root@ol9n1 ~]# cat /u01/app/23.7.0/grid/crs/install/crsconfig_params |grep ASMCA_ARGS
+    ASMCA_ARGS=
+    [root@ol9n1 ~]# su - grid
+    [grid@ol9n1 ~]$ vi /u01/app/23.7.0/grid/crs/install/crsconfig_params
+    ASMCA_ARGS=-param "_exadata_feature_on=true"
+    [grid@ol9n1 ~]$ exit
 
+    [root@ol9n2 ~]# cat /u01/app/23.7.0/grid/crs/install/crsconfig_params |grep ASMCA_ARGS 
+    ASMCA_ARGS=
+    [root@ol9n2 ~]# su - grid
+    [grid@ol9n2 ~]$ vi /u01/app/23.7.0/grid/crs/install/crsconfig_params 
+    [grid@ol9n2 ~]$ exit
+
+    
+    
+    
 
 
 
