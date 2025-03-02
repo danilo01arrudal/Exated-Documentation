@@ -12,6 +12,17 @@
 
     virt-install --virt-type kvm --name ol9n2 --memory 8192 --vcpus 2 --os-variant ol9.5 --cdrom /var/lib/libvirt/images/OracleLinux-R9-U5-x86_64-dvd.iso --network bridge=br0,model=virtio --network bridge=br0,model=virtio --network network=priv0,model=virtio --disk path=/var/lib/libvirt/images/ol9n2.qcow2,size=59
 
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CHANGE THE CLOCK SOURCE IN THE SYSTEM )
+
+    [root@ol9n1 ~]# cat /sys/devices/system/clocksource/clocksource0/current_clocksource
+    kvm-clock
+    [root@ol9n1 ~]# cat /sys/devices/system/clocksource/clocksource0/available_clocksource
+    kvm-clock tsc acpi_pm 
+    [root@ol9n1 ~]# vi /sys/devices/system/clocksource/clocksource0/current_clocksource
+    tsc
+    [root@ol9n2 ~]# vi /sys/devices/system/clocksource/clocksource0/current_clocksource
+    tsc
+
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE STATIC NETWORK NODE 1)
 
     [root@ol9n1 ~]# hostnamectl set-hostname ol9n1.appsdba.info
