@@ -1554,8 +1554,21 @@
     TYPE=ora.scan_vip.type
     TARGET=ONLINE
     STATE=ONLINE on ol9n2
+
+###### COPY GRID INFRASTRUCTURE SOFTWARE
+
+    [root@exated Downloads]# scp p37370465_230000_Linux-x86-64.zip oracle@192.168.18.121:/u01/app/oracle/product/23.7.0/dbhome_1/
+
+###### UNZIP GRID INFRASTRUCTURE SOFTWARE
+
+    [root@ol9n1 ~]# su - oracle
+    [oracle@ol9n1 ~]$ cd /u01/app/oracle/product/23.7.0/dbhome_1/
+    [oracle@ol9n1 dbhome_1]$ unzip p37370465_230000_Linux-x86-64.zip
+    [oracle@ol9n1 dbhome_1]$ rm -vf p37370465_230000_Linux-x86-64.zip
     
-    
+###### INSTALL ORACLE DATABASE 23AI SOFTWARE 
+
+
 
 
 
