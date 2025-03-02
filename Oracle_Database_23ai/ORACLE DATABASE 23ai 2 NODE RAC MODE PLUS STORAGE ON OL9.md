@@ -1867,3 +1867,7 @@
 	CRS-2677: Stop of 'ora.mdnsd' on 'ol9n2' succeeded
 	CRS-2793: Shutdown of Oracle High Availability Services-managed resources on 'ol9n2' has completed
 	CRS-4133: Oracle High Availability Services has been stopped.
+
+###### writed by: Danilo Arruda
+###### sat 02 mar 2025
+
