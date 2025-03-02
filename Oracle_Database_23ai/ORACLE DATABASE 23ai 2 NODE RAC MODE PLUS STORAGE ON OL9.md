@@ -1046,6 +1046,7 @@
     ASMCA_ARGS=
     [root@ol9n2 ~]# su - grid
     [grid@ol9n2 ~]$ vi /u01/app/23.7.0/grid/crs/install/crsconfig_params 
+    ASMCA_ARGS=-param "_exadata_feature_on=true"
     [grid@ol9n2 ~]$ exit
 
     
