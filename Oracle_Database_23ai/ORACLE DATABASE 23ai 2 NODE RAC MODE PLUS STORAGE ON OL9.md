@@ -1724,7 +1724,146 @@
     grid       46177       1  0 mar01 ?        00:00:00 asm_pmon_+ASM2
     oracle    193366       1  0 00:48 ?        00:00:00 ora_pmon_oradbc2
 
+###### STOP CLUSTER AND DATABASE 
 
+	[root@ol9n1 ~]# crsctl stop cluster -all
+	CRS-2673: Tentativa de interromper 'ora.crsd' em 'ol9n1'
+	CRS-2673: Tentativa de interromper 'ora.crsd' em 'ol9n2'
+	CRS-2790: Iniciando o shutdown de recursos gerenciados pelo Cluster Ready Services no servidor 'ol9n2'
+	CRS-2673: Tentativa de interromper 'ora.chad' em 'ol9n2'
+	CRS-2673: Tentativa de interromper 'ora.oradbc.oradbc_pdboradbc.svc' em 'ol9n2'
+	CRS-2673: Tentativa de interromper 'ora.cdp4.cdp' em 'ol9n2'
+	CRS-2790: Iniciando o shutdown de recursos gerenciados pelo Cluster Ready Services no servidor 'ol9n1'
+	CRS-2673: Tentativa de interromper 'ora.cdp1.cdp' em 'ol9n1'
+	CRS-2673: Tentativa de interromper 'ora.cdp2.cdp' em 'ol9n1'
+	CRS-2673: Tentativa de interromper 'ora.oradbc.oradbc_pdboradbc.svc' em 'ol9n1'
+	CRS-2673: Tentativa de interromper 'ora.cdp3.cdp' em 'ol9n1'
+	CRS-2673: Tentativa de interromper 'ora.chad' em 'ol9n1'
+	CRS-2677: Interrupção de 'ora.cdp4.cdp' em 'ol9n2' bem-sucedida
+	CRS-2677: Interrupção de 'ora.oradbc.oradbc_pdboradbc.svc' em 'ol9n2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.oradbc.pdboradbc.pdb' em 'ol9n2'
+	CRS-2677: Interrupção de 'ora.cdp1.cdp' em 'ol9n1' bem-sucedida
+	CRS-2677: Interrupção de 'ora.cdp2.cdp' em 'ol9n1' bem-sucedida
+	CRS-2677: Interrupção de 'ora.oradbc.pdboradbc.pdb' em 'ol9n2' bem-sucedida
+	CRS-2677: Interrupção de 'ora.cdp3.cdp' em 'ol9n1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.oradbc.db' em 'ol9n2'
+	CRS-2677: Interrupção de 'ora.oradbc.oradbc_pdboradbc.svc' em 'ol9n1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.oradbc.pdboradbc.pdb' em 'ol9n1'
+	CRS-2677: Interrupção de 'ora.oradbc.pdboradbc.pdb' em 'ol9n1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.oradbc.db' em 'ol9n1'
+	CRS-2677: Interrupção de 'ora.oradbc.db' em 'ol9n2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.LISTENER.lsnr' em 'ol9n2'
+	CRS-2673: Tentativa de interromper 'ora.LISTENER_SCAN4.lsnr' em 'ol9n2'
+	CRS-33673: Tentando interromper o grupo de recursos 'ora.asmgroup' no servidor 'ol9n2'
+	CRS-2673: Tentativa de interromper 'ora.DATA.dg' em 'ol9n2'
+	CRS-2673: Tentativa de interromper 'ora.FRA.dg' em 'ol9n2'
+	CRS-2677: Interrupção de 'ora.DATA.dg' em 'ol9n2' bem-sucedida
+	CRS-2677: Interrupção de 'ora.FRA.dg' em 'ol9n2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.asm' em 'ol9n2'
+	CRS-2677: Interrupção de 'ora.asm' em 'ol9n2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.ASMNET1LSNR_ASM.lsnr' em 'ol9n2'
+	CRS-2677: Interrupção de 'ora.LISTENER.lsnr' em 'ol9n2' bem-sucedida
+	CRS-2677: Interrupção de 'ora.LISTENER_SCAN4.lsnr' em 'ol9n2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.ol9n2.vip' em 'ol9n2'
+	CRS-2673: Tentativa de interromper 'ora.scan4.vip' em 'ol9n2'
+	CRS-2677: Interrupção de 'ora.ol9n2.vip' em 'ol9n2' bem-sucedida
+	CRS-2677: Interrupção de 'ora.ASMNET1LSNR_ASM.lsnr' em 'ol9n2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.asmnet1.asmnetwork' em 'ol9n2'
+	CRS-2677: Interrupção de 'ora.asmnet1.asmnetwork' em 'ol9n2' bem-sucedida
+	CRS-33677: A interrupção do grupo de recursos 'ora.asmgroup' no servidor 'ol9n2' foi bem-sucedida.
+	CRS-2677: Interrupção de 'ora.scan4.vip' em 'ol9n2' bem-sucedida
+	CRS-2677: Interrupção de 'ora.oradbc.db' em 'ol9n1' bem-sucedida
+	CRS-2677: Interrupção de 'ora.chad' em 'ol9n2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.LISTENER.lsnr' em 'ol9n1'
+	CRS-2673: Tentativa de interromper 'ora.LISTENER_SCAN1.lsnr' em 'ol9n1'
+	CRS-2673: Tentativa de interromper 'ora.LISTENER_SCAN2.lsnr' em 'ol9n1'
+	CRS-2673: Tentativa de interromper 'ora.LISTENER_SCAN3.lsnr' em 'ol9n1'
+	CRS-33673: Tentando interromper o grupo de recursos 'ora.asmgroup' no servidor 'ol9n1'
+	CRS-2673: Tentativa de interromper 'ora.DATA.dg' em 'ol9n1'
+	CRS-2673: Tentativa de interromper 'ora.FRA.dg' em 'ol9n1'
+	CRS-2673: Tentativa de interromper 'ora.cvu' em 'ol9n1'
+	CRS-2673: Tentativa de interromper 'ora.ons' em 'ol9n2'
+	CRS-2677: Interrupção de 'ora.DATA.dg' em 'ol9n1' bem-sucedida
+	CRS-2677: Interrupção de 'ora.chad' em 'ol9n1' bem-sucedida
+	CRS-2677: Interrupção de 'ora.cvu' em 'ol9n1' bem-sucedida
+	CRS-2677: Interrupção de 'ora.FRA.dg' em 'ol9n1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.asm' em 'ol9n1'
+	CRS-2677: Interrupção de 'ora.asm' em 'ol9n1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.ASMNET1LSNR_ASM.lsnr' em 'ol9n1'
+	CRS-2677: Interrupção de 'ora.ons' em 'ol9n2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.net1.network' em 'ol9n2'
+	CRS-2677: Interrupção de 'ora.net1.network' em 'ol9n2' bem-sucedida
+	CRS-2792: O shut-down de recursos gerenciados pelo Cluster Ready Services em 'ol9n2' foi concluído
+	CRS-2677: Interrupção de 'ora.LISTENER.lsnr' em 'ol9n1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.ol9n1.vip' em 'ol9n1'
+	CRS-2677: Interrupção de 'ora.LISTENER_SCAN3.lsnr' em 'ol9n1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.scan3.vip' em 'ol9n1'
+	CRS-2677: Interrupção de 'ora.LISTENER_SCAN1.lsnr' em 'ol9n1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.scan1.vip' em 'ol9n1'
+	CRS-2677: Interrupção de 'ora.LISTENER_SCAN2.lsnr' em 'ol9n1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.scan2.vip' em 'ol9n1'
+	CRS-2677: Interrupção de 'ora.ASMNET1LSNR_ASM.lsnr' em 'ol9n1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.asmnet1.asmnetwork' em 'ol9n1'
+	CRS-2677: Interrupção de 'ora.asmnet1.asmnetwork' em 'ol9n1' bem-sucedida
+	CRS-33677: A interrupção do grupo de recursos 'ora.asmgroup' no servidor 'ol9n1' foi bem-sucedida.
+	CRS-2677: Interrupção de 'ora.ol9n1.vip' em 'ol9n1' bem-sucedida
+	CRS-2677: Interrupção de 'ora.scan3.vip' em 'ol9n1' bem-sucedida
+	CRS-2677: Interrupção de 'ora.scan1.vip' em 'ol9n1' bem-sucedida
+	CRS-2677: Interrupção de 'ora.scan2.vip' em 'ol9n1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.ons' em 'ol9n1'
+	CRS-2677: Interrupção de 'ora.crsd' em 'ol9n2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.evmd' em 'ol9n2'
+	CRS-2673: Tentativa de interromper 'ora.storage' em 'ol9n2'
+	CRS-2677: Interrupção de 'ora.storage' em 'ol9n2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.asm' em 'ol9n2'
+	CRS-2677: Interrupção de 'ora.ons' em 'ol9n1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.net1.network' em 'ol9n1'
+	CRS-2677: Interrupção de 'ora.net1.network' em 'ol9n1' bem-sucedida
+	CRS-2792: O shut-down de recursos gerenciados pelo Cluster Ready Services em 'ol9n1' foi concluído
+	CRS-2677: Interrupção de 'ora.evmd' em 'ol9n2' bem-sucedida
+	CRS-2677: Interrupção de 'ora.crsd' em 'ol9n1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.evmd' em 'ol9n1'
+	CRS-2673: Tentativa de interromper 'ora.storage' em 'ol9n1'
+	CRS-2677: Interrupção de 'ora.storage' em 'ol9n1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.asm' em 'ol9n1'
+	CRS-2677: Interrupção de 'ora.evmd' em 'ol9n1' bem-sucedida
+	CRS-2677: Interrupção de 'ora.asm' em 'ol9n2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.cluster_interconnect.haip' em 'ol9n2'
+	CRS-2677: Interrupção de 'ora.cluster_interconnect.haip' em 'ol9n2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.cssd' em 'ol9n2'
+	CRS-2677: Interrupção de 'ora.asm' em 'ol9n1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.cluster_interconnect.haip' em 'ol9n1'
+	CRS-2677: Interrupção de 'ora.cssd' em 'ol9n2' bem-sucedida
+	CRS-2677: Interrupção de 'ora.cluster_interconnect.haip' em 'ol9n1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.cssd' em 'ol9n1'
+	CRS-2677: Interrupção de 'ora.cssd' em 'ol9n1' bem-sucedida
 
+	[root@ol9n1 ~]# crsctl stop has
+	CRS-2791: Starting shutdown of Oracle High Availability Services-managed resources on 'ol9n1'
+	CRS-2673: Attempting to stop 'ora.gpnpd' on 'ol9n1'
+	CRS-2673: Attempting to stop 'ora.crf' on 'ol9n1'
+	CRS-2673: Attempting to stop 'ora.mdnsd' on 'ol9n1'
+	CRS-2673: Attempting to stop 'ora.drivers.acfs' on 'ol9n1'
+	CRS-2677: Stop of 'ora.gpnpd' on 'ol9n1' succeeded
+	CRS-2677: Stop of 'ora.crf' on 'ol9n1' succeeded
+	CRS-2673: Attempting to stop 'ora.gipcd' on 'ol9n1'
+	CRS-2677: Stop of 'ora.gipcd' on 'ol9n1' succeeded
+	CRS-2677: Stop of 'ora.drivers.acfs' on 'ol9n1' succeeded
+	CRS-2677: Stop of 'ora.mdnsd' on 'ol9n1' succeeded
+	CRS-2793: Shutdown of Oracle High Availability Services-managed resources on 'ol9n1' has completed
+	CRS-4133: Oracle High Availability Services has been stopped.
 
-
+	[root@ol9n2 ~]# crsctl stop has
+	CRS-2791: Starting shutdown of Oracle High Availability Services-managed resources on 'ol9n2'
+	CRS-2673: Attempting to stop 'ora.crf' on 'ol9n2'
+	CRS-2673: Attempting to stop 'ora.drivers.acfs' on 'ol9n2'
+	CRS-2673: Attempting to stop 'ora.gpnpd' on 'ol9n2'
+	CRS-2673: Attempting to stop 'ora.mdnsd' on 'ol9n2'
+	CRS-2677: Stop of 'ora.gpnpd' on 'ol9n2' succeeded
+	CRS-2677: Stop of 'ora.drivers.acfs' on 'ol9n2' succeeded
+	CRS-2677: Stop of 'ora.crf' on 'ol9n2' succeeded
+	CRS-2673: Attempting to stop 'ora.gipcd' on 'ol9n2'
+	CRS-2677: Stop of 'ora.gipcd' on 'ol9n2' succeeded
+	CRS-2677: Stop of 'ora.mdnsd' on 'ol9n2' succeeded
+	CRS-2793: Shutdown of Oracle High Availability Services-managed resources on 'ol9n2' has completed
+	CRS-4133: Oracle High Availability Services has been stopped.
