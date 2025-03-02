@@ -1579,6 +1579,9 @@
     
 ###### INSTALL ORACLE DATABASE 23AI SOFTWARE 
 
+    [root@ol9n1 ~]# su - oracle
+    [oracle@ol9n1 ~]$ vi /u01/app/oracle/admin/oradbc/pfile/init.ora
+    _exadata_feature_on=true
 
 
 
