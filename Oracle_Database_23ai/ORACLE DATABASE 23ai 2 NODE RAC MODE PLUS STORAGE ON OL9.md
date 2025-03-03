@@ -1044,9 +1044,90 @@
     Usuário:                      grid
     Sistema operacional:          Linux5.15.0-302.167.6.el9uek.x86_64
 
+###### CREATE RESPONSE FILE ( GRID.RSP )
+
+    [grid@ol9n1 ~]$ vi /home/grid/grid.rsp
+	oracle.install.responseFileVersion=/oracle/install/rspfmt_crsinstall_response_schema_v23.0.0
+	INVENTORY_LOCATION=/u01/app/oraInventory
+	installOption=CRS_CONFIG
+	ORACLE_BASE=/u01/app/grid
+	clusterUsage=RAC
+	zeroDowntimeGIPatching=false
+	skipDriverUpdate=false
+	OSDBA=asmdba
+	OSOPER=asmoper
+	OSASM=asmadmin
+	scanType=LOCAL_SCAN
+	scanClientDataFile=
+	scanName=ol9n-scan
+	scanPort=1521
+	configureAsExtendedCluster=false
+	clusterName=ol9n
+	configureGNS=false
+	configureDHCPAssignedVIPs=false
+	gnsSubDomain=
+	gnsVIPAddress=
+	sites=
+	clusterNodes=ol9n1.appsdba.info:ol9n1-vip.appsdba.info,ol9n2.appsdba.info:ol9n2-vip.appsdba.info
+	networkInterfaceList=enp1s0:192.168.18.0:1,enp3s0:192.168.100.0:5
+	storageOption=FLEX_ASM_STORAGE
+	votingFilesLocations=
+	ocrLocations=
+	clientDataFile=
+	useIPMI=false
+	bmcBinpath=
+	bmcUsername=
+	bmcPassword=
+	sysasmPassword=
+	diskGroupName=DATA
+	redundancy=EXTERNAL
+	auSize=4
+	failureGroups=
+	disksWithFailureGroupNames=/dev/asm-disk1,,/dev/asm-disk2,,/dev/asm-disk3,,/dev/asm-disk4,
+	diskList=/dev/asm-disk1,/dev/asm-disk2,/dev/asm-disk3,/dev/asm-disk4
+	quorumFailureGroupNames=
+	diskString=/dev/asm-disk*
+	asmsnmpPassword=
+	configureAFD=false
+	ignoreDownNodes=false
+	configureBackupDG=false
+	backupDGName=RECO
+	backupDGRedundancy=NORMAL
+	backupDGAUSize=4
+	backupDGFailureGroups=
+	backupDGDisksWithFailureGroupNames=
+	backupDGDiskList=
+	backupDGQuorumFailureGroups=
+	managementOption=NONE
+	omsHost=
+	omsPort=0
+	emAdminUser=
+	emAdminPassword=
+	executeRootScript=true
+	configMethod=ROOT
+	sudoPath=/usr/local/bin/sudo
+	sudoUserName=grid
+	batchInfo=
+	nodesToDelete=
+    	enableAutoFixup=false
+
 ###### INSTALL GRID 23AI 
 
-![oracle database 23ai logo.](https://github.com/danilo01arrudal/Exated/blob/main/Oracle_Database_23ai/images/rac_23ai/rac_install_01.png)
+    [root@ol9n1 ~]# su - grid
+    [grid@ol9n1 ~]$ /u01/app/23.7.0/grid/gridSetup.sh -silent -responseFile /home/oracle/gridsetup.rsp
+    As a root user, execute the following script(s):
+        1. /u01/app/oraInventory/orainstRoot.sh
+        2. /u01/app/23.7.0/grid/root.sh
+ 
+	Execute /u01/app/oraInventory/orainstRoot.sh on the following nodes:
+	[ol9n1, ol9n2]
+	Execute /u01/app/19.0.0/grid/root.sh on the following nodes:
+	[ol9n1, ol9n2]
+ 
+	Run the script on the local node first. After successful completion, you can start the script in parallel on all other nodes.
+ 
+	Successfully Setup Software.
+	As install user, execute the following command to complete the configuration.
 
 ###### CLUSTER INSTALL ( SET EXADATA PARAMETER )
 
@@ -1064,8 +1145,19 @@
     ASMCA_ARGS=-param "_exadata_feature_on=true"
     [grid@ol9n2 ~]$ exit
 
-###### POST INSTALL CHECK ENVIRONMENT ( RUNCLUVFY )
+###### RUN ROOT ORAINSTALL FOR GRID
 
+    [root@ol9n1 ~]# /u01/app/oraInventory/orainstRoot.sh
+    [root@ol9n2 ~]# /u01/app/oraInventory/orainstRoot.sh    
+    [root@ol9n1 ~]# /u01/app/23.7.0/grid/root.sh
+    [root@ol9n2 ~]# /u01/app/23.7.0/grid/root.sh
+
+###### POST INSTALL CONFIGURATION GRID 
+
+    [root@ol9n1 ~]# su - grid
+    [grid@ol9n1 ~]$ /u01/app/23.7.0/grid/gridSetup.sh -executeConfigTools -responseFile /home/oracle/gridsetup.rsp -silent
+
+###### POST INSTALL CHECK ENVIRONMENT ( RUNCLUVFY )
 
     [root@ol9n1 ~]# su - grid
     [grid@ol9n1 ~]$ /u01/app/23.7.0/grid/runcluvfy.sh stage -post crsinst -n ol9n1,ol9n2 -verbose -method root
