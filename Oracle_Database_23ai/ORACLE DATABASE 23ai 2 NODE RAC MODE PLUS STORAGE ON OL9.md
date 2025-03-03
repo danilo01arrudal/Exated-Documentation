@@ -1044,6 +1044,10 @@
     Usuário:                      grid
     Sistema operacional:          Linux5.15.0-302.167.6.el9uek.x86_64
 
+###### INSTALL GRID 23AI 
+
+![oracle database 23ai logo.](https://github.com/danilo01arrudal/Exated/blob/main/Oracle_Database_23ai/images/rac_23ai/rac_install_01.png)
+
 ###### CLUSTER INSTALL ( SET EXADATA PARAMETER )
 
     [root@ol9n1 ~]# cat /u01/app/23.7.0/grid/crs/install/crsconfig_params |grep ASMCA_ARGS
