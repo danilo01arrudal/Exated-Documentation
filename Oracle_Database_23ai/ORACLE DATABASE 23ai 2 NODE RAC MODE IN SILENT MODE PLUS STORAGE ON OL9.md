@@ -1,4 +1,4 @@
-**ORACLE DATABASE 23ai 2 NODE RAC MODE PLUS STORAGE ON OL9.5**
+**ORACLE DATABASE 23ai 2 NODE RAC MODE IN SILENT MODE PLUS STORAGE ON OL9.5**
 
 > *The main purpose of installing Oracle RAC is to provide high availability and horizontal scalability for Oracle databases. It allows multiple database instances to operate simultaneously on different servers, sharing the same data store. This ensures that, in the event of a server failure, the database remains accessible without interruption, and also allows processing capacity to be increased by adding new servers. Oracle RAC is ideal for mission-critical applications that require continuous performance and fault tolerance, optimizing resource utilization and improving response to increasing transaction demands.*
 
