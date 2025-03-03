@@ -1662,6 +1662,10 @@
     TARGET=ONLINE
     STATE=ONLINE on ol9n2
 
+###### CREATE DISKGRUOP FRA ON ASM ( ASMCA )
+
+    [grid@ol9n1 ~]$ asmca -silent -createDiskGroup -diskGroupName FRA -disk '/dev/asm-disk5' -redundancy EXTERNAL -au_size 4 -compatible.asm 23.0.0 -compatible.rdbms 19.0.0
+
 ###### COPY GRID INFRASTRUCTURE SOFTWARE
 
     [root@exated Downloads]# scp p37370465_230000_Linux-x86-64.zip oracle@192.168.18.121:/u01/app/oracle/product/23.7.0/dbhome_1/
