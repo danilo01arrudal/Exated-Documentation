@@ -23,11 +23,11 @@
     [root@ol9n2 ~]# vi /sys/devices/system/clocksource/clocksource0/current_clocksource
     tsc
 
-###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE STATIC NETWORK NODE 1)
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE HOSTNAME NODE 1)
 
     [root@ol9n1 ~]# hostnamectl set-hostname ol9n1.appsdba.info
 
-###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE STATIC NETWORK NODE 2)
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE SHOSTNAME NODE 2)
 
     [root@ol9n2 ~]# hostnamectl set-hostname ol9n2.appsdba.info
 
