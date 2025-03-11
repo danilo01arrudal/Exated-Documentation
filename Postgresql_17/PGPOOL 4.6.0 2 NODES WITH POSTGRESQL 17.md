@@ -91,7 +91,7 @@
     enp2s0  1b65e7f2-8343-37a1-8c05-4628db7ce870  ethernet  enp2s0 
     lo      05478f0a-cadf-47d7-9d1f-82438b63541f  loopback  lo  
 
-###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( DISABLE AVAHI )
+###### PRE REQUIREMENTS POSTGRES ENVIRONMENT ( DISABLE AVAHI )
 
     [root@ol9pg1 ~]# systemctl disable avahi-daemon.socket avahi-daemon.service 
     Removed "/etc/systemd/system/multi-user.target.wants/avahi-daemon.service".
@@ -110,6 +110,39 @@
     Created symlink /etc/systemd/system/avahi-daemon.socket → /dev/null.
     Created symlink /etc/systemd/system/avahi-daemon.service → /dev/null.
     [root@ol9pg2 ~]# systemctl stop avahi-daemon.socket avahi-daemon.service
+
+###### PRE REQUIREMENTS POSTGRES ENVIRONMENT ( FIREWALL AND SELINUX )
+
+    [root@ol9pg1 ~]# sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+    [root@ol9pg1 ~]# systemctl stop firewalld; systemctl disable firewalld
+
+    [root@ol9pg2 ~]# sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+    [root@ol9pg2 ~]# systemctl stop firewalld; systemctl disable firewalld 
+
+###### PRE REQUIREMENTS POSTGRES ENVIRONMENT ( DEFINE LOCALTIME )
+
+    [root@ol9pg1 ~]# rm -vf /etc/localtime; ln -s /usr/share/zoneinfo/America/Fortaleza /etc/localtime
+
+    [root@ol9pg2 ~]# rm -vf /etc/localtime; ln -s /usr/share/zoneinfo/America/Fortaleza /etc/localtime
+
+
+###### PRE REQUIREMENTS POSTGRES ENVIRONMENT ( GRANT PERMISSIONS TO NETWORK BINARIES )
+
+    [root@ol9pg1 ~]# chmod u+x /usr/sbin/ip; chmod u+s /usr/sbin/arping; chmod u+s /sbin/ip; chmod u+s /sbin/ifconfig
+
+    [root@ol9pg2 ~]# chmod u+x /usr/sbin/ip; chmod u+s /usr/sbin/arping; chmod u+s /sbin/ip; chmod u+s /sbin/ifconfig
+
+
+###### PRE REQUIREMENTS POSTGRES ENVIRONMENT ( PACKAGES )
+
+    [root@ol9pg1 ~]# dnf config-manager --enable ol9_codeready_builder; pkill -f 'yum'; yum repolist; yum install -y net-tools openssl-devel rsync; yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm; yum install -y libmemcached-awesome-1.1.0-12.el9.x86_64 libmemcached-awesome-devel-1.1.0-12.el9.x86_64 libmemcached-awesome-tools-1.1.0-12.el9.x86_64; yum install -y postgresql17-contrib.x86_64 postgresql17-libs.x86_64 postgresql17-server.x86_64 postgresql17.x86_64; yum install -y pgpool-II-4.6.0-1PGDG.rhel9.x86_6 pgpool-II-pcp-4.6.0-1PGDG.rhel9.x86_64 pgpool-II-pg17-extensions-4.6.0-1PGDG.rhel9.x86_64
+
+    [root@ol9pg2 ~]# dnf config-manager --enable ol9_codeready_builder; pkill -f 'yum'; yum repolist; yum install -y net-tools openssl-devel rsync; yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm; yum install -y libmemcached-awesome-1.1.0-12.el9.x86_64 libmemcached-awesome-devel-1.1.0-12.el9.x86_64 libmemcached-awesome-tools-1.1.0-12.el9.x86_64; yum install -y postgresql17-contrib.x86_64 postgresql17-libs.x86_64 postgresql17-server.x86_64 postgresql17.x86_64; yum install -y pgpool-II-4.6.0-1PGDG.rhel9.x86_6 pgpool-II-pcp-4.6.0-1PGDG.rhel9.x86_64 pgpool-II-pg17-extensions-4.6.0-1PGDG.rhel9.x86_64
+
+    
+
+
+
 
 
 
