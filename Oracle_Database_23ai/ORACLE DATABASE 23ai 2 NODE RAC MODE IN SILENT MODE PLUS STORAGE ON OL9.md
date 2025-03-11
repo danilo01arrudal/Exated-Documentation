@@ -130,7 +130,7 @@
     lo      c88169e7-1918-478d-8015-77da6638ee58  loopback  lo     
     enp2s0  189431ad-d482-3853-86da-40818b54653f  ethernet  --  
 
-###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( DISABLE FIREWALL AND SELINUX )
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( DISABLE AVAHI )
 
     [root@ol9n1 ~]# systemctl disable avahi-daemon.socket avahi-daemon.service 
     Removed "/etc/systemd/system/multi-user.target.wants/avahi-daemon.service".
@@ -150,7 +150,7 @@
     Created symlink /etc/systemd/system/avahi-daemon.service → /dev/null.
     [root@ol9n2 ~]# systemctl stop avahi-daemon.socket avahi-daemon.service
 
-###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( DISABLE FIREWALL AND SELINUX )
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( DISABLE AVAHI )
 
     [root@ol9n1 ~]# sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
     [root@ol9n2 ~]# sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
