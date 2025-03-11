@@ -9,4 +9,10 @@
 
 ![oracle database 23ai logo.](https://github.com/danilo01arrudal/Exated/blob/main/Postgresql_17/images/PgpoolII.jpg)
 
-###### BUILD VIRTUAL MACHINE ON VIRTUALIZER
+###### BUILD VIRTUAL MACHINE ON VIRTUALIZER (NODE 1)
+
+    [root@exated ~]# virt-install --virt-type kvm --name ol9pg1 --memory 4096 --vcpus 2 --os-variant ol9.5 --cdrom /var/lib/libvirt/images/OracleLinux-R9-U5-x86_64-dvd.iso --network bridge=br0,model=virtio --network bridge=br0,model=virtio --disk path=/var/lib/libvirt/images/ol9pg1.qcow2,size=50
+
+###### BUILD VIRTUAL MACHINE ON VIRTUALIZER (NODE 2)
+
+    [root@exated ~]# virt-install --virt-type kvm --name ol9pg2 --memory 4096 --vcpus 2 --os-variant ol9.5 --cdrom /var/lib/libvirt/images/OracleLinux-R9-U5-x86_64-dvd.iso --network bridge=br0,model=virtio --network bridge=br0,model=virtio --disk path=/var/lib/libvirt/images/ol9pg2.qcow2,size=50
