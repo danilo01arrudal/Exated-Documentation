@@ -150,7 +150,7 @@
     Created symlink /etc/systemd/system/avahi-daemon.service → /dev/null.
     [root@ol9n2 ~]# systemctl stop avahi-daemon.socket avahi-daemon.service
 
-###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( DISABLE AVAHI )
+### PRE REQUIREMENTS ORACLE ENVIRONMENT ( FIREWALL AND SELINUX )
 
     [root@ol9n1 ~]# sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
     [root@ol9n2 ~]# sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
