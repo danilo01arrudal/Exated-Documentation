@@ -139,7 +139,20 @@
 
     [root@ol9pg2 ~]# dnf config-manager --enable ol9_codeready_builder; pkill -f 'yum'; yum repolist; yum install -y net-tools openssl-devel rsync; yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm; yum install -y libmemcached-awesome-1.1.0-12.el9.x86_64 libmemcached-awesome-devel-1.1.0-12.el9.x86_64 libmemcached-awesome-tools-1.1.0-12.el9.x86_64; yum install -y postgresql17-contrib.x86_64 postgresql17-libs.x86_64 postgresql17-server.x86_64 postgresql17.x86_64; yum install -y pgpool-II-4.6.0-1PGDG.rhel9.x86_64; yum install -y pgpool-II-pcp-4.6.0-1PGDG.rhel9.x86_64; yum install -y pgpool-II-pg17-extensions-4.6.0-1PGDG.rhel9.x86_64
 
-    
+
+###### PRE REQUIREMENTS POSTGRES ENVIRONMENT ( ENVIRONMENT VARIABLES )
+
+    [root@ol9pg1 ~]# echo "PGDATA=/var/lib/pgsql/17/data/" >> /etc/environment
+    [root@ol9pg1 ~]# echo "PGHOME=/usr/pgsql-17/" >> /etc/environment
+
+    [root@ol9pg2 ~]# echo "PGDATA=/var/lib/pgsql/17/data/" >> /etc/environment
+    [root@ol9pg2 ~]# echo "PGHOME=/usr/pgsql-17/" >> /etc/environment
+
+###### PRE REQUIREMENTS POSTGRES ENVIRONMENT ( POSTRGES PASSWORD )
+
+    [root@ol9pg1 ~]# passwd postgres
+    [root@ol9pg2 ~]# passwd postgres
+
 
 
 
