@@ -153,8 +153,71 @@
     [root@ol9pg1 ~]# passwd postgres
     [root@ol9pg2 ~]# passwd postgres
 
+###### SSH KEY EXCHANGE ( NODE 1 )
 
+    [root@ol9pg1 ~]# su - postgres -c "ssh-keygen -t rsa"
+    [root@ol9pg1 ~]# su - postgres -c "cat /var/lib/pgsql/.ssh/id_rsa.pub > /var/lib/pgsql/.ssh/authorized_keys"
+    [root@ol9pg1 ~]# chmod 600 /var/lib/pgsql/.ssh/authorized_keys
+    [root@ol9pg1 ~]# su - postgres
+    [postgres@ol9pg1 ~]$ ssh-copy-id -i .ssh/id_rsa.pub postgres@ol9pg2
 
+###### SSH KEY EXCHANGE ( NODE 2 )
+
+    [root@ol9pg2 ~]# su - postgres -c "ssh-keygen -t rsa"
+    [root@ol9pg2 ~]# su - postgres -c "cat /var/lib/pgsql/.ssh/id_rsa.pub > /var/lib/pgsql/.ssh/authorized_keys"
+    [root@ol9pg2 ~]# chmod 600 /var/lib/pgsql/.ssh/authorized_keys
+    [root@ol9pg2 ~]# su - postgres
+    [postgres@ol9pg2 ~]$ ssh-copy-id -i .ssh/id_rsa.pub postgres@ol9pg1
+
+###### PRE REQUIREMENTS PGPOOL-II ENVIRONMENT ( ENVIRONMENT FILE )
+
+    [root@ol9pg1 ~]# cat > /etc/sysconfig/pgpool <<EOF
+    # Options for pgpool
+
+    # -n: don't run in daemon mode. does not detatch control tty
+    # -d: debug mode. lots of debug information will be printed
+
+    OPTS=" -d -n"
+    #OPTS=" -n"
+
+    STOP_OPTS=" -m fast"
+    EOF
+    [root@ol9pg1 ~]# chown postgres:postgres /etc/sysconfig/pgpool
+
+    [root@ol9pg2 ~]# cat > /etc/sysconfig/pgpool <<EOF
+    # Options for pgpool
+
+    # -n: don't run in daemon mode. does not detatch control tty
+    # -d: debug mode. lots of debug information will be printed
+
+    OPTS=" -d -n"
+    #OPTS=" -n"
+
+    STOP_OPTS=" -m fast"
+    EOF
+    [root@ol9pg1 ~]# chown postgres:postgres /etc/sysconfig/pgpool
+
+###### ENABLE PGPOOL-II AND POSTGRESQL-17
+
+    [root@ol9pg1 ~]# systemctl daemon-reload; systemctl enable pgpool-II.service; systemctl daemon-reload; systemctl enable postgresql-17.service;
+    [root@ol9pg2 ~]# systemctl daemon-reload; systemctl enable pgpool-II.service; systemctl daemon-reload; systemctl enable postgresql-17.service;
+
+###### CREATE INSTANCE POSTGRESQL-17
+
+    [root@ol9pg1 ~]# systemctl stop postgresql-17.service
+    [root@ol9pg1 ~]# rm -Rvf /var/lib/pgsql/17/data/*;
+    [root@ol9pg1 ~]# rm -Rvf /var/lib/pgsql/archivedir
+    [root@ol9pg1 ~]# mkdir -p /var/lib/pgsql/archivedir
+    [root@ol9pg1 ~]# chown postgres:postgres -R /var/lib/pgsql/archivedir
+    [root@ol9pg1 ~]# echo "postgres"> /var/lib/pgsql/pdwfile
+    [root@ol9pg1 ~]# chown postgres:postgres /var/lib/pgsql/pdwfile
+    [root@ol9pg1 ~]# su - postgres -c "/usr/pgsql-17/bin/initdb -k -D /var/lib/pgsql/17/data/ --pwfile=/var/lib/pgsql/pdwfile --auth-host=md5"
+    [root@ol9pg1 ~]# systemctl start postgresql-17.service;
+    [root@ol9pg1 ~]# rm -vf /var/lib/pgsql/pdwfile
+    [root@ol9pg1 ~]# echo *:5432:*:postgres:postgres > /var/lib/pgsql/.pgpass;
+    [root@ol9pg1 ~]# chown postgres:postgres /var/lib/pgsql/.pgpass;
+    [root@ol9pg1 ~]# chmod 0600 /var/lib/pgsql/.pgpass;
+    [root@ol9pg1 ~]# rm -vf /home/postgres/useraccts.sql
 
 
 
