@@ -226,7 +226,7 @@
     [root@ol9pg1 ~]# cp /var/lib/pgsql/17/data/pg_hba.conf /var/lib/pgsql/17/data/pg_hba.conf-bkp
     [root@ol9pg1 ~]# chown postgres:postgres /var/lib/pgsql/17/data/pg_hba.conf-bkp
 
-###### MODIFY CONFIGURATION FILES ( POSTGRESQL-17 AND PGPOOL-II )
+###### MODIFY CONFIGURATION FILES ( PGPOOL-II )
 
 su - postgres -c "cp -vf /etc/pgpool-II/pgpool.conf.sample /etc/pgpool-II/pgpool.conf"; 
 sed -e "/listen_addresses/s/'.*'/'*'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
