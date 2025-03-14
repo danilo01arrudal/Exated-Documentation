@@ -219,9 +219,141 @@
     [root@ol9pg1 ~]# chmod 0600 /var/lib/pgsql/.pgpass;
     [root@ol9pg1 ~]# rm -vf /home/postgres/useraccts.sql
 
+###### BACKUP CONFIGURATION FILES ( POSTGRESQL-17 AND PGPOOL-II )
 
+    [root@ol9pg1 ~]# cp -vf /var/lib/pgsql/17/data/postgresql.conf /var/lib/pgsql/17/data/postgresql.conf-bkp
+    [root@ol9pg1 ~]# chown postgres:postgres /var/lib/pgsql/17/data/postgresql.conf-bkp
+    [root@ol9pg1 ~]# cp /var/lib/pgsql/17/data/pg_hba.conf /var/lib/pgsql/17/data/pg_hba.conf-bkp
+    [root@ol9pg1 ~]# chown postgres:postgres /var/lib/pgsql/17/data/pg_hba.conf-bkp
 
+###### MODIFY CONFIGURATION FILES ( POSTGRESQL-17 AND PGPOOL-II )
 
+su - postgres -c "cp -vf /etc/pgpool-II/pgpool.conf.sample /etc/pgpool-II/pgpool.conf"; 
+sed -e "/listen_addresses/s/'.*'/'*'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/socket_dir =/s/'\/tmp'/'\/var\/run\/postgresql'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/backend_hostname0/s/'.*'/'pg1'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "s/#backend_hostname1/backend_hostname1/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/backend_hostname1/s/'.*'/'pg2'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "s/#backend_port1/backend_port1/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/backend_port1/s/5433/5432/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "s/#backend_weight1/backend_weight1/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "s/#backend_data_directory1 =/backend_data_directory1 =/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/backend_data_directory1/s/'.*'/'\/var\/lib\/pgsql\/12\/data'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/backend_data_directory0/s/'.*'/'\/var\/lib\/pgsql\/12\/data'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "s/#backend_flag1/backend_flag1/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/sr_check_user =/s/'nobody'/'replication'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/sr_check_password =/s/''/'replication'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/health_check_period =/s/0/10/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/health_check_user =/s/'nobody'/'postgres'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/health_check_password =/s/''/'postgres'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/failover_command =/s/''/'\/etc\/pgpool-II\/failover.sh \%d \%h \%p \%D \%m \%H \%M \%P \%r \%R \%N \%S'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/recovery_user =/s/'nobody'/'postgres'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/recovery_password =/s/''/'postgres'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/recovery_1st_stage_command =/s/''/'recovery_1st_stage'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/use_watchdog =/s/off/on/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/delegate_IP =/s/''/'192.168.1.121'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/if_up_cmd =/s/'\/usr\/bin\/sudo \/sbin\/ip addr add \$_IP_\$\/24 dev eth0 label eth0\:0'/'\/usr\/bin\/sudo \/sbin\/ip addr add \$_IP_\$\/24 dev enp0s3 label enp0s3\:0'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/if_down_cmd =/s/'\/usr\/bin\/sudo \/sbin\/ip addr del \$_IP_\$\/24 dev eth0'/'\/usr\/bin\/sudo \/sbin\/ip addr del \$_IP_\$\/24 dev enp0s3'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/arping_cmd =/s/'\/usr\/bin\/sudo \/usr\/sbin\/arping -U \$_IP_\$ -w 1 -I eth0'/'\/usr\/bin\/sudo \/usr\/sbin\/arping -U \$_IP_\$ -w 1 -I enp0s3'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/wd_hostname =/s/''/'pg1'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "s/#other_pgpool_hostname0/other_pgpool_hostname0/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/other_pgpool_hostname0 =/s/'host0'/'pg2'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "s/#other_pgpool_port0/other_pgpool_port0/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; sed -e "/other_pgpool_port0 =/s/5432/9999/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "s/#other_wd_port0/other_wd_port0/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/heartbeat_destination0 =/s/'host0_ip1'/'pg2'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/heartbeat_device0 =/s/'.*'/'enp0s3'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/health_check_database =/s/''/'postgres'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/load_balance_mode =/s/off/on/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/master_slave_mode =/s/off/on/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/sr_check_period =/s/0/5/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/allow_multiple_failover_requests_from_node =/s/off/on/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/enable_consensus_with_half_votes =/s/off/on/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+sed -e "/enable_consensus_with_half_votes =/s/off/on/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
+mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
+chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+su - postgres -c "cp -vf /etc/pgpool-II/pool_hba.conf.sample /etc/pgpool-II/pool_hba.conf"; 
+chown postgres:postgres -R /etc/pgpool-II; 
+mkdir -p /var/log/pgpool/; 
+chown postgres:postgres -R /var/log/pgpool;
 
     
 
