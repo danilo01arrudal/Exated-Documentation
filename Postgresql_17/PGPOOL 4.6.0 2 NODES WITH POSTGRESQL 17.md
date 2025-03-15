@@ -229,12 +229,8 @@
 ###### MODIFY CONFIGURATION FILES ( PGPOOL-II )
 
 su - postgres -c "cp -vf /etc/pgpool-II/pgpool.conf.sample /etc/pgpool-II/pgpool.conf"; 
-sed -e "/listen_addresses/s/'.*'/'*'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
-mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
-chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
-sed -e "/socket_dir =/s/'\/tmp'/'\/var\/run\/postgresql'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
-mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
-chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
+listen_addresses = '*'
+socket_dir = '/var/run/postgresql' 
 sed -e "/backend_hostname0/s/'.*'/'pg1'/" /etc/pgpool-II/pgpool.conf > /etc/pgpool-II/pgpool.conf-new; 
 mv -vf /etc/pgpool-II/pgpool.conf-new /etc/pgpool-II/pgpool.conf; 
 chown postgres:postgres /etc/pgpool-II/pgpool.conf; 
