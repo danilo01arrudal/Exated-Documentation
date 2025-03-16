@@ -1,4 +1,4 @@
-**PGPOOL 4.6.0 2 NODES WITH POSTGRESQL 17**
+**PGPOOL 4.6.0 2 NODES WITH POSTGRESQL 17 ON OL9**
 
 > *The main purpose of installing PostgreSQL 17 is to provide a robust, reliable, open-source relational database management system (RDBMS) for a variety of applications.
 > *- Data management: PostgreSQL enables you to store, organize, and manage large volumes of data efficiently and securely.*  
