@@ -122,4 +122,15 @@
     SQL> exit
     Disconnected from EnterpriseDB Database.
 
+###### POST INSTALL EDB POSTGRES ( CONFIGURE CONECTION WITH SSL ) 
+
+    [root@ol9pgedb ~]# su - enterprisedb
+    [enterprisedb@ol9pgedb ~]$ cd /var/lib/edb/as17/data 
+    [enterprisedb@ol9pgedb data]$ openssl req -new -nodes -text -out server.csr -keyout server.key -subj "/CN=ol9pgedb.localhost.localdomain"
+    [enterprisedb@ol9pgedb data]$ openssl x509 -req -in server.csr -text -days 3650 -extfile /etc/pki/tls/openssl.cnf -extensions v3_ca -signkey server.key -out server.crt
+    Certificate request self-signature ok
+    subject=CN=ol9pgedb.localhost.localdomain
+    
+
+
 
