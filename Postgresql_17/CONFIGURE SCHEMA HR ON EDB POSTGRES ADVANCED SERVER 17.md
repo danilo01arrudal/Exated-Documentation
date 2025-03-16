@@ -3,7 +3,7 @@
 > The HR (Human Resources) schema is a sample schema provided by Oracle Corporation for educational and demonstration purposes within Oracle Database.
 > It serves as a simplified model of a company's Human Resources department, containing tables and data that represent information about employees, departments, work locations, job titles, and employment history.
 
-![edb postgres logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Postgresql_17/scripts/01%20account.sql)
+![edb postgres logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Postgresql_17/images/hr_schema.jpg)
 
 ###### TO CREATE HR SCHEMA ON YOUR DATABASE
 
@@ -13,18 +13,18 @@
 
     3. Run script 01, which changes to the pluggable database and creates the new HR user.
 
-![edb postgres logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Postgresql_17/scripts/02%20create%20tables.sql)
+![01 account.sql](https://github.com/danilo01arrudal/Documentation/blob/main/Postgresql_17/scripts/01%20account.sql)
 
     4. Connect to the database as the new HR user.
 
     5. Run script 02 to create the tables.
 
-![edb postgres logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Postgresql_17/scripts/03%20populate.sql)
+![02 create tables.sql](https://github.com/danilo01arrudal/Documentation/blob/main/Postgresql_17/scripts/02%20create%20tables.sql)
 
     6. Run script 03 to populate the tables.
 
-![edb postgres logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Postgresql_17/images/hr_schema.jpg)
+![03 populate.sql](https://github.com/danilo01arrudal/Documentation/blob/main/Postgresql_17/scripts/03%20populate.sql)
 
     7. Run script 04 to create indexes and comments.
 
-![edb postgres logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Postgresql_17/scripts/04%20others.sql)
+![04 others.sql](https://github.com/danilo01arrudal/Documentation/blob/main/Postgresql_17/scripts/04%20others.sql)
