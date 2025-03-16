@@ -13,5 +13,23 @@
 
     [root@exated ~]# virt-install --virt-type kvm --name ol9pgedb --memory 4096 --vcpus 2 --os-variant ol9.5 --cdrom /var/lib/libvirt/images/OracleLinux-R9-U5-x86_64-dvd.iso --network bridge=br0,model=virtio --disk path=/var/lib/libvirt/images/ol9pgedb.qcow2,size=50
 
-###### DISABLE SELINUX
-    [root@ol9pgedb ~]#
+###### PRE REQUIREMENTS POSTGRES ENVIRONMENT ( DISABLE SELINUX ) 
+   
+    [root@ol9pgedb ~]# hostnamectl set-hostname ol9pgedb
+
+###### PRE REQUIREMENTS POSTGRES ENVIRONMENT ( CONFIGURE REPOSITORY )
+
+    [root@ol9pgedb ~]# curl -1sSLf 'https://downloads.enterprisedb.com/********************************/enterprise/setup.rpm.sh' | sudo -E bash
+
+###### PRE REQUIREMENTS POSTGRES ENVIRONMENT ( VALIDATE REPOSITORY )
+
+    [root@ol9pgedb ~]# yum repolist
+    repo id                                                                                                      repo name
+    enterprisedb-enterprise                                                                                      enterprisedb-enterprise
+    enterprisedb-enterprise-noarch                                                                               enterprisedb-enterprise-noarch
+    enterprisedb-enterprise-source                                                                               enterprisedb-enterprise-source
+    ol9_UEKR7                                                                                                    Oracle Linux 9 UEK Release 7 (x86_64)
+    ol9_appstream                                                                                                Oracle Linux 9 Application Stream Packages (x86_64)
+    ol9_baseos_latest                                                                                            Oracle Linux 9 BaseOS Latest (x86_64)
+
+
