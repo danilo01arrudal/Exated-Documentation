@@ -15,7 +15,7 @@
 
 ###### PRE REQUIREMENTS POSTGRES ENVIRONMENT ( DISABLE SELINUX ) 
    
-    [root@ol9pgedb ~]# hostnamectl set-hostname ol9pgedb
+    [root@ol9pgedb ~]# hostnamectl set-hostname ol9pgedb.appsdba.info
 
 ###### PRE REQUIREMENTS POSTGRES ENVIRONMENT ( CONFIGURE REPOSITORY )
 
