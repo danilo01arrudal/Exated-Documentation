@@ -97,5 +97,29 @@
      t
     (1 row)
 
+    [root@ol9pgedb ~]# systemctl stop edb-as-17
+    [root@ol9pgedb ~]# systemctl start edb-as-17
+
+###### POST INSTALL EDB POSTGRES ( RESET PASSWORD EDB POSTGRES ) 
+
+    [root@ol9pgedb ~]# su - enterprisedb 
+    [enterprisedb@ol9pgedb ~]$ /usr/edb/as17/bin/psql postgres
+    psql (17.4.0)
+    Type "help" for help.
+
+    postgres=# \password enterprisedb
+    postgres=# \q
+    [enterprisedb@ol9pgedb ~]$ exit
+
+###### POST INSTALL EDB POSTGRES ( VALIDATE NETWORK CONNECTION ) 
+
+    [root@ol9pgedb ~]# /usr/edb/edbplus/edbplus.sh enterprisedb/**********@192.168.18.21:5444/edb 
+    Connected to EnterpriseDB 17.4.0 (192.168.18.21:5444/edb) AS enterprisedb
+
+    edb*Plus (Build 41.3.0)
+    Copyright (c) 2008-2024, EnterpriseDB Corporation.  All rights reserved.
+
+    SQL> exit
+    Disconnected from EnterpriseDB Database.
 
 
