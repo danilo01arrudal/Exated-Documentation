@@ -89,7 +89,7 @@
     port = 5444
 
     [root@ol9pgedb ~]# vi /var/lib/edb/as17/data/pg_hba.conf
-    host    all             all             192.168.18.0/24         md5
+    host    all             enterprisedb             192.168.18.0/24         md5
 
     [root@ol9pgedb ~]# su - enterprisedb -c "/usr/edb/as17/bin/psql postgres -c 'select pg_reload_conf();'"
      pg_reload_conf 
@@ -119,18 +119,23 @@
     edb*Plus (Build 41.3.0)
     Copyright (c) 2008-2024, EnterpriseDB Corporation.  All rights reserved.
 
+    SQL> select * from v$version;
+
+    BANNER                                                                          
+    --------------------------------------------------------------------------------
+    Oracle Database 10g Edition Release 10.2.0.1.0 - Product is similar             
+    PL/SQL Release 10.2.0.1.0 - Production is similar                               
+    CORE 10.2.0.1.0 Production is similar                                           
+
     SQL> exit
     Disconnected from EnterpriseDB Database.
+  
 
-###### POST INSTALL EDB POSTGRES ( CONFIGURE CONECTION WITH SSL ) 
-
-    [root@ol9pgedb ~]# su - enterprisedb
-    [enterprisedb@ol9pgedb ~]$ cd /var/lib/edb/as17/data 
-    [enterprisedb@ol9pgedb data]$ openssl req -new -nodes -text -out server.csr -keyout server.key -subj "/CN=ol9pgedb.localhost.localdomain"
-    [enterprisedb@ol9pgedb data]$ openssl x509 -req -in server.csr -text -days 3650 -extfile /etc/pki/tls/openssl.cnf -extensions v3_ca -signkey server.key -out server.crt
-    Certificate request self-signature ok
-    subject=CN=ol9pgedb.localhost.localdomain
     
+
+    
+
+
 
 
 
