@@ -34,7 +34,7 @@
 
 ###### INSTALL EDB POSTGRES ADVANCED SERVER 17
     
-    [root@ol9pgedb ~]# dnf -y install edb-as17-server
+    [root@ol9pgedb ~]# dnf -y install edb-as17-server edb-edbplus.x86_64
 
 ###### POST INSTALL EDB POSTGRES ( CREATE DATABASE DEFAULT )
 
