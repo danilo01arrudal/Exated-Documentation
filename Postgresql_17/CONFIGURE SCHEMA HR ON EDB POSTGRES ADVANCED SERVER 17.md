@@ -17,6 +17,6 @@
 
     5. Run script 02 to import data.
 
-[02 create tables.sql](https://github.com/danilo01arrudal/Documentation/blob/main/Postgresql_17/scripts/02%20import%20data.sql)
+[02 import_data.sql](https://github.com/danilo01arrudal/Documentation/blob/main/Postgresql_17/scripts/02%20import%20data.sql)
 
 
