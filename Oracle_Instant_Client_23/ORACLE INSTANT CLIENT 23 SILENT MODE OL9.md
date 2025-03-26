@@ -1,1 +1,52 @@
+wget https://download.oracle.com/otn_software/linux/instantclient/2370000/oracle-instantclient-odbc-23.7.0.25.01-1.el9.x86_64.rpm
+wget https://download.oracle.com/otn_software/linux/instantclient/2370000/oracle-instantclient-jdbc-23.7.0.25.01-1.el9.x86_64.rpm
+wget https://download.oracle.com/otn_software/linux/instantclient/2370000/oracle-instantclient-devel-23.7.0.25.01-1.el9.x86_64.rpm
+wget https://download.oracle.com/otn_software/linux/instantclient/2370000/oracle-instantclient-sqlplus-23.7.0.25.01-1.el9.x86_64.rpm
+wget https://download.oracle.com/otn_software/linux/instantclient/2370000/oracle-instantclient-basic-23.7.0.25.01-1.el9.x86_64.rpm
 
+[root@ol9pgedb ~]# ls -ltr /tmp/
+-rw-r--r--. 1 root         root         79460281 Mar 25 22:33 oracle-instantclient-basic-23.7.0.25.01-1.el9.x86_64.rpm
+-rw-r--r--. 1 root         root           687141 Mar 25 22:33 oracle-instantclient-devel-23.7.0.25.01-1.el9.x86_64.rpm
+-rw-r--r--. 1 root         root          1544481 Mar 25 22:33 oracle-instantclient-jdbc-23.7.0.25.01-1.el9.x86_64.rpm
+-rw-r--r--. 1 root         root           266682 Mar 25 22:33 oracle-instantclient-odbc-23.7.0.25.01-1.el9.x86_64.rpm
+-rw-r--r--. 1 root         root          2711122 Mar 25 22:33 oracle-instantclient-sqlplus-23.7.0.25.01-1.el9.x86_64.rpm
+
+[root@ol9pgedb ~]# cd /tmp/
+[root@ol9pgedb tmp]# rpm -ivh oracle-instantclient-basic-23.7.0.25.01-1.el9.x86_64.rpm 
+Verifying...                          ################################# [100%]
+Preparing...                          ################################# [100%]
+Updating / installing...
+   1:oracle-instantclient-basic-23.7.0################################# [100%]
+[root@ol9pgedb tmp]# rpm -ivh oracle-instantclient-devel-23.7.0.25.01-1.el9.x86_64.rpm 
+Verifying...                          ################################# [100%]
+Preparing...                          ################################# [100%]
+Updating / installing...
+   1:oracle-instantclient-devel-23.7.0################################# [100%]
+[root@ol9pgedb tmp]# rpm -ivh oracle-instantclient-jdbc-23.7.0.25.01-1.el9.x86_64.rpm 
+Verifying...                          ################################# [100%]
+Preparing...                          ################################# [100%]
+Updating / installing...
+   1:oracle-instantclient-jdbc-23.7.0.################################# [100%]
+[root@ol9pgedb tmp]# rpm -ivh oracle-instantclient-odbc-23.7.0.25.01-1.el9.x86_64.rpm 
+Verifying...                          ################################# [100%]
+Preparing...                          ################################# [100%]
+Updating / installing...
+   1:oracle-instantclient-odbc-23.7.0.################################# [100%]
+[root@ol9pgedb tmp]# rpm -ivh oracle-instantclient-sqlplus-23.7.0.25.01-1.el9.x86_64.rpm 
+Verifying...                          ################################# [100%]
+Preparing...                          ################################# [100%]
+Updating / installing...
+   1:oracle-instantclient-sqlplus-23.7################################# [100%]
+[root@ol9pgedb tmp]# 
+
+[root@ol9pgedb ~]# vi /usr/lib/oracle/23/client64/lib/network/admin/tnsnames.ora 
+HR =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.18.21)(PORT = 5444))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = hr)
+    )
+  )
+
+[root@ol9pgedb ~]# sqlplus enterprisedb/enterprisedb@HR
