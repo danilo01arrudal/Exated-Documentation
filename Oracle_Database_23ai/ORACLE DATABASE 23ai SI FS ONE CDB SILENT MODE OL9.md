@@ -70,7 +70,7 @@
 				export ORACLE_HOSTNAME=ol7db1
 				export ORACLE_UNQNAME=appscdb
 				export ORACLE_BASE=/u01/app/oracle
-				export ORACLE_HOME=\$ORACLE_BASE/product/19.3.0/dbhome_1
+				export ORACLE_HOME=\$ORACLE_BASE/product/23.5.0/dbhome_1
 				export ORA_INVENTORY=/u01/app/oraInventory
 				export ORACLE_SID=appscdb1
 
