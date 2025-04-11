@@ -1,3 +1,9 @@
+**ZABBIX SERVER 7.0 ON OL9**
+
+> *Zabbix is ​​an enterprise-grade, open-source monitoring solution that monitors the availability and performance of IT infrastructures, including networks, servers, virtual machines, services, applications, and the cloud. It collects and displays basic metrics, enabling users to proactively detect problems and ensure the reliability of their systems.*
+
+![zabbix logo.](https://github.com/danilo01arrudal/Documentation/blob/main/ZABBIX/images/zabbix_logo_icon_168734.png)
+
 ##### Install Zabbix Repository
 
 [root@ol9dns ~]# rpm -Uvh https://repo.zabbix.com/zabbix/7.0/rhel/9/x86_64/zabbix-release-latest.el9.noarch.rpm
