@@ -1,8 +1,8 @@
-wget https://download.oracle.com/otn_software/linux/instantclient/2370000/oracle-instantclient-odbc-23.7.0.25.01-1.el9.x86_64.rpm
-wget https://download.oracle.com/otn_software/linux/instantclient/2370000/oracle-instantclient-jdbc-23.7.0.25.01-1.el9.x86_64.rpm
-wget https://download.oracle.com/otn_software/linux/instantclient/2370000/oracle-instantclient-devel-23.7.0.25.01-1.el9.x86_64.rpm
-wget https://download.oracle.com/otn_software/linux/instantclient/2370000/oracle-instantclient-sqlplus-23.7.0.25.01-1.el9.x86_64.rpm
-wget https://download.oracle.com/otn_software/linux/instantclient/2370000/oracle-instantclient-basic-23.7.0.25.01-1.el9.x86_64.rpm
+[root@ol9pgedb ~]# wget https://download.oracle.com/otn_software/linux/instantclient/2370000/oracle-instantclient-odbc-23.7.0.25.01-1.el9.x86_64.rpm
+[root@ol9pgedb ~]# wget https://download.oracle.com/otn_software/linux/instantclient/2370000/oracle-instantclient-jdbc-23.7.0.25.01-1.el9.x86_64.rpm
+[root@ol9pgedb ~]# wget https://download.oracle.com/otn_software/linux/instantclient/2370000/oracle-instantclient-devel-23.7.0.25.01-1.el9.x86_64.rpm
+[root@ol9pgedb ~]# wget https://download.oracle.com/otn_software/linux/instantclient/2370000/oracle-instantclient-sqlplus-23.7.0.25.01-1.el9.x86_64.rpm
+[root@ol9pgedb ~]# wget https://download.oracle.com/otn_software/linux/instantclient/2370000/oracle-instantclient-basic-23.7.0.25.01-1.el9.x86_64.rpm
 
 [root@ol9pgedb ~]# ls -ltr /tmp/
 -rw-r--r--. 1 root         root         79460281 Mar 25 22:33 oracle-instantclient-basic-23.7.0.25.01-1.el9.x86_64.rpm
