@@ -7,7 +7,7 @@ In simple terms, LIO allows a Linux server to share its storage devices (such as
 
 >    *(2) It allows this server to expose storage devices as "targets" for other computers ("initiators") to access.*
 
-![oracle linux iscsi logo.](https://github.com/danilo01arrudal/Exated/blob/main/SCSI/images/iSCSI.png)
+![oracle linux iscsi logo.](https://github.com/danilo01arrudal/Exated/blob/main/Scsi/images/iSCSI.png)
 
 
 > *LVM, or Logical Volume Manager, is a powerful tool in Linux that provides a flexible and efficient way to manage storage devices. Instead of partitioning physical disks directly, LVM creates an abstraction layer that allows you to manipulate storage logically.*
