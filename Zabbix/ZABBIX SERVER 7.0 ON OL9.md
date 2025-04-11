@@ -172,6 +172,19 @@
     user : Admin
     password : zabbix 
 
+![zabbix 1.](https://github.com/danilo01arrudal/Documentation/blob/main/Zabbix/images/zabbix1.png)
+
+![zabbix 2.](https://github.com/danilo01arrudal/Documentation/blob/main/Zabbix/images/zabbix2.png)
+
+![zabbix 3.](https://github.com/danilo01arrudal/Documentation/blob/main/Zabbix/images/zabbix3.png)
+
+![zabbix 4.](https://github.com/danilo01arrudal/Documentation/blob/main/Zabbix/images/zabbix4.png)
+
+![zabbix 5.](https://github.com/danilo01arrudal/Documentation/blob/main/Zabbix/images/zabbix5.png)
+
+![zabbix 6.](https://github.com/danilo01arrudal/Documentation/blob/main/Zabbix/images/zabbix6.png)
+
+
 
 
 
