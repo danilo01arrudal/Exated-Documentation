@@ -2,7 +2,7 @@
 
 > *BIND (Berkeley Internet Name Domain) is a DNS (Domain Name System) server software essential to the functioning of the Internet. Its main use is to translate domain names (such as "google.com") into IP addresses (such as "172.217.160.142"), which are the numeric identifiers that computers use to communicate with each other..*
 
-![bind9 logo.](https://github.com/danilo01arrudal/Exated/blob/main/BIND/images/bind.png)
+![bind9 logo.](https://github.com/danilo01arrudal/Exated/blob/main/Bind/images/bind.png)
 
 ###### REMOVE DNSMASQ AND AVAHI-DAEMON
     [root@localhost ~]# systemctl stop dnsmasq
