@@ -2,7 +2,7 @@
 
 > *Zabbix is ​​an enterprise-grade, open-source monitoring solution that monitors the availability and performance of IT infrastructures, including networks, servers, virtual machines, services, applications, and the cloud. It collects and displays basic metrics, enabling users to proactively detect problems and ensure the reliability of their systems.*
 
-![zabbix logo.](https://github.com/danilo01arrudal/Documentation/blob/main/ZABBIX/images/zabbix_logo_icon_168734.png)
+![zabbix logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Zabbix/images/zabbix_logo_icon_168734.png)
 
 ##### Install Zabbix Repository
 
