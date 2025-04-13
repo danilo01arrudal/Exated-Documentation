@@ -7,6 +7,6 @@
 > *- Greater Control and Resilience: MongoDB 8 introduces new controls to optimize database performance during unpredictable peaks in usage, ensuring greater application resilience.*    
 > *- Other Improvements: Version 8 also brings improvements to logging (with profiler configuration based on processing time), aggregation, replication (faster concurrent writes), and sharding (simplified conversion of sharded to non-sharded collections and more efficient collection movement).*
 
-![oracle database 23ai logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Mongodb/images/mongodb_logo.webp)
+![oracle database 23ai logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Mongodb/images/mongodb_logo)
 
 ###### BUILD VIRTUAL MACHINE ON VIRTUALIZER
