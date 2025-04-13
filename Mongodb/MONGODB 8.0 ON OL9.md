@@ -35,3 +35,30 @@
 
     [root@ol9mongodb ~]# systemctl enable mongod; systemctl start mongod
 
+###### POST INSTALL MONGODB ( GET STARTED ) 
+
+    [root@ol9mongodb ~]# mongosh
+    Current Mongosh Log ID:	67fc2e972bd7d19046d861df
+    Connecting to:		mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.5.0
+    Using MongoDB:		8.0.6
+    Using Mongosh:		2.5.0
+
+    For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+
+    To help improve our products, anonymous usage data is collected and sent to MongoDB periodically (https://www.mongodb.com/legal/privacy-policy).
+    You can opt-out by running the disableTelemetry() command.
+
+    ------
+       The server generated these startup warnings when booting
+       2025-04-13T18:06:31.629-03:00: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://dochub.mongodb.org/core/prodnotes-filesystem
+       2025-04-13T18:06:32.024-03:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+       2025-04-13T18:06:32.024-03:00: For customers running the current memory allocator, we suggest changing the contents of the following sysfsFile
+       2025-04-13T18:06:32.024-03:00: For customers running the current memory allocator, we suggest changing the contents of the following sysfsFile
+       2025-04-13T18:06:32.024-03:00: We suggest setting the contents of sysfsFile to 0.
+       2025-04-13T18:06:32.024-03:00: vm.max_map_count is too low
+       2025-04-13T18:06:32.024-03:00: We suggest setting swappiness to 0 or 1, as swapping can cause performance problems.
+    ------
+
+    test>
+
