@@ -33,10 +33,10 @@
     enp1s0  26097519-1cba-3447-8711-fb0800ba2366  ethernet  enp1s0 
     lo      7ac75b97-ee60-4288-90d8-a732972b360f  loopback  lo 
 
-    [root@ol923ai ~]# nmcli con modify 'enp1s0' iframe enp1s0 ipv4.method manual ipv4.addresses 192.168.18.16/24 gw4 192.168.18.1
-    [root@ol923ai ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.201
-    [root@ol923ai ~]# nmcli con down 'enp1s0'
-    [root@ol923ai ~]# nmcli con up 'enp1s0'
+    [root@ol9em24ai ~]# nmcli con modify 'enp1s0' iframe enp1s0 ipv4.method manual ipv4.addresses 192.168.18.16/24 gw4 192.168.18.1
+    [root@ol9em24ai ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.201
+    [root@ol9em24ai ~]# nmcli con down 'enp1s0'
+    [root@ol9em24ai ~]# nmcli con up 'enp1s0'
 
     [root@ol9em24ai ~]# ip addr show enp1s0
     2: enp1s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
