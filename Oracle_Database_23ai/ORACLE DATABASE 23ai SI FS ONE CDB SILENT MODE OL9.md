@@ -43,10 +43,6 @@
     link/ether 52:54:00:bc:5a:a4 brd ff:ff:ff:ff:ff:ff
     inet 192.168.18.101/24 brd 192.168.18.255 scope global noprefixroute enp1s0
        valid_lft forever preferred_lft forever
-    inet6 2804:248:f65e:2800:5054:ff:febc:5aa4/64 scope global dynamic noprefixroute 
-       valid_lft 86197sec preferred_lft 86197sec
-    inet6 fe80::5054:ff:febc:5aa4/64 scope link noprefixroute 
-       valid_lft forever preferred_lft forever
 
     [root@ol923ai ~]# ip route show
     default via 192.168.18.1 dev enp1s0 proto static metric 100 
