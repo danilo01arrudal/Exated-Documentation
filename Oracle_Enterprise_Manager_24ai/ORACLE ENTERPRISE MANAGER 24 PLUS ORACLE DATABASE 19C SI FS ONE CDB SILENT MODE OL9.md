@@ -48,7 +48,11 @@
     default via 192.168.18.1 dev enp1s0 proto static metric 100 
     192.168.18.0/24 dev enp1s0 proto kernel scope link src 192.168.18.16 metric 100 
 
-    
+###### DISABLE AVAHI DAEMON
+
+    [root@ol9em24ai ~]# systemctl disable avahi-daemon  
+
+
 
 
 
