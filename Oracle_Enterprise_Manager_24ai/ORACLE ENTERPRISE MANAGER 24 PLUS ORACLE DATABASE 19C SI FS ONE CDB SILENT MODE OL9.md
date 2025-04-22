@@ -52,6 +52,90 @@
 
     [root@ol9em24ai ~]# systemctl disable avahi-daemon  
 
+###### INSTALL PACKAGES
+
+    [root@ol9em24ai ~]# yum install -y oracle-database-preinstall-19c.x86_64
+    [root@ol9em24ai ~]# yum install make -y
+    [root@ol9em24ai ~]# yum install binutils -y
+    [root@ol9em24ai ~]# yum install gcc -y
+    [root@ol9em24ai ~]# yum install libaio -y
+    [root@ol9em24ai ~]# yum install glibc-common -y
+    [root@ol9em24ai ~]# yum install libstdc++ -y
+    [root@ol9em24ai ~]# yum install sysstat -y
+    [root@ol9em24ai ~]# yum install glibc -y
+    [root@ol9em24ai ~]# yum install glibc-devel.i686 -y
+    [root@ol9em24ai ~]# yum install glibc-devel -y
+    [root@ol9em24ai ~]# yum install libXtst -y
+    [root@ol9em24ai ~]# yum install ntpd -y
+
+###### DISABLE AVAHI DAEMON
+
+    [root@ol9em24ai ~]# systemctl stop avahi-service
+    [root@ol9em24ai ~]# systemctl stop avahi-daemon
+    [root@ol9em24ai ~]# systemctl disable avahi-daemon
+
+###### CONFIGURE CHRONY SERVICE
+
+    [root@ol9em24ai ~]# yum install -y install chrony
+    [root@ol9em24ai ~]# systemctl start chronyd
+    [root@ol9em24ai ~]# systemctl enable chronyd
+
+###### CREATE ORACLE_BASE AND ORACLE_HOME DIRECTORIES
+
+    [root@ol9em24ai ~]# mkdir -p /u01/app/oracle/product/19.3.0/dbhome_1
+    [root@ol9em24ai ~]# chown -R oracle:oinstall /u01
+    [root@ol9em24ai ~]# chmod -R 775 /u01
+
+###### CONFIGURE VARIABLES
+
+    [root@ol9em24ai ~]# su - oracle
+    [oracle@ol9em24ai ~]$ mkdir /home/oracle/scripts
+
+    [oracle@ol9em24ai ~]$ cat > /home/oracle/scripts/setEnv.sh <<EOF
+    # Oracle Settings
+    export TMP=/tmp
+    export TMPDIR=\$TMP
+
+    export ORACLE_HOSTNAME=ol9em24ai.appsdba.info
+    export ORACLE_UNQNAME=appscdb
+    export ORACLE_BASE=/u01/app/oracle
+    export ORACLE_HOME=\$ORACLE_BASE/product/19.3.0/dbhome_1
+    export ORA_INVENTORY=/u01/app/oraInventory
+    export ORACLE_SID=appscdb1
+    export CV_ASSUME_DISTID='OL7'
+
+    export PATH=/usr/sbin:/usr/local/bin:\$PATH
+    export PATH=\$ORACLE_HOME/bin:\$PATH
+
+    export LD_LIBRARY_PATH=\$ORACLE_HOME/lib:/lib:/usr/lib
+    export CLASSPATH=\$ORACLE_HOME/jlib:\$ORACLE_HOME/rdbms/jlib
+    EOF
+
+    [oracle@ol9em24ai ~]$ echo ". /home/oracle/scripts/setEnv.sh" >> /home/oracle/.bash_profile 
+    [oracle@ol9em24ai ~]$ cat > /home/oracle/scripts/start_all.sh <<EOF
+    #!/bin/bash
+    . /home/oracle/scripts/setEnv.sh
+
+    export ORAENV_ASK=NO
+    . oraenv
+    export ORAENV_ASK=YES
+
+    dbstart \$ORACLE_HOME
+    EOF
+
+    [oracle@ol9em24ai ~]$ cat > /home/oracle/scripts/stop_all.sh <<EOF
+    #!/bin/bash
+    . /home/oracle/scripts/setEnv.sh
+
+    export ORAENV_ASK=NO
+    . oraenv
+    export ORAENV_ASK=YES
+
+    dbshut \$ORACLE_HOME
+    EOF
+
+    [oracle@ol9em24ai ~]$ chown -R oracle:oinstall /home/oracle/scripts
+    [oracle@ol9em24ai ~]$ chmod u+x /home/oracle/scripts/*.sh
 
 
 
