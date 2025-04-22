@@ -1,4 +1,4 @@
-**ORACLE ENTERPRISE MANAGER 24ai PLUS ORACLE DATABASE 19C SI FS ONE CDB SILENT MODE OL9.5**
+**ORACLE ENTERPRISE MANAGER 24ai PLUS ORACLE DATABASE 23ai SI FS ONE CDB SILENT MODE OL9.5**
 
 
 > *Oracle Enterprise Manager 24ai is Oracle's modern management platform, enhanced with AI for managing Oracle Databases and Engineered Systems across on-premises and cloud. Key features include an AI-powered assistant, zero downtime monitoring and job system, highly available remote agents, container-based architecture, improved UI, and integration with OCI observability and AI services for enhanced insights, automation, and security.*
@@ -15,7 +15,7 @@
 
 ###### INSTALL PRE-INSTALL PACKAGES
 
-    [root@ol9em24ai ~]# yum install oracle-database-preinstall-19c
+    [root@ol9em24ai ~]# yum install oracle-database-preinstall-23ai
 
 ###### DISABLE SELINUX
 
@@ -54,7 +54,6 @@
 
 ###### INSTALL PACKAGES
 
-    [root@ol9em24ai ~]# yum install -y oracle-database-preinstall-19c.x86_64
     [root@ol9em24ai ~]# yum install make -y
     [root@ol9em24ai ~]# yum install binutils -y
     [root@ol9em24ai ~]# yum install gcc -y
@@ -66,11 +65,9 @@
     [root@ol9em24ai ~]# yum install glibc-devel.i686 -y
     [root@ol9em24ai ~]# yum install glibc-devel -y
     [root@ol9em24ai ~]# yum install libXtst -y
-    [root@ol9em24ai ~]# yum install ntpd -y
 
 ###### DISABLE AVAHI DAEMON
 
-    [root@ol9em24ai ~]# systemctl stop avahi-service
     [root@ol9em24ai ~]# systemctl stop avahi-daemon
     [root@ol9em24ai ~]# systemctl disable avahi-daemon
 
@@ -82,27 +79,25 @@
 
 ###### CREATE ORACLE_BASE AND ORACLE_HOME DIRECTORIES
 
-    [root@ol9em24ai ~]# mkdir -p /u01/app/oracle/product/19.3.0/dbhome_1
-    [root@ol9em24ai ~]# chown -R oracle:oinstall /u01
-    [root@ol9em24ai ~]# chmod -R 775 /u01
+    [root@ol923ai ~]# mkdir -p /u01/app/oracle/product/23.5.0/dbhome_1/
+    [root@ol923ai ~]# chown -R oracle:oinstall /u01
+    [root@ol923ai ~]# chmod -R 775 /u01
 
 ###### CONFIGURE VARIABLES
 
-    [root@ol9em24ai ~]# su - oracle
-    [oracle@ol9em24ai ~]$ mkdir /home/oracle/scripts
-
-    [oracle@ol9em24ai ~]$ cat > /home/oracle/scripts/setEnv.sh <<EOF
+    [root@ol923ai ~]# su - oracle
+    [oracle@ol923ai ~]$ mkdir /home/oracle/scripts
+    [oracle@ol923ai ~]$ cat > /home/oracle/scripts/setEnv.sh <<EOF
     # Oracle Settings
     export TMP=/tmp
     export TMPDIR=\$TMP
 
-    export ORACLE_HOSTNAME=ol9em24ai.appsdba.info
+    export ORACLE_HOSTNAME=ol7db1
     export ORACLE_UNQNAME=appscdb
     export ORACLE_BASE=/u01/app/oracle
-    export ORACLE_HOME=\$ORACLE_BASE/product/19.3.0/dbhome_1
+    export ORACLE_HOME=\$ORACLE_BASE/product/23.5.0/dbhome_1
     export ORA_INVENTORY=/u01/app/oraInventory
     export ORACLE_SID=appscdb1
-    export CV_ASSUME_DISTID='OL7'
 
     export PATH=/usr/sbin:/usr/local/bin:\$PATH
     export PATH=\$ORACLE_HOME/bin:\$PATH
@@ -111,31 +106,32 @@
     export CLASSPATH=\$ORACLE_HOME/jlib:\$ORACLE_HOME/rdbms/jlib
     EOF
 
-    [oracle@ol9em24ai ~]$ echo ". /home/oracle/scripts/setEnv.sh" >> /home/oracle/.bash_profile 
-    [oracle@ol9em24ai ~]$ cat > /home/oracle/scripts/start_all.sh <<EOF
-    #!/bin/bash
-    . /home/oracle/scripts/setEnv.sh
+    [oracle@ol923ai ~]$ echo ". /home/oracle/scripts/setEnv.sh" >> /home/oracle/.bash_profile
 
-    export ORAENV_ASK=NO
-    . oraenv
-    export ORAENV_ASK=YES
+    [oracle@ol923ai ~]$ cat > /home/oracle/scripts/start_all.sh <<EOF
+				#!/bin/bash
+				. /home/oracle/scripts/setEnv.sh
 
-    dbstart \$ORACLE_HOME
-    EOF
+				export ORAENV_ASK=NO
+				. oraenv
+				export ORAENV_ASK=YES
 
-    [oracle@ol9em24ai ~]$ cat > /home/oracle/scripts/stop_all.sh <<EOF
-    #!/bin/bash
-    . /home/oracle/scripts/setEnv.sh
+				dbstart \$ORACLE_HOME
+				EOF
 
-    export ORAENV_ASK=NO
-    . oraenv
-    export ORAENV_ASK=YES
+    [oracle@ol923ai ~]$ cat > /home/oracle/scripts/stop_all.sh <<EOF
+				#!/bin/bash
+				. /home/oracle/scripts/setEnv.sh
 
-    dbshut \$ORACLE_HOME
-    EOF
+				export ORAENV_ASK=NO
+				. oraenv
+				export ORAENV_ASK=YES
 
-    [oracle@ol9em24ai ~]$ chown -R oracle:oinstall /home/oracle/scripts
-    [oracle@ol9em24ai ~]$ chmod u+x /home/oracle/scripts/*.sh
+				dbshut \$ORACLE_HOME
+				EOF
+
+    [oracle@ol923ai ~]$ chown -R oracle:oinstall /home/oracle/scripts
+    [oracle@ol923ai ~]$ chmod u+x /home/oracle/scripts/*.sh
 
 
 
