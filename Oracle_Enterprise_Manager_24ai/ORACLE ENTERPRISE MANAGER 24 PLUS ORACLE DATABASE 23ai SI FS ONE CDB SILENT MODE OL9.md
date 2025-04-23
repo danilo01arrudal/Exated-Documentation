@@ -199,6 +199,43 @@
 	[root@ol9em24ai ~]# /u01/app/oraInventory/orainstRoot.sh
 	[root@ol9em24ai ~]# /u01/app/oracle/product/23.5.0/dbhome_1/root.sh
 
+###### ENTERPRISE MANAGER 24ai DOWNLOAD UNZIP AND INSTALLATION
+
+	Oracle Enterprise Manager 24ai Release 1 for Linux x86-64 bit
+
+	This document contains information on the Oracle Enterprise Manager 24ai Release 1 Shiphome extraction information.
+
+	Extraction of Oracle Enterprise Manager 24ai Release 1 Shiphome
+	============================================================================================================
+
+	Downloading the files
+	---------------------
+	1. Download the all shiphome zips files, for each platform there are 5 files example as shown below
+
+	/scratch/V1046951-01.zip
+	/scratch/V1046951-02.zip
+	/scratch/V1046951-03.zip
+	/scratch/V1046951-04.zip
+	/scratch/V1046951-05.zip
+
+	2. The downloaded files are compressed with the zip format. Use any unzip tool to uncompress the file, or download a utility from eDelivery http://updates.oracle.com/unzips/unzips.html. This will generate the compressed zip files.
+
+	# cd /scratch
+
+	#unzip V1046951-01.zip
+	#unzip V1046951-02.zip
+	#unzip V1046951-03.zip
+	#unzip V1046951-04.zip
+	#unzip V1046951-05.zip
+
+	Uncompressing the .zip files will create shiphome files ending with .bin & .zip extension.
+
+	3. Start installation using the executable binary
+
+	For example
+	# ./em24100_linux64.bin
+
+	Follow the install flow as provided in the Enterprise Manager Basic Installation Guide.
 
 
 
