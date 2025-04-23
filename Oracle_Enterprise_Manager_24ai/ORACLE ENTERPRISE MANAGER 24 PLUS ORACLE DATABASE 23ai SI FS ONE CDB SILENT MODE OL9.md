@@ -83,20 +83,20 @@
 
 ###### CREATE ORACLE_BASE AND ORACLE_HOME DIRECTORIES
 
-    [root@ol923ai ~]# mkdir -p /u01/app/oracle/product/23.5.0/dbhome_1/
-    [root@ol923ai ~]# chown -R oracle:oinstall /u01
-    [root@ol923ai ~]# chmod -R 775 /u01
+    [root@ol9em24ai ~]# mkdir -p /u01/app/oracle/product/23.5.0/dbhome_1/
+    [root@ol9em24ai ~]# chown -R oracle:oinstall /u01
+    [root@ol9em24ai ~]# chmod -R 775 /u01
 
 ###### CONFIGURE VARIABLES
 
-    [root@ol923ai ~]# su - oracle
-    [oracle@ol923ai ~]$ mkdir /home/oracle/scripts
-    [oracle@ol923ai ~]$ cat > /home/oracle/scripts/setEnv.sh <<EOF
+    [root@ol9em24ai ~]# su - oracle
+    [oracle@ol9em24ai ~]$ mkdir /home/oracle/scripts
+    [oracle@ol9em24ai ~]$ cat > /home/oracle/scripts/setEnv.sh <<EOF
     # Oracle Settings
     export TMP=/tmp
     export TMPDIR=\$TMP
 
-    export ORACLE_HOSTNAME=ol7db1
+    export ORACLE_HOSTNAME=ol9em24ai
     export ORACLE_UNQNAME=appscdb
     export ORACLE_BASE=/u01/app/oracle
     export ORACLE_HOME=\$ORACLE_BASE/product/23.5.0/dbhome_1
@@ -110,9 +110,9 @@
     export CLASSPATH=\$ORACLE_HOME/jlib:\$ORACLE_HOME/rdbms/jlib
     EOF
 
-    [oracle@ol923ai ~]$ echo ". /home/oracle/scripts/setEnv.sh" >> /home/oracle/.bash_profile
+    [oracle@ol9em24ai ~]$ echo ". /home/oracle/scripts/setEnv.sh" >> /home/oracle/.bash_profile
 
-    [oracle@ol923ai ~]$ cat > /home/oracle/scripts/start_all.sh <<EOF
+    [oracle@ol9em24ai ~]$ cat > /home/oracle/scripts/start_all.sh <<EOF
 				#!/bin/bash
 				. /home/oracle/scripts/setEnv.sh
 
@@ -123,7 +123,7 @@
 				dbstart \$ORACLE_HOME
 				EOF
 
-    [oracle@ol923ai ~]$ cat > /home/oracle/scripts/stop_all.sh <<EOF
+    [oracle@ol9em24ai ~]$ cat > /home/oracle/scripts/stop_all.sh <<EOF
 				#!/bin/bash
 				. /home/oracle/scripts/setEnv.sh
 
@@ -134,8 +134,8 @@
 				dbshut \$ORACLE_HOME
 				EOF
 
-    [oracle@ol923ai ~]$ chown -R oracle:oinstall /home/oracle/scripts
-    [oracle@ol923ai ~]$ chmod u+x /home/oracle/scripts/*.sh
+    [oracle@ol9em24ai ~]$ chown -R oracle:oinstall /home/oracle/scripts
+    [oracle@ol9em24ai ~]$ chmod u+x /home/oracle/scripts/*.sh
 
 ###### DOWNLOAD ORACLE DATABASE SOFTWARE
    
@@ -143,10 +143,62 @@
 
 ###### MOVE AND UNZIP DATABASE SOFTWARE
  
-    [oracle@ol923ai ~]$ mv V1043785-01.zip /u01/app/oracle/product/23.5.0/dbhome_1/
-    [oracle@ol923ai dbhome_1]$ gunzip V1043785-01.zip 
+    [oracle@ol9em24ai ~]$ mv V1043785-01.zip /u01/app/oracle/product/23.5.0/dbhome_1/
+    [oracle@ol9em24ai dbhome_1]$ gunzip V1043785-01.zip 
+
+###### CREATE db_install.rsp INSTALL RESPONSE FILE
+
+    [root@ol9em24ai ~]# vi db_install.rsp
+                        oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v23.0.0
+                        installOption=INSTALL_DB_SWONLY
+                        UNIX_GROUP_NAME=oinstall
+                        INVENTORY_LOCATION=/u01/app/oraInventory
+                        ORACLE_HOME=/u01/app/oracle/product/23.5.0/dbhome_1
+                        ORACLE_BASE=/u01/app/oracle
+                        installEdition=EE
+                        OSDBA=dba
+                        OSOPER=oinstall
+                        OSBACKUPDBA=backupdba
+                        OSDGDBA=dgdba
+                        OSKMDBA=kmdba
+                        OSRACDBA=racdba
+                        executeRootScript=false
+                        configMethod=
+                        sudoPath=
+                        sudoUserName=
+                        clusterNodes=
+                        dbType=GENERAL_PURPOSE
+                        gdbName=
+                        dbSID=
+                        pdbName=
+                        charSet=
+                        enableAutoMemoryManagement=
+                        memoryLimit=
+                        allSchemaPassword=
+                        sysPassword=
+                        systemPassword=
+                        dbsnmpPassword=
+                        pdbadminPassword=
+                        managementOption=DEFAULT
+                        omsHost=
+                        omsPort=
+                        emAdminUser=
+                        emAdminPassword=
+                        enableRecovery=
+                        storageType=
+                        dataLocation=
+                        recoveryLocation=
+                        diskGroup=
+                        asmsnmpPassword=
+
+###### EXECUTE runInstaller
+
+	[oracle@ol9em24ai ~]$ cd $ORACLE_HOME
+	[oracle@ol9em24ai ~]$ ./runInstaller -silent -responseFile /home/oracle/db_install.rsp
+	[oracle@ol9em24ai ~]$ exit
+	[root@ol9em24ai ~]# /u01/app/oraInventory/orainstRoot.sh
+	[root@ol9em24ai ~]# /u01/app/oracle/product/23.5.0/dbhome_1/root.sh
 
 
-    
 
 
