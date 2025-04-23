@@ -77,6 +77,10 @@
     [root@ol9em24ai ~]# systemctl start chronyd
     [root@ol9em24ai ~]# systemctl enable chronyd
 
+###### CONFIGURE PARAVIRTUALIZED CLOCK
+
+    [root@ol9em24ai ~]# echo "tsc" > /sys/devices/system/clocksource/clocksource0/current_clocksource	
+
 ###### CREATE ORACLE_BASE AND ORACLE_HOME DIRECTORIES
 
     [root@ol923ai ~]# mkdir -p /u01/app/oracle/product/23.5.0/dbhome_1/
@@ -133,6 +137,16 @@
     [oracle@ol923ai ~]$ chown -R oracle:oinstall /home/oracle/scripts
     [oracle@ol923ai ~]$ chmod u+x /home/oracle/scripts/*.sh
 
+###### DOWNLOAD ORACLE DATABASE SOFTWARE
+   
+    V1043785-01.zip
 
+###### MOVE AND UNZIP DATABASE SOFTWARE
+ 
+    [oracle@ol923ai ~]$ mv V1043785-01.zip /u01/app/oracle/product/23.5.0/dbhome_1/
+    [oracle@ol923ai dbhome_1]$ gunzip V1043785-01.zip 
+
+
+    
 
 
