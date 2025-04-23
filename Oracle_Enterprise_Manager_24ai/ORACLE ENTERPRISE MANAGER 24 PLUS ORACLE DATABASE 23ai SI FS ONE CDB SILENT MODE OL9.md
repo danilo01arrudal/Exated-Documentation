@@ -211,7 +211,7 @@
 	Downloading the files
 	---------------------
 	1. Download the all shiphome zips files, for each platform there are 5 files example as shown below
-
+	/scratch/V1046984-01.zip
 	/scratch/V1046951-01.zip
 	/scratch/V1046951-02.zip
 	/scratch/V1046951-03.zip
@@ -221,7 +221,8 @@
 	2. The downloaded files are compressed with the zip format. Use any unzip tool to uncompress the file, or download a utility from eDelivery http://updates.oracle.com/unzips/unzips.html. This will generate the compressed zip files.
 
 	# cd /scratch
-
+	
+	#unzip V1046984-01.zip
 	#unzip V1046951-01.zip
 	#unzip V1046951-02.zip
 	#unzip V1046951-03.zip
