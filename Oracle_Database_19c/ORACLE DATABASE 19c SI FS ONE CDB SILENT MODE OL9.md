@@ -1,9 +1,9 @@
-**ORACLE DATABASE 23ai SI FS ONE CDB SILENT MODE OL9.5**
+**ORACLE DATABASE 19c SI FS ONE CDB SILENT MODE OL9.5**
 
 
-> *Oracle Instant Client is a free software package from Oracle that contains the client libraries needed to connect applications to an Oracle database, either locally or remotely. It is designed to be lightweight and easy to install, eliminating the need for a full Oracle Client installation on client machines.*
+> *Oracle Database 19c has features such as advanced partitioning, multitenancy support, data compression, and automation tools such as the Autonomous Health Framework, 19c is ideal for mission-critical environments. In addition, it includes improvements in machine learning, integration with big data, and support for hybrid architectures, being widely used in on-premises and cloud databases.*
 
-![oracle database 23ai logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Database_19c/images/oracle_database_19c_logo.png)
+![oracle database 19c logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Database_19c/images/oracle_database_19c_logo.png)
 
 ###### BUILD VIRTUAL MACHINE ON VIRTUALIZER
     
