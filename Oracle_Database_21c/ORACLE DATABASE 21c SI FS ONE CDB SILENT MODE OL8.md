@@ -337,7 +337,7 @@
 ###### AUTOMATIC START SERVICE ORACLE
 
 	[root@ol821c ~]# vi /etc/oratab
- 				appscdb1:/u01/app/oracle/product/23.5.0/dbhome_1:Y
+ 	appscdb1:/u01/app/oracle/product/21.3.0/dbhome_1:Y
 
 ###### CONFIGURE ORACLE DATABASE DAEMON 
 
