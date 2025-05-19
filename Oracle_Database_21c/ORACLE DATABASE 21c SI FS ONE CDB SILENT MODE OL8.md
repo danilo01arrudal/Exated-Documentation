@@ -15,7 +15,7 @@
 
 ###### INSTALL PRE-INSTALL PACKAGES
 
-    [root@ol919c ~]# yum install oracle-database-preinstall-19c
+    [root@ol919c ~]# yum install oracle-database-preinstall-21c
 
 ###### DISABLE SELINUX
 
