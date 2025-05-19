@@ -80,26 +80,26 @@
     [oracle@ol821c ~]$ echo ". /home/oracle/scripts/setEnv.sh" >> /home/oracle/.bash_profile
 
     [oracle@ol821c ~]$ cat > /home/oracle/scripts/start_all.sh <<EOF
-				#!/bin/bash
-				. /home/oracle/scripts/setEnv.sh
+	#!/bin/bash
+	. /home/oracle/scripts/setEnv.sh
 
-				export ORAENV_ASK=NO
-				. oraenv
-				export ORAENV_ASK=YES
+	export ORAENV_ASK=NO
+	. oraenv
+	export ORAENV_ASK=YES
 
-				dbstart \$ORACLE_HOME
-				EOF
+	dbstart \$ORACLE_HOME
+    EOF
 
     [oracle@ol821c ~]$ cat > /home/oracle/scripts/stop_all.sh <<EOF
-				#!/bin/bash
-				. /home/oracle/scripts/setEnv.sh
+	#!/bin/bash
+	. /home/oracle/scripts/setEnv.sh
 
-				export ORAENV_ASK=NO
-				. oraenv
-				export ORAENV_ASK=YES
+	export ORAENV_ASK=NO
+	. oraenv
+	export ORAENV_ASK=YES
 
-				dbshut \$ORACLE_HOME
-				EOF
+	dbshut \$ORACLE_HOME
+	EOF
 
     [oracle@ol821c ~]$ chown -R oracle:oinstall /home/oracle/scripts
     [oracle@ol821c ~]$ chmod u+x /home/oracle/scripts/*.sh
@@ -231,20 +231,20 @@
 ###### CREATE netca.rsp response file
 
 	[oracle@ol821c ~]$ vi netca.rsp
-				[GENERAL]
-				RESPONSEFILE_VERSION="23.0"
-				CREATE_TYPE="CUSTOM"
-				INSTALLED_COMPONENTS={"server","net8","javavm"}
-				INSTALL_TYPE=""typical""
-				LISTENER_NUMBER=1
-				LISTENER_NAMES={"LISTENER"}
-				LISTENER_START=""LISTENER""
-				NAMING_METHODS={"TNSNAMES","ONAMES","HOSTNAME"}
-				NSN_NUMBER=1
-				NSN_NAMES={"EXTPROC_CONNECTION_DATA"}
-				NSN_SERVICE={"PLSExtProc"}
-    				NSN_SERVICE={"PLSExtProc"}
-				NSN_PROTOCOLS={"TCP;HOSTNAME;1521"}
+	[GENERAL]
+	RESPONSEFILE_VERSION="23.0"
+	CREATE_TYPE="CUSTOM"
+	INSTALLED_COMPONENTS={"server","net8","javavm"}
+	INSTALL_TYPE=""typical""
+	LISTENER_NUMBER=1
+	LISTENER_NAMES={"LISTENER"}
+	LISTENER_START=""LISTENER""
+	NAMING_METHODS={"TNSNAMES","ONAMES","HOSTNAME"}
+	NSN_NUMBER=1
+	NSN_NAMES={"EXTPROC_CONNECTION_DATA"}
+	NSN_SERVICE={"PLSExtProc"}
+    	NSN_SERVICE={"PLSExtProc"}
+	NSN_PROTOCOLS={"TCP;HOSTNAME;1521"}
 
 ###### CREATE DATABASE 
 
