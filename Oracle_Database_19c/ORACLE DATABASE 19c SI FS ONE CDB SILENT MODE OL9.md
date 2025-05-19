@@ -257,23 +257,24 @@
 ###### START LISTENER
 
 	[oracle@ol719c ~]$ lsnrctl status
- 	LSNRCTL for Linux: Version 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on 15-FEB-2025 16:10:08
 
-	Copyright (c) 1991, 2024, Oracle.  All rights reserved.
+	LSNRCTL for Linux: Version 19.0.0.0.0 - Production on 18-MAY-2025 23:10:52
+
+	Copyright (c) 1991, 2019, Oracle.  All rights reserved.
 
 	Connecting to (ADDRESS=(PROTOCOL=tcp)(HOST=)(PORT=1521))
 	STATUS of the LISTENER
 	------------------------
 	Alias                     LISTENER
-	Version                   TNSLSNR for Linux: Version 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
-	Start Date                15-FEB-2025 16:10:08
-	Uptime                    0 days 0 hr. 0 min. 6 sec
+	Version                   TNSLSNR for Linux: Version 19.0.0.0.0 - Production
+	Start Date                18-MAY-2025 23:10:48
+	Uptime                    0 days 0 hr. 0 min. 4 sec
 	Trace Level               off
 	Security                  ON: Local OS Authentication
 	SNMP                      OFF
 	Listener Log File         /u01/app/oracle/diag/tnslsnr/ol719c/listener/alert/log.xml
 	Listening Endpoints Summary...
-  	(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=ol719c)(PORT=1521)))
+  		(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=ol719c.appsdba.info)(PORT=1521)))
 	The listener supports no services
 	The command completed successfully
 
