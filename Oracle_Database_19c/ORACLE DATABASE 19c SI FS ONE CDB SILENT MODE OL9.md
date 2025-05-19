@@ -15,7 +15,7 @@
 
 ###### INSTALL PRE-INSTALL PACKAGES
 
-    [root@ol919c ~]# yum install oracle-database-preinstall-23ai
+    [root@ol919c ~]# yum install oracle-database-preinstall-19c
 
 ###### DISABLE SELINUX
 
@@ -63,10 +63,10 @@
     export TMP=/tmp
     export TMPDIR=\$TMP
 
-    export ORACLE_HOSTNAME=ol7db1
+    export ORACLE_HOSTNAME=ol919c
     export ORACLE_UNQNAME=appscdb
     export ORACLE_BASE=/u01/app/oracle
-    export ORACLE_HOME=\$ORACLE_BASE/product/23.5.0/dbhome_1
+    export ORACLE_HOME=\$ORACLE_BASE/product/19.3.0/dbhome_1
     export ORA_INVENTORY=/u01/app/oraInventory
     export ORACLE_SID=appscdb1
 
@@ -106,57 +106,58 @@
 
 ###### DOWNLOAD ORACLE DATABASE SOFTWARE
    
-    V1043785-01.zip
+    LINUX.X64_193000_db_home.zip
 
 ###### MOVE AND UNZIP DATABASE SOFTWARE
  
-    [oracle@ol919c ~]$ mv V1043785-01.zip /u01/app/oracle/product/23.5.0/dbhome_1/
-    [oracle@ol919c dbhome_1]$ gunzip V1043785-01.zip 
+    [oracle@ol919c ~]$ mv LINUX.X64_193000_db_home.zip /u01/app/oracle/product/19.3.0/dbhome_1/
+    [oracle@ol919c dbhome_1]$ gunzip LINUX.X64_193000_db_home.zip
 
 ###### CREATE db_install.rsp INSTALL RESPONSE FILE
 
     [oracle@ol919c ~]$ vi db_install.rsp
-                            oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v23.0.0
-                            installOption=INSTALL_DB_SWONLY
-                            UNIX_GROUP_NAME=oinstall
-                            INVENTORY_LOCATION=/u01/app/oraInventory
-                            ORACLE_HOME=/u01/app/oracle/product/23.5.0/dbhome_1
-                            ORACLE_BASE=/u01/app/oracle
-                            installEdition=EE
-                            OSDBA=dba
-                            OSOPER=oinstall
-                            OSBACKUPDBA=backupdba
-                            OSDGDBA=dgdba
-                            OSKMDBA=kmdba
-                            OSRACDBA=racdba
-                            executeRootScript=false
-                            configMethod=
-                            sudoPath=
-                            sudoUserName=
-                            clusterNodes=
-                            dbType=GENERAL_PURPOSE
-                            gdbName=
-                            dbSID=
-                            pdbName=
-                            charSet=
-                            enableAutoMemoryManagement=
-                            memoryLimit=
-                            allSchemaPassword=
-                            sysPassword=
-                            systemPassword=
-                            dbsnmpPassword=
-                            pdbadminPassword=
-                            managementOption=DEFAULT
-                            omsHost=
-                            omsPort=
-                            emAdminUser=
-                            emAdminPassword=
-                            enableRecovery=
-                            storageType=
-                            dataLocation=
-                            recoveryLocation=
-                            diskGroup=
-                            asmsnmpPassword=
+	oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v19.0.0
+	oracle.install.option=INSTALL_DB_SWONLY
+	UNIX_GROUP_NAME=oinstall
+	INVENTORY_LOCATION=/u01/app/oraInventory
+	ORACLE_BASE=/u01/app/oracle
+	oracle.install.db.InstallEdition=EE
+	oracle.install.db.OSDBA_GROUP=dba
+	oracle.install.db.OSOPER_GROUP=oinstall
+	oracle.install.db.OSBACKUPDBA_GROUP=backupdba
+	oracle.install.db.OSDGDBA_GROUP=dgdba
+	oracle.install.db.OSKMDBA_GROUP=kmdba
+	oracle.install.db.OSRACDBA_GROUP=racdba
+	oracle.install.db.rootconfig.executeRootScript=false
+	oracle.install.db.rootconfig.configMethod=
+	oracle.install.db.rootconfig.sudoPath=
+	oracle.install.db.rootconfig.sudoUserName=
+	oracle.install.db.CLUSTER_NODES=
+	oracle.install.db.config.starterdb.type=GENERAL_PURPOSE
+	oracle.install.db.config.starterdb.globalDBName=
+	oracle.install.db.config.starterdb.SID=
+	oracle.install.db.ConfigureAsContainerDB=false
+	oracle.install.db.config.PDBName=
+	oracle.install.db.config.starterdb.characterSet=
+	oracle.install.db.config.starterdb.memoryOption=false
+	oracle.install.db.config.starterdb.memoryLimit=
+	oracle.install.db.config.starterdb.installExampleSchemas=false
+	oracle.install.db.config.starterdb.password.ALL=
+	oracle.install.db.config.starterdb.password.SYS=
+	oracle.install.db.config.starterdb.password.SYSTEM=
+	oracle.install.db.config.starterdb.password.DBSNMP=
+	oracle.install.db.config.starterdb.password.PDBADMIN=
+	oracle.install.db.config.starterdb.managementOption=DEFAULT
+	oracle.install.db.config.starterdb.omsHost=
+	oracle.install.db.config.starterdb.omsPort=0
+	oracle.install.db.config.starterdb.emAdminUser=
+	oracle.install.db.config.starterdb.emAdminPassword=
+	oracle.install.db.config.starterdb.enableRecovery=false
+	oracle.install.db.config.starterdb.storageType=
+	oracle.install.db.config.starterdb.fileSystemStorage.dataLocation=
+	oracle.install.db.config.starterdb.fileSystemStorage.recoveryLocation=
+	oracle.install.db.config.asm.diskGroup=
+	oracle.install.db.config.asm.ASMSNMPPassword=
 
 ###### EXECUTE runInstaller 
     [oracle@ol919c ~]$ cd $ORACLE_HOME
