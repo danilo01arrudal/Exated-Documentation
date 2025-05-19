@@ -342,29 +342,29 @@
 ###### CONFIGURE ORACLE DATABASE DAEMON 
 
 	[root@ol821c ~]# vi /lib/systemd/system/dbora.service
-				[Unit]
-				Description=The Oracle Database Service
-				After=syslog.target network.target
+	[Unit]
+	Description=The Oracle Database Service
+	After=syslog.target network.target
 
-				[Service]
-				# systemd ignores PAM limits, so set any necessary limits in the service.
-				# Not really a bug, but a feature.
-				# https://bugzilla.redhat.com/show_bug.cgi?id=754285
-				LimitMEMLOCK=infinity
-				LimitNOFILE=65535
+	[Service]
+	# systemd ignores PAM limits, so set any necessary limits in the service.
+	# Not really a bug, but a feature.
+	# https://bugzilla.redhat.com/show_bug.cgi?id=754285
+	LimitMEMLOCK=infinity
+	LimitNOFILE=65535
 
-				#Type=simple
-				# idle: similar to simple, the actual execution of the service binary is delayed
-				#       until all jobs are finished, which avoids mixing the status output with shell output of services.
-				RemainAfterExit=yes
-				User=oracle
-				Group=oinstall
-				Restart=no
-				ExecStart=/bin/bash -c '/home/oracle/scripts/start_all.sh'
-				ExecStop=/bin/bash -c '/home/oracle/scripts/stop_all.sh'
+	#Type=simple
+	# idle: similar to simple, the actual execution of the service binary is delayed
+	#       until all jobs are finished, which avoids mixing the status output with shell output of services.
+	RemainAfterExit=yes
+	User=oracle
+	Group=oinstall
+	Restart=no
+	ExecStart=/bin/bash -c '/home/oracle/scripts/start_all.sh'
+	ExecStop=/bin/bash -c '/home/oracle/scripts/stop_all.sh'
 
-				[Install]
-				WantedBy=multi-user.target
+	[Install]
+	WantedBy=multi-user.target
 
 	[root@ol821c ~]# systemctl daemon-reload
 	[root@ol821c ~]# systemctl enable dbora.service
