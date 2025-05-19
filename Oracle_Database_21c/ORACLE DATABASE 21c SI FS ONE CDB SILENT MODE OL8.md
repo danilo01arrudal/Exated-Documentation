@@ -280,69 +280,59 @@
 
 ###### ENABLE AUTOMATIC START PDB
 
-	[oracle@ol821c ~]$ sqlplus / as sysdba
+	[oracle@ol821c ~]$ sqlplus / as sysdba 
 
-	SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Tue Feb 18 16:20:09 2025
-	Version 23.5.0.24.07
+	SQL*Plus: Release 21.0.0.0.0 - Production on Mon May 19 13:42:11 2025
+	Version 21.3.0.0.0
 
-	Copyright (c) 1982, 2024, Oracle.  All rights reserved.
+	Copyright (c) 1982, 2021, Oracle.  All rights reserved.
 
 
 	Connected to:
-	Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
-	Version 23.5.0.24.07
+	Oracle Database 21c Enterprise Edition Release 21.0.0.0.0 - Production
+	Version 21.3.0.0.0
 
-	SQL> ALTER PLUGGABLE DATABASE APPSPDB OPEN;
+	SQL> show pdbs;
+
+	    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+	---------- ------------------------------ ---------- ----------
+		 2 PDB$SEED			  READ ONLY  NO
+		 3 APPSPDB			  READ WRITE NO
+	SQL> alter session set container=APPSPDB;
+
+	Session altered.
+
+	SQL> ALTER PLUGGABLE DATABASE APPSPDB SAVE STATE;
 
 	Pluggable database altered.
 
-	SQL> @state
-	SQL> col col_name for a30
-	SQL> select con_name, state from dba_pdb_saved_states
-	  2 / 
-
-	no rows selected
-
- 	SQL> ALTER PLUGGABLE DATABASE APPSPDB SAVE STATE;
-
-   	Pluggable database altered.
-
-	SQL> @state
-	SQL> col col_name for a30
-	SQL> select con_name, state from dba_pdb_saved_states
-	  2 / 
-
-	CON_NAME			STATE
-	------------------------------- -------------
-	APPSPDB
-    
 	SQL> exit
-	Disconnected from Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
-	Version 23.5.0.24.07
+	Disconnected from Oracle Database 21c Enterprise Edition Release 21.0.0.0.0 - Production
+	Version 21.3.0.0.0
 
 ###### CONFIGURE TNSNAMES.ORA
 
-	[oracle@ol821c ~]$ cat > /u01/app/oracle/product/23.5.0/dbhome_1/network/admin/tnsnames.ora <<EOF
-				appspdb =
-				  (DESCRIPTION =
-				    (ADDRESS_LIST =
-				      (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.18.101)(PORT = 1521))
-				    )
-				    (CONNECT_DATA =
-				      (SERVICE_NAME = appspdb)
-				    )
-				  )
+	[oracle@ol821c ~]$ cat > /u01/app/oracle/product/21.3.0/dbhome_1/network/admin/tnsnames.ora <<EOF
+	appspdb =
+	  (DESCRIPTION =
+	    (ADDRESS_LIST =
+	      (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.18.212)(PORT = 1521))
+	    )
+	    (CONNECT_DATA =
+ 	     (SERVICE_NAME = appspdb)
+	    )
+	  )
 
-				appscdb =
-				  (DESCRIPTION =
-				    (ADDRESS_LIST =
-				      (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.18.101)(PORT = 1521))
-				    )
-				    (CONNECT_DATA =
-				      (SERVICE_NAME = appscdb)
-				    )
-				  )
-				EOF  
+	appscdb =
+	  (DESCRIPTION =
+	    (ADDRESS_LIST =
+	      (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.18.212)(PORT = 1521))
+	    )
+	    (CONNECT_DATA =
+	      (SERVICE_NAME = appscdb)
+	    )
+	  )
+	EOF  
 
 ###### AUTOMATIC START SERVICE ORACLE
 
