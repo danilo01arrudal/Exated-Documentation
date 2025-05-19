@@ -282,47 +282,44 @@
 
 	[oracle@ol719c ~]$ sqlplus / as sysdba
 
-	SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Tue Feb 18 16:20:09 2025
-	Version 23.5.0.24.07
+	SQL*Plus: Release 19.0.0.0.0 - Production on Sun May 18 23:12:44 2025
+	Version 19.3.0.0.0
 
-	Copyright (c) 1982, 2024, Oracle.  All rights reserved.
+	Copyright (c) 1982, 2019, Oracle.  All rights reserved.
 
 
 	Connected to:
-	Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
-	Version 23.5.0.24.07
+	Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+	Version 19.3.0.0.0
 
-	SQL> ALTER PLUGGABLE DATABASE APPSPDB OPEN;
+	SQL> show pdbs;
+
+	    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+	---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 APPSPDB			  READ WRITE NO
+	SQL> alter session set container=APPSPDB;
+
+	Session altered.
+
+	SQL> ALTER PLUGGABLE DATABASE APPSPDB SAVE STATE;
 
 	Pluggable database altered.
 
-	SQL> @state
-	SQL> col col_name for a30
-	SQL> select con_name, state from dba_pdb_saved_states
-	  2 / 
+	SQL> col col_name for a30 
+	SQL> select con_name, state from dba_pdb_saved_states;
 
-	no rows selected
+	CON_NAME	STATE
+	--------------- --------------
+	APPSPDB		OPEN
 
- 	SQL> ALTER PLUGGABLE DATABASE APPSPDB SAVE STATE;
-
-   	Pluggable database altered.
-
-	SQL> @state
-	SQL> col col_name for a30
-	SQL> select con_name, state from dba_pdb_saved_states
-	  2 / 
-
-	CON_NAME			STATE
-	------------------------------- -------------
-	APPSPDB
-    
 	SQL> exit
-	Disconnected from Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
-	Version 23.5.0.24.07
+	Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+	Version 19.3.0.0.0
 
 ###### CONFIGURE TNSNAMES.ORA
 
-	[oracle@ol719c ~]$ cat > /u01/app/oracle/product/23.5.0/dbhome_1/network/admin/tnsnames.ora <<EOF
+	[oracle@ol719c ~]$ cat > /u01/app/oracle/product/19.3.0/dbhome_1/network/admin/tnsnames.ora <<EOF
 				appspdb =
 				  (DESCRIPTION =
 				    (ADDRESS_LIST =
@@ -347,7 +344,7 @@
 ###### AUTOMATIC START SERVICE ORACLE
 
 	[root@ol719c ~]# vi /etc/oratab
- 				appscdb1:/u01/app/oracle/product/23.5.0/dbhome_1:Y
+ 				appscdb1:/u01/app/oracle/product/19.3.0/dbhome_1:Y
 
 ###### CONFIGURE ORACLE DATABASE DAEMON 
 
