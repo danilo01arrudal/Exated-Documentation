@@ -7,7 +7,7 @@
 > *- Community and support: As an open source project, PostgreSQL has an active community of developers and users, which ensures ongoing support, updates, and improvements.*    
 > *- Updates and improvements: Postgres 17 brings with it performance and security improvements over previous versions.*
 
-![edb postgres logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Postgresql_17/images/edb_postgres.jpeg)
+![edb postgres logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Edb_Postgresql_17/images/edb_postgres.jpeg)
 
 ###### BUILD VIRTUAL MACHINE ON VIRTUALIZER 
 
