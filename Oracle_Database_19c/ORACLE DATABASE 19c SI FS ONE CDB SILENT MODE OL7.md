@@ -232,7 +232,7 @@
 
 	[oracle@ol719c ~]$ vi netca.rsp
 				[GENERAL]
-				RESPONSEFILE_VERSION="23.0"
+				RESPONSEFILE_VERSION="19.0"
 				CREATE_TYPE="CUSTOM"
 				INSTALLED_COMPONENTS={"server","net8","javavm"}
 				INSTALL_TYPE=""typical""
