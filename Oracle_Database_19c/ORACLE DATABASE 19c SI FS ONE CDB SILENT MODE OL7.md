@@ -231,29 +231,29 @@
 
 ###### CREATE netca.rsp response file
 
-	[oracle@ol719c ~]$ vi netca.rsp
-				[GENERAL]
-				RESPONSEFILE_VERSION="19.0"
-				CREATE_TYPE="CUSTOM"
-				INSTALLED_COMPONENTS={"server","net8","javavm"}
-				INSTALL_TYPE=""typical""
-				LISTENER_NUMBER=1
-				LISTENER_NAMES={"LISTENER"}
-				LISTENER_START=""LISTENER""
-				NAMING_METHODS={"TNSNAMES","ONAMES","HOSTNAME"}
-				NSN_NUMBER=1
-				NSN_NAMES={"EXTPROC_CONNECTION_DATA"}
-				NSN_SERVICE={"PLSExtProc"}
-    				NSN_SERVICE={"PLSExtProc"}
-				NSN_PROTOCOLS={"TCP;HOSTNAME;1521"}
+    [oracle@ol719c ~]$ vi netca.rsp
+    [GENERAL]
+    RESPONSEFILE_VERSION="19.0"
+    CREATE_TYPE="CUSTOM"
+    INSTALLED_COMPONENTS={"server","net8","javavm"}
+    INSTALL_TYPE=""typical""
+    LISTENER_NUMBER=1
+    LISTENER_NAMES={"LISTENER"}
+    LISTENER_START=""LISTENER""
+    NAMING_METHODS={"TNSNAMES","ONAMES","HOSTNAME"}
+    NSN_NUMBER=1
+    NSN_NAMES={"EXTPROC_CONNECTION_DATA"}
+    NSN_SERVICE={"PLSExtProc"}
+    NSN_SERVICE={"PLSExtProc"}
+    NSN_PROTOCOLS={"TCP;HOSTNAME;1521"}
 
 ###### CREATE DATABASE 
 
-	[oracle@ol719c ~]$ dbca -silent -createDatabase -responseFile /home/oracle/dbca.rsp
+    [oracle@ol719c ~]$ dbca -silent -createDatabase -responseFile /home/oracle/dbca.rsp
 
 ###### CREATE LISTENER
 
-	[oracle@ol719c ~]$ netca -silent -responsefile /home/oracle/netca.rsp
+    [oracle@ol719c ~]$ netca -silent -responsefile /home/oracle/netca.rsp
 
 ###### START LISTENER
 
@@ -320,27 +320,27 @@
 
 ###### CONFIGURE TNSNAMES.ORA
 
-	[oracle@ol719c ~]$ cat > /u01/app/oracle/product/19.3.0/dbhome_1/network/admin/tnsnames.ora <<EOF
-				appspdb =
-				  (DESCRIPTION =
-				    (ADDRESS_LIST =
-				      (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.18.101)(PORT = 1521))
-				    )
-				    (CONNECT_DATA =
-				      (SERVICE_NAME = appspdb)
-				    )
-				  )
+    [oracle@ol719c ~]$ cat > /u01/app/oracle/product/19.3.0/dbhome_1/network/admin/tnsnames.ora <<EOF
+    appspdb =
+	(DESCRIPTION =
+	(ADDRESS_LIST =
+	(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.18.101)(PORT = 1521))
+	)
+	(CONNECT_DATA =
+	(SERVICE_NAME = appspdb)
+	)
+	)
 
-				appscdb =
-				  (DESCRIPTION =
-				    (ADDRESS_LIST =
-				      (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.18.101)(PORT = 1521))
-				    )
-				    (CONNECT_DATA =
-				      (SERVICE_NAME = appscdb)
-				    )
-				  )
-				EOF  
+    appscdb =
+	(DESCRIPTION =
+	(ADDRESS_LIST =
+	(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.18.101)(PORT = 1521))
+	)
+	(CONNECT_DATA =
+	(SERVICE_NAME = appscdb)
+	)
+	)
+    EOF  
 
 ###### AUTOMATIC START SERVICE ORACLE
 
@@ -349,33 +349,33 @@
 
 ###### CONFIGURE ORACLE DATABASE DAEMON 
 
-	[root@ol719c ~]# vi /lib/systemd/system/dbora.service
-				[Unit]
-				Description=The Oracle Database Service
-				After=syslog.target network.target
+    [root@ol719c ~]# vi /lib/systemd/system/dbora.service
+    [Unit]
+    Description=The Oracle Database Service
+    After=syslog.target network.target
 
-				[Service]
-				# systemd ignores PAM limits, so set any necessary limits in the service.
-				# Not really a bug, but a feature.
-				# https://bugzilla.redhat.com/show_bug.cgi?id=754285
-				LimitMEMLOCK=infinity
-				LimitNOFILE=65535
+    [Service]
+    # systemd ignores PAM limits, so set any necessary limits in the service.
+    # Not really a bug, but a feature.
+    # https://bugzilla.redhat.com/show_bug.cgi?id=754285
+    LimitMEMLOCK=infinity
+    LimitNOFILE=65535
 
-				#Type=simple
-				# idle: similar to simple, the actual execution of the service binary is delayed
-				#       until all jobs are finished, which avoids mixing the status output with shell output of services.
-				RemainAfterExit=yes
-				User=oracle
-				Group=oinstall
-				Restart=no
-				ExecStart=/bin/bash -c '/home/oracle/scripts/start_all.sh'
-				ExecStop=/bin/bash -c '/home/oracle/scripts/stop_all.sh'
+    #Type=simple
+    # idle: similar to simple, the actual execution of the service binary is delayed
+    #       until all jobs are finished, which avoids mixing the status output with shell output of services.
+    RemainAfterExit=yes
+    User=oracle
+    Group=oinstall
+    Restart=no
+    ExecStart=/bin/bash -c '/home/oracle/scripts/start_all.sh'
+    ExecStop=/bin/bash -c '/home/oracle/scripts/stop_all.sh'
 
-				[Install]
-				WantedBy=multi-user.target
+    [Install]
+    WantedBy=multi-user.target
 
-	[root@ol719c ~]# systemctl daemon-reload
-	[root@ol719c ~]# systemctl enable dbora.service
+    [root@ol719c ~]# systemctl daemon-reload
+    [root@ol719c ~]# systemctl enable dbora.service
 
 ###### writed by: Danilo Arruda
 ###### ter 18 fev 2025
