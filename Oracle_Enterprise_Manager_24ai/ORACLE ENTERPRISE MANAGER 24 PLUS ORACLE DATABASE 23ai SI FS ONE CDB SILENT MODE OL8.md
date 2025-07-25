@@ -1,4 +1,4 @@
-**ORACLE ENTERPRISE MANAGER 24ai PLUS ORACLE DATABASE 23ai SI FS ONE CDB SILENT MODE OL9.5**
+**ORACLE ENTERPRISE MANAGER 24ai PLUS ORACLE DATABASE 23ai SI FS ONE CDB SILENT MODE OL8.10**
 
 
 > *Oracle Enterprise Manager 24ai is Oracle's modern management platform, enhanced with AI for managing Oracle Databases and Engineered Systems across on-premises and cloud. Key features include an AI-powered assistant, zero downtime monitoring and job system, highly available remote agents, container-based architecture, improved UI, and integration with OCI observability and AI services for enhanced insights, automation, and security.*
