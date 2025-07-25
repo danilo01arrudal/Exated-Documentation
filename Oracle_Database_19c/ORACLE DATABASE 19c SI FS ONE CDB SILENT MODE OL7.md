@@ -170,7 +170,7 @@
 ###### CREATE dbca.rsp response file
 
     [oracle@ol719c ~]$ vi dbca.rsp
-    responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v12.2.0
+    responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v19.0.0
     gdbName=appscdb
     sid=appscdb1
     databaseConfigType=SI
