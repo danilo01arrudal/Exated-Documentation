@@ -54,17 +54,16 @@
 
 ###### INSTALL PACKAGES
 
-    [root@ol9em24ai ~]# yum install make -y
-    [root@ol9em24ai ~]# yum install binutils -y
-    [root@ol9em24ai ~]# yum install gcc -y
-    [root@ol9em24ai ~]# yum install libaio -y
-    [root@ol9em24ai ~]# yum install glibc-common -y
-    [root@ol9em24ai ~]# yum install libstdc++ -y
-    [root@ol9em24ai ~]# yum install sysstat -y
-    [root@ol9em24ai ~]# yum install glibc -y
-    [root@ol9em24ai ~]# yum install glibc-devel.i686 -y
-    [root@ol9em24ai ~]# yum install glibc-devel -y
-    [root@ol9em24ai ~]# yum install libXtst -y
+    [root@ol9em24ai ~]# dnf install -y make
+    [root@ol9em24ai ~]# dnf install -y binutils
+    [root@ol9em24ai ~]# dnf install -y gcc
+    [root@ol9em24ai ~]# dnf install -y libaio
+    [root@ol9em24ai ~]# dnf install -y libstdc++
+    [root@ol9em24ai ~]# dnf install -y sysstat
+    [root@ol9em24ai ~]# dnf install -y glibc-devel
+    [root@ol9em24ai ~]# dnf install -y glibc-common
+    [root@ol9em24ai ~]# dnf install -y libXtst
+    [root@ol9em24ai ~]# dnf install -y libnsl
 
 ###### DISABLE AVAHI DAEMON
 
