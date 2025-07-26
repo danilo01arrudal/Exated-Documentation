@@ -61,7 +61,7 @@
 
 ###### CREATE ORACLE_BASE AND ORACLE_HOME DIRECTORIES
 
-    [root@ol8em24ai ~]# mkdir -p /u01/app/oracle/product/23.5.0/dbhome_1/
+    [root@ol8em24ai ~]# mkdir -p /u01/app/oracle/product/23.7.0/dbhome_1/
     [root@ol8em24ai ~]# chown -R oracle:oinstall /u01
     [root@ol8em24ai ~]# chmod -R 775 /u01
 
@@ -77,7 +77,7 @@
     export ORACLE_HOSTNAME=ol8em24ai
     export ORACLE_UNQNAME=appscdb
     export ORACLE_BASE=/u01/app/oracle
-    export ORACLE_HOME=\$ORACLE_BASE/product/23.5.0/dbhome_1
+    export ORACLE_HOME=\$ORACLE_BASE/product/23.7.0/dbhome_1
     export ORA_INVENTORY=/u01/app/oraInventory
     export ORACLE_SID=appscdb1
 
@@ -121,15 +121,8 @@
 
 ###### MOVE AND UNZIP DATABASE SOFTWARE
  
-    [oracle@ol8em24ai ~]$ mv V1043785-01.zip /u01/app/oracle/product/23.5.0/dbhome_1/
-    [oracle@ol8em24ai dbhome_1]$ gunzip V1043785-01.zip 
-
-###### SET OS RELEASE 
-
-    [oracle@ol8em24ai ~]$ export CV_ASSUME_DISTID=OEL7.8
-    [oracle@ol8em24ai ~]$ vi $ORACLE_HOME/cv/admin/cvu_config 
-			CV_ASSUME_DISTID=OEL7.8
-
+    [oracle@ol8em24ai ~]$ mv p37370465_230000_Linux-x86-64.zip /u01/app/oracle/product/23.7.0/dbhome_1/
+    [oracle@ol8em24ai dbhome_1]$ gunzip p37370465_230000_Linux-x86-64.zip
 
 ###### CREATE db_install.rsp INSTALL RESPONSE FILE
 
