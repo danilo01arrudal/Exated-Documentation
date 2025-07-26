@@ -184,6 +184,102 @@
 	[root@ol8em24ai ~]# /u01/app/oraInventory/orainstRoot.sh
 	[root@ol8em24ai ~]# /u01/app/oracle/product/23.5.0/dbhome_1/root.sh
 
+###### CREATE dbca.rsp response file
+
+	[oracle@ol923ai ~]$ vi dbca.rsp
+                        responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v23.0.0
+                        gdbName=appscdb.appsdba.info
+                        sid=appscdb
+                        databaseConfigType=SI
+                        RACOneNodeServiceName=
+                        sehaServiceName=
+                        policyManaged=false
+                        managementPolicy=AUTOMATIC
+                        createServerPool=false
+                        serverPoolName=
+                        cardinality=
+                        force=false
+                        pqPoolName=
+                        pqCardinality=
+                        createAsContainerDatabase=true
+                        numberOfPDBs=1
+                        pdbName=appspdb
+                        useLocalUndoForPDBs=true
+                        pdbAdminPassword=
+                        nodelist=
+                        sehaNodeList=
+                        templateName=/u01/app/oracle/product/23.7.0/dbhome_1/assistants/dbca/templates/General_Purpose.dbc
+                        sysPassword=
+                        systemPassword= 
+                        serviceUserPassword=
+                        emConfiguration=
+                        runCVUChecks=FALSE
+                        dbsnmpPassword=
+                        omsHost=
+                        omsPort=0
+                        emUser=
+                        emPassword=
+                        dvConfiguration=false
+                        dvUserName=
+                        dvUserPassword=
+                        dvAccountManagerName=
+                        dvAccountManagerPassword=
+                        olsConfiguration=false
+                        datafileJarLocation={ORACLE_HOME}/assistants/dbca/templates/
+                        datafileDestination={ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/
+                        recoveryAreaDestination=
+                        recoveryAreaSize=54525952BYTES
+                        configureWithOID=
+                        pdbOptions=IMEDIA:false,OMS:true,ORACLE_TEXT:true,DV:true,JSERVER:true,SAMPLE_SCHEMA:false,CWMLITE:true,SPATIAL:true
+                        dbOptions=IMEDIA:false,OMS:true,ORACLE_TEXT:true,DV:true,JSERVER:true,SAMPLE_SCHEMA:false,CWMLITE:true,SPATIAL:true
+                        storageType=FS
+                        diskGroupName=
+                        asmsnmpPassword=
+                        recoveryGroupName=
+                        characterSet=AL32UTF8
+                        nationalCharacterSet=AL16UTF16
+                        registerWithDirService=false
+                        dirServiceUserName=
+                        dirServicePassword=
+                        walletPassword=
+                        listeners=
+                        skipListenerRegistration=true
+                        variablesFile=
+                        variables=ORACLE_BASE_HOME=/u01/app/oracle/product/23.7.0/dbhome_1,DB_UNIQUE_NAME=appscdb,ORACLE_BASE=/u01/app/oracle,PDB_NAME=,DB_NAME=appscdb,ORACLE_HOME=/u01/app/oracle/product/23.7.0/dbhome_1,SID=appscdb
+                        initParams=undo_tablespace=UNDOTBS1,enable_pluggable_database=true,sga_target=2379MB,db_block_size=8192BYTES,nls_language=AMERICAN,dispatchers=(PROTOCOL=TCP) (SERVICE=appscdbXDB),diagnostic_dest={ORACLE_BASE},control_files=("{ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/control01.ctl", "{ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/control02.ctl"),remote_login_passwordfile=EXCLUSIVE,_exadata_feature_on=true,processes=300,pga_aggregate_target=793MB,nls_territory=AMERICA,open_cursors=300,db_domain=appsdba.info,compatible=23.6.0,db_name=appscdb
+                        enableArchive=false
+                        useOMF=false
+                        memoryPercentage=40
+                        databaseType=MULTIPURPOSE
+                        automaticMemoryManagement=false
+                        totalMemory=0
+
+###### CREATE netca.rsp response file
+
+	[oracle@ol923ai ~]$ vi netca.rsp
+				[GENERAL]
+				RESPONSEFILE_VERSION="23.0"
+				CREATE_TYPE="CUSTOM"
+				INSTALLED_COMPONENTS={"server","net8","javavm"}
+				INSTALL_TYPE=""typical""
+				LISTENER_NUMBER=1
+				LISTENER_NAMES={"LISTENER"}
+				LISTENER_START=""LISTENER""
+				NAMING_METHODS={"TNSNAMES","ONAMES","HOSTNAME"}
+				NSN_NUMBER=1
+				NSN_NAMES={"EXTPROC_CONNECTION_DATA"}
+				NSN_SERVICE={"PLSExtProc"}
+    				NSN_SERVICE={"PLSExtProc"}
+				NSN_PROTOCOLS={"TCP;HOSTNAME;1521"}
+
+###### CREATE DATABASE 
+
+	[oracle@ol923ai ~]$ dbca -silent -createDatabase -responseFile /home/oracle/dbca.rsp
+
+###### CREATE LISTENER
+
+	[oracle@ol923ai ~]$ netca -silent -responsefile /home/oracle/netca.rsp
+
 ###### ENTERPRISE MANAGER 24ai DOWNLOAD UNZIP AND INSTALLATION
 
 	Oracle Enterprise Manager 24ai Release 1 for Linux x86-64 bit
