@@ -91,26 +91,26 @@
     [oracle@ol8em24ai ~]$ echo ". /home/oracle/scripts/setEnv.sh" >> /home/oracle/.bash_profile
 
     [oracle@ol8em24ai ~]$ cat > /home/oracle/scripts/start_all.sh <<EOF
-				#!/bin/bash
-				. /home/oracle/scripts/setEnv.sh
+    #!/bin/bash
+    /home/oracle/scripts/setEnv.sh
 
-				export ORAENV_ASK=NO
-				. oraenv
-				export ORAENV_ASK=YES
+    export ORAENV_ASK=NO
+    . oraenv
+    export ORAENV_ASK=YES
 
-				dbstart \$ORACLE_HOME
-				EOF
+    dbstart \$ORACLE_HOME
+    EOF
 
     [oracle@ol8em24ai ~]$ cat > /home/oracle/scripts/stop_all.sh <<EOF
-				#!/bin/bash
-				. /home/oracle/scripts/setEnv.sh
+    #!/bin/bash
+    . /home/oracle/scripts/setEnv.sh
 
-				export ORAENV_ASK=NO
-				. oraenv
-				export ORAENV_ASK=YES
+    export ORAENV_ASK=NO
+    . oraenv
+    export ORAENV_ASK=YES
 
-				dbshut \$ORACLE_HOME
-				EOF
+    dbshut \$ORACLE_HOME
+    EOF
 
     [oracle@ol8em24ai ~]$ chown -R oracle:oinstall /home/oracle/scripts
     [oracle@ol8em24ai ~]$ chmod u+x /home/oracle/scripts/*.sh
