@@ -7,7 +7,7 @@
 
 ###### BUILD VIRTUAL MACHINE ON VIRTUALIZER
     
-    [root@exated ~]# virt-install --virt-type kvm --name ol9d --memory 4096 --vcpus 2 --os-variant ol9.5 --cdrom /var/lib/libvirt/images/OracleLinux-R9-U5-x86_64-dvd.iso --network bridge=br0,model=virtio --disk path=/var/lib/libvirt/images/ol8em24ai.qcow2,size=50
+    [root@exated ~]# virt-install --virt-type kvm --name ol8em24ai --memory 12288 --vcpus 2 --os-variant ol8.10 --cdrom /var/lib/libvirt/images/OracleLinux-R8-U10-x86_64-dvd.iso --network bridge=br0,model=virtio --disk path=/var/lib/libvirt/images/ol8em24ai.qcow2,size=100
 
 ###### CONFIGURE HOSTNAME
 
