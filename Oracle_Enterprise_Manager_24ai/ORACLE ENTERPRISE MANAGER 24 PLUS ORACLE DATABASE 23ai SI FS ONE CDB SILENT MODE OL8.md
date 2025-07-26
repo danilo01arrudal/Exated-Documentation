@@ -15,7 +15,18 @@
 
 ###### INSTALL PRE-INSTALL PACKAGES
 
-    [root@ol8em24ai ~]# yum install oracle-database-preinstall-23ai
+    [root@ol8em24ai ~]# dnf install oracle-database-preinstall-23ai
+    [root@ol8em24ai ~]# dnf install -y make
+    [root@ol8em24ai ~]# dnf install -y binutils
+    [root@ol8em24ai ~]# dnf install -y gcc
+    [root@ol8em24ai ~]# dnf install -y libaio
+    [root@ol8em24ai ~]# dnf install -y libstdc++
+    [root@ol8em24ai ~]# dnf install -y sysstat
+    [root@ol8em24ai ~]# dnf install -y glibc-devel
+    [root@ol8em24ai ~]# dnf install -y glibc-common
+    [root@ol8em24ai ~]# dnf install -y libXtst
+    [root@ol8em24ai ~]# dnf install -y libnsl
+
 
 ###### DISABLE SELINUX
 
