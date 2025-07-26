@@ -59,38 +59,6 @@
     default via 192.168.18.1 dev enp1s0 proto static metric 100 
     192.168.18.0/24 dev enp1s0 proto kernel scope link src 192.168.18.16 metric 100 
 
-###### DISABLE AVAHI DAEMON
-
-    [root@ol8em24ai ~]# systemctl disable avahi-daemon  
-
-###### INSTALL PACKAGES
-
-    [root@ol8em24ai ~]# dnf install -y make
-    [root@ol8em24ai ~]# dnf install -y binutils
-    [root@ol8em24ai ~]# dnf install -y gcc
-    [root@ol8em24ai ~]# dnf install -y libaio
-    [root@ol8em24ai ~]# dnf install -y libstdc++
-    [root@ol8em24ai ~]# dnf install -y sysstat
-    [root@ol8em24ai ~]# dnf install -y glibc-devel
-    [root@ol8em24ai ~]# dnf install -y glibc-common
-    [root@ol8em24ai ~]# dnf install -y libXtst
-    [root@ol8em24ai ~]# dnf install -y libnsl
-
-###### DISABLE AVAHI DAEMON
-
-    [root@ol8em24ai ~]# systemctl stop avahi-daemon
-    [root@ol8em24ai ~]# systemctl disable avahi-daemon
-
-###### CONFIGURE CHRONY SERVICE
-
-    [root@ol8em24ai ~]# yum install -y install chrony
-    [root@ol8em24ai ~]# systemctl start chronyd
-    [root@ol8em24ai ~]# systemctl enable chronyd
-
-###### CONFIGURE PARAVIRTUALIZED CLOCK
-
-    [root@ol8em24ai ~]# echo "tsc" > /sys/devices/system/clocksource/clocksource0/current_clocksource	
-
 ###### CREATE ORACLE_BASE AND ORACLE_HOME DIRECTORIES
 
     [root@ol8em24ai ~]# mkdir -p /u01/app/oracle/product/23.5.0/dbhome_1/
