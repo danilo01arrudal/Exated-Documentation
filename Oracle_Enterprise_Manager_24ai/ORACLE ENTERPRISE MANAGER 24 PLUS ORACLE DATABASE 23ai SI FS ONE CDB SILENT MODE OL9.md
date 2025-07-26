@@ -11,70 +11,70 @@
 
 ###### CONFIGURE HOSTNAME
 
-    [root@ol8em24ai ~]# hostnamectl set-hostname ol8em24ai
+    [root@ol9em24ai ~]# hostnamectl set-hostname ol9em24ai
 
 ###### INSTALL PRE-INSTALL PACKAGES
 
-    [root@ol8em24ai ~]# dnf install oracle-database-preinstall-23ai
-    [root@ol8em24ai ~]# dnf install -y make
-    [root@ol8em24ai ~]# dnf install -y binutils
-    [root@ol8em24ai ~]# dnf install -y gcc
-    [root@ol8em24ai ~]# dnf install -y libaio
-    [root@ol8em24ai ~]# dnf install -y libstdc++
-    [root@ol8em24ai ~]# dnf install -y sysstat
-    [root@ol8em24ai ~]# dnf install -y glibc-devel
-    [root@ol8em24ai ~]# dnf install -y glibc-common
-    [root@ol8em24ai ~]# dnf install -y libXtst
-    [root@ol8em24ai ~]# dnf install -y libnsl
+    [root@ol9em24ai ~]# dnf install oracle-database-preinstall-23ai
+    [root@ol9em24ai ~]# dnf install -y make
+    [root@ol9em24ai ~]# dnf install -y binutils
+    [root@ol9em24ai ~]# dnf install -y gcc
+    [root@ol9em24ai ~]# dnf install -y libaio
+    [root@ol9em24ai ~]# dnf install -y libstdc++
+    [root@ol9em24ai ~]# dnf install -y sysstat
+    [root@ol9em24ai ~]# dnf install -y glibc-devel
+    [root@ol9em24ai ~]# dnf install -y glibc-common
+    [root@ol9em24ai ~]# dnf install -y libXtst
+    [root@ol9em24ai ~]# dnf install -y libnsl
 
 
 ###### DISABLE SELINUX
 
-    [root@ol8em24ai ~]# sed -i 's/SELINUX=.*/SELINUX=disabled/' /etc/selinux/config && setenforce 0
+    [root@ol9em24ai ~]# sed -i 's/SELINUX=.*/SELINUX=disabled/' /etc/selinux/config && setenforce 0
 
 ###### CONFIGURE STATIC NETWORK
 
-    [root@ol8em24ai ~]# nmcli device 
+    [root@ol9em24ai ~]# nmcli device 
     DEVICE  TYPE      STATE                   CONNECTION 
     enp1s0  ethernet  conectado               enp1s0     
     lo      loopback  connected (externally)  lo  
 
-    [root@ol8em24ai ~]# nmcli connection show  
+    [root@ol9em24ai ~]# nmcli connection show  
     NAME    UUID                                  TYPE      DEVICE 
     enp1s0  26097519-1cba-3447-8711-fb0800ba2366  ethernet  enp1s0 
     lo      7ac75b97-ee60-4288-90d8-a732972b360f  loopback  lo 
 
-    [root@ol8em24ai ~]# nmcli con modify 'enp1s0' iframe enp1s0 ipv4.method manual ipv4.addresses 192.168.18.16/24 gw4 192.168.18.1
-    [root@ol8em24ai ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.201
-    [root@ol8em24ai ~]# nmcli con down 'enp1s0'
-    [root@ol8em24ai ~]# nmcli con up 'enp1s0'
+    [root@ol9em24ai ~]# nmcli con modify 'enp1s0' iframe enp1s0 ipv4.method manual ipv4.addresses 192.168.18.16/24 gw4 192.168.18.1
+    [root@ol9em24ai ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.201
+    [root@ol9em24ai ~]# nmcli con down 'enp1s0'
+    [root@ol9em24ai ~]# nmcli con up 'enp1s0'
 
-    [root@ol8em24ai ~]# ip addr show enp1s0
+    [root@ol9em24ai ~]# ip addr show enp1s0
     2: enp1s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 52:54:00:84:74:c7 brd ff:ff:ff:ff:ff:ff
     inet 192.168.18.16/24 brd 192.168.18.255 scope global noprefixroute enp1s0
        valid_lft forever preferred_lft forever
 
-    [root@ol8em24ai ~]# ip route show
+    [root@ol9em24ai ~]# ip route show
     default via 192.168.18.1 dev enp1s0 proto static metric 100 
     192.168.18.0/24 dev enp1s0 proto kernel scope link src 192.168.18.16 metric 100 
 
 ###### CREATE ORACLE_BASE AND ORACLE_HOME DIRECTORIES
 
-    [root@ol8em24ai ~]# mkdir -p /u01/app/oracle/product/23.7.0/dbhome_1/
-    [root@ol8em24ai ~]# chown -R oracle:oinstall /u01
-    [root@ol8em24ai ~]# chmod -R 775 /u01
+    [root@ol9em24ai ~]# mkdir -p /u01/app/oracle/product/23.7.0/dbhome_1/
+    [root@ol9em24ai ~]# chown -R oracle:oinstall /u01
+    [root@ol9em24ai ~]# chmod -R 775 /u01
 
 ###### CONFIGURE VARIABLES
 
-    [root@ol8em24ai ~]# su - oracle
-    [oracle@ol8em24ai ~]$ mkdir /home/oracle/scripts
-    [oracle@ol8em24ai ~]$ cat > /home/oracle/scripts/setEnv.sh <<EOF
+    [root@ol9em24ai ~]# su - oracle
+    [oracle@ol9em24ai ~]$ mkdir /home/oracle/scripts
+    [oracle@ol9em24ai ~]$ cat > /home/oracle/scripts/setEnv.sh <<EOF
     # Oracle Settings
     export TMP=/tmp
     export TMPDIR=\$TMP
 
-    export ORACLE_HOSTNAME=ol8em24ai
+    export ORACLE_HOSTNAME=ol9em24ai
     export ORACLE_UNQNAME=appscdb
     export ORACLE_BASE=/u01/app/oracle
     export ORACLE_HOME=\$ORACLE_BASE/product/23.7.0/dbhome_1
@@ -88,9 +88,9 @@
     export CLASSPATH=\$ORACLE_HOME/jlib:\$ORACLE_HOME/rdbms/jlib
     EOF
 
-    [oracle@ol8em24ai ~]$ echo ". /home/oracle/scripts/setEnv.sh" >> /home/oracle/.bash_profile
+    [oracle@ol9em24ai ~]$ echo ". /home/oracle/scripts/setEnv.sh" >> /home/oracle/.bash_profile
 
-    [oracle@ol8em24ai ~]$ cat > /home/oracle/scripts/start_all.sh <<EOF
+    [oracle@ol9em24ai ~]$ cat > /home/oracle/scripts/start_all.sh <<EOF
     #!/bin/bash
     /home/oracle/scripts/setEnv.sh
 
@@ -101,7 +101,7 @@
     dbstart \$ORACLE_HOME
     EOF
 
-    [oracle@ol8em24ai ~]$ cat > /home/oracle/scripts/stop_all.sh <<EOF
+    [oracle@ol9em24ai ~]$ cat > /home/oracle/scripts/stop_all.sh <<EOF
     #!/bin/bash
     . /home/oracle/scripts/setEnv.sh
 
@@ -112,8 +112,8 @@
     dbshut \$ORACLE_HOME
     EOF
 
-    [oracle@ol8em24ai ~]$ chown -R oracle:oinstall /home/oracle/scripts
-    [oracle@ol8em24ai ~]$ chmod u+x /home/oracle/scripts/*.sh
+    [oracle@ol9em24ai ~]$ chown -R oracle:oinstall /home/oracle/scripts
+    [oracle@ol9em24ai ~]$ chmod u+x /home/oracle/scripts/*.sh
 
 ###### DOWNLOAD ORACLE DATABASE SOFTWARE
    
@@ -121,12 +121,12 @@
 
 ###### MOVE AND UNZIP DATABASE SOFTWARE
  
-    [oracle@ol8em24ai ~]$ mv p37370465_230000_Linux-x86-64.zip /u01/app/oracle/product/23.7.0/dbhome_1/
-    [oracle@ol8em24ai dbhome_1]$ gunzip p37370465_230000_Linux-x86-64.zip
+    [oracle@ol9em24ai ~]$ mv p37370465_230000_Linux-x86-64.zip /u01/app/oracle/product/23.7.0/dbhome_1/
+    [oracle@ol9em24ai dbhome_1]$ gunzip p37370465_230000_Linux-x86-64.zip
 
 ###### CREATE db_install.rsp INSTALL RESPONSE FILE
 
-    [root@ol8em24ai ~]# vi db_install.rsp
+    [root@ol9em24ai ~]# vi db_install.rsp
                         oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v23.0.0
                         installOption=INSTALL_DB_SWONLY
                         UNIX_GROUP_NAME=oinstall
@@ -171,11 +171,11 @@
 
 ###### EXECUTE runInstaller
 
-	[oracle@ol8em24ai ~]$ cd $ORACLE_HOME
-	[oracle@ol8em24ai ~]$ ./runInstaller -silent -responseFile /home/oracle/db_install.rsp
-	[oracle@ol8em24ai ~]$ exit
-	[root@ol8em24ai ~]# /u01/app/oraInventory/orainstRoot.sh
-	[root@ol8em24ai ~]# /u01/app/oracle/product/23.5.0/dbhome_1/root.sh
+	[oracle@ol9em24ai ~]$ cd $ORACLE_HOME
+	[oracle@ol9em24ai ~]$ ./runInstaller -silent -responseFile /home/oracle/db_install.rsp
+	[oracle@ol9em24ai ~]$ exit
+	[root@ol9em24ai ~]# /u01/app/oraInventory/orainstRoot.sh
+	[root@ol9em24ai ~]# /u01/app/oracle/product/23.5.0/dbhome_1/root.sh
 
 ###### CREATE dbca.rsp response file
 
@@ -314,7 +314,7 @@
 
 ###### GRANT EXECUTE ENTERPRISE MANAGER 24ai BINARY
 
-	[oracle@ol8em24ai emcc]$ chmod u+x em24100_linux64.bin
+	[oracle@ol9em24ai emcc]$ chmod u+x em24100_linux64.bin
 
 
 
