@@ -339,6 +339,62 @@
 	Disconnected from Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
 	Version 23.7.0.25.01
 
+###### RECOMMENDED MINIMUM SETTINGS ON ORACLE DATABASE
+
+	[oracle@ol9em24ai ~]$ sqlplus / as sysdba
+
+	SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Mon Jul 28 14:39:16 2025
+	Version 23.7.0.25.01
+
+	Copyright (c) 1982, 2024, Oracle.  All rights reserved.
+
+
+	Connected to:
+	Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
+	Version 23.7.0.25.01
+
+	SQL> alter system set "_allow_insert_with_update_check"=true scope=both;
+
+	System altered.
+
+	SQL> alter system set session_cached_cursors=200 scope=spfile;
+
+	System altered.
+
+	SQL> alter system set processes=600 scope=spfile;
+
+	System altered.
+
+	SQL> alter system set pga_aggregate_target=450M scope=spfile;
+
+	System altered.
+
+	SQL> alter system set sga_target=800M scope=spfile;
+
+	System altered.
+
+	SQL> alter system set shared_pool_size=600M scope=spfile;
+
+	System altered.
+
+	SQL> SHUTDOWN IMMEDIATE;
+	Database closed.
+	Database dismounted.
+	ORACLE instance shut down.
+	SQL> STARTUP;
+	ORACLE instance started.
+
+	Total System Global Area  835901400 bytes
+	Fixed Size		    5429208 bytes
+	Variable Size		  633339904 bytes
+	Database Buffers	  188743680 bytes
+	Redo Buffers		    8388608 bytes
+	Database mounted.
+	Database opened.
+	SQL> exit
+	Disconnected from Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
+	Version 23.7.0.25.01
+
 ###### ENTERPRISE MANAGER 24ai DOWNLOAD UNZIP AND INSTALLATION
 
 	Oracle Enterprise Manager 24ai Release 1 for Linux x86-64 bit
@@ -380,6 +436,7 @@
 
 ###### GRANT EXECUTE ENTERPRISE MANAGER 24ai BINARY
 
+	[oracle@ol9em24ai ~]$ cd /tmp/emcc/
 	[oracle@ol9em24ai emcc]$ chmod u+x em24100_linux64.bin
 
 ###### CREATE ENTERPRISE MANAGER 24ai DIRECTORIES
