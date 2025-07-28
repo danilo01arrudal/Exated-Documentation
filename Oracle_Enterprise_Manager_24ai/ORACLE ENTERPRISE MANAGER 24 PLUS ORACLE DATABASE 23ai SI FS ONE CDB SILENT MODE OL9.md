@@ -273,6 +273,10 @@
 
 	[oracle@ol923ai ~]$ dbca -silent -createDatabase -responseFile /home/oracle/dbca.rsp
 
+###### CREATE LISTENER
+
+	[oracle@ol923ai ~]$ netca -silent -responsefile /home/oracle/netca.rsp
+
 ###### START LISTENER
 
 	[oracle@ol9em24ai ~]$ lsnrctl start
@@ -334,10 +338,6 @@
 	SQL> exit
 	Disconnected from Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
 	Version 23.7.0.25.01
-
-###### CREATE LISTENER
-
-	[oracle@ol923ai ~]$ netca -silent -responsefile /home/oracle/netca.rsp
 
 ###### ENTERPRISE MANAGER 24ai DOWNLOAD UNZIP AND INSTALLATION
 
