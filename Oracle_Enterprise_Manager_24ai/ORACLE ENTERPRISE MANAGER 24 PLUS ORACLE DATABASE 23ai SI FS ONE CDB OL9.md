@@ -511,6 +511,16 @@
 
 ![emcc24ai12](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/img12.png)
 
+###### STARTUP AND SHUTDOWN 
+
+> *Cloud Control is set to auto-start using the "gcstartup" service. The "/etc/oragchomelist" file contains the items that will be started by the system.*
+
+> *On a simple installation the default auto-start will cause a problem as Cloud Control will attempt to start before the database has started. The service can be disabled by commenting out (using #) all the contents of the "/etc/oragchomelist" file to prevent the auto-start and use start/stop scripts described below.*
+
+> *If the start/stop needs to be automated, you can do it in the usual way using Linux service that calls your start/stop scripts that include the database management.*
+
+> *Use the following commands to turn on all components installed by this article.*
+
 
 
 
