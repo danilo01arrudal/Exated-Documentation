@@ -398,26 +398,26 @@
 ###### CONFIGURE TNSNAMES.ORA
 
 	[oracle@ol923ai ~]$ cat > /u01/app/oracle/product/23.7.0/dbhome_1/network/admin/tnsnames.ora <<EOF
-				appspdb =
-				  (DESCRIPTION =
-				    (ADDRESS_LIST =
-				      (ADDRESS = (PROTOCOL = TCP)(HOST = ol9em24ai.appsdba.info)(PORT = 1521))
-				    )
-				    (CONNECT_DATA =
-				      (SERVICE_NAME = appspdb.appsdba.info)
-				    )
-				  )
+	appspdb =
+	(DESCRIPTION =
+	(ADDRESS_LIST =
+	(ADDRESS = (PROTOCOL = TCP)(HOST = ol9em24ai.appsdba.info)(PORT = 1521))
+	)
+	(CONNECT_DATA =
+	(SERVICE_NAME = appspdb.appsdba.info)
+	)
+	)
 
-				appscdb =
-				  (DESCRIPTION =
-				    (ADDRESS_LIST =
-				      (ADDRESS = (PROTOCOL = TCP)(HOST = ol9em24ai.appsdba.info)(PORT = 1521))
-				    )
-				    (CONNECT_DATA =
-				      (SERVICE_NAME = appscdb.appsdba.info)
-				    )
-				  )
-				EOF  
+	appscdb =
+	(DESCRIPTION =
+	(ADDRESS_LIST =
+	(ADDRESS = (PROTOCOL = TCP)(HOST = ol9em24ai.appsdba.info)(PORT = 1521))
+	)
+	(CONNECT_DATA =
+	(SERVICE_NAME = appscdb.appsdba.info)
+	)
+	)
+	EOF  
 
 ###### AUTOMATIC START SERVICE ORACLE
 
