@@ -15,7 +15,7 @@
 
 ###### INSTALL PRE-INSTALL PACKAGES
 
-    [root@ol9em24ai ~]# dnf install oracle-database-preinstall-23ai
+    [root@ol9em24ai ~]# dnf install -y oracle-database-preinstall-23ai
     [root@ol9em24ai ~]# dnf install -y make
     [root@ol9em24ai ~]# dnf install -y binutils
     [root@ol9em24ai ~]# dnf install -y gcc
