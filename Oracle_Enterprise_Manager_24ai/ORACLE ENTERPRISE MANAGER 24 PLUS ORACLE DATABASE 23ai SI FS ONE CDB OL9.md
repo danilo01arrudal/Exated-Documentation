@@ -507,7 +507,9 @@
 
 	[root@ol9em24ai ~]# /u01/app/oracle/middleware/oms_home/allroot.sh
 
+###### ACCESS ORACLE ENTERPRISE MANAGER 24AI
 
+![emcc24ai12](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/img12.png)
 
 
 
