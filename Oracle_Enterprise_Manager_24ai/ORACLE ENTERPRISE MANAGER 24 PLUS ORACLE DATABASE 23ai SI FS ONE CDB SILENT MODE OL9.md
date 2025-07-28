@@ -316,6 +316,12 @@
 
 	[oracle@ol9em24ai emcc]$ chmod u+x em24100_linux64.bin
 
+###### CREATE ENTERPRISE MANAGER 24ai DIRECTORIES
+
+	[oracle@ol9em24ai emcc]$ mkdir -p /u01/app/oracle/middleware
+	[oracle@ol9em24ai emcc]$ mkdir -p /u01/app/oracle/agent
+
+###### PREPARE DATABASE PARAMETERS
 
 
 
