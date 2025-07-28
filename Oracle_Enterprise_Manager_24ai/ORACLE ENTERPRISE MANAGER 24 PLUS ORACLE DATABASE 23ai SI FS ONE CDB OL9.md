@@ -473,6 +473,30 @@
 	[oracle@ol9em24ai emcc]$ mkdir -p /u01/app/oracle/middleware
 	[oracle@ol9em24ai emcc]$ mkdir -p /u01/app/oracle/agent
 
+###### RUN EMCC 24AI INSTALLER
+
+    [root@ol9em24ai ~]# xhost + 
+    [root@ol9em24ai ~]# su - oracle
+    [oracle@ol923ai ~]$ export DISPLAY=:0.0
+    [oracle@ol923ai ~]$ cd /tmp/emcc
+    [oracle@ol923ai ~]$ ./em13200_linux64.bin
+
+![oracle enterprise manager_24ai logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/images.png)
+
+![oracle enterprise manager_24ai logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/images.png)
+
+![oracle enterprise manager_24ai logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/images.png)
+
+![oracle enterprise manager_24ai logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/images.png)
+
+![oracle enterprise manager_24ai logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/images.png)
+
+![oracle enterprise manager_24ai logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/images.png)
+
+
+
+
+
 
 
 
