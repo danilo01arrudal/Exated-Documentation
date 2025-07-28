@@ -481,7 +481,7 @@
     [oracle@ol923ai ~]$ cd /tmp/emcc
     [oracle@ol923ai ~]$ ./em13200_linux64.bin
 
-![oracle enterprise manager_24ai logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/images.png)
+![oracle enterprise manager_24ai logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/Captura%20de%20Tela%202025-07-28%20às%2016.01.50.png)
 
 ![oracle enterprise manager_24ai logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/images.png)
 
