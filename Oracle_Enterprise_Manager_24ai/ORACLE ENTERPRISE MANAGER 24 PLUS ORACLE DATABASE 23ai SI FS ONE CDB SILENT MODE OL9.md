@@ -395,6 +395,35 @@
 	Disconnected from Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
 	Version 23.7.0.25.01
 
+###### CONFIGURE TNSNAMES.ORA
+
+	[oracle@ol923ai ~]$ cat > /u01/app/oracle/product/23.7.0/dbhome_1/network/admin/tnsnames.ora <<EOF
+				appspdb =
+				  (DESCRIPTION =
+				    (ADDRESS_LIST =
+				      (ADDRESS = (PROTOCOL = TCP)(HOST = ol9em24ai.appsdba.info)(PORT = 1521))
+				    )
+				    (CONNECT_DATA =
+				      (SERVICE_NAME = appspdb.appsdba.info)
+				    )
+				  )
+
+				appscdb =
+				  (DESCRIPTION =
+				    (ADDRESS_LIST =
+				      (ADDRESS = (PROTOCOL = TCP)(HOST = ol9em24ai.appsdba.info)(PORT = 1521))
+				    )
+				    (CONNECT_DATA =
+				      (SERVICE_NAME = appscdb.appsdba.info)
+				    )
+				  )
+				EOF  
+
+###### AUTOMATIC START SERVICE ORACLE
+
+	[root@ol923ai ~]# vi /etc/oratab
+ 				appscdb1:/u01/app/oracle/product/23.7.0/dbhome_1:Y
+
 ###### ENTERPRISE MANAGER 24ai DOWNLOAD UNZIP AND INSTALLATION
 
 	Oracle Enterprise Manager 24ai Release 1 for Linux x86-64 bit
@@ -444,7 +473,7 @@
 	[oracle@ol9em24ai emcc]$ mkdir -p /u01/app/oracle/middleware
 	[oracle@ol9em24ai emcc]$ mkdir -p /u01/app/oracle/agent
 
-###### PREPARE DATABASE PARAMETERS
+
 
 
 
