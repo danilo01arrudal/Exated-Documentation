@@ -135,7 +135,7 @@
                         installOption=INSTALL_DB_SWONLY
                         UNIX_GROUP_NAME=oinstall
                         INVENTORY_LOCATION=/u01/app/oraInventory
-                        ORACLE_HOME=/u01/app/oracle/product/23.5.0/dbhome_1
+                        ORACLE_HOME=/u01/app/oracle/product/23.7.0/dbhome_1
                         ORACLE_BASE=/u01/app/oracle
                         installEdition=EE
                         OSDBA=dba
