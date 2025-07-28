@@ -499,7 +499,9 @@
 
 ![emcc24ai9](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/img9.png)
 
+![emcc24ai10](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/img10.png)
 
+![emcc24ai11](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/img11.png)
 
 ###### RUN POST INSTALL SCRIPT
 
