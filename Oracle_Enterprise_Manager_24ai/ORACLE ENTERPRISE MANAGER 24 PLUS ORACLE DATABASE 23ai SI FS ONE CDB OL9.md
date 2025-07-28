@@ -495,6 +495,10 @@
 
 ![emcc24ai7](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/img7.png)
 
+![emcc24ai8](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/img8.png)
+
+![emcc24ai9](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/img9.png)
+
 
 
 
