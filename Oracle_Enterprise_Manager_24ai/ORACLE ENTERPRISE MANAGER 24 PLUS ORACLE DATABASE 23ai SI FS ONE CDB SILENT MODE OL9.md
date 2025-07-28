@@ -179,7 +179,7 @@
 	[oracle@ol9em24ai ~]$ ./runInstaller -silent -responseFile /home/oracle/db_install.rsp
 	[oracle@ol9em24ai ~]$ exit
 	[root@ol9em24ai ~]# /u01/app/oraInventory/orainstRoot.sh
-	[root@ol9em24ai ~]# /u01/app/oracle/product/23.5.0/dbhome_1/root.sh
+	[root@ol9em24ai ~]# /u01/app/oracle/product/23.7.0/dbhome_1/root.sh
 
 ###### CREATE dbca.rsp response file
 
