@@ -273,6 +273,68 @@
 
 	[oracle@ol923ai ~]$ dbca -silent -createDatabase -responseFile /home/oracle/dbca.rsp
 
+###### START LISTENER
+
+	[oracle@ol9em24ai ~]$ lsnrctl start
+
+	LSNRCTL for Linux: Version 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on 28-JUL-2025 14:34:40
+
+	Copyright (c) 1991, 2024, Oracle.  All rights reserved.
+
+	Starting /u01/app/oracle/product/23.7.0/dbhome_1/bin/tnslsnr: please wait...
+
+	TNSLSNR for Linux: Version 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
+	Log messages written to /u01/app/oracle/diag/tnslsnr/ol9em24ai/listener/alert/log.xml
+	Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=ol9em24ai.appsdba.info)(PORT=1521)))
+
+	Connecting to (ADDRESS=(PROTOCOL=tcp)(HOST=)(PORT=1521))
+	STATUS of the LISTENER
+	------------------------
+	Alias                     LISTENER
+	Version                   TNSLSNR for Linux: Version 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
+	Start Date                28-JUL-2025 14:34:40
+	Uptime                    0 days 0 hr. 0 min. 0 sec
+	Trace Level               off
+	Security                  ON: Local OS Authentication
+	SNMP                      OFF
+	Listener Log File         /u01/app/oracle/diag/tnslsnr/ol9em24ai/listener/alert/log.xml
+	Listening Endpoints Summary...
+	  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=ol9em24ai.appsdba.info)(PORT=1521)))
+	The listener supports no services
+	The command completed successfully
+
+###### ENABLE AUTOMATIC START PDB
+
+	[oracle@ol9em24ai ~]$ sqlplus / as sysdba
+
+	SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Mon Jul 28 14:35:29 2025
+	Version 23.7.0.25.01
+
+	Copyright (c) 1982, 2024, Oracle.  All rights reserved.
+
+
+	Connected to:
+	Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
+	Version 23.7.0.25.01
+
+	SQL> show pdbs;
+
+	    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+	---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 APPSPDB			  READ WRITE NO
+	SQL> alter session set container=APPSPDB;
+
+	Session altered.
+
+	SQL> ALTER PLUGGABLE DATABASE APPSPDB SAVE STATE;
+
+	Pluggable database altered.
+
+	SQL> exit
+	Disconnected from Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
+	Version 23.7.0.25.01
+
 ###### CREATE LISTENER
 
 	[oracle@ol923ai ~]$ netca -silent -responsefile /home/oracle/netca.rsp
