@@ -32,6 +32,10 @@
 
     [root@ol9em24ai ~]# sed -i 's/SELINUX=.*/SELINUX=disabled/' /etc/selinux/config && setenforce 0
 
+###### SETTING CLOCK SOURCE FOR VMs ON LINUX x86-64
+
+    [root@ol923ai ~]# echo "tsc" > /sys/devices/system/clocksource/clocksource0/current_clocksource
+
 ###### CONFIGURE STATIC NETWORK
 
     [root@ol9em24ai ~]# nmcli device 
