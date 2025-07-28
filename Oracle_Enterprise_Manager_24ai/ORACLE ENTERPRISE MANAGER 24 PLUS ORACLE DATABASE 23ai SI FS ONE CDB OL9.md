@@ -501,6 +501,9 @@
 
 
 
+###### RUN POST INSTALL SCRIPT
+
+	[root@ol9em24ai ~]# /u01/app/oracle/middleware/oms_home/allroot.sh
 
 
 
