@@ -519,10 +519,6 @@
 
 	[root@ol9em24ai ~]# /u01/app/oracle/middleware/oms_home/allroot.sh
 
-###### ACCESS ORACLE ENTERPRISE MANAGER 24AI
-
-![emcc24ai12](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/img12.png)
-
 ###### STARTUP AND SHUTDOWN 
 
 > *Cloud Control is set to auto-start using the "gcstartup" service. The "/etc/oragchomelist" file contains the items that will be started by the system.*
@@ -532,6 +528,20 @@
 > *If the start/stop needs to be automated, you can do it in the usual way using Linux service that calls your start/stop scripts that include the database management.*
 
 > *Use the following commands to turn on all components installed by this article.*
+
+###### COMMENT AUTOMATIC STARTUP
+
+	[root@ol9em24ai ~]# vi /etc/oragchomelist
+		#/u01/app/oracle/middleware/oms_home
+		#/u01/app/oracle/agent/agent_24.1.0.0.0:/u01/app/oracle/agent/agent_inst
+
+###### ACCESS ORACLE ENTERPRISE MANAGER 24AI
+
+![emcc24ai12](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/img12.png)
+
+
+
+
 
 
 
