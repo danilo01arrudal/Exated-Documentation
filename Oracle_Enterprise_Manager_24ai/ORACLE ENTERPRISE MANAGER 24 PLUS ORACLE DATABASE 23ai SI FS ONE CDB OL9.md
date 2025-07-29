@@ -96,13 +96,20 @@
 
     [oracle@ol9em24ai ~]$ cat > /home/oracle/scripts/start_all.sh <<EOF
     #!/bin/bash
-    /home/oracle/scripts/setEnv.sh
+    . /home/oracle/scripts/setEnv.sh
 
     export ORAENV_ASK=NO
     . oraenv
     export ORAENV_ASK=YES
 
     dbstart \$ORACLE_HOME
+
+    sleep 30
+
+    /u01/app/oracle/middleware/oms_home/bin/emctl start oms
+
+    /u01/app/oracle/agent/agent_inst/bin/emctl start agent
+
     EOF
 
     [oracle@ol9em24ai ~]$ cat > /home/oracle/scripts/stop_all.sh <<EOF
@@ -113,7 +120,12 @@
     . oraenv
     export ORAENV_ASK=YES
 
+    /u01/app/oracle/agent/agent_inst/bin/emctl stop agent
+
+    /u01/app/oracle/middleware/oms_home/bin/emctl stop oms -all
+
     dbshut \$ORACLE_HOME
+
     EOF
 
     [oracle@ol9em24ai ~]$ chown -R oracle:oinstall /home/oracle/scripts
