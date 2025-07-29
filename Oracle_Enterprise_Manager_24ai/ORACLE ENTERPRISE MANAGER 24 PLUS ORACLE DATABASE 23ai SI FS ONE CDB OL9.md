@@ -537,8 +537,19 @@
 
 ###### ACCESS ORACLE ENTERPRISE MANAGER 24AI
 
+> *https://ol9em24ai.appsdba.info:7803/em*
+> *user = sysman*	
+> *password = password*
+
 ![emcc24ai12](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/img12.png)
 
+###### ACCESS ORACLE WEBLOGIC
+
+> *https://ol9em24ai.appsdba.info:7102/console*
+> *user = weblogic*	
+> *password = password*
+
+![emcc24ai13](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/img13.png)
 
 
 
