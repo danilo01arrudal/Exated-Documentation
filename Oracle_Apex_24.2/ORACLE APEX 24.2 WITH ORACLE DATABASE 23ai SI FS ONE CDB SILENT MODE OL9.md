@@ -3,7 +3,7 @@
 
 > *Oracle Instant Client is a free software package from Oracle that contains the client libraries needed to connect applications to an Oracle database, either locally or remotely. It is designed to be lightweight and easy to install, eliminating the need for a full Oracle Client installation on client machines.*
 
-![oracle database 23ai logo.](https://github.com/danilo01arrudal/Exated/blob/main/Oracle_Database_23ai/images/1714697079871.png)
+![oracle_apex_24_logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Apex_24.2/images/images.png)
 
 ###### BUILD VIRTUAL MACHINE ON VIRTUALIZER
     
