@@ -119,8 +119,8 @@
 
 ###### MOVE AND UNZIP DATABASE SOFTWARE
  
-    [oracle@ol923ai ~]$ mv V1043785-01.zip /u01/app/oracle/product/23.5.0/dbhome_1/
-    [oracle@ol923ai dbhome_1]$ gunzip V1043785-01.zip 
+    [oracle@ol9em24ai ~]$ mv p37370465_230000_Linux-x86-64.zip /u01/app/oracle/product/23.7.0/dbhome_1/
+    [oracle@ol9em24ai dbhome_1]$ gunzip p37370465_230000_Linux-x86-64.zip
 
 ###### CREATE db_install.rsp INSTALL RESPONSE FILE
 
