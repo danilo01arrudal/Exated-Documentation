@@ -642,7 +642,13 @@
 
 ![ol9apex24](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Apex_24.2/images/img2.png)
 
+> *WORKSPACE: INTERNAL*
 
+> *Username: ADMIN*
+
+> *Password: Password configured when running the @apxchpwd.sql script.*
+
+![ol9apex24](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Apex_24.2/images/img3.png)
 
 
 
