@@ -11,15 +11,16 @@
 
 ###### CONFIGURE HOSTNAME
 
-    [root@ ~]# hostnamectl set-hostname ol923ai
+    [root@ ~]# hostnamectl set-hostname ol9apex24
 
 ###### INSTALL PRE-INSTALL PACKAGES
 
-    [root@ol923ai ~]# yum install oracle-database-preinstall-23ai
+    [root@ol9apex24 ~]# dnf install -y oracle-database-preinstall-23ai
+    [root@ol9apex24 ~]# dnf install -y https://download.oracle.com/java/24/latest/jdk-24_linux-x64_bin.rpm
 
 ###### DISABLE SELINUX
 
-    [root@ol923ai ~]# sed -i 's/SELINUX=.*/SELINUX=disabled/' /etc/selinux/config && setenforce 0
+    [root@ol9apex24 ~]# sed -i 's/SELINUX=.*/SELINUX=disabled/' /etc/selinux/config && setenforce 0
 
 ###### OPEN PORT ON FIREWALLD
 
@@ -28,46 +29,46 @@
 
 ###### SETTING CLOCK SOURCE FOR VMs ON LINUX x86-64
 
-    [root@ol923ai ~]# echo "tsc" > /sys/devices/system/clocksource/clocksource0/current_clocksource
+    [root@ol9apex24 ~]# echo "tsc" > /sys/devices/system/clocksource/clocksource0/current_clocksource
 
 ###### CONFIGURE STATIC NETWORK
     
-    [root@ol923ai ~]# nmcli device
+    [root@ol9apex24 ~]# nmcli device
     DEVICE  TYPE      STATE                   CONNECTION 
     enp1s0  ethernet  conectado               enp1s0     
     lo      loopback  connected (externally)  lo   
 
-    [root@ol923ai ~]# nmcli connection show 
+    [root@ol9apex24 ~]# nmcli connection show 
     NAME    UUID                                  TYPE      DEVICE 
     enp1s0  82e45657-ca14-380d-adfc-ac71a5aa7281  ethernet  enp1s0 
     lo      c30f3777-2d34-40f9-9fdb-da73383b9848  loopback  lo  
 
-    [root@ol923ai ~]# nmcli con modify 'enp1s0' iframe enp1s0 ipv4.method manual ipv4.addresses 192.168.18.101/24 gw4 192.168.18.1
-    [root@ol923ai ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.201
-    [root@ol923ai ~]# nmcli con down 'enp1s0'
-    [root@ol923ai ~]# nmcli con up 'enp1s0'
+    [root@ol9apex24 ~]# nmcli con modify 'enp1s0' iframe enp1s0 ipv4.method manual ipv4.addresses 192.168.18.101/24 gw4 192.168.18.1
+    [root@ol9apex24 ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.201
+    [root@ol9apex24 ~]# nmcli con down 'enp1s0'
+    [root@ol9apex24 ~]# nmcli con up 'enp1s0'
 
-    [root@ol923ai ~]# ip addr show enp1s0
+    [root@ol9apex24 ~]# ip addr show enp1s0
     2: enp1s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 52:54:00:bc:5a:a4 brd ff:ff:ff:ff:ff:ff
     inet 192.168.18.101/24 brd 192.168.18.255 scope global noprefixroute enp1s0
        valid_lft forever preferred_lft forever
 
-    [root@ol923ai ~]# ip route show
+    [root@ol9apex24 ~]# ip route show
     default via 192.168.18.1 dev enp1s0 proto static metric 100 
     192.168.18.0/24 dev enp1s0 proto kernel scope link src 192.168.18.101 metric 100 
 
 ###### CREATE ORACLE_BASE AND ORACLE_HOME DIRECTORIES
 
-    [root@ol923ai ~]# mkdir -p /u01/app/oracle/product/23.5.0/dbhome_1/
-    [root@ol923ai ~]# chown -R oracle:oinstall /u01
-    [root@ol923ai ~]# chmod -R 775 /u01
+    [root@ol9apex24 ~]# mkdir -p /u01/app/oracle/product/23.5.0/dbhome_1/
+    [root@ol9apex24 ~]# chown -R oracle:oinstall /u01
+    [root@ol9apex24 ~]# chmod -R 775 /u01
 
 ###### CONFIGURE VARIABLES
 
-    [root@ol923ai ~]# su - oracle
-    [oracle@ol923ai ~]$ mkdir /home/oracle/scripts
-    [oracle@ol923ai ~]$ cat > /home/oracle/scripts/setEnv.sh <<EOF
+    [root@ol9apex24 ~]# su - oracle
+    [oracle@ol9apex24 ~]$ mkdir /home/oracle/scripts
+    [oracle@ol9apex24 ~]$ cat > /home/oracle/scripts/setEnv.sh <<EOF
     # Oracle Settings
     export TMP=/tmp
     export TMPDIR=\$TMP
@@ -86,9 +87,9 @@
     export CLASSPATH=\$ORACLE_HOME/jlib:\$ORACLE_HOME/rdbms/jlib
     EOF
 
-    [oracle@ol923ai ~]$ echo ". /home/oracle/scripts/setEnv.sh" >> /home/oracle/.bash_profile
+    [oracle@ol9apex24 ~]$ echo ". /home/oracle/scripts/setEnv.sh" >> /home/oracle/.bash_profile
 
-    [oracle@ol923ai ~]$ cat > /home/oracle/scripts/start_all.sh <<EOF
+    [oracle@ol9apex24 ~]$ cat > /home/oracle/scripts/start_all.sh <<EOF
 	#!/bin/bash
 	. /home/oracle/scripts/setEnv.sh
 
@@ -99,7 +100,7 @@
 	dbstart \$ORACLE_HOME
 	EOF
 
-    [oracle@ol923ai ~]$ cat > /home/oracle/scripts/stop_all.sh <<EOF
+    [oracle@ol9apex24 ~]$ cat > /home/oracle/scripts/stop_all.sh <<EOF
 	#!/bin/bash
 	. /home/oracle/scripts/setEnv.sh
 
@@ -110,8 +111,8 @@
 	dbshut \$ORACLE_HOME
 	EOF
 
-    [oracle@ol923ai ~]$ chown -R oracle:oinstall /home/oracle/scripts
-    [oracle@ol923ai ~]$ chmod u+x /home/oracle/scripts/*.sh
+    [oracle@ol9apex24 ~]$ chown -R oracle:oinstall /home/oracle/scripts
+    [oracle@ol9apex24 ~]$ chmod u+x /home/oracle/scripts/*.sh
 
 ###### DOWNLOAD ORACLE DATABASE SOFTWARE
    
@@ -119,12 +120,12 @@
 
 ###### MOVE AND UNZIP DATABASE SOFTWARE
  
-    [oracle@ol9em24ai ~]$ mv p37370465_230000_Linux-x86-64.zip /u01/app/oracle/product/23.7.0/dbhome_1/
-    [oracle@ol9em24ai dbhome_1]$ gunzip p37370465_230000_Linux-x86-64.zip
+    [oracle@ol9apex24 ~]$ mv p37370465_230000_Linux-x86-64.zip /u01/app/oracle/product/23.7.0/dbhome_1/
+    [oracle@ol9apex24 dbhome_1]$ gunzip p37370465_230000_Linux-x86-64.zip
 
 ###### CREATE db_install.rsp INSTALL RESPONSE FILE
 
-    [oracle@ol923ai ~]$ vi db_install.rsp
+    [oracle@ol9apex24 ~]$ vi db_install.rsp
                             oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v23.0.0
                             installOption=INSTALL_DB_SWONLY
                             UNIX_GROUP_NAME=oinstall
@@ -168,15 +169,15 @@
                             asmsnmpPassword=
 
 ###### EXECUTE runInstaller 
-    [oracle@ol923ai ~]$ cd $ORACLE_HOME
-    [oracle@ol923ai ~]$ ./runInstaller -silent -responseFile /home/oracle/db_install.rsp
-    [oracle@ol923ai ~]$ exit
-    [root@ol923ai ~]# /u01/app/oraInventory/orainstRoot.sh
-    [root@ol923ai ~]# /u01/app/oracle/product/23.5.0/dbhome_1/root.sh
+    [oracle@ol9apex24 ~]$ cd $ORACLE_HOME
+    [oracle@ol9apex24 ~]$ ./runInstaller -silent -responseFile /home/oracle/db_install.rsp
+    [oracle@ol9apex24 ~]$ exit
+    [root@ol9apex24 ~]# /u01/app/oraInventory/orainstRoot.sh
+    [root@ol9apex24 ~]# /u01/app/oracle/product/23.5.0/dbhome_1/root.sh
 
 ###### CREATE dbca.rsp response file
 
-	[oracle@ol923ai ~]$ vi dbca.rsp
+	[oracle@ol9apex24 ~]$ vi dbca.rsp
 				responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v23.0.0
 				gdbName=appscdb
 				sid=appscdb1
@@ -238,7 +239,7 @@
 
 ###### CREATE netca.rsp response file
 
-	[oracle@ol923ai ~]$ vi netca.rsp
+	[oracle@ol9apex24 ~]$ vi netca.rsp
 				[GENERAL]
 				RESPONSEFILE_VERSION="23.0"
 				CREATE_TYPE="CUSTOM"
@@ -256,15 +257,15 @@
 
 ###### CREATE DATABASE 
 
-	[oracle@ol923ai ~]$ dbca -silent -createDatabase -responseFile /home/oracle/dbca.rsp
+	[oracle@ol9apex24 ~]$ dbca -silent -createDatabase -responseFile /home/oracle/dbca.rsp
 
 ###### CREATE LISTENER
 
-	[oracle@ol923ai ~]$ netca -silent -responsefile /home/oracle/netca.rsp
+	[oracle@ol9apex24 ~]$ netca -silent -responsefile /home/oracle/netca.rsp
 
 ###### START LISTENER
 
-	[oracle@ol923ai ~]$ lsnrctl status
+	[oracle@ol9apex24 ~]$ lsnrctl status
  	LSNRCTL for Linux: Version 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on 15-FEB-2025 16:10:08
 
 	Copyright (c) 1991, 2024, Oracle.  All rights reserved.
@@ -279,15 +280,15 @@
 	Trace Level               off
 	Security                  ON: Local OS Authentication
 	SNMP                      OFF
-	Listener Log File         /u01/app/oracle/diag/tnslsnr/ol923ai/listener/alert/log.xml
+	Listener Log File         /u01/app/oracle/diag/tnslsnr/ol9apex24/listener/alert/log.xml
 	Listening Endpoints Summary...
-  	(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=ol923ai)(PORT=1521)))
+  	(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=ol9apex24)(PORT=1521)))
 	The listener supports no services
 	The command completed successfully
 
 ###### ENABLE AUTOMATIC START PDB
 
-	[oracle@ol923ai ~]$ sqlplus / as sysdba
+	[oracle@ol9apex24 ~]$ sqlplus / as sysdba
 
 	SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Tue Feb 18 16:20:09 2025
 	Version 23.5.0.24.07
@@ -323,13 +324,17 @@
 	------------------------------- -------------
 	APPSPDB
     
+	SQL> create tablespace APEX_DATA datafile '/u01/app/oracle/oradata/APPSCDB/appspdb/apex_data01.dbf' size 1g autoextend on next 50m maxsize 10g;
+
+	Tablespace created.
+
 	SQL> exit
 	Disconnected from Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
 	Version 23.5.0.24.07
 
 ###### CONFIGURE TNSNAMES.ORA
 
-	[oracle@ol923ai ~]$ cat > /u01/app/oracle/product/23.5.0/dbhome_1/network/admin/tnsnames.ora <<EOF
+	[oracle@ol9apex24 ~]$ cat > /u01/app/oracle/product/23.5.0/dbhome_1/network/admin/tnsnames.ora <<EOF
 				appspdb =
 				  (DESCRIPTION =
 				    (ADDRESS_LIST =
@@ -353,12 +358,12 @@
 
 ###### AUTOMATIC START SERVICE ORACLE
 
-	[root@ol923ai ~]# vi /etc/oratab
+	[root@ol9apex24 ~]# vi /etc/oratab
  				appscdb1:/u01/app/oracle/product/23.5.0/dbhome_1:Y
 
 ###### CONFIGURE ORACLE DATABASE DAEMON 
 
-	[root@ol923ai ~]# vi /lib/systemd/system/dbora.service
+	[root@ol9apex24 ~]# vi /lib/systemd/system/dbora.service
 				[Unit]
 				Description=The Oracle Database Service
 				After=syslog.target network.target
@@ -383,8 +388,164 @@
 				[Install]
 				WantedBy=multi-user.target
 
-	[root@ol923ai ~]# systemctl daemon-reload
-	[root@ol923ai ~]# systemctl enable dbora.service
+	[root@ol9apex24 ~]# systemctl daemon-reload
+	[root@ol9apex24 ~]# systemctl enable dbora.service
 
-###### writed by: Danilo Arruda
-###### ter 18 fev 2025
+###### CREATE ORDS CONFIGURATION DIRECTORY
+	
+	[root@ol9apex24 ~]# mkdir -p /etc/ords/config
+	[root@ol9apex24 ~]# mkdir -p /etc/ords/logs
+	[root@ol9apex24 ~]# chown -R oracle:oinstall /etc/ords
+
+###### SET JAVA_HOME ENVIRONMENT VARIABLES 
+
+	[root@ol9apex24 ~]# vi .bash_profile
+	export JAVA_HOME=/usr/lib/jvm/jdk-24.0.2-oracle-x64
+	export PATH=$PATH:$JAVA_HOME/bin	
+	[root@ol9apex24 ~]# source .bash_profile	
+
+###### DOWNLOAD APEX AND ORDS
+
+	[root@ol9apex24 ~]# su - oracle
+	[oracle@ol9apex24 ~]$ wget https://download.oracle.com/otn_software/apex/apex_24.2.zip 
+	[oracle@ol9apex24 ~]$ wget https://download.oracle.com/otn_software/java/ords/ords-25.2.2.204.0103.zip
+
+###### CREATE APEX AND ORDS DIRECTORIES TO STORE SOFTWARE
+
+	[oracle@ol9apex24 ~]$ mkdir -p /u01/app/oracle/ords
+	[oracle@ol9apex24 ~]$ mkdir -p /u01/app/oracle/apex 
+	[oracle@ol9apex24 ~]$ mv apex_24.2.zip /u01/app/oracle/apex/
+	[oracle@ol9apex24 ~]$ mv ords-25.2.2.204.0103.zip /u01/app/oracle/ords/	
+	[oracle@ol9apex24 ~]$ cd /u01/app/oracle/ords
+	[oracle@ol9apex24 ords]$ unzip ords-25.2.2.204.0103.zip
+	[oracle@ol9apex24 ~]$ cd /u01/app/oracle/apex/ 
+	[oracle@ol9apex24 apex]$ unzip apex_24.2.zip
+	[oracle@ol9apex24 apex]$ cp -rp images /u01/app/oracle/ords
+
+###### SETUP ORACLE APEX 
+
+	[oracle@ol9apex24 apex]$ sqlplus / as sysdba
+
+	SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Wed Jul 30 20:04:12 2025
+	Version 23.7.0.25.01
+
+	Copyright (c) 1982, 2024, Oracle.  All rights reserved.
+
+	Connected to:
+	Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
+	Version 23.7.0.25.01
+
+	SQL> show pdbs
+
+	    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+	---------- ------------------------------ ---------- ----------
+		 2 PDB$SEED			  READ ONLY  NO
+		 3 APPSPDB			  READ WRITE NO
+	SQL> alter session set container = APPSPDB;
+
+	Session altered.
+
+	SQL> @apexins.sql APEX_DATA APEX_DATA TEMP /i/
+
+	timing for: Validating Installation
+	Elapsed:    0.02
+
+	#
+	# Actions in Phase 3:
+	#
+	    ok 1 - BEGIN							|   0.00
+	    ok 2 - Updating DBA_REGISTRY					|   0.00
+	    ok 3 - Computing Pub Syn Dependents 				|   0.00
+	    ok 4 - Upgrade Hot Metadata and Switch Schemas			|   0.00
+	    ok 5 - Removing Jobs						|   0.00
+	    ok 6 - Creating Public Synonyms					|   0.02
+	    ok 7 - Granting Public Synonyms					|   0.07
+	    ok 8 - Granting to FLOWS_FILES					|   0.00
+	    ok 9 - Creating FLOWS_FILES grants and synonyms			|   0.00
+	    ok 10 - Syncing ORDS Gateway Allow List				|   0.00
+	    ok 11 - Creating Jobs						|   0.00
+	    ok 12 - Creating Dev Jobs						|   0.00
+	    ok 13 - Installing FLOWS_FILES Objects				|   0.00
+	    ok 14 - Installing APEX$SESSION Context				|   0.00
+	    ok 15 - Recompiling APEX_240200					|   0.02
+	    ok 16 - Installing APEX REST Config 				|   0.00
+	    ok 17 - Set Loaded/Upgraded in Registry				|   0.00
+	    ok 18 - Setting Patch Status: APPLIED				|   0.02
+	    ok 19 - Removing Unused SYS Objects and Public Privs		|   0.00
+	    ok 20 - Validating Installation					|   0.02
+	ok 3 - 20 actions passed, 0 actions failed				|   0.13
+
+	Thank you for installing Oracle APEX 24.2.0
+
+	Oracle APEX is installed in the APEX_240200 schema.
+
+	The structure of the link to the Oracle APEX Administration Services is as follows:
+	http://host:port/ords/apex_admin
+
+	The structure of the link to the Oracle APEX development environment is as follows:
+	http://host:port/ords/apex
+
+
+	timing for: Phase 3 (Switch)
+	Elapsed:    0.13
+
+
+	timing for: Complete Installation
+	Elapsed:    4.88
+
+	SYS> @apxchpwd.sql
+	...set_appun.sql
+	================================================================================
+	This script can be used to change the password of an Oracle APEX
+	instance administrator. If the user does not yet exist, a user record will be
+	created.
+	================================================================================
+	Enter the administrator's username [ADMIN] ADMIN
+	User "ADMIN" does not yet exist and will be created.
+	Enter ADMIN's email [ADMIN] admin@exated.online
+	Enter ADMIN's password [] 
+	Created instance administrator ADMIN.
+
+	SYS> @apex_rest_config.sql
+	Enter a password for the APEX_LISTENER user              [] 
+	Enter a password for the APEX_REST_PUBLIC_USER user              [] 
+	...set_appun.sql
+	...setting session environment
+	...create APEX_LISTENER and APEX_REST_PUBLIC_USER users
+	...grants for APEX_LISTENER and ORDS_METADATA user
+
+	SYS> select username from dba_users where username like 'APEX%';
+
+	USERNAME
+	--------------------------------------------------------------------------------
+	APEX_LISTENER
+	APEX_PUBLIC_ROUTER
+	APEX_REST_PUBLIC_USER
+	APEX_PUBLIC_USER
+	APEX_240200
+	
+	SYS> BEGIN
+    	DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE(
+        host => '*',
+        ace => xs$ace_type(privilege_list => xs$name_list('connect'),
+                           principal_name => 'APEX_240200',
+                           principal_type => xs_acl.ptype_db));
+	END;
+	/
+	
+	
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
