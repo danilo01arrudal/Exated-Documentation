@@ -21,6 +21,11 @@
 
     [root@ol923ai ~]# sed -i 's/SELINUX=.*/SELINUX=disabled/' /etc/selinux/config && setenforce 0
 
+###### OPEN PORT ON FIREWALLD
+
+    [root@ol9apex24 ~]# firewall-cmd --zone=public --add-port=8080/tcp --permanent
+    [root@ol9apex24 ~]# firewall-cmd --reload
+
 ###### SETTING CLOCK SOURCE FOR VMs ON LINUX x86-64
 
     [root@ol923ai ~]# echo "tsc" > /sys/devices/system/clocksource/clocksource0/current_clocksource
