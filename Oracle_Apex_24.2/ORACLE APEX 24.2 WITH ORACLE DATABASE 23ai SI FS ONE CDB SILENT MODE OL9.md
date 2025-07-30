@@ -413,6 +413,7 @@
 ###### CREATE APEX AND ORDS DIRECTORIES TO STORE SOFTWARE
 
 	[oracle@ol9apex24 ~]$ mkdir -p /u01/app/oracle/ords
+	[oracle@ol9apex24 ~]$ mkdir -p /u01/app/oracle/ords/images
 	[oracle@ol9apex24 ~]$ mkdir -p /u01/app/oracle/apex 
 	[oracle@ol9apex24 ~]$ mv apex_24.2.zip /u01/app/oracle/apex/
 	[oracle@ol9apex24 ~]$ mv ords-25.2.2.204.0103.zip /u01/app/oracle/ords/	
@@ -533,7 +534,96 @@
 	END;
 	/
 	
+	SYS> select dbms_xdb.gethttpport from dual;
+
+	GETHTTPPORT
+	-----------
+		  0
 	
+	SYS> exec dbms_xdb.sethttpport('8081');
+
+	SYS> select dbms_xdb.gethttpport from dual;
+
+	GETHTTPPORT
+	-----------
+	       8081
+
+	SYS> exit
+	Disconnected from Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
+	Version 23.7.0.25.01
+
+	[oracle@ol9apex24 apex]$ exit
+
+###### SETUP ORACLE ORDS 
+
+	[root@ol9apex24 ~]# /u01/app/oracle/ords/bin/ords --config /etc/ords/config install \
+	--log-folder /etc/ords/logs \
+	--admin-user SYS \
+	--db-hostname ol9apex24.appsdba.info \
+	--db-port 1521 \
+	--db-servicename appspdb.appsdba.info \
+	--feature-db-api true \
+	--feature-rest-enabled-sql true \
+	--feature-sdw true \
+	--gateway-mode proxied \
+	--gateway-user APEX_PUBLIC_USER \
+	--proxy-user
+
+###### CREATE GOLD IMAGE ORDS
+
+	[root@ol9apex24 ~]# /u01/app/oracle/ords/bin/ords --config /etc/ords/config config set standalone.static.path /u01/app/oracle/ords/images
+
+###### CREATE ORACLE REST DATA SERVICES DAEMON 
+
+	[root@ol9apex24 ~]# vi /etc/systemd/system/ords.service
+	[Unit]
+	Description=Oracle REST Data Services
+	After=network.target
+
+	[Service]
+	User=oracle
+	Group=oinstall
+	WorkingDirectory=/u01/app/oracle/ords
+	ExecStart=/u01/app/oracle/ords/bin/ords --config /etc/ords/config serve
+	Restart=always
+	RestartSec=5s
+
+	[Install]
+	WantedBy=multi-user.target
+
+	[root@ol9apex24 ~]# systemctl daemon-reload
+	[root@ol9apex24 ~]# systemctl enable ords.service
+
+###### ENABLE ORACLE START DAEMON
+
+	[root@ol9apex24 ~]# visudo
+	oracle ALL=(ALL) NOPASSWD: /bin/systemctl start ords.service, /bin/systemctl stop ords.service, /bin/systemctl restart ords.service, /bin/systemctl status ords.service
+
+###### START ORACLE REST DATA SERVICES DAEMON 
+	[root@ol9apex24 ~]# systemctl start ords.service
+	[root@ol9apex24 ~]# systemctl status -l ords.service 
+	● ords.service - Oracle REST Data Services
+	     Loaded: loaded (/etc/systemd/system/ords.service; enabled; preset: disabled)
+	     Active: active (running) since Wed 2025-07-30 19:17:26 -03; 1h 16min ago
+	   Main PID: 4471 (ords)
+	      Tasks: 46 (limit: 50355)
+	     Memory: 804.6M
+	        CPU: 21.368s
+	     CGroup: /system.slice/ords.service
+	             ├─4471 /bin/bash /u01/app/oracle/ords/bin/ords --config /etc/ords/config serve
+	             └─4503 java -Doracle.dbtools.cmdline.home=/u01/app/oracle/ords -Duser.language=en -Duser.region=US -Dfile.encoding=UTF-8 -Djava.awt.headless=true --add-exports=java.base/jdk.internal.foreign=ALL-UNNAMED -Doracle.dbtools.cmdl>
+
+	Jul 30 19:17:31 ol9apex24.appsdba.info ords[4503]: conf.use.wallet=true
+	Jul 30 19:17:31 ol9apex24.appsdba.info ords[4503]: 2025-07-30T22:17:31.325Z WARNING     *** jdbc.MaxLimit in configuration |default|lo| is using a value of 10, this setting may not be sized adequately for a production environment ***
+	Jul 30 19:17:31 ol9apex24.appsdba.info ords[4503]: 2025-07-30T22:17:31.659Z INFO        Created Pool: |default|lo|-2025-07-30T22-17-30.701942897Z at: 2025-07-30T22:17:30.701942897Z
+	Jul 30 19:17:31 ol9apex24.appsdba.info ords[4503]: 2025-07-30T22:17:31.664Z INFO
+	Jul 30 19:17:31 ol9apex24.appsdba.info ords[4503]: Mapped local pools from /etc/ords/config/databases:
+	Jul 30 19:17:31 ol9apex24.appsdba.info ords[4503]:   /ords/                              => default                        => VALID
+	Jul 30 19:17:31 ol9apex24.appsdba.info ords[4503]: 2025-07-30T22:17:31.742Z INFO        Oracle REST Data Services initialized
+	Jul 30 19:17:31 ol9apex24.appsdba.info ords[4503]: Oracle REST Data Services version : 25.2.2.r2040103
+	Jul 30 19:17:31 ol9apex24.appsdba.info ords[4503]: Oracle REST Data Services server info: jetty/12.0.18
+	Jul 30 19:17:31 ol9apex24.appsdba.info ords[4503]: Oracle REST Data Services java info: Java HotSpot(TM) 64-Bit Server VM  (build 24.0.2+12-54 mixed mode, sharing)
+
 
 
 
