@@ -632,7 +632,7 @@
 
 > *password = password*
 
-![emcc24ai13](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/img13.png)
+![ol9apex24](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Apex_24.2/images/img1.png)
 
 
 
