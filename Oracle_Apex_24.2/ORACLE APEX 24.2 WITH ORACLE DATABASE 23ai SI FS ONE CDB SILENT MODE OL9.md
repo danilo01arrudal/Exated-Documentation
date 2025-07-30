@@ -633,10 +633,14 @@
 > *The ORDS "HOME" page provides access to three tools:*
 
 > *SQL Developer Web version.*
+
 > *Oracle APEX.*
+
 > *ORDS Authentication Manager.*
+
 > *Clicking the "GO" button in the central "Oracle APEX" application will redirect you to the tool's login screen.*
 
+![ol9apex24](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Apex_24.2/images/img2.png)
 
 
 
