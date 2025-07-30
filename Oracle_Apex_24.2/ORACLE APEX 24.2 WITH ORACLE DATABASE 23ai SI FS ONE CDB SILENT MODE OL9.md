@@ -624,7 +624,15 @@
 	Jul 30 19:17:31 ol9apex24.appsdba.info ords[4503]: Oracle REST Data Services server info: jetty/12.0.18
 	Jul 30 19:17:31 ol9apex24.appsdba.info ords[4503]: Oracle REST Data Services java info: Java HotSpot(TM) 64-Bit Server VM  (build 24.0.2+12-54 mixed mode, sharing)
 
+###### ACCESS ORACLE APEX
 
+> *https://ol9apex24.appsdba.info:8080/ords*
+
+> *user = weblogic*	
+
+> *password = password*
+
+![emcc24ai13](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Enterprise_Manager_24ai/images/img13.png)
 
 
 
