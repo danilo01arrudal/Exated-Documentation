@@ -599,11 +599,6 @@
 	[root@ol9apex24 ~]# systemctl daemon-reload
 	[root@ol9apex24 ~]# systemctl enable ords.service
 
-###### ENABLE ORACLE START DAEMON
-
-	[root@ol9apex24 ~]# visudo
-	oracle ALL=(ALL) NOPASSWD: /bin/systemctl start ords.service, /bin/systemctl stop ords.service, /bin/systemctl restart ords.service, /bin/systemctl status ords.service
-
 ###### START ORACLE REST DATA SERVICES DAEMON 
 	[root@ol9apex24 ~]# systemctl start ords.service
 	[root@ol9apex24 ~]# systemctl status -l ords.service 
