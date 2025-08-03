@@ -421,6 +421,7 @@
 	[oracle@ol9apex24 ords]$ unzip ords-25.2.2.204.0103.zip
 	[oracle@ol9apex24 ~]$ cd /u01/app/oracle/apex/ 
 	[oracle@ol9apex24 apex]$ unzip apex_24.2.zip
+ 	[oracle@ol9apex24 ~]$ cd /u01/app/oracle/apex/apex/ 
 	[oracle@ol9apex24 apex]$ cp -rp images /u01/app/oracle/ords
 
 ###### SETUP ORACLE APEX 
