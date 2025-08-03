@@ -566,7 +566,7 @@
 	--admin-user SYS \
 	--db-hostname ol9apex24.appsdba.info \
 	--db-port 1521 \
-	--db-servicename appspdb.appsdba.info \
+	--db-servicename appspdb \
 	--feature-db-api true \
 	--feature-rest-enabled-sql true \
 	--feature-sdw true \
