@@ -526,6 +526,10 @@
 	APEX_PUBLIC_USER
 	APEX_240200
 	
+	SQL> alter user APEX_PUBLIC_USER account unlock;
+
+	SQL> alter user APEX_240200 account unlock;
+
 	SYS> BEGIN
     	DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE(
         host => '*',
