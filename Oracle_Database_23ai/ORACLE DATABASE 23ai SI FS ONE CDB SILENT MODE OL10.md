@@ -59,6 +59,7 @@
     [root@ol1023ai ~]# openssl version -v
 
 ###### ADD SYSCTL PARAMETERS IN /etc/sysctl.conf FILE 
+
     [root@ol1023ai ~]# vi /etc/sysctl.conf
     	# oracle-database-preinstall-23ai setting for fs.file-max is 6815744
     	fs.file-max = 6815744
@@ -107,6 +108,10 @@
 		kernel.panic = 10
 
 		# oracle-database-preinstall-23ai setting special parameters END
+
+###### RELOAD SYSCTL PARAMETERS
+
+	[root@ol1023ai ~]# /sbin/sysctl -p  
 
 ###### DISABLE SELINUX
 
