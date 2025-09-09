@@ -9,7 +9,7 @@ Leapp operations consist of two phases:
 >    *The actual upgrade, which process is based on configuration files that map packages between previous and current versions of the software packages.*
 
 
-![Oracle linux 10 logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Linux_10_UEK8/images/Oracle_linux_10.png)
+![Oracle linux 10 logo](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Linux_10_UEK8/images/Oracle_linux_10.png)
 
 ###### OBTAIN THE LATEST ORACLE LINUX 9 PACKAGES.
 
