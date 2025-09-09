@@ -9,19 +9,7 @@ Leapp operations consist of two phases:
 >    *The actual upgrade, which process is based on configuration files that map packages between previous and current versions of the software packages.*
 
 
-![oracle linux iscsi logo.](https://github.com/danilo01arrudal/Exated/blob/main/Scsi/images/iSCSI.png)
-
-> *ZFS provides advanced storage management capabilities, making it ideal for enterprise storage solutions.*
-
->    *Data Integrity: Uses checksums to detect and correct data corruption automatically.*
-
->    *Snapshots: Enables instantaneous point-in-time copies of volumes for backups or testing.*
-
->    *Compression: Supports inline compression (e.g., lz4) to save storage space.*
-
->    *Pool Expansion: Allows adding more disks to increase capacity or redundancy without downtime.*
-
->    *Thin Provisioning: Allocates storage dynamically, optimizing disk usage.*
+![oracle linux iscsi logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Linux_10_UEK8/images/Oracle_linux_10.png)
 
 ###### INSTALL ZFS AND TARGETCLI
 
