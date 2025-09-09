@@ -13,9 +13,39 @@
 
     [root@ ~]# hostnamectl set-hostname ol923ai
 
-###### INSTALL PRE-INSTALL PACKAGES
+###### INSTALL Operating System Requirements PACKAGES
 
-    [root@ol923ai ~]# yum install oracle-database-preinstall-23ai
+	[root@ol923ai ~]# yum install -y binutils
+    [root@ol923ai ~]# yum install -y compat-openssl11
+    [root@ol923ai ~]# yum install -y compat-openssl12
+    [root@ol923ai ~]# yum install -y compat-openssl*
+    [root@ol923ai ~]# yum install -y elfutils-libelf
+    [root@ol923ai ~]# yum install -y fontconfig
+    [root@ol923ai ~]# yum install -y glibc
+    [root@ol923ai ~]# yum install -y glibc-devel
+    [root@ol923ai ~]# yum install -y ksh
+    [root@ol923ai ~]# yum install -y libaio
+    [root@ol923ai ~]# yum install -y libXrender
+    [root@ol923ai ~]# yum install -y libX11
+    [root@ol923ai ~]# yum install -y libXau
+    [root@ol923ai ~]# yum install -y libXi
+    [root@ol923ai ~]# yum install -y libXtst
+    [root@ol923ai ~]# yum install -y libgcc
+    [root@ol923ai ~]# yum install -y libnsl
+    [root@ol923ai ~]# yum install -y libstdc++
+    [root@ol923ai ~]# yum install -y libxcb
+    [root@ol923ai ~]# yum install -y libibverbs
+    [root@ol923ai ~]# yum install -y libasan
+    [root@ol923ai ~]# yum install -y liblsan
+    [root@ol923ai ~]# yum install -y librdmacm
+    [root@ol923ai ~]# yum install -y make
+    [root@ol923ai ~]# yum install -y policycoreutils
+    [root@ol923ai ~]# yum install -y policycoreutils-python-utils
+    [root@ol923ai ~]# yum install -y smartmontools
+    [root@ol923ai ~]# yum install -y sysstat
+    [root@ol923ai ~]# yum install -y ipmiutil
+    [root@ol923ai ~]# yum install -y libaio
+    [root@ol923ai ~]# yum install -y nfs-utils
 
 ###### DISABLE SELINUX
 
