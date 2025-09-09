@@ -2,8 +2,6 @@
 
 > *The Leapp utility is a framework for updating and upgrading operating systems and applications. The utility's component packages enable the creation of different workflows into profiles for updating software.*
 
-Leapp operations consist of two phases:
-
 >    *The preupgrade phase, where system checks are performed to verify if the software can be upgraded.*
 
 >    *The actual upgrade, which process is based on configuration files that map packages between previous and current versions of the software packages.*
