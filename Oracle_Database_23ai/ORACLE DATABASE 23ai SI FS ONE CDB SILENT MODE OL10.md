@@ -46,6 +46,17 @@
     [root@ol1023ai ~]# yum install -y ipmiutil
     [root@ol1023ai ~]# yum install -y libaio
     [root@ol1023ai ~]# yum install -y nfs-utils
+    [root@ol1023ai ~]# yum install -y perl-core
+
+###### COMPILE OPENSSL 3.5.2 (PACKAGE compat-openssl11 IS NOT SUPPORTED ON ORACLE LINUX 10)
+
+    [root@ol1023ai ~]# wget https://github.com/openssl/openssl/releases/download/openssl-3.5.2/openssl-3.5.2.tar.gz
+    [root@ol1023ai ~]# tar -xvzf openssl-3.5.2.tar.gz
+    [root@ol1023ai ~]# cd openssl-3.5.2/
+    [root@ol1023ai ~]# ./config
+    [root@ol1023ai ~]# make install
+    [root@ol1023ai ~]# ldconfig /usr/local/lib64/
+    [root@ol1023ai ~]# openssl version -v
 
 ###### DISABLE SELINUX
 
