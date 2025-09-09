@@ -48,7 +48,7 @@
     [root@ol1023ai ~]# yum install -y nfs-utils
     [root@ol1023ai ~]# yum install -y perl-core
 
-###### COMPILE OPENSSL 3.5.2 (PACKAGE compat-openssl11 IS NOT SUPPORTED ON ORACLE LINUX 10)
+###### COMPILE OPENSSL 3.5.2 (PACKAGE COMPAT-OPENSSL11 IS NOT SUPPORTED ON ORACLE LINUX 10)
 
     [root@ol1023ai ~]# wget https://github.com/openssl/openssl/releases/download/openssl-3.5.2/openssl-3.5.2.tar.gz
     [root@ol1023ai ~]# tar -xvzf openssl-3.5.2.tar.gz
@@ -57,6 +57,56 @@
     [root@ol1023ai ~]# make install
     [root@ol1023ai ~]# ldconfig /usr/local/lib64/
     [root@ol1023ai ~]# openssl version -v
+
+###### ADD SYSCTL PARAMETERS IN /etc/sysctl.conf FILE 
+    [root@ol1023ai ~]# vi /etc/sysctl.conf
+    	# oracle-database-preinstall-23ai setting for fs.file-max is 6815744
+    	fs.file-max = 6815744
+
+    	# oracle-database-preinstall-23ai setting for kernel.sem is '250 32000 100 128'
+    	kernel.sem = 250 32000 100 128
+
+    	# oracle-database-preinstall-23ai setting for kernel.shmmni is 4096
+    	kernel.shmmni = 4096
+
+    	# oracle-database-preinstall-23ai setting for kernel.shmall is 1073741824 on x86_64
+    	kernel.shmall = 1073741824
+
+    	# oracle-database-preinstall-23ai setting for kernel.shmmax is 4398046511104 on x86_64
+    	kernel.shmmax = 4398046511104
+
+    	# oracle-database-preinstall-23ai setting for kernel.panic_on_oops is 1 per Orabug 19212317
+    	kernel.panic_on_oops = 1
+
+    	# oracle-database-preinstall-23ai setting for net.core.rmem_default is 262144
+    	net.core.rmem_default = 262144
+
+		# oracle-database-preinstall-23ai setting for net.core.rmem_max is 4194304
+		net.core.rmem_max = 4194304
+
+		# oracle-database-preinstall-23ai setting for net.core.wmem_default is 262144
+		net.core.wmem_default = 262144
+
+		# oracle-database-preinstall-23ai setting for net.core.wmem_max is 1048576
+		net.core.wmem_max = 1048576
+
+		# oracle-database-preinstall-23ai setting for net.ipv4.conf.all.rp_filter is 2
+		net.ipv4.conf.all.rp_filter = 2
+
+		# oracle-database-preinstall-23ai setting for net.ipv4.conf.default.rp_filter is 2
+		net.ipv4.conf.default.rp_filter = 2
+
+		# oracle-database-preinstall-23ai setting for fs.aio-max-nr is 1048576
+		fs.aio-max-nr = 1048576
+
+		# oracle-database-preinstall-23ai setting for net.ipv4.ip_local_port_range is 9000 65500
+		net.ipv4.ip_local_port_range = 9000 65535
+
+		# oracle-database-preinstall-23ai setting special parameters BEGIN
+		# oracle-database-preinstall-23ai setting for kernel.panic is 10
+		kernel.panic = 10
+
+		# oracle-database-preinstall-23ai setting special parameters END
 
 ###### DISABLE SELINUX
 
@@ -95,7 +145,7 @@
 
 ###### CREATE ORACLE_BASE AND ORACLE_HOME DIRECTORIES
 
-    [root@ol1023ai ~]# mkdir -p /u01/app/oracle/product/23.5.0/dbhome_1/
+    [root@ol1023ai ~]# mkdir -p /u01/app/oracle/product/23.7.0/dbhome_1/
     [root@ol1023ai ~]# chown -R oracle:oinstall /u01
     [root@ol1023ai ~]# chmod -R 775 /u01
 
@@ -111,7 +161,7 @@
     export ORACLE_HOSTNAME=ol7db1
     export ORACLE_UNQNAME=appscdb
     export ORACLE_BASE=/u01/app/oracle
-    export ORACLE_HOME=\$ORACLE_BASE/product/23.5.0/dbhome_1
+    export ORACLE_HOME=\$ORACLE_BASE/product/23.7.0/dbhome_1
     export ORA_INVENTORY=/u01/app/oraInventory
     export ORACLE_SID=appscdb1
 
