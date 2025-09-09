@@ -147,6 +147,11 @@
 		# oracle-database-preinstall-23ai setting for data hard limit is 'unlimited'
 		oracle   hard   data    unlimited
 
+###### CREATE USER AND GRUPS FOR ORACLE DATABASE
+
+    [root@ol1023ai ~]# userdel oracle; rm -Rvf /home/oracle; rm -Rvf /var/mail/oracle groupadd -g 54321 oinstall; groupadd -g 54322 dba; groupadd -g 54323 oper; groupadd -g 54324 backupdba; groupadd -g 54325 dgdba; groupadd -g 54326 kmdba; groupadd -g 54327 asmdba; groupadd -g 54328 asmoper; groupadd -g 54329 asmadmin; groupadd -g 54330 racdba; useradd -m -u 54331 -g oinstall -G dba,oper,backupdba,dgdba,kmdba,asmdba,asmadmin,racdba -d /home/oracle -s /bin/bash  oracle; useradd -m -u 54332 -g oinstall -G dba,asmadmin,asmdba,asmoper -d /home/grid -s /bin/bash  grid; id oracle; id grid
+	[root@ol1023ai ~]# passwd oracle
+
 ###### DISABLE SELINUX
 
     [root@ol1023ai ~]# sed -i 's/SELINUX=.*/SELINUX=disabled/' /etc/selinux/config && setenforce 0
@@ -250,47 +255,47 @@
 ###### CREATE db_install.rsp INSTALL RESPONSE FILE
 
     [oracle@ol1023ai ~]$ vi db_install.rsp
-                            oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v23.0.0
-                            installOption=INSTALL_DB_SWONLY
-                            UNIX_GROUP_NAME=oinstall
-                            INVENTORY_LOCATION=/u01/app/oraInventory
-                            ORACLE_HOME=/u01/app/oracle/product/23.5.0/dbhome_1
-                            ORACLE_BASE=/u01/app/oracle
-                            installEdition=EE
-                            OSDBA=dba
-                            OSOPER=oinstall
-                            OSBACKUPDBA=backupdba
-                            OSDGDBA=dgdba
-                            OSKMDBA=kmdba
-                            OSRACDBA=racdba
-                            executeRootScript=false
-                            configMethod=
-                            sudoPath=
-                            sudoUserName=
-                            clusterNodes=
-                            dbType=GENERAL_PURPOSE
-                            gdbName=
-                            dbSID=
-                            pdbName=
-                            charSet=
-                            enableAutoMemoryManagement=
-                            memoryLimit=
-                            allSchemaPassword=
-                            sysPassword=
-                            systemPassword=
-                            dbsnmpPassword=
-                            pdbadminPassword=
-                            managementOption=DEFAULT
-                            omsHost=
-                            omsPort=
-                            emAdminUser=
-                            emAdminPassword=
-                            enableRecovery=
-                            storageType=
-                            dataLocation=
-                            recoveryLocation=
-                            diskGroup=
-                            asmsnmpPassword=
+		oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v23.0.0
+		installOption=INSTALL_DB_SWONLY
+		UNIX_GROUP_NAME=oinstall
+		INVENTORY_LOCATION=/u01/app/oraInventory
+		ORACLE_HOME=/u01/app/oracle/product/23.7.0/dbhome_1
+		ORACLE_BASE=/u01/app/oracle
+		installEdition=EE
+		OSDBA=dba
+		OSOPER=oinstall
+		OSBACKUPDBA=backupdba
+		OSDGDBA=dgdba
+		OSKMDBA=kmdba
+		OSRACDBA=racdba
+		executeRootScript=false
+		configMethod=
+		sudoPath=
+		sudoUserName=
+		clusterNodes=
+		dbType=GENERAL_PURPOSE
+		gdbName=
+		dbSID=
+		pdbName=
+		charSet=
+		enableAutoMemoryManagement=
+		memoryLimit=
+		allSchemaPassword=
+		sysPassword=
+		systemPassword=
+		dbsnmpPassword=
+		pdbadminPassword=
+		managementOption=DEFAULT
+		omsHost=
+		omsPort=
+		emAdminUser=
+		emAdminPassword=
+		enableRecovery=
+		storageType=
+		dataLocation=
+		recoveryLocation=
+		diskGroup=
+		asmsnmpPassword=
 
 ###### EXECUTE runInstaller 
     [oracle@ol1023ai ~]$ cd $ORACLE_HOME
@@ -302,64 +307,72 @@
 ###### CREATE dbca.rsp response file
 
 	[oracle@ol1023ai ~]$ vi dbca.rsp
-				responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v23.0.0
-				gdbName=appscdb
-				sid=appscdb1
-				databaseConfigType=SI
-				RACOneNodeServiceName=
-				policyManaged=false
-				managementPolicy=
-				createServerPool=false
-				serverPoolName=
-				cardinality=
-				force=
-				pqPoolName=
-				pqCardinality=
-				createAsContainerDatabase=true
-				numberOfPDBs=1
-				pdbName=appspdb
-				useLocalUndoForPDBs=true
-				pdbAdminPassword=
-				nodelist=
-				templateName=/u01/app/oracle/product/23.5.0/dbhome_1/assistants/dbca/templates/General_Purpose.dbc
-				sysPassword=
-				systemPassword= 
-				oracleHomeUserPassword=
-				emConfiguration=
-				runCVUChecks=FALSE
-				dbsnmpPassword=
-				omsHost=
-				omsPort=
-				emUser=
-				emPassword=
-				dvConfiguration=false
-				dvUserName=
-				dvUserPassword=
-				dvAccountManagerName=
-				dvAccountManagerPassword=
-				olsConfiguration=
-				datafileJarLocation={ORACLE_HOME}/assistants/dbca/templates/
-				datafileDestination={ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/
-				recoveryAreaDestination={ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME}
-				storageType=FS
-				diskGroupName=
-				asmsnmpPassword=
-				recoveryGroupName=
-				characterSet=AL32UTF8
-				nationalCharacterSet=AL16UTF16
-				registerWithDirService=false
-				dirServiceUserName=
-				dirServicePassword=
-				walletPassword=
-				listeners=
-				variablesFile=
-				variables=ORACLE_BASE_HOME=/u01/app/oracle/product/23.5.0/dbhome_1,DB_UNIQUE_NAME=appscdb,ORACLE_BASE=/u01/app/oracle,PDB_NAME=,DB_NAME=appscdb,ORACLE_HOME=/u01/app/oracle/product/23.5.0/dbhome_1,SID=appscdb1
-				initParams=_exadata_feature_on=true,undo_tablespace=UNDOTBS1,sga_target=2047MB,db_block_size=8192BYTES,log_archive_dest_1='LOCATION={ORACLE_BASE}/oradata/archivelog/',nls_language=AMERICAN,dispatchers=(PROTOCOL=TCP) (SERVICE=appscdb1XDB),diagnostic_dest={ORACLE_BASE},control_files=("{ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/control01.ctl", "{ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME}/control02.ctl"),remote_login_passwordfile=EXCLUSIVE,audit_file_dest={ORACLE_BASE}/admin/{DB_UNIQUE_NAME}/adump,processes=600,pga_aggregate_target=683MB,nls_territory=AMERICA,db_recovery_file_dest_size=12732MB,open_cursors=300,log_archive_format=%t_%s_%r.dbf,compatible=23.0.0,db_name=appscdb,db_recovery_file_dest={ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME},audit_trail=db,_exadata_feature_on=true
-				sampleSchema=false
-				memoryPercentage=40
-				databaseType=MULTIPURPOSE
-				automaticMemoryManagement=false
-				totalMemory=0
+		responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v23.0.0
+		gdbName=appscdb.appsdba.info
+		sid=appscdb
+		databaseConfigType=SI
+		RACOneNodeServiceName=
+		sehaServiceName=
+		policyManaged=false
+		managementPolicy=AUTOMATIC
+		createServerPool=false
+		serverPoolName=
+		cardinality=
+		force=false
+		pqPoolName=
+		pqCardinality=
+		createAsContainerDatabase=true
+		numberOfPDBs=1
+		pdbName=appspdb
+		useLocalUndoForPDBs=true
+		pdbAdminPassword=
+		nodelist=
+		sehaNodeList=
+		templateName=/u01/app/oracle/product/23.7.0/dbhome_1/assistants/dbca/templates/General_Purpose.dbc
+		sysPassword=
+		systemPassword=
+		serviceUserPassword=	
+		emConfiguration=
+		runCVUChecks=FALSE
+		dbsnmpPassword=
+		omsHost=
+		omsPort=0
+		emUser=
+		emPassword=
+		dvConfiguration=false
+		dvUserName=
+		dvUserPassword=
+		dvAccountManagerName=
+		dvAccountManagerPassword=
+		olsConfiguration=false
+		datafileJarLocation={ORACLE_HOME}/assistants/dbca/templates/
+		datafileDestination={ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/
+		recoveryAreaDestination=
+		recoveryAreaSize=54525952BYTES
+		configureWithOID=
+		pdbOptions=IMEDIA:false,OMS:true,ORACLE_TEXT:true,DV:true,JSERVER:true,SAMPLE_SCHEMA:false,CWMLITE:true,SPATIAL:true
+		dbOptions=IMEDIA:false,OMS:true,ORACLE_TEXT:true,DV:true,JSERVER:true,SAMPLE_SCHEMA:false,CWMLITE:true,SPATIAL:true
+		storageType=FS
+		diskGroupName=
+		asmsnmpPassword=
+		recoveryGroupName=
+		characterSet=AL32UTF8
+		nationalCharacterSet=AL16UTF16
+		registerWithDirService=false
+		dirServiceUserName=
+		dirServicePassword=
+		walletPassword=
+		listeners=
+		skipListenerRegistration=true
+		variablesFile=
+		variables=ORACLE_BASE_HOME=/u01/app/oracle/product/23.7.0/dbhome_1,DB_UNIQUE_NAME=appscdb,ORACLE_BASE=/u01/app/oracle,PDB_NAME=,DB_NAME=appscdb,ORACLE_HOME=/u01/app/oracle/product/23.7.0/dbhome_1,SID=appscdb
+		initParams=undo_tablespace=UNDOTBS1,enable_pluggable_database=true,sga_target=2379MB,db_block_size=8192BYTES,nls_language=AMERICAN,dispatchers=(PROTOCOL=TCP)(SERVICE=appscdbXDB),diagnostic_dest={ORACLE_BASE},control_files=("{ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/control01.ctl","{ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/control02.ctl"),remote_login_passwordfile=EXCLUSIVE,_exadata_feature_on=true,processes=300,pga_aggregate_target=793MB,nls_territory=AMERICA,open_cursors=300,db_domain=appsdba.info,compatible=23.6.0,db_name=appscdb
+		enableArchive=false
+		useOMF=false
+		memoryPercentage=40
+		databaseType=MULTIPURPOSE
+		automaticMemoryManagement=false
+		totalMemory=0
 
 ###### CREATE netca.rsp response file
 
@@ -376,7 +389,7 @@
 				NSN_NUMBER=1
 				NSN_NAMES={"EXTPROC_CONNECTION_DATA"}
 				NSN_SERVICE={"PLSExtProc"}
-    				NSN_SERVICE={"PLSExtProc"}
+    			NSN_SERVICE={"PLSExtProc"}
 				NSN_PROTOCOLS={"TCP;HOSTNAME;1521"}
 
 ###### CREATE DATABASE 
@@ -390,39 +403,49 @@
 ###### START LISTENER
 
 	[oracle@ol1023ai ~]$ lsnrctl status
- 	LSNRCTL for Linux: Version 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on 15-FEB-2025 16:10:08
 
-	Copyright (c) 1991, 2024, Oracle.  All rights reserved.
+		LSNRCTL for Linux: Version 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on 08-SEP-2025 23:01:35
 
-	Connecting to (ADDRESS=(PROTOCOL=tcp)(HOST=)(PORT=1521))
-	STATUS of the LISTENER
-	------------------------
-	Alias                     LISTENER
-	Version                   TNSLSNR for Linux: Version 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
-	Start Date                15-FEB-2025 16:10:08
-	Uptime                    0 days 0 hr. 0 min. 6 sec
-	Trace Level               off
-	Security                  ON: Local OS Authentication
-	SNMP                      OFF
-	Listener Log File         /u01/app/oracle/diag/tnslsnr/ol1023ai/listener/alert/log.xml
-	Listening Endpoints Summary...
-  	(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=ol1023ai)(PORT=1521)))
-	The listener supports no services
-	The command completed successfully
+		Copyright (c) 1991, 2024, Oracle.  All rights reserved.
+
+		Connecting to (ADDRESS=(PROTOCOL=tcp)(HOST=)(PORT=1521))
+		STATUS of the LISTENER
+		------------------------
+		Alias                     LISTENER
+		Version                   TNSLSNR for Linux: Version 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
+		Start Date                08-SEP-2025 20:01:07
+		Uptime                    0 days 3 hr. 0 min. 29 sec
+		Trace Level               off
+		Security                  ON: Local OS Authentication
+		SNMP                      OFF
+		Listener Log File         /u01/app/oracle/diag/tnslsnr/localhost/listener/alert/log.xml
+		Listening Endpoints Summary...
+		  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521)))
+		Services Summary...
+		Service "2bd45b2c420628bbe06337d35e643db0.appsdba.info" has 1 instance(s).
+		  Instance "appscdb", status READY, has 1 handler(s) for this service...
+		Service "3e3f134b5c828a1ae063d812a8c0a662.appsdba.info" has 1 instance(s).
+		  Instance "appscdb", status READY, has 1 handler(s) for this service...
+		Service "appscdb.appsdba.info" has 1 instance(s).
+		  Instance "appscdb", status READY, has 1 handler(s) for this service...
+		Service "appscdbXDB.appsdba.info" has 1 instance(s).
+		  Instance "appscdb", status READY, has 1 handler(s) for this service...
+		Service "appspdb.appsdba.info" has 1 instance(s).
+		  Instance "appscdb", status READY, has 1 handler(s) for this service...
+		The command completed successfully
 
 ###### ENABLE AUTOMATIC START PDB
 
 	[oracle@ol1023ai ~]$ sqlplus / as sysdba
 
-	SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Tue Feb 18 16:20:09 2025
-	Version 23.5.0.24.07
+		SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Mon Sep 8 23:03:24 2025
+		Version 23.7.0.25.01
 
-	Copyright (c) 1982, 2024, Oracle.  All rights reserved.
+		Copyright (c) 1982, 2024, Oracle.  All rights reserved.
 
-
-	Connected to:
-	Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
-	Version 23.5.0.24.07
+		Connected to:
+		Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
+		Version 23.7.0.25.01
 
 	SQL> ALTER PLUGGABLE DATABASE APPSPDB OPEN;
 
@@ -450,7 +473,7 @@
     
 	SQL> exit
 	Disconnected from Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
-	Version 23.5.0.24.07
+	Version 23.7.0.25.01
 
 ###### CONFIGURE TNSNAMES.ORA
 
@@ -479,7 +502,7 @@
 ###### AUTOMATIC START SERVICE ORACLE
 
 	[root@ol1023ai ~]# vi /etc/oratab
- 				appscdb1:/u01/app/oracle/product/23.5.0/dbhome_1:Y
+ 				appscdb1:/u01/app/oracle/product/23.7.0/dbhome_1:Y
 
 ###### CONFIGURE ORACLE DATABASE DAEMON 
 
@@ -512,4 +535,4 @@
 	[root@ol1023ai ~]# systemctl enable dbora.service
 
 ###### writed by: Danilo Arruda
-###### ter 18 fev 2025
+###### seg 8 set 2025
