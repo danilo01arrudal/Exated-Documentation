@@ -13,7 +13,7 @@
 
     [root@ ~]# hostnamectl set-hostname ol1023ai
 
-###### INSTALL Operating System Requirements PACKAGES
+###### INSTALL OPERATING SYSTEM REQUIREMENTS PACKAGES
 
 	[root@ol1023ai ~]# yum install -y binutils
     [root@ol1023ai ~]# yum install -y compat-openssl11
