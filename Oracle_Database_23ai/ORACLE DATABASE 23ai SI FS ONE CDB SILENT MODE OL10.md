@@ -48,6 +48,7 @@
     [root@ol1023ai ~]# yum install -y libaio
     [root@ol1023ai ~]# yum install -y nfs-utils
     [root@ol1023ai ~]# yum install -y perl-core
+	[root@ol1023ai ~]# yum install -y libxcrypt-compat
 
 ###### COMPILE OPENSSL 3.5.2 (PACKAGE COMPAT-OPENSSL11 IS NOT SUPPORTED ON ORACLE LINUX 10)
 
