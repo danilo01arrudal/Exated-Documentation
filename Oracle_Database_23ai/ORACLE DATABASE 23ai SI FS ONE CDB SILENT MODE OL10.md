@@ -20,9 +20,6 @@
 ###### INSTALL OPERATING SYSTEM REQUIREMENTS PACKAGES
 
 	[root@ol1023ai ~]# yum install -y binutils
-    [root@ol1023ai ~]# yum install -y compat-openssl11
-    [root@ol1023ai ~]# yum install -y compat-openssl12
-    [root@ol1023ai ~]# yum install -y compat-openssl*
     [root@ol1023ai ~]# yum install -y elfutils-libelf
     [root@ol1023ai ~]# yum install -y fontconfig
     [root@ol1023ai ~]# yum install -y glibc
