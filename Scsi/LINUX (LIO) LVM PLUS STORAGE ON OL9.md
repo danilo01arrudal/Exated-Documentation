@@ -214,6 +214,21 @@ In simple terms, LIO allows a Linux server to share its storage devices (such as
     [root@exated ~]# firewall-cmd --zone=public --add-port=3260/tcp --permanent
     [root@exated ~]# firewall-cmd --reload
 
+###### DESTROY ISCSI CONFIGURATION
+
+/iscsi/iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0/tpg1/acls delete iqn.1994-05.com.redhat:2868b8b62d
+/iscsi/iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0/tpg1/acls delete iqn.1994-05.com.redhat:afaace60edb7
+/iscsi/iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0/tpg1/luns delete LUN_1
+/iscsi/iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0/tpg1/luns delete LUN_2
+/iscsi/iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0/tpg1/luns delete LUN_3
+/iscsi/iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0/tpg1/luns delete LUN_4
+/iscsi delete iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0
+/backstores/block delete LUN_1
+/backstores/block delete LUN_2
+/backstores/block delete LUN_3
+/backstores/block delete LUN_4
+ls
+
 ###### writed by: Danilo Arruda
 ###### ter 23 fev 2025
 
