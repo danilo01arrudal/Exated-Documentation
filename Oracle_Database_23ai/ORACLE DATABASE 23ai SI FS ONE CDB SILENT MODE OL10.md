@@ -253,6 +253,11 @@
     [oracle@ol1023ai ~]$ mv V1043785-01.zip /u01/app/oracle/product/23.5.0/dbhome_1/
     [oracle@ol1023ai dbhome_1]$ gunzip V1043785-01.zip 
 
+###### CHANGE CV_ASSUME_DISTID PARAMETER 
+
+    [root@ol1023ai ~]# vi /u01/app/oracle/product/23.7.0/dbhome_1/cv/admin/cvu_config u
+		CV_ASSUME_DISTID=OL9
+
 ###### CREATE db_install.rsp INSTALL RESPONSE FILE
 
     [oracle@ol1023ai ~]$ vi db_install.rsp
@@ -304,11 +309,6 @@
     [oracle@ol1023ai ~]$ exit
     [root@ol1023ai ~]# /u01/app/oraInventory/orainstRoot.sh
     [root@ol1023ai ~]# /u01/app/oracle/product/23.5.0/dbhome_1/root.sh
-
-###### CHANGE CV_ASSUME_DISTID PARAMETER 
-
-    [root@ol1023ai ~]# vi /u01/app/oracle/product/23.7.0/dbhome_1/cv/admin/cvu_config u
-		CV_ASSUME_DISTID=OL9
 
 ###### CREATE dbca.rsp response file
 
