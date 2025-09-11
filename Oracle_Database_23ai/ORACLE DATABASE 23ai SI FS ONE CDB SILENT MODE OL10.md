@@ -484,7 +484,7 @@
 
 ###### CONFIGURE TNSNAMES.ORA
 
-	[oracle@ol1023ai ~]$ cat > /u01/app/oracle/product/23.5.0/dbhome_1/network/admin/tnsnames.ora <<EOF
+	[oracle@ol1023ai ~]$ cat > /u01/app/oracle/product/23.7.0/dbhome_1/network/admin/tnsnames.ora <<EOF
 				appspdb =
 				  (DESCRIPTION =
 				    (ADDRESS_LIST =
