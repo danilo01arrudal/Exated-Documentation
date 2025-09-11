@@ -209,7 +209,7 @@
     export ORACLE_BASE=/u01/app/oracle
     export ORACLE_HOME=\$ORACLE_BASE/product/23.7.0/dbhome_1
     export ORA_INVENTORY=/u01/app/oraInventory
-    export ORACLE_SID=appscdb1
+    export ORACLE_SID=appscdb
 
     export PATH=/usr/sbin:/usr/local/bin:\$PATH
     export PATH=\$ORACLE_HOME/bin:\$PATH
