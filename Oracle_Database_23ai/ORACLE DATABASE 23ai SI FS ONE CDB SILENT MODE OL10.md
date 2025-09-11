@@ -305,6 +305,11 @@
     [root@ol1023ai ~]# /u01/app/oraInventory/orainstRoot.sh
     [root@ol1023ai ~]# /u01/app/oracle/product/23.5.0/dbhome_1/root.sh
 
+###### CHANGE CV_ASSUME_DISTID PARAMETER 
+
+    [root@ol1023ai ~]# vi /u01/app/oracle/product/23.7.0/dbhome_1/cv/admin/cvu_config u
+		CV_ASSUME_DISTID=OL9
+
 ###### CREATE dbca.rsp response file
 
 	[oracle@ol1023ai ~]$ vi dbca.rsp
