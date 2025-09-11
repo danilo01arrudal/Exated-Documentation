@@ -23,6 +23,14 @@
     [root@ol9n2 ~]# vi /sys/devices/system/clocksource/clocksource0/current_clocksource
     tsc
 
+###### SET ON /etc/fstab TMPFS PARTITION
+
+    [root@ol9n1 ~]# vi /etc/fstab
+		tmpfs      				  /dev/shm        	  tmpfs   defaults,size=4G	0 0
+ 
+	[root@ol9n2 ~]# vi /etc/fstab
+ 		tmpfs      				  /dev/shm        	  tmpfs   defaults,size=4G	0 0
+
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE HOSTNAME NODE 1)
 
     [root@ol9n1 ~]# hostnamectl set-hostname ol9n1.appsdba.info
