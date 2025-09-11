@@ -9,6 +9,10 @@
     
     [root@exated ~]# virt-install --virt-type kvm --name ol1023ai --memory 8192 --vcpus 2 --os-variant ol10.0 --cdrom /var/lib/libvirt/images/OracleLinux-R10-U0-x86_64-dvd.iso --network bridge=br0,model=virtio --disk path=/var/lib/libvirt/images/ol1023ai.qcow2,size=50
 
+###### UPDATE HOST ENVIRONMENT 
+
+    [root@ ~]# yum update -y 
+
 ###### CONFIGURE HOSTNAME
 
     [root@ ~]# hostnamectl set-hostname ol1023ai
