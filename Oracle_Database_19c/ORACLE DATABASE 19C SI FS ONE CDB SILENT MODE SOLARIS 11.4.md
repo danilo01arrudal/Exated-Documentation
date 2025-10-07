@@ -1,0 +1,559 @@
+**ORACLE DATABASE 19c SI FS ONE CDB SILENT MODE OL7.5**
+
+
+> *The advantages of running Oracle Database 19c Enterprise Edition on Oracle Solaris (especially on SPARC hardware) include deep integration optimizations between the operating system and the database, resulting in improved performance, scalability, security, and overall efficiency..*
+
+![oracle database 19c logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Database_19c/images/oracle_database_19c_logo.png)
+
+###### BUILD VIRTUAL MACHINE ON VIRTUALIZER
+    
+##    [root@exated ~]# virt-install --virt-type kvm --name sol19c --memory 4096 --vcpus 2 --os-variant solaris11 --cdrom /var/lib/libvirt/images/sosol-11_4_81_193_1-ai-x86-iso --network bridge=br0,model=virtio --disk path=/var/lib/libvirt/images/sol19c.qcow2,size=50
+
+###### DEFINE STATIC IP ORACLE SOLARIS 11.4
+
+    [root@ ~]# ipadm create-addr -T static -a local=192.168.1.115/24 net0/v4
+
+###### LIST IPS 
+ipadm show-addr
+ADDROBJ           TYPE     STATE        ADDR
+lo0/v4            static   ok           127.0.0.1/8
+net0/v4           static   ok           192.168.18.115/24
+lo0/v6            static   ok           ::1/128
+net0/v6           addrconf ok           fe80::a00:27ff:fedb:b01b/10
+
+ifconfig net0
+net0: flags=100001000843<UP,BROADCAST,RUNNING,MULTICAST,IPv4,PHYSRUNNING> mtu 1500 index 2
+        inet 192.168.18.115 netmask ffffff00 broadcast 192.168.18d.255
+        ether 8:0:27:db:b0:1b
+
+#CHANGE HOSTNAME SOLARIS
+svccfg -s system/identity:node listprop config
+config                       application
+config/enable_mapping       boolean     true
+config/ignore_dhcp_hostname boolean     false
+config/loopback             astring
+config/nodename             astring     solaris
+
+svccfg -s system/identity:node setprop config/loopback="solaris19c"
+svccfg -s system/identity:node setprop config/nodename="solaris19c"
+svcadm refresh system/identity:node
+svcadm restart system/identity:node
+
+svccfg -s system/identity:node listprop config
+config                       application
+config/enable_mapping       boolean     true
+config/ignore_dhcp_hostname boolean     false
+config/nodename             astring     geekserver
+config/loopback             astring     geekserver
+
+#LOGIN AS ROOT IN SOLARIS WITH PUTTY
+#CHANGE SSHD_CONFIG FILE
+vim /etc/ssh/sshd_config
+PermitRoot yes
+
+#RESTART SERVICE SSHD
+svcadm restart svc:/network/ssh
+
+#CONFIGURE PUBLIC DNS GOOGLE
+svcs -a | grep dns/client
+disabled       22:11:44 svc:/network/dns/client:default
+
+svcadm enable dns/client
+
+svcs -a | grep dns/client
+online         23:14:48 svc:/network/dns/client:default
+
+vi /etc/resolv.conf
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+
+#CONFIGURE IMULTABLE FILE RESOLV.CONF
+chmod S+ci /etc/resolv.conf
+
+#CONFIGURE MULTABLE RESOLV.CONF FILE IF YOU NEED TO MODIFY
+chmod S-ci /etc/resolv.conf
+
+cp /etc/nsswitch.dns /etc/nsswitch.conf
+
+svccfg -s name-service/switch
+svc:/system/name-service/switch> setprop config/host = "files dns"
+svc:/system/name-service/switch> listprop config
+config                     application
+config/default             astring     files
+config/host                astring     "files dns"
+config/value_authorization astring     solaris.smf.value.name-service.switch
+svc:/system/name-service/switch> exit
+svcadm refresh name-service/switch
+
+ nslookup
+> www.google.com
+Server:         8.8.8.8
+Address:        8.8.8.8#53
+
+Non-authoritative answer:
+Name:   www.google.com
+Address: 172.217.29.132
+> exit
+
+#ENABLE ISCSI SOLARIS 11
+svcadm enable network/iscsi/initiator
+
+svcs -a network/iscsi/initiator
+svcs: -a ignored when used with arguments.
+STATE          STIME    FMRI
+online          5:59:57 svc:/network/iscsi/initiator:default
+
+#LIST INITIATOR-NODE
+iscsiadm list initiator-node
+Initiator node name: iqn.1986-03.com.sun:01:94036b4f1ba0.5f4cbc0d
+Initiator node alias: solarisrac1
+        Login Parameters (Default/Configured):
+                Header Digest: NONE/-
+                Data Digest: NONE/-
+                Max Connections: 65535/-
+        Authentication Type: NONE
+        RADIUS Server: NONE
+        RADIUS Access: unknown
+        Tunable Parameters (Default/Configured):
+                Session Login Response Time: 60/-
+                Maximum Connection Retry Time: 180/-
+                Login Retry Time Interval: 60/-
+        Configured Sessions: 1
+
+#CHAP: SET THE SECRET KEY ON THE INITIATOR
+iscsiadm modify initiator-node --CHAP-secret
+Enter secret: CHAPsecret22
+Re-enter secret: CHAPsecret22
+
+#CONFIGURE TARGET
+iscsiadm add static-config iqn.1986-03.com.sun:01:94036b4f1ba0.5f4cbc0d,<$IP>:2360
+iscsiadm list static-config
+iscsiadm modify discovery --static enable
+
+#SOLARIS PREPACKAGE INSTALLATION
+pkg install solaris-minimal-server
+           Packages to install:  1
+       Create boot environment: No
+Create backup boot environment: No
+
+DOWNLOAD                                PKGS         FILES    XFER (MB)   SPEED
+Completed                                1/1           2/2      0.0/0.0  3.3k/s
+
+PHASE                                          ITEMS
+Installing new actions                         25/25
+Updating package state database                 Done
+Updating package cache                           0/0
+Updating image state                            Done
+Creating fast lookup database                   Done
+Updating package cache                           1/1
+
+pkg install group/prerequisite/oracle/oracle-rdbms-server-18c-preinstall
+           Packages to install: 24
+            Services to change:  4
+       Create boot environment: No
+Create backup boot environment: No
+
+DOWNLOAD                                PKGS         FILES    XFER (MB)   SPEED
+Completed                              24/24       486/486  103.9/103.9  435k/s
+
+PHASE                                          ITEMS
+Installing new actions                     1211/1211
+Updating package state database                 Done
+Updating package cache                           0/0
+Updating image state                            Done
+Creating fast lookup database                   Done
+Updating package cache                           1/1
+
+#CONFIGURE USER ORACLE
+groupadd -g 54321 oinstall
+groupadd -g 54322 dba
+groupadd -g 54323 oper
+groupadd -g 54324 backupdba
+groupadd -g 54325 dgdba
+groupadd -g 54326 kmdba
+groupadd -g 54327 asmdba
+groupadd -g 54328 asmoper
+groupadd -g 54329 asmadmin
+groupadd -g 54330 racdba
+useradd -m -u 54331 -g oinstall -G dba,oper,backupdba,dgdba,kmdba,asmdba,asmadmin,racdba -d /export/home/oracle -s /bin/bash  oracle
+useradd -m -u 54332 -g oinstall -G dba,asmadmin,asmdba,asmoper -d /export/home/grid -s /bin/bash  grid
+id oracle
+id grid
+passwd oracle
+passwd grid
+mkdir -p /u01/app/oracle/product/19.5.0/dbhome_1
+chown -R oracle:oinstall /u01
+chmod -R 775 /u01
+
+#RECOMMENDED PARAMETER SETTING
+#REFERENCE 
+https://docs.oracle.com/en/database/oracle/oracle-database/12.2/ssdbi/configuring-kernel-parameters-on-oracle-solaris.html#GUID-93C859CD-DB53-4906-93AB-25E21E0E3E0D
+
+RAM_MB=`prtconf |grep Memory|awk '{print $3}'`
+SHMMAX=`expr $RAM_MB \* 1024 \* 1024 \* 70 / 100`
+echo $SHMMAX
+3006477107
+
+projadd -G oinstall group.oinstall
+projmod -s -K "project.max-sem-ids=(priv,256,deny)" group.oinstall
+projmod -s -K "project.max-shm-ids=(priv,256,deny)" group.oinstall
+projmod -s -K "project.max-sem-nsems=(priv,512,deny)" group.oinstall
+projmod -s -K "project.max-shm-memory=(priv,$SHMMAX,deny)" group.oinstall
+projmod -s -K "process.max-file-descriptor=(priv,655360,deny),(basic,655360,deny)" group.oinstall
+projmod -s -K "process.max-stack-size=(priv,32768KB,deny),(basic,10240KB,deny)" group.oinstall
+
+projects -l group.oinstall
+	group.oinstall
+			projid : 100
+			comment: ""
+			users  : (none)
+			groups : oinstall
+			attribs: process.max-file-descriptor=(priv,655360,deny),(basic,655360,deny)
+					process.max-stack-size=(priv,33554432,deny),(basic,10485760,deny)
+					project.max-sem-ids=(priv,256,deny)
+					project.max-sem-nsems=(priv,512,deny)
+					project.max-shm-ids=(priv,256,deny)
+					project.max-shm-memory=(priv,3006477107,deny)
+
+echo "set max_nprocs = 65536" >> /etc/system
+echo "user_reserve_hint_pct = 70" >> /etc/system
+echo "set maxusers=4096" >> /etc/system
+
+vim /etc/inittab
+dev::sysinit:/usr/sbin/devfsadm -P
+ap::sysinit:/usr/sbin/autopush -f /etc/iu.ap
+tm::sysinit:/usr/sbin/ndd -set /dev/tcp tcp_smallest_anon_port 9000 > /dev/console
+tm::sysinit:/usr/sbin/ndd -set /dev/tcp tcp_largest_anon_port 65500 > /dev/console
+tm::sysinit:/usr/sbin/ndd -set /dev/udp udp_smallest_anon_port 9000 > /dev/console
+tm::sysinit:/usr/sbin/ndd -set /dev/udp udp_largest_anon_port 65500 > /dev/console
+smf::sysinit:/lib/svc/bin/svc.startd >/dev/msglog 2<>/dev/msglog </dev/console
+p3:s1234:powerfail:/usr/sbin/shutdown -y -i5 -g0 >/dev/msglog 2<>/dev/msglog
+
+#REBOOT MACHINE
+reboot
+
+#CONFIGURE ORACLE_HOME ENVIRONMENTS
+su - oracle
+mkdir /export/home/oracle/scripts
+
+cat > /export/home/oracle/scripts/setEnv.sh <<EOF
+# Oracle Settings
+export TMP=/tmp
+export TMPDIR=\$TMP
+
+export ORACLE_HOSTNAME=solaris19c
+export ORACLE_UNQNAME=appscdb
+export ORACLE_BASE=/u01/app/oracle
+export ORACLE_HOME=\$ORACLE_BASE/product/19.5.0/dbhome_1
+export ORA_INVENTORY=/u01/app/oraInventory
+export ORACLE_SID=appscdb1
+
+export PATH=/usr/sbin:/usr/local/bin:\$PATH
+export PATH=\$ORACLE_HOME/bin:\$PATH
+
+export LD_LIBRARY_PATH=\$ORACLE_HOME/lib:/lib:/usr/lib
+export CLASSPATH=\$ORACLE_HOME/jlib:\$ORACLE_HOME/rdbms/jlib
+EOF
+
+echo ". /export/home/oracle/scripts/setEnv.sh" >> .profile
+
+cat > /export/home/oracle/scripts/start_all.sh <<EOF
+#!/bin/bash
+. scripts/setEnv.sh
+
+export ORAENV_ASK=NO
+. oraenv
+export ORAENV_ASK=YES
+
+dbstart \$ORACLE_HOME
+EOF
+
+cat > /export/home/oracle/scripts/stop_all.sh <<EOF
+#!/bin/bash
+. scripts/setEnv.sh
+
+export ORAENV_ASK=NO
+. oraenv
+export ORAENV_ASK=YES
+
+dbshut \$ORACLE_HOME
+EOF
+
+chown -R oracle:oinstall scripts
+chmod u+x /export/home/oracle/scripts/*.sh
+
+#DOWNLOAD ORACLE DATABASE 19.5c FOR SOLARIS
+wget https://download.oracle.com/otn/solaris/oracle19c/195000/SOLARIS.X64_195000_db_home.zip?AuthParam=1597623719_1c94053516fa8179fde7fe1c8e4caada
+mv SOLARIS.X64_195000_db_home.zip $ORACLE_HOME/LINUX.X64_193000_db_home.zip
+cd $ORACLE_HOME
+unzip -oq SOLARIS.X64_195000_db_home.zip
+
+#CREATE db_install.rsp INSTALL RESPONSE FILE
+vi /export/home/oracle/db_install.rsp
+oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v19.0.0
+oracle.install.option=INSTALL_DB_SWONLY
+UNIX_GROUP_NAME=oinstall
+INVENTORY_LOCATION=/u01/app/oraInventory
+ORACLE_HOME=/u01/app/oracle/product/19.5.0/dbhome_1
+ORACLE_BASE=/u01/app/oracle
+oracle.install.db.InstallEdition=EE
+oracle.install.db.OSDBA_GROUP=dba
+oracle.install.db.OSOPER_GROUP=oinstall
+oracle.install.db.OSBACKUPDBA_GROUP=backupdba
+oracle.install.db.OSDGDBA_GROUP=dgdba
+oracle.install.db.OSKMDBA_GROUP=kmdba
+oracle.install.db.OSRACDBA_GROUP=racdba
+oracle.install.db.rootconfig.executeRootScript=false
+oracle.install.db.rootconfig.configMethod=
+oracle.install.db.rootconfig.sudoPath=
+oracle.install.db.rootconfig.sudoUserName=
+oracle.install.db.CLUSTER_NODES=
+oracle.install.db.config.starterdb.type=GENERAL_PURPOSE
+oracle.install.db.config.starterdb.globalDBName=
+oracle.install.db.config.starterdb.SID=
+oracle.install.db.ConfigureAsContainerDB=false
+oracle.install.db.config.PDBName=
+oracle.install.db.config.starterdb.characterSet=
+oracle.install.db.config.starterdb.memoryOption=false
+oracle.install.db.config.starterdb.memoryLimit=
+oracle.install.db.config.starterdb.installExampleSchemas=false
+oracle.install.db.config.starterdb.password.ALL=
+oracle.install.db.config.starterdb.password.SYS=
+oracle.install.db.config.starterdb.password.SYSTEM=
+oracle.install.db.config.starterdb.password.DBSNMP=
+oracle.install.db.config.starterdb.password.PDBADMIN=
+oracle.install.db.config.starterdb.managementOption=DEFAULT
+oracle.install.db.config.starterdb.omsHost=
+oracle.install.db.config.starterdb.omsPort=0
+oracle.install.db.config.starterdb.emAdminUser=
+oracle.install.db.config.starterdb.emAdminPassword=
+oracle.install.db.config.starterdb.enableRecovery=false
+oracle.install.db.config.starterdb.storageType=
+oracle.install.db.config.starterdb.fileSystemStorage.dataLocation=
+oracle.install.db.config.starterdb.fileSystemStorage.recoveryLocation=
+oracle.install.db.config.asm.diskGroup=
+oracle.install.db.config.asm.ASMSNMPPassword=
+
+cd $ORACLE_HOME
+./runInstaller -silent -responseFile /export/home/oracle/db_install.rsp
+
+Launching Oracle Database Setup Wizard...
+
+[WARNING] [INS-13014] Target environment does not meet some optional requirements.
+   CAUSE: Some of the optional prerequisites are not met. See logs for details. installActions2020-08-17_11-38-46AM.log
+   ACTION: Identify the list of failed prerequisite checks from the log: installActions2020-08-17_11-38-46AM.log. Then either from the log file or from installation manual find the appropriate configuration to meet the prerequisites and fix it manually.
+The response file for this session can be found at:
+ /u01/app/oracle/product/19.5.0/dbhome_1/install/response/db_2020-08-17_11-38-46AM.rsp
+
+You can find the log of this install session at:
+ /tmp/InstallActions2020-08-17_11-38-46AM/installActions2020-08-17_11-38-46AM.log
+
+As a root user, execute the following script(s):
+        1. /u01/app/oraInventory/orainstRoot.sh
+        2. /u01/app/oracle/product/19.5.0/dbhome_1/root.sh
+
+Successfully Setup Software with warning(s).
+Moved the install session logs to:
+/u01/app/oraInventory/logs/InstallActions2020-08-17_11-38-46AM
+
+exit
+/u01/app/oraInventory/orainstRoot.sh
+Changing permissions of /u01/app/oraInventory.
+Adding read,write permissions for group.
+Removing read,write,execute permissions for world.
+Changing groupname of /u01/app/oraInventory to oinstall.
+The execution of the script is complete.
+
+/u01/app/oracle/product/19.5.0/dbhome_1/root.sh
+Check /u01/app/oracle/product/19.5.0/dbhome_1/install/root_solaris_2020-08-17_11-43-55-523355459.log for the output of root script
+
+#CREATE dbca.rsp response file
+vi /export/home/oracle/dbca.rsp
+responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v12.2.0
+gdbName=appscdb
+sid=appscdb1
+databaseConfigType=SI
+RACOneNodeServiceName=
+policyManaged=false
+createServerPool=false
+serverPoolName=
+cardinality=
+force=false
+pqPoolName=
+pqCardinality=
+createAsContainerDatabase=true
+numberOfPDBs=1
+pdbName=appspdb
+useLocalUndoForPDBs=true
+pdbAdminPassword=
+nodelist=
+templateName=/u01/app/oracle/product/19.5.0/dbhome_1/assistants/dbca/templates/General_Purpose.dbc
+sysPassword=
+systemPassword= 
+serviceUserPassword=
+emConfiguration=
+emExpressPort=5500
+runCVUChecks=FALSE
+dbsnmpPassword=
+omsHost=
+omsPort=0
+emUser=
+emPassword=
+dvConfiguration=false
+dvUserName=
+dvUserPassword=
+dvAccountManagerName=
+dvAccountManagerPassword=
+olsConfiguration=false
+datafileJarLocation={ORACLE_HOME}/assistants/dbca/templates/
+datafileDestination={ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/
+recoveryAreaDestination={ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME}
+storageType=FS
+diskGroupName=
+asmsnmpPassword=
+recoveryGroupName=
+characterSet=AL32UTF8
+nationalCharacterSet=AL16UTF16
+registerWithDirService=false
+dirServiceUserName=
+dirServicePassword=
+walletPassword=
+listeners=
+variablesFile=
+variables=ORACLE_BASE_HOME=/u01/app/oracle/product/19.5.0/dbhome_1,DB_UNIQUE_NAME=appscdb,ORACLE_BASE=/u01/app/oracle,PDB_NAME=,DB_NAME=appscdb,ORACLE_HOME=/u01/app/oracle/product/19.5.0/dbhome_1,SID=appscdb1
+initParams=undo_tablespace=UNDOTBS1,sga_target=2047MB,db_block_size=8192BYTES,log_archive_dest_1='LOCATION={ORACLE_BASE}/oradata/archivelog/',nls_language=AMERICAN,dispatchers=(PROTOCOL=TCP) (SERVICE=appscdb1XDB),diagnostic_dest={ORACLE_BASE},control_files=("{ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/control01.ctl", "{ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME}/control02.ctl"),remote_login_passwordfile=EXCLUSIVE,audit_file_dest={ORACLE_BASE}/admin/{DB_UNIQUE_NAME}/adump,processes=600,pga_aggregate_target=683MB,nls_territory=AMERICA,db_recovery_file_dest_size=12732MB,open_cursors=300,log_archive_format=%t_%s_%r.dbf,compatible=19.0.0,db_name=appscdb,db_recovery_file_dest={ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME},audit_trail=db
+sampleSchema=false
+memoryPercentage=40
+databaseType=MULTIPURPOSE
+automaticMemoryManagement=false
+totalMemory=0
+
+#CREATE netca.rsp response file
+vi /export/home/oracle/netca.rsp
+[GENERAL]
+RESPONSEFILE_VERSION="19.0"
+CREATE_TYPE="CUSTOM"
+INSTALLED_COMPONENTS={"server","net8","javavm"}
+INSTALL_TYPE=""typical""
+LISTENER_NUMBER=1
+LISTENER_NAMES={"LISTENER"}
+LISTENER_START=""LISTENER""
+NAMING_METHODS={"TNSNAMES","ONAMES","HOSTNAME"}
+NSN_NUMBER=1
+NSN_NAMES={"EXTPROC_CONNECTION_DATA"}
+NSN_SERVICE={"PLSExtProc"}
+NSN_SERVICE={"PLSExtProc"}
+NSN_PROTOCOLS={"TCP;HOSTNAME;1521"}
+
+#CREATE DATABASE 
+dbca -silent -createDatabase -responseFile /export/home/oracle/dbca.rsp
+Enter SYS user password: 
+
+Enter SYSTEM user password: 
+
+Enter PDBADMIN User Password: 
+
+[WARNING] [DBT-06208] The 'SYS' password entered does not conform to the Oracle recommended standards.
+   CAUSE: 
+a. Oracle recommends that the password entered should be at least 8 characters in length, contain at least 1 uppercase character, 1 lower case character and 1 digit [0-9].
+b.The password entered is a keyword that Oracle does not recommend to be used as password
+   ACTION: Specify a strong password. If required refer Oracle documentation for guidelines.
+[WARNING] [DBT-06208] The 'SYSTEM' password entered does not conform to the Oracle recommended standards.
+   CAUSE: 
+a. Oracle recommends that the password entered should be at least 8 characters in length, contain at least 1 uppercase character, 1 lower case character and 1 digit [0-9].
+b.The password entered is a keyword that Oracle does not recommend to be used as password
+   ACTION: Specify a strong password. If required refer Oracle documentation for guidelines.
+[WARNING] [DBT-06208] The 'PDBADMIN' password entered does not conform to the Oracle recommended standards.
+   CAUSE: 
+a. Oracle recommends that the password entered should be at least 8 characters in length, contain at least 1 uppercase character, 1 lower case character and 1 digit [0-9].
+b.The password entered is a keyword that Oracle does not recommend to be used as password
+   ACTION: Specify a strong password. If required refer Oracle documentation for guidelines.
+Prepare for db operation
+8% complete
+Copying database files
+31% complete
+Creating and starting Oracle instance
+32% complete
+36% complete
+40% complete
+43% complete
+46% complete
+Completing Database Creation
+51% complete
+53% complete
+54% complete
+Creating Pluggable Databases
+58% complete
+77% complete
+Executing Post Configuration Actions
+100% complete
+Database creation complete. For details check the logfiles at:
+ /u01/app/oracle/cfgtoollogs/dbca/appscdb.
+Database Information:
+Global Database Name:appscdb
+System Identifier(SID):appscdb1
+Look at the log file "/u01/app/oracle/cfgtoollogs/dbca/appscdb/appscdb.log" for further details.
+
+#CREATE LISTENER
+netca -silent -responsefile /export/home/oracle/netca.rsp
+
+Parsing command line arguments:
+    Parameter "silent" = true
+    Parameter "responsefile" = /export/home/oracle/netca.rsp
+Done parsing command line arguments.
+Oracle Net Services Configuration:
+Profile configuration complete.
+Oracle Net Services configuration successful. The exit code is 0
+
+#START LISTENER
+lsnrctl start
+
+#CONNECT TO DATABASE
+sqlplus / as sysdba
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Aug 17 14:06:07 2020
+Version 19.5.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.5.0.0.0
+
+SQL> select name, open_mode from v$pdbs;
+
+NAME                                                                            OPEN_MODE
+------------------------------------------------------------------------------- ----------
+PDB$SEED                                                                        READ ONLY
+APPSPDB                                                                         READ WRITE
+
+SQL> exit
+
+#PLUGGABLE DATABASE (PDB) AUTOMATIC STARTUP
+sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Tue Feb 2 18:16:16 2021
+Version 19.5.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> CREATE OR REPLACE TRIGGER open_pdbs 
+  AFTER STARTUP ON DATABASE 
+BEGIN 
+   EXECUTE IMMEDIATE 'ALTER PLUGGABLE DATABASE ALL OPEN'; 
+END open_pdbs;
+/
+
+Trigger created.
+
+SQL> exit
+
+
+
+
+
