@@ -1,4 +1,4 @@
-**ORACLE DATABASE 19c SI FS ONE CDB SILENT MODE OL7.5**
+**ORACLE DATABASE 19C SI FS ONE CDB SILENT MODE SOLARIS 11.4**
 
 
 > *The advantages of running Oracle Database 19c Enterprise Edition on Oracle Solaris (especially on SPARC hardware) include deep integration optimizations between the operating system and the database,*
