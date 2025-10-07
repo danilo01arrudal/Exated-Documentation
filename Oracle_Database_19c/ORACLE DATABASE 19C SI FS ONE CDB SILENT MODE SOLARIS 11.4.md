@@ -1,13 +1,14 @@
 **ORACLE DATABASE 19c SI FS ONE CDB SILENT MODE OL7.5**
 
 
-> *The advantages of running Oracle Database 19c Enterprise Edition on Oracle Solaris (especially on SPARC hardware) include deep integration optimizations between the operating system and the database, resulting in improved performance, scalability, security, and overall efficiency..*
+> *The advantages of running Oracle Database 19c Enterprise Edition on Oracle Solaris (especially on SPARC hardware) include deep integration optimizations between the operating system and the database,*
+> *resulting in improved performance, scalability, security, and overall efficiency..*
 
 ![oracle database 19c logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Database_19c/images/oracle_database_19c_logo.png)
 
 ###### BUILD VIRTUAL MACHINE ON VIRTUALIZER
     
-##    [root@exated ~]# virt-install --virt-type kvm --name sol19c --memory 4096 --vcpus 2 --os-variant solaris11 --cdrom /var/lib/libvirt/images/sosol-11_4_81_193_1-ai-x86-iso --network bridge=br0,model=virtio --disk path=/var/lib/libvirt/images/sol19c.qcow2,size=50
+    [root@exated ~]# virt-install --virt-type kvm --name sol19c --memory 4096 --vcpus 2 --os-variant solaris11 --cdrom /var/lib/libvirt/images/sosol-11_4_81_193_1-ai-x86-iso --network bridge=br0,model=virtio --disk path=/var/lib/libvirt/images/sol19c.qcow2,size=50
 
 ###### DEFINE STATIC IP ORACLE SOLARIS 11.4
 
