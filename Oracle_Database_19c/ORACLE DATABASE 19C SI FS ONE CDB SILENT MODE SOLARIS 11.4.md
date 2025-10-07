@@ -12,35 +12,35 @@
 
 ###### DEFINE STATIC IP ORACLE SOLARIS 11.4
 
-    [root@ ~]# ipadm create-addr -T static -a local=192.168.1.115/24 net0/v4
+    [root@solaris19c ~]# ipadm create-addr -T static -a local=192.168.1.115/24 net0/v4
 
 ###### LIST IP
-    [root@ ~]# ipadm show-addr
+    [root@solaris19c ~]# ipadm show-addr
 		ADDROBJ           TYPE     STATE        ADDR
 		lo0/v4            static   ok           127.0.0.1/8
 		net0/v4           static   ok           192.168.18.115/24
 		lo0/v6            static   ok           ::1/128
 		net0/v6           addrconf ok           fe80::a00:27ff:fedb:b01b/10
 
-    [root@ ~]# ifconfig net0
+    [root@solaris19c ~]# ifconfig net0
 		net0: flags=100001000843<UP,BROADCAST,RUNNING,MULTICAST,IPv4,PHYSRUNNING> mtu 1500 index 2
         	inet 192.168.18.115 netmask ffffff00 broadcast 192.168.18d.255
         	ether 8:0:27:db:b0:1b
 
 ###### CHANGE HOSTNAME SOLARIS
-    [root@ ~]# svccfg -s system/identity:node listprop config
+    [root@solaris19c ~]# svccfg -s system/identity:node listprop config
 		config                       application
 		config/enable_mapping       boolean     true
 		config/ignore_dhcp_hostname boolean     false
 		config/loopback             astring
 		config/nodename             astring     solaris
 
-    [root@ ~]# svccfg -s system/identity:node setprop config/loopback="solaris19c"
-    [root@ ~]# svccfg -s system/identity:node setprop config/nodename="solaris19c"
-    [root@ ~]# svcadm refresh system/identity:node
-    [root@ ~]# svcadm restart system/identity:node
+    [root@solaris19c ~]# svccfg -s system/identity:node setprop config/loopback="solaris19c"
+    [root@solaris19c ~]# svccfg -s system/identity:node setprop config/nodename="solaris19c"
+    [root@solaris19c ~]# svcadm refresh system/identity:node
+    [root@solaris19c ~]# svcadm restart system/identity:node
 
-    [root@ ~]# svccfg -s system/identity:node listprop config
+    [root@solaris19c ~]# svccfg -s system/identity:node listprop config
 		config                       application
 		config/enable_mapping       boolean     true
 		config/ignore_dhcp_hostname boolean     false
@@ -48,22 +48,22 @@
 		config/loopback             astring     geekserver
 
 ###### LOGIN AS ROOT IN SOLARIS WITH PUTTY AND CHANGE SSHD_CONFIG FILE
-    [root@ ~]# vim /etc/ssh/sshd_config
+    [root@solaris19c ~]# vim /etc/ssh/sshd_config
 		PermitRoot yes
 
 ###### RESTART SERVICE SSHD
-    [root@ ~]# svcadm restart svc:/network/ssh
+    [root@solaris19c ~]# svcadm restart svc:/network/ssh
 
 ###### CONFIGURE PUBLIC DNS GOOGLE
-    [root@ ~]# svcs -a | grep dns/client
+    [root@solaris19c ~]# svcs -a | grep dns/client
 		disabled       22:11:44 svc:/network/dns/client:default
 
-    [root@ ~]# svcadm enable dns/client
+    [root@solaris19c ~]# svcadm enable dns/client
 
-    [root@ ~]# svcs -a | grep dns/client
+    [root@solaris19c ~]# svcs -a | grep dns/client
 		online         23:14:48 svc:/network/dns/client:default
 
-    [root@ ~]# vi /etc/resolv.conf
+    [root@solaris19c ~]# vi /etc/resolv.conf
 		nameserver 8.8.8.8
 		nameserver 8.8.4.4
 
