@@ -14,7 +14,7 @@
 
     [root@ ~]# ipadm create-addr -T static -a local=192.168.1.115/24 net0/v4
 
-###### LIST IPS 
+###### LIST IP
     [root@ ~]# ipadm show-addr
 		ADDROBJ           TYPE     STATE        ADDR
 		lo0/v4            static   ok           127.0.0.1/8
