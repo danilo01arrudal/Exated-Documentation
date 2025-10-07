@@ -35,38 +35,37 @@
 		config/loopback             astring
 		config/nodename             astring     solaris
 
-svccfg -s system/identity:node setprop config/loopback="solaris19c"
-svccfg -s system/identity:node setprop config/nodename="solaris19c"
-svcadm refresh system/identity:node
-svcadm restart system/identity:node
+    [root@ ~]# svccfg -s system/identity:node setprop config/loopback="solaris19c"
+    [root@ ~]# svccfg -s system/identity:node setprop config/nodename="solaris19c"
+    [root@ ~]# svcadm refresh system/identity:node
+    [root@ ~]# svcadm restart system/identity:node
 
-svccfg -s system/identity:node listprop config
-config                       application
-config/enable_mapping       boolean     true
-config/ignore_dhcp_hostname boolean     false
-config/nodename             astring     geekserver
-config/loopback             astring     geekserver
+    [root@ ~]# svccfg -s system/identity:node listprop config
+		config                       application
+		config/enable_mapping       boolean     true
+		config/ignore_dhcp_hostname boolean     false
+		config/nodename             astring     geekserver
+		config/loopback             astring     geekserver
 
-#LOGIN AS ROOT IN SOLARIS WITH PUTTY
-#CHANGE SSHD_CONFIG FILE
-vim /etc/ssh/sshd_config
-PermitRoot yes
+###### LOGIN AS ROOT IN SOLARIS WITH PUTTY AND CHANGE SSHD_CONFIG FILE
+    [root@ ~]# vim /etc/ssh/sshd_config
+		PermitRoot yes
 
-#RESTART SERVICE SSHD
-svcadm restart svc:/network/ssh
+###### RESTART SERVICE SSHD
+    [root@ ~]# svcadm restart svc:/network/ssh
 
-#CONFIGURE PUBLIC DNS GOOGLE
-svcs -a | grep dns/client
-disabled       22:11:44 svc:/network/dns/client:default
+###### CONFIGURE PUBLIC DNS GOOGLE
+    [root@ ~]# svcs -a | grep dns/client
+		disabled       22:11:44 svc:/network/dns/client:default
 
-svcadm enable dns/client
+    [root@ ~]# svcadm enable dns/client
 
-svcs -a | grep dns/client
-online         23:14:48 svc:/network/dns/client:default
+    [root@ ~]# svcs -a | grep dns/client
+		online         23:14:48 svc:/network/dns/client:default
 
-vi /etc/resolv.conf
-nameserver 8.8.8.8
-nameserver 8.8.4.4
+    [root@ ~]# vi /etc/resolv.conf
+		nameserver 8.8.8.8
+		nameserver 8.8.4.4
 
 #CONFIGURE IMULTABLE FILE RESOLV.CONF
 chmod S+ci /etc/resolv.conf
