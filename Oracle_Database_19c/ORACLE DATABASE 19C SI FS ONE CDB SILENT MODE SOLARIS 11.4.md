@@ -67,46 +67,50 @@
 		nameserver 8.8.8.8
 		nameserver 8.8.4.4
 
-#CONFIGURE IMULTABLE FILE RESOLV.CONF
-chmod S+ci /etc/resolv.conf
+###### CONFIGURE IMULTABLE FILE RESOLV.CONF
+    [root@solaris19c ~]# chmod S+ci /etc/resolv.conf
 
-#CONFIGURE MULTABLE RESOLV.CONF FILE IF YOU NEED TO MODIFY
-chmod S-ci /etc/resolv.conf
+###### CONFIGURE MULTABLE RESOLV.CONF FILE IF YOU NEED TO MODIFY
+    
+	[root@solaris19c ~]# chmod S-ci /etc/resolv.conf
 
-cp /etc/nsswitch.dns /etc/nsswitch.conf
+    [root@solaris19c ~]# cp /etc/nsswitch.dns /etc/nsswitch.conf
 
-svccfg -s name-service/switch
-svc:/system/name-service/switch> setprop config/host = "files dns"
-svc:/system/name-service/switch> listprop config
-config                     application
-config/default             astring     files
-config/host                astring     "files dns"
-config/value_authorization astring     solaris.smf.value.name-service.switch
-svc:/system/name-service/switch> exit
-svcadm refresh name-service/switch
+    [root@solaris19c ~]# svccfg -s name-service/switch
+		svc:/system/name-service/switch> setprop config/host = "files dns"
+		svc:/system/name-service/switch> listprop config
+		config                     application
+		config/default             astring     files
+		config/host                astring     "files dns"
+		config/value_authorization astring     solaris.smf.value.name-service.switch
+		svc:/system/name-service/switch> exit
+    
+	[root@solaris19c ~]# svcadm refresh name-service/switch
 
- nslookup
-> www.google.com
-Server:         8.8.8.8
-Address:        8.8.8.8#53
+    [root@solaris19c ~]# nslookup
+		> www.google.com
+		Server:         8.8.8.8
+		Address:        8.8.8.8#53
 
-Non-authoritative answer:
-Name:   www.google.com
-Address: 172.217.29.132
-> exit
+		Non-authoritative answer:
+		Name:   www.google.com
+		Address: 172.217.29.132
+		> exit
 
-#ENABLE ISCSI SOLARIS 11
-svcadm enable network/iscsi/initiator
+###### ENABLE ISCSI SOLARIS 11
+    
+	[root@solaris19c ~]# svcadm enable network/iscsi/initiator
 
-svcs -a network/iscsi/initiator
-svcs: -a ignored when used with arguments.
-STATE          STIME    FMRI
-online          5:59:57 svc:/network/iscsi/initiator:default
+    [root@solaris19c ~]# svcs -a network/iscsi/initiator
+    [root@solaris19c ~]# svcs: -a ignored when used with arguments.
+		STATE          STIME    FMRI
+		online          5:59:57 svc:/network/iscsi/initiator:default
 
-#LIST INITIATOR-NODE
-iscsiadm list initiator-node
-Initiator node name: iqn.1986-03.com.sun:01:94036b4f1ba0.5f4cbc0d
-Initiator node alias: solarisrac1
+###### LIST INITIATOR-NODE
+    
+	[root@solaris19c ~]# iscsiadm list initiator-node
+		Initiator node name: iqn.1986-03.com.sun:01:94036b4f1ba0.5f4cbc0d
+		Initiator node alias: solarisrac1
         Login Parameters (Default/Configured):
                 Header Digest: NONE/-
                 Data Digest: NONE/-
@@ -120,90 +124,94 @@ Initiator node alias: solarisrac1
                 Login Retry Time Interval: 60/-
         Configured Sessions: 1
 
-#CHAP: SET THE SECRET KEY ON THE INITIATOR
-iscsiadm modify initiator-node --CHAP-secret
-Enter secret: CHAPsecret22
-Re-enter secret: CHAPsecret22
+###### CHAP: SET THE SECRET KEY ON THE INITIATOR
 
-#CONFIGURE TARGET
-iscsiadm add static-config iqn.1986-03.com.sun:01:94036b4f1ba0.5f4cbc0d,<$IP>:2360
-iscsiadm list static-config
-iscsiadm modify discovery --static enable
+    [root@solaris19c ~]# iscsiadm modify initiator-node --CHAP-secret
+		Enter secret: CHAPsecret22
+		Re-enter secret: CHAPsecret22
 
-#SOLARIS PREPACKAGE INSTALLATION
-pkg install solaris-minimal-server
-           Packages to install:  1
-       Create boot environment: No
-Create backup boot environment: No
+###### CONFIGURE TARGET
+	
+    [root@solaris19c ~]# iscsiadm add static-config iqn.1986-03.com.sun:01:94036b4f1ba0.5f4cbc0d,<$IP>:2360
+    [root@solaris19c ~]# iscsiadm list static-config
+    [root@solaris19c ~]# iscsiadm modify discovery --static enable
 
-DOWNLOAD                                PKGS         FILES    XFER (MB)   SPEED
-Completed                                1/1           2/2      0.0/0.0  3.3k/s
+###### SOLARIS PREPACKAGE INSTALLATION
+    
+	[root@solaris19c ~]# pkg install solaris-minimal-server
+           		Packages to install:  1
+       		Create boot environment: No
+		Create backup boot environment: No
 
-PHASE                                          ITEMS
-Installing new actions                         25/25
-Updating package state database                 Done
-Updating package cache                           0/0
-Updating image state                            Done
-Creating fast lookup database                   Done
-Updating package cache                           1/1
+		DOWNLOAD                                PKGS         FILES    XFER (MB)   SPEED
+		Completed                                1/1           2/2      0.0/0.0  3.3k/s
 
-pkg install group/prerequisite/oracle/oracle-rdbms-server-18c-preinstall
-           Packages to install: 24
-            Services to change:  4
-       Create boot environment: No
-Create backup boot environment: No
+		PHASE                                          ITEMS
+		Installing new actions                         25/25
+		Updating package state database                 Done
+		Updating package cache                           0/0
+		Updating image state                            Done
+		Creating fast lookup database                   Done
+		Updating package cache                           1/1
 
-DOWNLOAD                                PKGS         FILES    XFER (MB)   SPEED
-Completed                              24/24       486/486  103.9/103.9  435k/s
+    [root@solaris19c ~]# pkg install group/prerequisite/oracle/oracle-rdbms-server-18c-preinstall
+           		Packages to install: 24
+            	Services to change:  4
+       		Create boot environment: No
+		Create backup boot environment: No
 
-PHASE                                          ITEMS
-Installing new actions                     1211/1211
-Updating package state database                 Done
-Updating package cache                           0/0
-Updating image state                            Done
-Creating fast lookup database                   Done
-Updating package cache                           1/1
+		DOWNLOAD                                PKGS         FILES    XFER (MB)   SPEED
+		Completed                              24/24       486/486  103.9/103.9  435k/s
 
-#CONFIGURE USER ORACLE
-groupadd -g 54321 oinstall
-groupadd -g 54322 dba
-groupadd -g 54323 oper
-groupadd -g 54324 backupdba
-groupadd -g 54325 dgdba
-groupadd -g 54326 kmdba
-groupadd -g 54327 asmdba
-groupadd -g 54328 asmoper
-groupadd -g 54329 asmadmin
-groupadd -g 54330 racdba
-useradd -m -u 54331 -g oinstall -G dba,oper,backupdba,dgdba,kmdba,asmdba,asmadmin,racdba -d /export/home/oracle -s /bin/bash  oracle
-useradd -m -u 54332 -g oinstall -G dba,asmadmin,asmdba,asmoper -d /export/home/grid -s /bin/bash  grid
-id oracle
-id grid
-passwd oracle
-passwd grid
-mkdir -p /u01/app/oracle/product/19.5.0/dbhome_1
-chown -R oracle:oinstall /u01
-chmod -R 775 /u01
+		PHASE                                          ITEMS
+		Installing new actions                     1211/1211
+		Updating package state database                 Done
+		Updating package cache                           0/0
+		Updating image state                            Done
+		Creating fast lookup database                   Done
+		Updating package cache                           1/1
 
-#RECOMMENDED PARAMETER SETTING
-#REFERENCE 
-https://docs.oracle.com/en/database/oracle/oracle-database/12.2/ssdbi/configuring-kernel-parameters-on-oracle-solaris.html#GUID-93C859CD-DB53-4906-93AB-25E21E0E3E0D
+###### CONFIGURE USER ORACLE
 
-RAM_MB=`prtconf |grep Memory|awk '{print $3}'`
-SHMMAX=`expr $RAM_MB \* 1024 \* 1024 \* 70 / 100`
-echo $SHMMAX
-3006477107
+    [root@solaris19c ~]# groupadd -g 54321 oinstall
+    [root@solaris19c ~]# groupadd -g 54322 dba
+    [root@solaris19c ~]# groupadd -g 54323 oper
+    [root@solaris19c ~]# groupadd -g 54324 backupdba
+    [root@solaris19c ~]# groupadd -g 54325 dgdba
+    [root@solaris19c ~]# groupadd -g 54326 kmdba
+    [root@solaris19c ~]# groupadd -g 54327 asmdba
+    [root@solaris19c ~]# groupadd -g 54328 asmoper
+    [root@solaris19c ~]# groupadd -g 54329 asmadmin
+    [root@solaris19c ~]# groupadd -g 54330 racdba
+    [root@solaris19c ~]# useradd -m -u 54331 -g oinstall -G dba,oper,backupdba,dgdba,kmdba,asmdba,asmadmin,racdba -d /export/home/oracle -s /bin/bash  oracle
+    [root@solaris19c ~]# useradd -m -u 54332 -g oinstall -G dba,asmadmin,asmdba,asmoper -d /export/home/grid -s /bin/bash  grid
+    [root@solaris19c ~]# id oracle
+    [root@solaris19c ~]# id grid
+    [root@solaris19c ~]# passwd oracle
+    [root@solaris19c ~]# passwd grid
+    [root@solaris19c ~]# mkdir -p /u01/app/oracle/product/19.5.0/dbhome_1
+    [root@solaris19c ~]# chown -R oracle:oinstall /u01
+    [root@solaris19c ~]# chmod -R 775 /u01
 
-projadd -G oinstall group.oinstall
-projmod -s -K "project.max-sem-ids=(priv,256,deny)" group.oinstall
-projmod -s -K "project.max-shm-ids=(priv,256,deny)" group.oinstall
-projmod -s -K "project.max-sem-nsems=(priv,512,deny)" group.oinstall
-projmod -s -K "project.max-shm-memory=(priv,$SHMMAX,deny)" group.oinstall
-projmod -s -K "process.max-file-descriptor=(priv,655360,deny),(basic,655360,deny)" group.oinstall
-projmod -s -K "process.max-stack-size=(priv,32768KB,deny),(basic,10240KB,deny)" group.oinstall
+###### RECOMMENDED PARAMETER SETTING
+	
+	https://docs.oracle.com/en/database/oracle/oracle-database/12.2/ssdbi/configuring-kernel-parameters-on-oracle-solaris.html#GUID-93C859CD-DB53-4906-93AB-25E21E0E3E0D
 
-projects -l group.oinstall
-	group.oinstall
+    [root@solaris19c ~]# RAM_MB=`prtconf |grep Memory|awk '{print $3}'`
+    [root@solaris19c ~]# SHMMAX=`expr $RAM_MB \* 1024 \* 1024 \* 70 / 100`
+    [root@solaris19c ~]# echo $SHMMAX
+		3006477107
+
+    [root@solaris19c ~]# projadd -G oinstall group.oinstall
+    [root@solaris19c ~]# projmod -s -K "project.max-sem-ids=(priv,256,deny)" group.oinstall
+    [root@solaris19c ~]# projmod -s -K "project.max-shm-ids=(priv,256,deny)" group.oinstall
+    [root@solaris19c ~]# projmod -s -K "project.max-sem-nsems=(priv,512,deny)" group.oinstall
+    [root@solaris19c ~]# projmod -s -K "project.max-shm-memory=(priv,$SHMMAX,deny)" group.oinstall
+    [root@solaris19c ~]# projmod -s -K "process.max-file-descriptor=(priv,655360,deny),(basic,655360,deny)" group.oinstall
+    [root@solaris19c ~]# projmod -s -K "process.max-stack-size=(priv,32768KB,deny),(basic,10240KB,deny)" group.oinstall
+
+    [root@solaris19c ~]# projects -l group.oinstall
+		group.oinstall
 			projid : 100
 			comment: ""
 			users  : (none)
@@ -215,25 +223,27 @@ projects -l group.oinstall
 					project.max-shm-ids=(priv,256,deny)
 					project.max-shm-memory=(priv,3006477107,deny)
 
-echo "set max_nprocs = 65536" >> /etc/system
-echo "user_reserve_hint_pct = 70" >> /etc/system
-echo "set maxusers=4096" >> /etc/system
+    [root@solaris19c ~]# echo "set max_nprocs = 65536" >> /etc/system
+    [root@solaris19c ~]# echo "user_reserve_hint_pct = 70" >> /etc/system
+    [root@solaris19c ~]# echo "set maxusers=4096" >> /etc/system
 
-vim /etc/inittab
-dev::sysinit:/usr/sbin/devfsadm -P
-ap::sysinit:/usr/sbin/autopush -f /etc/iu.ap
-tm::sysinit:/usr/sbin/ndd -set /dev/tcp tcp_smallest_anon_port 9000 > /dev/console
-tm::sysinit:/usr/sbin/ndd -set /dev/tcp tcp_largest_anon_port 65500 > /dev/console
-tm::sysinit:/usr/sbin/ndd -set /dev/udp udp_smallest_anon_port 9000 > /dev/console
-tm::sysinit:/usr/sbin/ndd -set /dev/udp udp_largest_anon_port 65500 > /dev/console
-smf::sysinit:/lib/svc/bin/svc.startd >/dev/msglog 2<>/dev/msglog </dev/console
-p3:s1234:powerfail:/usr/sbin/shutdown -y -i5 -g0 >/dev/msglog 2<>/dev/msglog
+    [root@solaris19c ~]# vim /etc/inittab
+		dev::sysinit:/usr/sbin/devfsadm -P
+		ap::sysinit:/usr/sbin/autopush -f /etc/iu.ap
+		tm::sysinit:/usr/sbin/ndd -set /dev/tcp tcp_smallest_anon_port 9000 > /dev/console
+		tm::sysinit:/usr/sbin/ndd -set /dev/tcp tcp_largest_anon_port 65500 > /dev/console
+		tm::sysinit:/usr/sbin/ndd -set /dev/udp udp_smallest_anon_port 9000 > /dev/console
+		tm::sysinit:/usr/sbin/ndd -set /dev/udp udp_largest_anon_port 65500 > /dev/console
+		smf::sysinit:/lib/svc/bin/svc.startd >/dev/msglog 2<>/dev/msglog </dev/console
+		p3:s1234:powerfail:/usr/sbin/shutdown -y -i5 -g0 >/dev/msglog 2<>/dev/msglog
 
-#REBOOT MACHINE
-reboot
+###### REBOOT MACHINE
 
-#CONFIGURE ORACLE_HOME ENVIRONMENTS
-su - oracle
+    [root@solaris19c ~]# reboot
+
+###### CONFIGURE ORACLE_HOME ENVIRONMENTS
+
+    [root@solaris19c ~]# su - oracle
 mkdir /export/home/oracle/scripts
 
 cat > /export/home/oracle/scripts/setEnv.sh <<EOF
