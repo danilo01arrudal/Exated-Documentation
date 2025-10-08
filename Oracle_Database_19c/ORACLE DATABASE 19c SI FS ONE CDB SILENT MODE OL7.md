@@ -33,7 +33,7 @@
     enp1s0  82e45657-ca14-380d-adfc-ac71a5aa7281  ethernet  enp1s0 
     lo      c30f3777-2d34-40f9-9fdb-da73383b9848  loopback  lo  
 
-    [root@ol719c ~]# nmcli con modify 'enp1s0' iframe enp1s0 ipv4.method manual ipv4.addresses 192.168.18.211/24 gw4 192.168.18.1
+    [root@ol719c ~]# nmcli con modify 'enp1s0' ifname enp1s0 ipv4.method manual ipv4.addresses 192.168.18.211/24 gw4 192.168.18.1
     [root@ol719c ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.201
     [root@ol719c ~]# nmcli con down 'enp1s0'
     [root@ol719c ~]# nmcli con up 'enp1s0'
