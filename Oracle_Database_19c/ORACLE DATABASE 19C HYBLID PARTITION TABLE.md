@@ -76,7 +76,7 @@
         );
 
 ###### ADD REQUIRED PARTITIONS
->* By adding these two partitions, the table structure will look like this:* 
+> * By adding these two partitions, the table structure will look like this:* 
 
         SQL> ALTER TABLE mytbl ADD PARTITION p3 VALUES (3) EXTERNAL LOCATION (part3dir: 'part3.txt');
 
@@ -121,7 +121,7 @@
         | 107         | nima  | karimi    | 3      |
         +-------------+-------+-----------+--------+
 
->* Execution plan related to organizational code two and three can be seen below:* 
+> * Execution plan related to organizational code two and three can be seen below:* 
 
         SQL> select * from mytbl where org_id = 2;
 
@@ -147,11 +147,11 @@
         | 2  | EXTERNAL TABLE ACCESS FULL     | MYTBL | 82    | 4100   | 2     | 00:00:01|
         +----+--------------------------------+-------+-------+--------+-------+---------+
 
->* Finally, we enumerate some of the features and limitations of the Hybrid Partition feature.* 
->* For this type of tables, only partial index can be used:* 
->* DML commands can only be executed on internal partitions* 
->* It is not possible to add LOB and LONG data types in this type of tables:* 
->* To view the names of tables that use this feature, you can use the following query:* 
+> * Finally, we enumerate some of the features and limitations of the Hybrid Partition feature.* 
+> * For this type of tables, only partial index can be used:* 
+> * DML commands can only be executed on internal partitions* 
+> * It is not possible to add LOB and LONG data types in this type of tables:* 
+> * To view the names of tables that use this feature, you can use the following query:* 
 
         SQL> create index ind1 on mytbl (name);
 
