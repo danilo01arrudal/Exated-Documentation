@@ -1,16 +1,18 @@
+**ORACLE DATABASE 19C BLOCKCHAIN TABLE WORKS**
 
+> *The blockchain tables are now generally available as mentioned in the Introducing Oracle Database 21c post announcing availability of the latest release in the Oracle Cloud Database Service Virtual Machine* 
+> *(for RAC and single instance) and Bare Metal Service (single instance).* 
+> *It's also available in the Autonomous Database Free Tier Service in Ashburn (IAD), Phoenix (PHX), Frankfurt (FRA) and London (LHR) regions.* 
+> *General availability of Oracle Database 21c for on-prem platforms (including Exadata, Linux and Windows) will follow along in 2021,* 
+> *and the Blockchain Tables will also become available in 19c database when 19.10 Release Update (RU) is available in early 2021.* 
 
-The blockchain tables are now generally available as mentioned in the 
-Introducing Oracle Database 21c post announcing availability of the latest release in the Oracle Cloud Database Service Virtual Machine 
-(for RAC and single instance) and Bare Metal Service (single instance). 
-It's also available in the Autonomous Database Free Tier Service in Ashburn (IAD), Phoenix (PHX), Frankfurt (FRA) and London (LHR) regions. 
-General availability of Oracle Database 21c for on-prem platforms (including Exadata, Linux and Windows) will follow along in 2021, 
-and the Blockchain Tables will also become available in 19c database when 19.10 Release Update (RU) is available in early 2021. 
+![oracle database 19c logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Database_19c/images/oracle_database_19c_logo.png)
 
-#NOTE
-with patch 32431413 and compatible 19.10.0
+###### NOTE
+> *with patch 32431413 and compatible 19.10.0*
 
-#CHECK INVENTORY
+###### CHECK INVENTORY
+
 $ORACLE_HOME/OPatch/opatch lsinventory -bugs_fixed |grep 32431413
 32431413   32431413  Thu Fev 04 10:05:02 SGT 2021   19.10 RU FOR ORACLE IS MISSING QCPLK.O WHICH GETS
 
