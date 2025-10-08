@@ -15,30 +15,42 @@
 
 ###### PRE-REQUERIMENT FILES
 
-    [oracle@ ~]# cat /part3/part3.txt
+    [oracle@ol719c ~]$ cat /part3/part3.txt
       104, javad, akbarian, 3
       105, mina, karimi, 3
       106, sima, kabiri, 3
       107, nima, kasiri, 3
 
-    [oracle@ ~]# cat /part4/part4.txt
+    [oracle@ol719c ~]$ cat /part4/part4.txt
       108, chemistry, hasani, 4
       109, cobra, armani, 4
       110, kazem, kalvandi, 4
       111, usef, kalvani, 4
 
-SQL> CREATE TABLE mytbl (national_id NUMBER, name VARCHAR2 (20), last_name VARCHAR2 (20), org_id number)
-PARTITION BY LIST (org_id)
-    (
+    [oracle@ol719c ~]$ sqlplus / as sysdba
+
+        SQL*Plus: Release 19.0.0.0.0 - Production on Sun May 18 23:12:44 2025
+        Version 19.3.0.0.0
+
+        Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+        Connected to:
+        Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+        Version 19.3.0.0.0
+
+        SQL> CREATE TABLE mytbl (national_id NUMBER, name VARCHAR2 (20), last_name VARCHAR2 (20), org_id number)
+        PARTITION BY LIST (org_id)
+        (
         PARTITION p1 VALUES (1),
         PARTITION p2 CURRENT (2)
-    );
+        );
     
-Table created
+        Table created
 
-SQL> insert into mytbl values (100, 'ali', 'rezai', 1);
+        SQL> insert into mytbl values (100, 'ali', 'rezai', 1);
 
-SQL> insert into mytbl values (101, 'hadi', 'alavi', 1);
+        SQL> insert into mytbl values (101, 'hadi', 'alavi', 1);
 
 SQL> insert into mytbl values (102, 'reza', 'karimi', 2);
 
