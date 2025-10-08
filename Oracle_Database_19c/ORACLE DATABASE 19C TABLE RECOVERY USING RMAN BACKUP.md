@@ -110,22 +110,23 @@
       Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
       Version 19.3.0.0.0
 
-sqlplus / as sysdba
 
-SQL*Plus: Release 19.0.0.0.0 - Production on Fri Aug 14 16:33:42 2020
-Version 19.3.0.0.0
+    [oracle@ol719c ~]$ sqlplus / as sysdba
 
-Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+      SQL*Plus: Release 19.0.0.0.0 - Production on Wed Jun 23 22:38:25 2021
+      Version 19.3.0.0.0
+
+      Copyright (c) 1982, 2019, Oracle.  All rights reserved.
 
 
-Connected to:
-Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
-Version 19.3.0.0.0
+      Connected to:
+      Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+      Version 19.3.0.0.0
 
-SQL> archive log list;
-Database log mode	       Archive Mode
-Automatic archival	       Enabled
-Archive destination	       /u01/app/oracle/oradata/ORA19/archivelog
-Oldest online log sequence     95
-Next log sequence to archive   97
-Current log sequence	       97
+      SQL> archive log list;
+            Database log mode	       Archive Mode
+            Automatic archival	       Enabled
+            Archive destination	       /u01/app/oracle/oradata/ORA19/archivelog
+            Oldest online log sequence     95
+            Next log sequence to archive   97
+            Current log sequence	       97
