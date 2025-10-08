@@ -13,76 +13,79 @@
 
 ###### CHECK INVENTORY
 
-$ORACLE_HOME/OPatch/opatch lsinventory -bugs_fixed |grep 32431413
-32431413   32431413  Thu Fev 04 10:05:02 SGT 2021   19.10 RU FOR ORACLE IS MISSING QCPLK.O WHICH GETS
+    [oracle@ol719c ~]$ $ORACLE_HOME/OPatch/opatch lsinventory -bugs_fixed |grep 32431413
+          32431413   32431413  Thu Fev 04 10:05:02 SGT 2021   19.10 RU FOR ORACLE IS MISSING QCPLK.O WHICH GETS
 
-#TEST CREATE BLOCKCHAIN TABLE 
-sqlplus / as sysdba
+###### TEST CREATE BLOCKCHAIN TABLE 
 
-SQL*Plus: Release 19.0.0.0.0 - Production on Thu Fev 04 12:19:49 2021
-Version 19.10.0.0.0
+    [oracle@ol719c ~]$ sqlplus / as sysdba
 
-Copyright (c) 1982, 2020, Oracle.  All rights reserved.
+          SQL*Plus: Release 19.0.0.0.0 - Production on Thu Fev 04 12:19:49 2021
+          Version 19.10.0.0.0
 
-Connected to:
-Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
-Version 19.10.0.0.0
+          Copyright (c) 1982, 2020, Oracle.  All rights reserved.
 
-SQL> CREATE BLOCKCHAIN TABLE bctab_part (trans_id number primary key, sender varchar2(50), recipient varchar2(50), trans_date DATE, amount number) 
-     NO DROP UNTIL 16 DAYS IDLE
-     NO DELETE UNTIL 25 DAYS AFTER INSERT
-     HASHING USING "SHA2_512" VERSION "v1"
-     PARTITION BY RANGE(trans_date)
-      (PARTITION p1 VALUES LESS THAN (TO_DATE('30-09-2019','dd-mm-yyyy')),
-       PARTITION p2 VALUES LESS THAN (TO_DATE('31-12-2019','dd-mm-yyyy')),
-       PARTITION p3 VALUES LESS THAN (TO_DATE('31-03-2020','dd-mm-yyyy')),
-       PARTITION p4 VALUES LESS THAN (TO_DATE('30-06-2020','dd-mm-yyyy'))
-      );
-CREATE BLOCKCHAIN TABLE bctab_part (trans_id number primary key, sender varchar2(50)
-*
-ERROR at line 1:
-ORA-05728: COMPATIBLE needs to be 19.10.0.0.0 or higher to use blockchain table
-ORA-00722: Feature "Blockchain table"
+          Connected to:
+          Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+          Version 19.10.0.0.0
 
-SQL> show parameter compatible
+          SQL> CREATE BLOCKCHAIN TABLE bctab_part (trans_id number primary key, sender varchar2(50), recipient varchar2(50), trans_date DATE, amount number) 
+               NO DROP UNTIL 16 DAYS IDLE
+               NO DELETE UNTIL 25 DAYS AFTER INSERT
+               HASHING USING "SHA2_512" VERSION "v1"
+               PARTITION BY RANGE(trans_date)
+                (PARTITION p1 VALUES LESS THAN (TO_DATE('30-09-2019','dd-mm-yyyy')),
+                 PARTITION p2 VALUES LESS THAN (TO_DATE('31-12-2019','dd-mm-yyyy')),
+                 PARTITION p3 VALUES LESS THAN (TO_DATE('31-03-2020','dd-mm-yyyy')),
+                 PARTITION p4 VALUES LESS THAN (TO_DATE('30-06-2020','dd-mm-yyyy'))
+               );
+          CREATE BLOCKCHAIN TABLE bctab_part (trans_id number primary key, sender varchar2(50)
+          *
+          ERROR at line 1:
+          ORA-05728: COMPATIBLE needs to be 19.10.0.0.0 or higher to use blockchain table
+          ORA-00722: Feature "Blockchain table"
 
-NAME                                 TYPE        VALUE
------------------------------------- ----------- ------------------------------
-compatible                           string      19.0.0
-noncdb_compatible                    boolean     FALSE
+          SQL> show parameter compatible
 
-SQL> alter system set compatible='19.10.0' scope=spfile;
+          NAME                                 TYPE        VALUE
+          ------------------------------------ ----------- ------------------------------
+          compatible                           string      19.0.0
+          noncdb_compatible                    boolean     FALSE
 
-System altered.
+          SQL> alter system set compatible='19.10.0' scope=spfile;
 
-SQL> shutdown immediate
-Database closed.
-Database dismounted.
-ORACLE instance shut down.
-SQL> startup
-ORACLE instance started.
+          System altered.
 
-Total System Global Area 5368705904 bytes
-Fixed Size                  9192304 bytes
-Variable Size            3036676096 bytes
-Database Buffers          167772160 bytes
-Redo Buffers                7581696 bytes
-In-Memory Area           2147483648 bytes
-Database mounted.
-Database opened.
+          SQL> shutdown immediate
+          Database closed.
+          Database dismounted.
+          ORACLE instance shut down.
 
-SQL> alter session set container=APPSPDB
-Enter password:
-Connected.
-SQL> CREATE BLOCKCHAIN TABLE bctab_part (trans_id number primary key, sender varchar2(50), recipient varchar2(50), trans_date DATE, amount number) 
-     NO DROP UNTIL 16 DAYS IDLE
-     NO DELETE UNTIL 25 DAYS AFTER INSERT
-     HASHING USING "SHA2_512" VERSION "v1"
-     PARTITION BY RANGE(trans_date)
-      (PARTITION p1 VALUES LESS THAN (TO_DATE('30-09-2019','dd-mm-yyyy')),
-       PARTITION p2 VALUES LESS THAN (TO_DATE('31-12-2019','dd-mm-yyyy')),
-       PARTITION p3 VALUES LESS THAN (TO_DATE('31-03-2020','dd-mm-yyyy')),
-       PARTITION p4 VALUES LESS THAN (TO_DATE('30-06-2020','dd-mm-yyyy'))
-      );
+          SQL> startup
+          ORACLE instance started.
 
-Table created.
+          Total System Global Area 5368705904 bytes
+          Fixed Size                  9192304 bytes
+          Variable Size            3036676096 bytes
+          Database Buffers          167772160 bytes
+          Redo Buffers                7581696 bytes
+          In-Memory Area           2147483648 bytes
+          Database mounted.
+          Database opened.
+
+          SQL> alter session set container=APPSPDB
+          Enter password:
+          Connected.
+
+          SQL> CREATE BLOCKCHAIN TABLE bctab_part (trans_id number primary key, sender varchar2(50), recipient varchar2(50), trans_date DATE, amount number) 
+               NO DROP UNTIL 16 DAYS IDLE
+               NO DELETE UNTIL 25 DAYS AFTER INSERT
+               HASHING USING "SHA2_512" VERSION "v1"
+               PARTITION BY RANGE(trans_date)
+                (PARTITION p1 VALUES LESS THAN (TO_DATE('30-09-2019','dd-mm-yyyy')),
+                 PARTITION p2 VALUES LESS THAN (TO_DATE('31-12-2019','dd-mm-yyyy')),
+                 PARTITION p3 VALUES LESS THAN (TO_DATE('31-03-2020','dd-mm-yyyy')),
+                 PARTITION p4 VALUES LESS THAN (TO_DATE('30-06-2020','dd-mm-yyyy'))
+                );
+
+          Table created.
