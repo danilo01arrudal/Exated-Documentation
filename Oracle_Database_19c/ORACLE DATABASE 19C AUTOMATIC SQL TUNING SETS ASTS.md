@@ -1,40 +1,41 @@
+**ORACLE DATABASE 19C AUTOMATIC SQL TUNING SETS ASTS**
 
+> *Oracle Database - Enterprise Edition - Version 19.7.0.0.0 and later*
+> *Information in this document applies to any platform.*
+> *Oracle Database 19c RU 19.7 exposes a new database infrastructure component called the automatic SQL Tuning Set (ASTS).* 
+> *It is available in Enterprise Edition for all platforms and has no additional licensing requirement.*
+> *The ASTS is maintained using an automatic background task, which is enabled by default in Oracle Database 19c RU 19.7.* 
 
-#NOTE
-Oracle Database - Enterprise Edition - Version 19.7.0.0.0 and later
-Information in this document applies to any platform.
-Oracle Database 19c RU 19.7 exposes a new database infrastructure component called the automatic SQL Tuning Set (ASTS). 
-It is available in Enterprise Edition for all platforms and has no additional licensing requirement.
-The ASTS is maintained using an automatic background task, which is enabled by default in Oracle Database 19c RU 19.7. 
+> *While ASTS is common infrastructure functionality that does not have any impact on the runtime behavior of a* 
+> *database (other than occupying limited space in SYSAUX), some customers expressed the preference of not enabling this functionality by default in an RU.* 
+> *Oracle has therefore decided to disable ASTS in future RUs for this database release by default, giving customers the responsibility to enable ASTS explicitly.* 
+> *It is disabled by default in 19c RU 19.8.*
 
-While ASTS is common infrastructure functionality that does not have any impact on the runtime behavior of a 
-database (other than occupying limited space in SYSAUX), some customers expressed the preference of not enabling this functionality by default in an RU. 
-Oracle has therefore decided to disable ASTS in future RUs for this database release by default, giving customers the responsibility to enable ASTS explicitly. 
-It is disabled by default in 19c RU 19.8.
+> *The ASTS is a historic record of SQL execution plans and SQL statement performance metrics. It differs from the automatic workload repository (AWR) because it is not limited to statements that consume significant system resources.*
+> *Over time, the ASTS will include examples of all queries seen on the system, but it does impose a limit on the collection of non-reusable statements such as ad-hoc queries or statements that use literals instead of bind variables.*
+> *ASTS is complementary to AWR and considered a similar core manageability infrastructure of the Oracle Database.*
+> *The ASTS is particularly useful for diagnosing and potentially correcting SQL performance regressions in situations where the regression is caused by a plan change.* 
+> *In cases like this, the better plan is unlikely to be available in AWR, but it will be available in the ASTS.* 
+> *This is significant because, for example, SQL plan management can be used to locate, test, and enforce better SQL execution plans contained in the ASTS.* 
+> *This allows SQL performance regressions to be corrected quickly and with little effort.* 
+> *In addition, automatic SQL plan management implements this entire workflow without manual intervention (see the Database Licensing Information User Manual for availability details).*
+> *In summary, the ASTS is a component designed to resolve SQL statement performance regressions quickly and easily.* 
+> *It mitigates the risks associated with database change, system configuration changes, and upgrades.*
 
-The ASTS is a historic record of SQL execution plans and SQL statement performance metrics. It differs from the automatic workload repository (AWR) because it is not limited to statements that consume significant system resources. Over time, the ASTS will include examples of all queries seen on the system, but it does impose a limit on the collection of non-reusable statements such as ad-hoc queries or statements that use literals instead of bind variables.
-ASTS is complementary to AWR and considered a similar core manageability infrastructure of the Oracle Database.
-The ASTS is particularly useful for diagnosing and potentially correcting SQL performance regressions in situations where the regression is caused by a plan change. 
-In cases like this, the better plan is unlikely to be available in AWR, but it will be available in the ASTS. 
-This is significant because, for example, SQL plan management can be used to locate, test, and enforce better SQL execution plans contained in the ASTS. 
-This allows SQL performance regressions to be corrected quickly and with little effort. 
-In addition, automatic SQL plan management implements this entire workflow without manual intervention 
-(see the Database Licensing Information User Manual for availability details).
-In summary, the ASTS is a component designed to resolve SQL statement performance regressions quickly and easily. 
-It mitigates the risks associated with database change, system configuration changes, and upgrades.
+> *The ASTS is self-maintaining with no requirement for it to be configured. Oracle recommends that it is enabled, but it can be disabled if preferred.*
+> *Automatic Indexing relies on the ASTS, so you must not disable the ASTS task if you are using this feature.* 
+> *Automatic SQL plan management uses ASTS as a source of alternative SQL execution plans, so ASTS should not be disabled if you use this feature.*
 
-The ASTS is self-maintaining with no requirement for it to be configured. Oracle recommends that it is enabled, but it can be disabled if preferred.
-Automatic Indexing relies on the ASTS, so you must not disable the ASTS task if you are using this feature. 
-Automatic SQL plan management uses ASTS as a source of alternative SQL execution plans, so ASTS should not be disabled if you use this feature.
+> *Task Performance and Space Utilization*
+> *The resource utilization for normal systems is negligible and can be ignored in most cases; this is true for both space and CPU consumption.* 
+> *The following SQL statements provide an insight into the resources used.*
 
-Task Performance and Space Utilization
-The resource utilization for normal systems is negligible and can be ignored in most cases; this is true for both space and CPU consumption. 
-The following SQL statements provide an insight into the resources used.
+![oracle database 19c logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Database_19c/images/oracle_database_19c_logo.png)
 
 =============================================================================================================================================================
 
-* Runtime Performance
-You can acquire a summary of runtime performance for the ASTS task as follows:
+###### RUNTIME PERFORMANCE
+> *You can acquire a summary of runtime performance for the ASTS task as follows:*
 
 [oracle@oraclerac19con1 ~]$ sqlplus / as sysdba
 
