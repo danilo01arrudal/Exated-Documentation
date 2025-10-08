@@ -244,141 +244,144 @@
 ###### CONFIGURE ORACLE_HOME ENVIRONMENTS
 
     [root@solaris19c ~]# su - oracle
-mkdir /export/home/oracle/scripts
+    [root@solaris19c ~]# mkdir /export/home/oracle/scripts
 
-cat > /export/home/oracle/scripts/setEnv.sh <<EOF
-# Oracle Settings
-export TMP=/tmp
-export TMPDIR=\$TMP
+    [root@solaris19c ~]# cat > /export/home/oracle/scripts/setEnv.sh <<EOF
+		# Oracle Settings
+		export TMP=/tmp
+		export TMPDIR=\$TMP
 
-export ORACLE_HOSTNAME=solaris19c
-export ORACLE_UNQNAME=appscdb
-export ORACLE_BASE=/u01/app/oracle
-export ORACLE_HOME=\$ORACLE_BASE/product/19.5.0/dbhome_1
-export ORA_INVENTORY=/u01/app/oraInventory
-export ORACLE_SID=appscdb1
+		export ORACLE_HOSTNAME=solaris19c
+		export ORACLE_UNQNAME=appscdb
+		export ORACLE_BASE=/u01/app/oracle
+		export ORACLE_HOME=\$ORACLE_BASE/product/19.5.0/dbhome_1
+		export ORA_INVENTORY=/u01/app/oraInventory
+		export ORACLE_SID=appscdb1
 
-export PATH=/usr/sbin:/usr/local/bin:\$PATH
-export PATH=\$ORACLE_HOME/bin:\$PATH
+		export PATH=/usr/sbin:/usr/local/bin:\$PATH
+		export PATH=\$ORACLE_HOME/bin:\$PATH
 
-export LD_LIBRARY_PATH=\$ORACLE_HOME/lib:/lib:/usr/lib
-export CLASSPATH=\$ORACLE_HOME/jlib:\$ORACLE_HOME/rdbms/jlib
-EOF
+		export LD_LIBRARY_PATH=\$ORACLE_HOME/lib:/lib:/usr/lib
+		export CLASSPATH=\$ORACLE_HOME/jlib:\$ORACLE_HOME/rdbms/jlib
+	EOF
 
-echo ". /export/home/oracle/scripts/setEnv.sh" >> .profile
+    [root@solaris19c ~]# echo ". /export/home/oracle/scripts/setEnv.sh" >> .profile
 
-cat > /export/home/oracle/scripts/start_all.sh <<EOF
-#!/bin/bash
-. scripts/setEnv.sh
+    [root@solaris19c ~]# cat > /export/home/oracle/scripts/start_all.sh <<EOF
+		#!/bin/bash
+		. scripts/setEnv.sh
 
-export ORAENV_ASK=NO
-. oraenv
-export ORAENV_ASK=YES
+		export ORAENV_ASK=NO
+		. oraenv
+		export ORAENV_ASK=YES
 
-dbstart \$ORACLE_HOME
-EOF
+		dbstart \$ORACLE_HOME
+	EOF
 
-cat > /export/home/oracle/scripts/stop_all.sh <<EOF
-#!/bin/bash
-. scripts/setEnv.sh
+    [root@solaris19c ~]# cat > /export/home/oracle/scripts/stop_all.sh <<EOF
+		#!/bin/bash
+		. scripts/setEnv.sh
 
-export ORAENV_ASK=NO
-. oraenv
-export ORAENV_ASK=YES
+		export ORAENV_ASK=NO
+		. oraenv
+		export ORAENV_ASK=YES
 
-dbshut \$ORACLE_HOME
-EOF
+		dbshut \$ORACLE_HOME
+	EOF
 
-chown -R oracle:oinstall scripts
-chmod u+x /export/home/oracle/scripts/*.sh
+    [root@solaris19c ~]# chown -R oracle:oinstall scripts
+    [root@solaris19c ~]# chmod u+x /export/home/oracle/scripts/*.sh
 
-#DOWNLOAD ORACLE DATABASE 19.5c FOR SOLARIS
-wget https://download.oracle.com/otn/solaris/oracle19c/195000/SOLARIS.X64_195000_db_home.zip?AuthParam=1597623719_1c94053516fa8179fde7fe1c8e4caada
-mv SOLARIS.X64_195000_db_home.zip $ORACLE_HOME/LINUX.X64_193000_db_home.zip
-cd $ORACLE_HOME
-unzip -oq SOLARIS.X64_195000_db_home.zip
+###### DOWNLOAD ORACLE DATABASE 19.5c FOR SOLARIS
 
-#CREATE db_install.rsp INSTALL RESPONSE FILE
-vi /export/home/oracle/db_install.rsp
-oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v19.0.0
-oracle.install.option=INSTALL_DB_SWONLY
-UNIX_GROUP_NAME=oinstall
-INVENTORY_LOCATION=/u01/app/oraInventory
-ORACLE_HOME=/u01/app/oracle/product/19.5.0/dbhome_1
-ORACLE_BASE=/u01/app/oracle
-oracle.install.db.InstallEdition=EE
-oracle.install.db.OSDBA_GROUP=dba
-oracle.install.db.OSOPER_GROUP=oinstall
-oracle.install.db.OSBACKUPDBA_GROUP=backupdba
-oracle.install.db.OSDGDBA_GROUP=dgdba
-oracle.install.db.OSKMDBA_GROUP=kmdba
-oracle.install.db.OSRACDBA_GROUP=racdba
-oracle.install.db.rootconfig.executeRootScript=false
-oracle.install.db.rootconfig.configMethod=
-oracle.install.db.rootconfig.sudoPath=
-oracle.install.db.rootconfig.sudoUserName=
-oracle.install.db.CLUSTER_NODES=
-oracle.install.db.config.starterdb.type=GENERAL_PURPOSE
-oracle.install.db.config.starterdb.globalDBName=
-oracle.install.db.config.starterdb.SID=
-oracle.install.db.ConfigureAsContainerDB=false
-oracle.install.db.config.PDBName=
-oracle.install.db.config.starterdb.characterSet=
-oracle.install.db.config.starterdb.memoryOption=false
-oracle.install.db.config.starterdb.memoryLimit=
-oracle.install.db.config.starterdb.installExampleSchemas=false
-oracle.install.db.config.starterdb.password.ALL=
-oracle.install.db.config.starterdb.password.SYS=
-oracle.install.db.config.starterdb.password.SYSTEM=
-oracle.install.db.config.starterdb.password.DBSNMP=
-oracle.install.db.config.starterdb.password.PDBADMIN=
-oracle.install.db.config.starterdb.managementOption=DEFAULT
-oracle.install.db.config.starterdb.omsHost=
-oracle.install.db.config.starterdb.omsPort=0
-oracle.install.db.config.starterdb.emAdminUser=
-oracle.install.db.config.starterdb.emAdminPassword=
-oracle.install.db.config.starterdb.enableRecovery=false
-oracle.install.db.config.starterdb.storageType=
-oracle.install.db.config.starterdb.fileSystemStorage.dataLocation=
-oracle.install.db.config.starterdb.fileSystemStorage.recoveryLocation=
-oracle.install.db.config.asm.diskGroup=
-oracle.install.db.config.asm.ASMSNMPPassword=
+    [root@solaris19c ~]# wget https://download.oracle.com/otn/solaris/oracle19c/195000/SOLARIS.X64_195000_db_home.zip?AuthParam=1597623719_1c94053516fa8179fde7fe1c8e4caada
+    [root@solaris19c ~]# mv SOLARIS.X64_195000_db_home.zip $ORACLE_HOME/LINUX.X64_193000_db_home.zip
+    [root@solaris19c ~]# cd $ORACLE_HOME
+    [root@solaris19c ~]# unzip -oq SOLARIS.X64_195000_db_home.zip
 
-cd $ORACLE_HOME
-./runInstaller -silent -responseFile /export/home/oracle/db_install.rsp
+###### CREATE db_install.rsp INSTALL RESPONSE FILE
+    
+	[root@solaris19c ~]# vi /export/home/oracle/db_install.rsp
+		oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v19.0.0
+		oracle.install.option=INSTALL_DB_SWONLY
+		UNIX_GROUP_NAME=oinstall
+		INVENTORY_LOCATION=/u01/app/oraInventory
+		ORACLE_HOME=/u01/app/oracle/product/19.5.0/dbhome_1
+		ORACLE_BASE=/u01/app/oracle
+		oracle.install.db.InstallEdition=EE
+		oracle.install.db.OSDBA_GROUP=dba
+		oracle.install.db.OSOPER_GROUP=oinstall
+		oracle.install.db.OSBACKUPDBA_GROUP=backupdba
+		oracle.install.db.OSDGDBA_GROUP=dgdba
+		oracle.install.db.OSKMDBA_GROUP=kmdba
+		oracle.install.db.OSRACDBA_GROUP=racdba
+		oracle.install.db.rootconfig.executeRootScript=false
+		oracle.install.db.rootconfig.configMethod=
+		oracle.install.db.rootconfig.sudoPath=
+		oracle.install.db.rootconfig.sudoUserName=
+		oracle.install.db.CLUSTER_NODES=
+		oracle.install.db.config.starterdb.type=GENERAL_PURPOSE
+		oracle.install.db.config.starterdb.globalDBName=
+		oracle.install.db.config.starterdb.SID=
+		oracle.install.db.ConfigureAsContainerDB=false
+		oracle.install.db.config.PDBName=
+		oracle.install.db.config.starterdb.characterSet=
+		oracle.install.db.config.starterdb.memoryOption=false
+		oracle.install.db.config.starterdb.memoryLimit=
+		oracle.install.db.config.starterdb.installExampleSchemas=false
+		oracle.install.db.config.starterdb.password.ALL=
+		oracle.install.db.config.starterdb.password.SYS=
+		oracle.install.db.config.starterdb.password.SYSTEM=
+		oracle.install.db.config.starterdb.password.DBSNMP=
+		oracle.install.db.config.starterdb.password.PDBADMIN=
+		oracle.install.db.config.starterdb.managementOption=DEFAULT
+		oracle.install.db.config.starterdb.omsHost=
+		oracle.install.db.config.starterdb.omsPort=0
+		oracle.install.db.config.starterdb.emAdminUser=
+		oracle.install.db.config.starterdb.emAdminPassword=
+		oracle.install.db.config.starterdb.enableRecovery=false
+		oracle.install.db.config.starterdb.storageType=
+		oracle.install.db.config.starterdb.fileSystemStorage.dataLocation=
+		oracle.install.db.config.starterdb.fileSystemStorage.recoveryLocation=
+		oracle.install.db.config.asm.diskGroup=
+		oracle.install.db.config.asm.ASMSNMPPassword=
 
-Launching Oracle Database Setup Wizard...
+	[root@solaris19c ~]# cd $ORACLE_HOME
+	[root@solaris19c ~]# ./runInstaller -silent -responseFile /export/home/oracle/db_install.rsp
 
-[WARNING] [INS-13014] Target environment does not meet some optional requirements.
-   CAUSE: Some of the optional prerequisites are not met. See logs for details. installActions2020-08-17_11-38-46AM.log
-   ACTION: Identify the list of failed prerequisite checks from the log: installActions2020-08-17_11-38-46AM.log. Then either from the log file or from installation manual find the appropriate configuration to meet the prerequisites and fix it manually.
-The response file for this session can be found at:
- /u01/app/oracle/product/19.5.0/dbhome_1/install/response/db_2020-08-17_11-38-46AM.rsp
+		Launching Oracle Database Setup Wizard...
 
-You can find the log of this install session at:
- /tmp/InstallActions2020-08-17_11-38-46AM/installActions2020-08-17_11-38-46AM.log
+		[WARNING] [INS-13014] Target environment does not meet some optional requirements.
+		   CAUSE: Some of the optional prerequisites are not met. See logs for details. installActions2020-08-17_11-38-46AM.log
+		   ACTION: Identify the list of failed prerequisite checks from the log: installActions2020-08-17_11-38-46AM.log. Then either from the log file or from installation manual find the appropriate configuration to meet the prerequisites and fix it manually.
+		The response file for this session can be found at:
+		 /u01/app/oracle/product/19.5.0/dbhome_1/install/response/db_2020-08-17_11-38-46AM.rsp
 
-As a root user, execute the following script(s):
-        1. /u01/app/oraInventory/orainstRoot.sh
-        2. /u01/app/oracle/product/19.5.0/dbhome_1/root.sh
+		You can find the log of this install session at:
+		 /tmp/InstallActions2020-08-17_11-38-46AM/installActions2020-08-17_11-38-46AM.log
 
-Successfully Setup Software with warning(s).
-Moved the install session logs to:
-/u01/app/oraInventory/logs/InstallActions2020-08-17_11-38-46AM
+		As a root user, execute the following script(s):
+		        1. /u01/app/oraInventory/orainstRoot.sh
+    		    2. /u01/app/oracle/product/19.5.0/dbhome_1/root.sh
 
-exit
-/u01/app/oraInventory/orainstRoot.sh
-Changing permissions of /u01/app/oraInventory.
-Adding read,write permissions for group.
-Removing read,write,execute permissions for world.
-Changing groupname of /u01/app/oraInventory to oinstall.
-The execution of the script is complete.
+		Successfully Setup Software with warning(s).
+		Moved the install session logs to:
+		/u01/app/oraInventory/logs/InstallActions2020-08-17_11-38-46AM
 
-/u01/app/oracle/product/19.5.0/dbhome_1/root.sh
-Check /u01/app/oracle/product/19.5.0/dbhome_1/install/root_solaris_2020-08-17_11-43-55-523355459.log for the output of root script
+	[root@solaris19c ~]# exit
+	[root@solaris19c ~]# /u01/app/oraInventory/orainstRoot.sh
+		Changing permissions of /u01/app/oraInventory.
+		Adding read,write permissions for group.
+		Removing read,write,execute permissions for world.
+		Changing groupname of /u01/app/oraInventory to oinstall.
+		The execution of the script is complete.
+
+	[root@solaris19c ~]# /u01/app/oracle/product/19.5.0/dbhome_1/root.sh
+		Check /u01/app/oracle/product/19.5.0/dbhome_1/install/root_solaris_2020-08-17_11-43-55-523355459.log for the output of root script
 
 #CREATE dbca.rsp response file
-vi /export/home/oracle/dbca.rsp
+	
+	[root@solaris19c ~]# vi /export/home/oracle/dbca.rsp
 responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v12.2.0
 gdbName=appscdb
 sid=appscdb1
