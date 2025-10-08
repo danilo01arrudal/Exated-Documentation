@@ -37,40 +37,40 @@
 ###### RUNTIME PERFORMANCE
 > *You can acquire a summary of runtime performance for the ASTS task as follows:*
 
-[oracle@oraclerac19con1 ~]$ sqlplus / as sysdba
+       [oracle@ol719c ~]$ sqlplus / as sysdba
 
-SQL*Plus: Release 19.0.0.0.0 - Production on Wed Jun 23 22:38:25 2021
-Version 19.3.0.0.0
+              SQL*Plus: Release 19.0.0.0.0 - Production on Wed Jun 23 22:38:25 2021
+              Version 19.3.0.0.0
 
-Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+              Copyright (c) 1982, 2019, Oracle.  All rights reserved.
 
 
-Connected to:
-Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
-Version 19.3.0.0.0
+              Connected to:
+              Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+              Version 19.3.0.0.0
 
-SQL> Select Task_Name, Interval Task_Interval_in_Seconds, Enabled From DBA_AutoTask_Schedule_Control Where Task_Name = 'Auto STS Capture Task';
+              SQL> Select Task_Name, Interval Task_Interval_in_Seconds, Enabled From DBA_AutoTask_Schedule_Control Where Task_Name = 'Auto STS Capture Task';
 
-TASK_NAME                   TASK_INTERVAL_IN_SECONDS    ENABLED
---------------------------- --------------------------- --------
-Auto STS Capture Task       900                         TRUE
+              TASK_NAME                   TASK_INTERVAL_IN_SECONDS    ENABLED
+              --------------------------- --------------------------- --------
+              Auto STS Capture Task       900                         TRUE
 
-SQL> With dur As
-(
-Select (To_Date('1','J')+Run_Duration-to_Date('1','J'))* 86400 Duration_Sec,
-       (To_Date('1','J')+CPU_Used-to_Date('1','J'))* 86400 CPU_Used_Sec
-From DBA_Scheduler_Job_Run_Details
-Where job_name = 'ORA$_ATSK_AUTOSTS'
-)
-Select Min(Duration_Sec) ASTS_Min_Time_Sec,
-       Max(Duration_Sec) ASTS_Max_Time_Sec,
-       Avg(Duration_Sec) ASTS_Average_Time_Sec,
-       Avg(CPU_Used_Sec) ASTS_Average_CPU_Sec
-From dur;  2    3    4    5    6    7    8    9   10   11   12  
+              SQL> With dur As
+              (
+              Select (To_Date('1','J')+Run_Duration-to_Date('1','J'))* 86400 Duration_Sec,
+                     (To_Date('1','J')+CPU_Used-to_Date('1','J'))* 86400 CPU_Used_Sec
+              From DBA_Scheduler_Job_Run_Details
+              Where job_name = 'ORA$_ATSK_AUTOSTS'
+              )
+              Select Min(Duration_Sec) ASTS_Min_Time_Sec,
+                     Max(Duration_Sec) ASTS_Max_Time_Sec,
+                     Avg(Duration_Sec) ASTS_Average_Time_Sec,
+                     Avg(CPU_Used_Sec) ASTS_Average_CPU_Sec
+              From dur; 
 
-ASTS_MIN_TIME_SEC ASTS_MAX_TIME_SEC ASTS_AVERAGE_TIME_SEC ASTS_AVERAGE_CPU_SEC
------------------ ----------------- --------------------- --------------------
-6                 905               19.1590909            10.9390496
+              ASTS_MIN_TIME_SEC ASTS_MAX_TIME_SEC ASTS_AVERAGE_TIME_SEC ASTS_AVERAGE_CPU_SEC
+              ----------------- ----------------- --------------------- --------------------
+              6                 905               19.1590909            10.9390496
 
 * Space Consumption
 The amount of space consumed by all SQL tuning sets can be queried as follows:
