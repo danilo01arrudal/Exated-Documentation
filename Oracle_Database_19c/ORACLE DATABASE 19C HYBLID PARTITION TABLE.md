@@ -1,4 +1,4 @@
-**ORACLE DATABASE 19c SI FS ONE CDB SILENT MODE OL7.5**
+**ORACLE DATABASE 19C HYBLID PARTITION TABLE**
 
 
 > *Hybrid Partition is a new feature introduced in Oracle 19c. With this feature, a combination of external and internal partitions can be created for a table.*
