@@ -379,192 +379,198 @@
 	[root@solaris19c ~]# /u01/app/oracle/product/19.5.0/dbhome_1/root.sh
 		Check /u01/app/oracle/product/19.5.0/dbhome_1/install/root_solaris_2020-08-17_11-43-55-523355459.log for the output of root script
 
-#CREATE dbca.rsp response file
+###### CREATE dbca.rsp response file
 	
 	[root@solaris19c ~]# vi /export/home/oracle/dbca.rsp
-responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v12.2.0
-gdbName=appscdb
-sid=appscdb1
-databaseConfigType=SI
-RACOneNodeServiceName=
-policyManaged=false
-createServerPool=false
-serverPoolName=
-cardinality=
-force=false
-pqPoolName=
-pqCardinality=
-createAsContainerDatabase=true
-numberOfPDBs=1
-pdbName=appspdb
-useLocalUndoForPDBs=true
-pdbAdminPassword=
-nodelist=
-templateName=/u01/app/oracle/product/19.5.0/dbhome_1/assistants/dbca/templates/General_Purpose.dbc
-sysPassword=
-systemPassword= 
-serviceUserPassword=
-emConfiguration=
-emExpressPort=5500
-runCVUChecks=FALSE
-dbsnmpPassword=
-omsHost=
-omsPort=0
-emUser=
-emPassword=
-dvConfiguration=false
-dvUserName=
-dvUserPassword=
-dvAccountManagerName=
-dvAccountManagerPassword=
-olsConfiguration=false
-datafileJarLocation={ORACLE_HOME}/assistants/dbca/templates/
-datafileDestination={ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/
-recoveryAreaDestination={ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME}
-storageType=FS
-diskGroupName=
-asmsnmpPassword=
-recoveryGroupName=
-characterSet=AL32UTF8
-nationalCharacterSet=AL16UTF16
-registerWithDirService=false
-dirServiceUserName=
-dirServicePassword=
-walletPassword=
-listeners=
-variablesFile=
-variables=ORACLE_BASE_HOME=/u01/app/oracle/product/19.5.0/dbhome_1,DB_UNIQUE_NAME=appscdb,ORACLE_BASE=/u01/app/oracle,PDB_NAME=,DB_NAME=appscdb,ORACLE_HOME=/u01/app/oracle/product/19.5.0/dbhome_1,SID=appscdb1
-initParams=undo_tablespace=UNDOTBS1,sga_target=2047MB,db_block_size=8192BYTES,log_archive_dest_1='LOCATION={ORACLE_BASE}/oradata/archivelog/',nls_language=AMERICAN,dispatchers=(PROTOCOL=TCP) (SERVICE=appscdb1XDB),diagnostic_dest={ORACLE_BASE},control_files=("{ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/control01.ctl", "{ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME}/control02.ctl"),remote_login_passwordfile=EXCLUSIVE,audit_file_dest={ORACLE_BASE}/admin/{DB_UNIQUE_NAME}/adump,processes=600,pga_aggregate_target=683MB,nls_territory=AMERICA,db_recovery_file_dest_size=12732MB,open_cursors=300,log_archive_format=%t_%s_%r.dbf,compatible=19.0.0,db_name=appscdb,db_recovery_file_dest={ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME},audit_trail=db
-sampleSchema=false
-memoryPercentage=40
-databaseType=MULTIPURPOSE
-automaticMemoryManagement=false
-totalMemory=0
+		responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v12.2.0
+		gdbName=appscdb
+		sid=appscdb1
+		databaseConfigType=SI
+		RACOneNodeServiceName=
+		policyManaged=false
+		createServerPool=false
+		serverPoolName=
+		cardinality=
+		force=false
+		pqPoolName=
+		pqCardinality=
+		createAsContainerDatabase=true
+		numberOfPDBs=1
+		pdbName=appspdb
+		useLocalUndoForPDBs=true
+		pdbAdminPassword=
+		nodelist=
+		templateName=/u01/app/oracle/product/19.5.0/dbhome_1/assistants/dbca/templates/General_Purpose.dbc
+		sysPassword=
+		systemPassword= 
+		serviceUserPassword=
+		emConfiguration=
+		emExpressPort=5500
+		runCVUChecks=FALSE
+		dbsnmpPassword=
+		omsHost=
+		omsPort=0
+		emUser=
+		emPassword=
+		dvConfiguration=false
+		dvUserName=
+		dvUserPassword=
+		dvAccountManagerName=
+		dvAccountManagerPassword=
+		olsConfiguration=false
+		datafileJarLocation={ORACLE_HOME}/assistants/dbca/templates/
+		datafileDestination={ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/
+		recoveryAreaDestination={ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME}
+		storageType=FS
+		diskGroupName=
+		asmsnmpPassword=
+		recoveryGroupName=
+		characterSet=AL32UTF8
+		nationalCharacterSet=AL16UTF16
+		registerWithDirService=false
+		dirServiceUserName=
+		dirServicePassword=
+		walletPassword=
+		listeners=
+		variablesFile=
+		variables=ORACLE_BASE_HOME=/u01/app/oracle/product/19.5.0/dbhome_1,DB_UNIQUE_NAME=appscdb,ORACLE_BASE=/u01/app/oracle,PDB_NAME=,DB_NAME=appscdb,ORACLE_HOME=/u01/app/oracle/product/19.5.0/dbhome_1,SID=appscdb1
+		initParams=undo_tablespace=UNDOTBS1,sga_target=2047MB,db_block_size=8192BYTES,log_archive_dest_1='LOCATION={ORACLE_BASE}/oradata/archivelog/',nls_language=AMERICAN,dispatchers=(PROTOCOL=TCP) (SERVICE=appscdb1XDB),diagnostic_dest={ORACLE_BASE},control_files=("{ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/control01.ctl", "{ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME}/control02.ctl"),remote_login_passwordfile=EXCLUSIVE,audit_file_dest={ORACLE_BASE}/admin/{DB_UNIQUE_NAME}/adump,processes=600,pga_aggregate_target=683MB,nls_territory=AMERICA,db_recovery_file_dest_size=12732MB,open_cursors=300,log_archive_format=%t_%s_%r.dbf,compatible=19.0.0,db_name=appscdb,db_recovery_file_dest={ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME},audit_trail=db
+		sampleSchema=false
+		memoryPercentage=40
+		databaseType=MULTIPURPOSE
+		automaticMemoryManagement=false
+		totalMemory=0
 
-#CREATE netca.rsp response file
-vi /export/home/oracle/netca.rsp
-[GENERAL]
-RESPONSEFILE_VERSION="19.0"
-CREATE_TYPE="CUSTOM"
-INSTALLED_COMPONENTS={"server","net8","javavm"}
-INSTALL_TYPE=""typical""
-LISTENER_NUMBER=1
-LISTENER_NAMES={"LISTENER"}
-LISTENER_START=""LISTENER""
-NAMING_METHODS={"TNSNAMES","ONAMES","HOSTNAME"}
-NSN_NUMBER=1
-NSN_NAMES={"EXTPROC_CONNECTION_DATA"}
-NSN_SERVICE={"PLSExtProc"}
-NSN_SERVICE={"PLSExtProc"}
-NSN_PROTOCOLS={"TCP;HOSTNAME;1521"}
+###### CREATE netca.rsp response file
 
-#CREATE DATABASE 
-dbca -silent -createDatabase -responseFile /export/home/oracle/dbca.rsp
-Enter SYS user password: 
+	[root@solaris19c ~]# vi /export/home/oracle/netca.rsp
+		[GENERAL]
+		RESPONSEFILE_VERSION="19.0"
+		CREATE_TYPE="CUSTOM"
+		INSTALLED_COMPONENTS={"server","net8","javavm"}
+		INSTALL_TYPE=""typical""
+		LISTENER_NUMBER=1
+		LISTENER_NAMES={"LISTENER"}
+		LISTENER_START=""LISTENER""
+		NAMING_METHODS={"TNSNAMES","ONAMES","HOSTNAME"}
+		NSN_NUMBER=1
+		NSN_NAMES={"EXTPROC_CONNECTION_DATA"}
+		NSN_SERVICE={"PLSExtProc"}
+		NSN_SERVICE={"PLSExtProc"}
+		NSN_PROTOCOLS={"TCP;HOSTNAME;1521"}
 
-Enter SYSTEM user password: 
+###### CREATE DATABASE 
 
-Enter PDBADMIN User Password: 
+	[root@solaris19c ~]# dbca -silent -createDatabase -responseFile /export/home/oracle/dbca.rsp
+		Enter SYS user password: 
 
-[WARNING] [DBT-06208] The 'SYS' password entered does not conform to the Oracle recommended standards.
-   CAUSE: 
-a. Oracle recommends that the password entered should be at least 8 characters in length, contain at least 1 uppercase character, 1 lower case character and 1 digit [0-9].
-b.The password entered is a keyword that Oracle does not recommend to be used as password
-   ACTION: Specify a strong password. If required refer Oracle documentation for guidelines.
-[WARNING] [DBT-06208] The 'SYSTEM' password entered does not conform to the Oracle recommended standards.
-   CAUSE: 
-a. Oracle recommends that the password entered should be at least 8 characters in length, contain at least 1 uppercase character, 1 lower case character and 1 digit [0-9].
-b.The password entered is a keyword that Oracle does not recommend to be used as password
-   ACTION: Specify a strong password. If required refer Oracle documentation for guidelines.
-[WARNING] [DBT-06208] The 'PDBADMIN' password entered does not conform to the Oracle recommended standards.
-   CAUSE: 
-a. Oracle recommends that the password entered should be at least 8 characters in length, contain at least 1 uppercase character, 1 lower case character and 1 digit [0-9].
-b.The password entered is a keyword that Oracle does not recommend to be used as password
-   ACTION: Specify a strong password. If required refer Oracle documentation for guidelines.
-Prepare for db operation
-8% complete
-Copying database files
-31% complete
-Creating and starting Oracle instance
-32% complete
-36% complete
-40% complete
-43% complete
-46% complete
-Completing Database Creation
-51% complete
-53% complete
-54% complete
-Creating Pluggable Databases
-58% complete
-77% complete
-Executing Post Configuration Actions
-100% complete
-Database creation complete. For details check the logfiles at:
- /u01/app/oracle/cfgtoollogs/dbca/appscdb.
-Database Information:
-Global Database Name:appscdb
-System Identifier(SID):appscdb1
-Look at the log file "/u01/app/oracle/cfgtoollogs/dbca/appscdb/appscdb.log" for further details.
+		Enter SYSTEM user password: 
 
-#CREATE LISTENER
-netca -silent -responsefile /export/home/oracle/netca.rsp
+		Enter PDBADMIN User Password: 
 
-Parsing command line arguments:
-    Parameter "silent" = true
-    Parameter "responsefile" = /export/home/oracle/netca.rsp
-Done parsing command line arguments.
-Oracle Net Services Configuration:
-Profile configuration complete.
-Oracle Net Services configuration successful. The exit code is 0
+		[WARNING] [DBT-06208] The 'SYS' password entered does not conform to the Oracle recommended standards.
+		   CAUSE: 
+		a. Oracle recommends that the password entered should be at least 8 characters in length, contain at least 1 uppercase character, 1 lower case character and 1 digit [0-9].
+		b.The password entered is a keyword that Oracle does not recommend to be used as password
+		   ACTION: Specify a strong password. If required refer Oracle documentation for guidelines.
+		[WARNING] [DBT-06208] The 'SYSTEM' password entered does not conform to the Oracle recommended standards.
+		   CAUSE: 
+		a. Oracle recommends that the password entered should be at least 8 characters in length, contain at least 1 uppercase character, 1 lower case character and 1 digit [0-9].
+		b.The password entered is a keyword that Oracle does not recommend to be used as password
+		   ACTION: Specify a strong password. If required refer Oracle documentation for guidelines.
+		[WARNING] [DBT-06208] The 'PDBADMIN' password entered does not conform to the Oracle recommended standards.
+		   CAUSE: 
+		a. Oracle recommends that the password entered should be at least 8 characters in length, contain at least 1 uppercase character, 1 lower case character and 1 digit [0-9].
+		b.The password entered is a keyword that Oracle does not recommend to be used as password
+		   ACTION: Specify a strong password. If required refer Oracle documentation for guidelines.
+		Prepare for db operation
+		8% complete
+		Copying database files
+		31% complete
+		Creating and starting Oracle instance
+		32% complete
+		36% complete
+		40% complete
+		43% complete
+		46% complete
+		Completing Database Creation
+		51% complete
+		53% complete
+		54% complete
+		Creating Pluggable Databases
+		58% complete
+		77% complete
+		Executing Post Configuration Actions
+		100% complete
+		Database creation complete. For details check the logfiles at:
+		 /u01/app/oracle/cfgtoollogs/dbca/appscdb.
+		Database Information:
+		Global Database Name:appscdb
+		System Identifier(SID):appscdb1
+		Look at the log file "/u01/app/oracle/cfgtoollogs/dbca/appscdb/appscdb.log" for further details.
 
-#START LISTENER
-lsnrctl start
+###### CREATE LISTENER
 
-#CONNECT TO DATABASE
-sqlplus / as sysdba
-SQL*Plus: Release 19.0.0.0.0 - Production on Mon Aug 17 14:06:07 2020
-Version 19.5.0.0.0
+	[root@solaris19c ~]# netca -silent -responsefile /export/home/oracle/netca.rsp
 
-Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+		Parsing command line arguments:
+		    Parameter "silent" = true
+		    Parameter "responsefile" = /export/home/oracle/netca.rsp
+		Done parsing command line arguments.
+		Oracle Net Services Configuration:
+		Profile configuration complete.
+		Oracle Net Services configuration successful. The exit code is 0
 
+###### START LISTENER
 
-Connected to:
-Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
-Version 19.5.0.0.0
+	[root@solaris19c ~]# lsnrctl start
 
-SQL> select name, open_mode from v$pdbs;
+###### CONNECT TO DATABASE
 
-NAME                                                                            OPEN_MODE
-------------------------------------------------------------------------------- ----------
-PDB$SEED                                                                        READ ONLY
-APPSPDB                                                                         READ WRITE
+	[root@solaris19c ~]# sqlplus / as sysdba
+		SQL*Plus: Release 19.0.0.0.0 - Production on Mon Aug 17 14:06:07 2020
+		Version 19.5.0.0.0
 
-SQL> exit
-
-#PLUGGABLE DATABASE (PDB) AUTOMATIC STARTUP
-sqlplus / as sysdba
-
-SQL*Plus: Release 19.0.0.0.0 - Production on Tue Feb 2 18:16:16 2021
-Version 19.5.0.0.0
-
-Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+		Copyright (c) 1982, 2019, Oracle.  All rights reserved.
 
 
-Connected to:
-Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
-Version 19.3.0.0.0
+		Connected to:
+		Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+		Version 19.5.0.0.0
 
-SQL> CREATE OR REPLACE TRIGGER open_pdbs 
-  AFTER STARTUP ON DATABASE 
-BEGIN 
-   EXECUTE IMMEDIATE 'ALTER PLUGGABLE DATABASE ALL OPEN'; 
-END open_pdbs;
-/
+		SQL> select name, open_mode from v$pdbs;
 
-Trigger created.
+		NAME                                                                            OPEN_MODE
+		------------------------------------------------------------------------------- ----------
+		PDB$SEED                                                                        READ ONLY
+		APPSPDB                                                                         READ WRITE
 
-SQL> exit
+		SQL> exit
+
+###### PLUGGABLE DATABASE (PDB) AUTOMATIC STARTUP
+
+	[root@solaris19c ~]# sqlplus / as sysdba
+
+		SQL*Plus: Release 19.0.0.0.0 - Production on Tue Feb 2 18:16:16 2021
+		Version 19.5.0.0.0
+
+		Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+		Connected to:
+		Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+		Version 19.3.0.0.0
+
+		SQL> CREATE OR REPLACE TRIGGER open_pdbs 
+		  AFTER STARTUP ON DATABASE 
+		BEGIN 
+		   EXECUTE IMMEDIATE 'ALTER PLUGGABLE DATABASE ALL OPEN'; 
+		END open_pdbs;
+		/
+
+		Trigger created.
+
+		SQL> exit
 
 
 
