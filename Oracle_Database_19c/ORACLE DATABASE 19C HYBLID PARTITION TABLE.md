@@ -52,140 +52,137 @@
 
         SQL> insert into mytbl values (101, 'hadi', 'alavi', 1);
 
-SQL> insert into mytbl values (102, 'reza', 'karimi', 2);
+        SQL> insert into mytbl values (102, 'reza', 'karimi', 2);
 
-SQL> insert into mytbl values (103, 'hossein', 'akbari', 2);
+        SQL> insert into mytbl values (103, 'hossein', 'akbari', 2);
 
-SQL> commit;
+        SQL> commit;
 
-SQL> create directory part3dir as '/ part3';
+        SQL> create directory part3dir as '/ part3';
 
-Directory created.
+        Directory created.
 
-SQL> create directory part4dir as '/ part4';
+        SQL> create directory part4dir as '/ part4';
 
-Directory created.
+        Directory created.
 
-SQL> ALTER TABLE mytbl
-ADD EXTERNAL PARTITION ATTRIBUTES
-(TYPE ORACLE_LOADER
-DEFAULT DIRECTORY part3dir
-ACCESS PARAMETERS (
-FIELDS TERMINATED BY ',' (national_id, name, last_name, org_id)
-)
-);
+        SQL> ALTER TABLE mytbl
+        ADD EXTERNAL PARTITION ATTRIBUTES
+        (TYPE ORACLE_LOADER
+        DEFAULT DIRECTORY part3dir
+        ACCESS PARAMETERS (
+        FIELDS TERMINATED BY ',' (national_id, name, last_name, org_id)
+        )
+        );
 
-#NOTE
-Add required partitions:
-By adding these two partitions, the table structure will look like this:
+###### ADD REQUIRED PARTITIONS
+>* By adding these two partitions, the table structure will look like this:* 
 
-SQL> ALTER TABLE mytbl ADD PARTITION p3 VALUES (3) EXTERNAL LOCATION (part3dir: 'part3.txt');
+        SQL> ALTER TABLE mytbl ADD PARTITION p3 VALUES (3) EXTERNAL LOCATION (part3dir: 'part3.txt');
 
-SQL> ALTER TABLE mytbl ADD PARTITION p4 VALUES (4) EXTERNAL LOCATION (part4dir: 'part4.txt');
+        SQL> ALTER TABLE mytbl ADD PARTITION p4 VALUES (4) EXTERNAL LOCATION (part4dir: 'part4.txt');
 
-SQL> create table MYTBL
-(
- national_id NUMBER,
- name VARCHAR2 (20),
- last_name VARCHAR2 (20),
- org_id NUMBER
-)
-organization external
-(
- type ORACLE_LOADER
- default directory PART3DIR
- access parameters
-(
-FIELDS TERMINATED BY ',' (national_id, name, last_name, org_id)
-)
-)
-reject limit 0
-partition by list (ORG_ID)
-(
-partition P1 values ​​(1),
-partition P2 values ​​(2),
-partition P3 values ​​(3),
-partition P4 values ​​(4)
-);
+        SQL> create table MYTBL
+        (
+         national_id NUMBER,
+         name VARCHAR2 (20),
+         last_name VARCHAR2 (20),
+         org_id NUMBER
+        )
+        organization external
+        (
+         type ORACLE_LOADER
+         default directory PART3DIR
+         access parameters
+        (
+        FIELDS TERMINATED BY ',' (national_id, name, last_name, org_id)
+        )
+        )
+        reject limit 0
+        partition by list (ORG_ID)
+        (
+        partition P1 values ​​(1),
+        partition P2 values ​​(2),
+        partition P3 values ​​(3),
+        partition P4 values ​​(4)
+        );
 
-SQL> select * from mytbl where org_id = 3;
+        SQL> select * from mytbl where org_id = 3;
 
-+-------------+-------+-----------+--------+
-| NATIONAL_ID | NAME  | LAST_NAME | ORG_ID | 
-+-------------+-------+-----------+--------+
-| 104         | javad | akbarian  | 3      |
-+-------------+-------+-----------+--------+
-| 105         | mina  | karimi    | 3      |
-+-------------+-------+-----------+--------+
-| 106         | sima  | karimi    | 3      |
-+-------------+-------+-----------+--------+
-| 107         | nima  | karimi    | 3      |
-+-------------+-------+-----------+--------+
+        +-------------+-------+-----------+--------+
+        | NATIONAL_ID | NAME  | LAST_NAME | ORG_ID | 
+        +-------------+-------+-----------+--------+
+        | 104         | javad | akbarian  | 3      |
+        +-------------+-------+-----------+--------+
+        | 105         | mina  | karimi    | 3      |
+        +-------------+-------+-----------+--------+
+        | 106         | sima  | karimi    | 3      |
+        +-------------+-------+-----------+--------+
+        | 107         | nima  | karimi    | 3      |
+        +-------------+-------+-----------+--------+
 
-#NOTE
-Execution plan related to organizational code two and three can be seen below:
+>* Execution plan related to organizational code two and three can be seen below:* 
 
-SQL> select * from mytbl where org_id = 2;
+        SQL> select * from mytbl where org_id = 2;
 
-+----+------------------------+-------+-------+--------+-------+-----------------+
-| ID | OPERATION              | NAME  | ROWS  | BYTES  | COST  | TIME            |
-+----+------------------------+-------+-------+--------+-------+-----------------+
-| 0  | SELECT STATEMENTS      |       | 1     | 50     | 2     | 00:00:01        |
-+----+------------------------+-------+-------+--------+-------+-----------------+
-| 1  | PARTITION LIST SINGLE  |       | 1     | 50     | 2     | 00:00:01        |
-+----+------------------------+-------+-------+--------+-------+-----------------+
-| 2  | TABLE ACCESS FULL      |       | 1     | 50     | 2     | 00:00:01        |
-+----+------------------------+-------+-------+--------+-------+-----------------+
+        +----+------------------------+-------+-------+--------+-------+-----------------+
+        | ID | OPERATION              | NAME  | ROWS  | BYTES  | COST  | TIME            |
+        +----+------------------------+-------+-------+--------+-------+-----------------+
+        | 0  | SELECT STATEMENTS      |       | 1     | 50     | 2     | 00:00:01        |
+        +----+------------------------+-------+-------+--------+-------+-----------------+
+        | 1  | PARTITION LIST SINGLE  |       | 1     | 50     | 2     | 00:00:01        |
+        +----+------------------------+-------+-------+--------+-------+-----------------+
+        | 2  | TABLE ACCESS FULL      |       | 1     | 50     | 2     | 00:00:01        |
+        +----+------------------------+-------+-------+--------+-------+-----------------+
 
-SQL> select * from mytbl where org_id = 3;
+        SQL> select * from mytbl where org_id = 3;
 
-+----+--------------------------------+-------+-------+--------+-------+---------+
-| ID | OPERATION                      | NAME  | ROWS  | BYTES  | COST  | TIME    |
-+----+--------------------------------+-------+-------+--------+-------+---------+
-| 0  | SELECT STATEMENTS              |       | 82    | 4100   | 2     | 00:00:01|
-+----+--------------------------------+-------+-------+--------+-------+---------+
-| 1  | PARTITION LIST SINGLE          |       | 82    | 4100   | 2     | 00:00:01|
-+----+--------------------------------+-------+-------+--------+-------+---------+
-| 2  | EXTERNAL TABLE ACCESS FULL     | MYTBL | 82    | 4100   | 2     | 00:00:01|
-+----+--------------------------------+-------+-------+--------+-------+---------+
+        +----+--------------------------------+-------+-------+--------+-------+---------+
+        | ID | OPERATION                      | NAME  | ROWS  | BYTES  | COST  | TIME    |
+        +----+--------------------------------+-------+-------+--------+-------+---------+
+        | 0  | SELECT STATEMENTS              |       | 82    | 4100   | 2     | 00:00:01|
+        +----+--------------------------------+-------+-------+--------+-------+---------+
+        | 1  | PARTITION LIST SINGLE          |       | 82    | 4100   | 2     | 00:00:01|
+        +----+--------------------------------+-------+-------+--------+-------+---------+
+        | 2  | EXTERNAL TABLE ACCESS FULL     | MYTBL | 82    | 4100   | 2     | 00:00:01|
+        +----+--------------------------------+-------+-------+--------+-------+---------+
 
-#NODE
-Finally, we enumerate some of the features and limitations of the Hybrid Partition feature.
-For this type of tables, only partial index can be used:
-DML commands can only be executed on internal partitions
-It is not possible to add LOB and LONG data types in this type of tables:
-To view the names of tables that use this feature, you can use the following query:
+>* Finally, we enumerate some of the features and limitations of the Hybrid Partition feature.* 
+>* For this type of tables, only partial index can be used:* 
+>* DML commands can only be executed on internal partitions* 
+>* It is not possible to add LOB and LONG data types in this type of tables:* 
+>* To view the names of tables that use this feature, you can use the following query:* 
 
-SQL> create index ind1 on mytbl (name);
+        SQL> create index ind1 on mytbl (name);
 
-ORA-14354: operation not supported for a hybrid-partitioned table
+        ORA-14354: operation not supported for a hybrid-partitioned table
 
-SQL> create index ind1 on mytbl (name) local;
+        SQL> create index ind1 on mytbl (name) local;
 
-ORA-14354: operation not supported for a hybrid-partitioned table
+        ORA-14354: operation not supported for a hybrid-partitioned table
 
-SQL> create index ind1 on mytbl (name) indexing partial;
+        SQL> create index ind1 on mytbl (name) indexing partial;
 
-Index created
+        Index created
 
-SQL> create index ind1 on mytbl (name) local indexing partial;
+        SQL> create index ind1 on mytbl (name) local indexing partial;
 
-Index created
+        Index created
 
-SQL> insert into mytbl values ​​(130, 'hossein', 'zaker', 4);
+        SQL> insert into mytbl values ​​(130, 'hossein', 'zaker', 4);
 
-ORA-14466: Data in a read-only partition or subpartition cannot be modified.
+        ORA-14466: Data in a read-only partition or subpartition cannot be modified.
 
-SQL> insert into mytbl values ​​(130, 'hossein', 'zaker', 1);
+        SQL> insert into mytbl values ​​(130, 'hossein', 'zaker', 1);
 
-1 row inserted
+        1 row inserted
 
-SQL> alter table MYTBL add pic blob;
+        SQL> alter table MYTBL add pic blob;
 
-ORA-03001: unimplemented feature
+        ORA-03001: unimplemented feature
 
-SQL> alter table MYTBL add id number;
+        SQL> alter table MYTBL add id number;
 
-Table altered
+        Table altered
 
-SQL> select TABLE_NAME, HYBRID from user_tables where HYBRID = 'YES';
+        SQL> select TABLE_NAME, HYBRID from user_tables where HYBRID = 'YES';
