@@ -8,6 +8,8 @@ and even Oracle can use the same package to schedule some tasks. he does.
 For example, when creating MV (MATERIALIZED VIEW) , if a time and interval is defined for automatic MV updating, 
 Oracle creates a dbms_job job to update MATERIALIZED VIEW:
 
+![oracle database 19c logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Database_19c/images/oracle_database_19c_logo.png)
+
 SQL> CREATE MATERIALIZED VIEW “USEF”.”MVTEST”
 BUILD IMMEDIATE 
 REFRESH FORCE
