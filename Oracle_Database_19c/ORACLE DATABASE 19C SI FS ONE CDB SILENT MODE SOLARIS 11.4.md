@@ -380,8 +380,10 @@
 		Check /u01/app/oracle/product/19.5.0/dbhome_1/install/root_solaris_2020-08-17_11-43-55-523355459.log for the output of root script
 
 ###### CREATE dbca.rsp response file
+
+	[root@solaris19c ~]# su - oracle
 	
-	[root@solaris19c ~]# vi /export/home/oracle/dbca.rsp
+	[oracle@solaris19c ~]# vi /export/home/oracle/dbca.rsp
 		responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v12.2.0
 		gdbName=appscdb
 		sid=appscdb1
@@ -443,7 +445,7 @@
 
 ###### CREATE netca.rsp response file
 
-	[root@solaris19c ~]# vi /export/home/oracle/netca.rsp
+	[oracle@solaris19c ~]# vi /export/home/oracle/netca.rsp
 		[GENERAL]
 		RESPONSEFILE_VERSION="19.0"
 		CREATE_TYPE="CUSTOM"
@@ -461,7 +463,7 @@
 
 ###### CREATE DATABASE 
 
-	[root@solaris19c ~]# dbca -silent -createDatabase -responseFile /export/home/oracle/dbca.rsp
+	[oracle@solaris19c ~]# dbca -silent -createDatabase -responseFile /export/home/oracle/dbca.rsp
 		Enter SYS user password: 
 
 		Enter SYSTEM user password: 
@@ -511,7 +513,7 @@
 
 ###### CREATE LISTENER
 
-	[root@solaris19c ~]# netca -silent -responsefile /export/home/oracle/netca.rsp
+	[oracle@solaris19c ~]# netca -silent -responsefile /export/home/oracle/netca.rsp
 
 		Parsing command line arguments:
 		    Parameter "silent" = true
@@ -523,11 +525,11 @@
 
 ###### START LISTENER
 
-	[root@solaris19c ~]# lsnrctl start
+	[oracle@solaris19c ~]# lsnrctl start
 
 ###### CONNECT TO DATABASE
 
-	[root@solaris19c ~]# sqlplus / as sysdba
+	[oracle@solaris19c ~]# sqlplus / as sysdba
 		SQL*Plus: Release 19.0.0.0.0 - Production on Mon Aug 17 14:06:07 2020
 		Version 19.5.0.0.0
 
@@ -549,7 +551,7 @@
 
 ###### PLUGGABLE DATABASE (PDB) AUTOMATIC STARTUP
 
-	[root@solaris19c ~]# sqlplus / as sysdba
+	[oracle@solaris19c ~]# sqlplus / as sysdba
 
 		SQL*Plus: Release 19.0.0.0.0 - Production on Tue Feb 2 18:16:16 2021
 		Version 19.5.0.0.0
