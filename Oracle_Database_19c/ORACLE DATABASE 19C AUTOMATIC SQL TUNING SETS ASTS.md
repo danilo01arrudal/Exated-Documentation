@@ -70,87 +70,85 @@
               ----------------- ----------------- --------------------- --------------------
               6                 905               19.1590909            10.9390496
 
-* Space Consumption
-The amount of space consumed by all SQL tuning sets can be queried as follows:
+###### SPACE CONSUMPTION
+> *The amount of space consumed by all SQL tuning sets can be queried as follows:*
 
-SQL> Select Table_Name,
-Round(Sum(size_b)/1024/1024, 3) Table_Size_MB,
-Round(Max(Total_Size_B)/1024/1024, 3) Total_Size_MB
-From (Select Table_Name, Size_B, Sum(Size_B) Over() Total_Size_B
-From
-(Select Segment_Name as table_Name, Bytes Size_B
-From DBA_Segments
-Where Segment_Name Not Like '%WORKSPA%'
-And Owner = 'SYS'
-And (segment_Name Like 'WRI%SQLSET%'
-Or Segment_Name Like 'WRH$_SQLTEXT')
-Union All
-Select t.Table_Name, Bytes Size_B
-From DBA_Segments s,
-(Select Table_Name, Segment_Name
-From DBA_Lobs
-Where Tabl  2  e_Name In ('WRI$_SQLSET_PLAN_LINES','WRH$_SQLTEXT')
-And Owner = 'SYS') t
-Where s.Segment_Name = t.Segment_Name))
-Group By Table_Name
-Order By Table_Size_MB Desc;  3    4    5    6    7    8    9   10   11   12   13   14   15   16   17   18   19   20   21  
+              SQL> Select Table_Name,
+              Round(Sum(size_b)/1024/1024, 3) Table_Size_MB,
+              Round(Max(Total_Size_B)/1024/1024, 3) Total_Size_MB
+              From (Select Table_Name, Size_B, Sum(Size_B) Over() Total_Size_B
+              From
+              (Select Segment_Name as table_Name, Bytes Size_B
+              From DBA_Segments
+              Where Segment_Name Not Like '%WORKSPA%'
+              And Owner = 'SYS'
+              And (segment_Name Like 'WRI%SQLSET%'
+              Or Segment_Name Like 'WRH$_SQLTEXT')
+              Union All
+              Select t.Table_Name, Bytes Size_B
+              From DBA_Segments s,
+              (Select Table_Name, Segment_Name
+              From DBA_Lobs
+              Where Tabl  2  e_Name In ('WRI$_SQLSET_PLAN_LINES','WRH$_SQLTEXT')
+              And Owner = 'SYS') t
+              Where s.Segment_Name = t.Segment_Name))
+              Group By Table_Name
+              Order By Table_Size_MB Desc;    
 
-TABLE_NAME					TABLE_SIZE_MB TOTAL_SIZE_MB
------------------------------------------ ------------- -------------
-WRI$_SQLSET_PLAN_LINES                    1550.188	3162.688
-WRH$_SQLTEXT                              1195.188	3162.688
-WRI$_SQLSET_PLANS                          170	       3162.688
-WRI$_SQLSET_PLAN_LINES_PK                   80	       3162.688
-WRI$_SQLSET_STATISTICS                      44	       3162.688
-WRI$_SQLSET_STATEMENTS                      32	       3162.688
-WRI$_SQLSET_STATEMENTS_IDX_02               17	       3162.688
-WRI$_SQLSET_STATEMENTS_IDX_01               17	       3162.688
-WRI$_SQLSET_PLANS_PK                        13	       3162.688
-WRI$_SQLSET_STATISTICS_PK                   13	       3162.688
-WRI$_SQLSET_MASK_PK                         13	       3162.688
-WRI$_SQLSET_MASK                            10	       3162.688
-WRI$_SQLSET_STATEMENTS_PK                    8	       3162.688
-WRI$_SQLSET_DEFINITIONS                      .063	3162.688
-WRI$_SQLSET_REFERENCES_PK                    .063	3162.688
-WRI$_SQLSET_DEFINITIONS_IDX_01               .063	3162.688
-WRI$_SQLSET_REFERENCES                       .063	3162.688
-WRI$_SQLSET_DEFINITIONS_PK                   .063	3162.688
+              TABLE_NAME					TABLE_SIZE_MB TOTAL_SIZE_MB
+              ----------------------------------------- ------------- -------------
+              WRI$_SQLSET_PLAN_LINES                    1550.188	3162.688
+              WRH$_SQLTEXT                              1195.188	3162.688
+              WRI$_SQLSET_PLANS                          170	       3162.688
+              WRI$_SQLSET_PLAN_LINES_PK                   80	       3162.688
+              WRI$_SQLSET_STATISTICS                      44	       3162.688
+              WRI$_SQLSET_STATEMENTS                      32	       3162.688
+              WRI$_SQLSET_STATEMENTS_IDX_02               17	       3162.688
+              WRI$_SQLSET_STATEMENTS_IDX_01               17	       3162.688
+              WRI$_SQLSET_PLANS_PK                        13	       3162.688
+              WRI$_SQLSET_STATISTICS_PK                   13	       3162.688
+              WRI$_SQLSET_MASK_PK                         13	       3162.688
+              WRI$_SQLSET_MASK                            10	       3162.688
+              WRI$_SQLSET_STATEMENTS_PK                    8	       3162.688
+              WRI$_SQLSET_DEFINITIONS                      .063	3162.688
+              WRI$_SQLSET_REFERENCES_PK                    .063	3162.688
+              WRI$_SQLSET_DEFINITIONS_IDX_01               .063	3162.688
+              WRI$_SQLSET_REFERENCES                       .063	3162.688
+              WRI$_SQLSET_DEFINITIONS_PK                   .063	3162.688
 
-18 rows selected.
+              18 rows selected.
 
-* The following query reports statement counts per SQL tuning set, allowing you to approximately apportion space usage to individual SQL tuning sets:
+              * The following query reports statement counts per SQL tuning set, allowing you to approximately apportion space usage to individual SQL tuning sets:
 
-SQL> Select Decode(SQLSet_Name,'SYS_AUTO_STS','ASTS','NON-ASTS') SQLSets, Count(*) Count From DBA_SQLSet_Statements Group By Decode(SQLSet_Name,'SYS_AUTO_STS','ASTS','NON-ASTS');
+              SQL> Select Decode(SQLSet_Name,'SYS_AUTO_STS','ASTS','NON-ASTS') SQLSets, Count(*) Count From DBA_SQLSet_Statements Group By Decode(SQLSet_Name,'SYS_AUTO_STS','ASTS','NON-ASTS');
 
-SQLSETS       COUNT
-------------- ----------
-ASTS          348292
+              SQLSETS       COUNT
+              ------------- ----------
+              ASTS          348292
 
-#CONTROLLING THE ASTS TASK
-#NOTE
-ASTS is collected through Oracle’s automatic task framework: SQL statement performance metrics and execution plans are collected continuously. 
-The task can be enabled and disabled but it Is recommended to enable ASTS to collect historical SQL plan and execution statistics.
+###### CONTROLLING THE ASTS TASK
+> *ASTS is collected through Oracle’s automatic task framework: SQL statement performance metrics and execution plans are collected continuously.* 
+> *The task can be enabled and disabled but it Is recommended to enable ASTS to collect historical SQL plan and execution statistics.*
 
-* Viewing Task Status
+> *Viewing Task Status*
 
-SQL> Select Task_Name, Enabled From DBA_AutoTask_Schedule_Control Where Task_Name = 'Auto STS Capture Task';
+              SQL> Select Task_Name, Enabled From DBA_AutoTask_Schedule_Control Where Task_Name = 'Auto STS Capture Task';
 
-TASK_NAME                   ENABLED
---------------------------- --------
-Auto STS Capture Task       TRUE
+              TASK_NAME                   ENABLED
+              --------------------------- --------
+              Auto STS Capture Task       TRUE
 
-* Enabling Task
+> *Enabling Task*
 
-SQL> exec DBMS_AUTO_TASK_ADMIN.ENABLE(Client_Name => 'Auto STS Capture Task', Operation => NULL, Window_name => NULL);
+              SQL> exec DBMS_AUTO_TASK_ADMIN.ENABLE(Client_Name => 'Auto STS Capture Task', Operation => NULL, Window_name => NULL);
 
-* Disabling Task
+> *Disabling Task*
 
-SQL> exec DBMS_Auto_Task_Admin.Disable(Client_Name => 'Auto STS Capture Task', Operation => NULL, Window_name => NULL);
+              SQL> exec DBMS_Auto_Task_Admin.Disable(Client_Name => 'Auto STS Capture Task', Operation => NULL, Window_name => NULL);
 
-#NOTE
-In 19.7, autotask should be disabled in all containers all pdbs.
-There are checks and balances to prevent ATST from growing indefinitely – but we found some issues with this under some circumstances. 
-When all bugs are fixed in the RU, then it should no longer happen and ASTS will be much smaller.
+> *In 19.7, autotask should be disabled in all containers all pdbs.*
+> *There are checks and balances to prevent ATST from growing indefinitely – but we found some issues with this under some circumstances.* 
+> *When all bugs are fixed in the RU, then it should no longer happen and ASTS will be much smaller.*
 
-Probably the feature was turned off to avoid rampant space consumption where the user or dba is often unaware of the reason for space consumption. 
-But soon this feature should return to the default package.
+> *Probably the feature was turned off to avoid rampant space consumption where the user or dba is often unaware of the reason for space consumption.* 
+> *But soon this feature should return to the default package.*
