@@ -9,106 +9,106 @@
 
 ###### CREATE ENVIRONMENT TO RESTORE TABLE
 
-sqlplus / as sysdba
+    [oracle@ol719c ~]$ sqlplus / as sysdba
 
-SQL*Plus: Release 19.0.0.0.0 - Production on Fri Aug 14 16:33:42 2020
-Version 19.3.0.0.0
+      SQL*Plus: Release 19.0.0.0.0 - Production on Wed Jun 23 22:38:25 2021
+      Version 19.3.0.0.0
 
-Copyright (c) 1982, 2019, Oracle.  All rights reserved.
-
-
-Connected to:
-Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
-Version 19.3.0.0.0
-
-SQL> alter session set container=APPSPDB;
-
-Session altered.
-
-SQL> create user danilo identified by "<$password>" default tablespace users temporary tablespace temp profile default account unlock;
-
-User created.
-
-SQL> grant create session, create table to danilo;
-
-Grant succeeded.
-
-SQL> alter user danilo quota 500M on users;  
-
-User altered.
-
-SQL> exit
-
-#CONFIGURE CONNECTION STRING ON TNSNAMES.ORA
-
-vi /u01/app/oracle/product/19.3.0/dbhome_1/network/admin/tnsnames.ora
-
-APPSPDB =
-  (DESCRIPTION =
-    (ADDRESS = (PROTOCOL = TCP)(HOST = 127.0.0.1)(PORT = 1521))
-    (CONNECT_DATA =
-      (SERVER = DEDICATED)
-      (SERVICE_NAME = appspdb)
-    )
-  )
-
-tnsping APPSPDB
-
-TNS Ping Utility for Linux: Version 19.0.0.0.0 - Production on 14-AUG-2020 16:39:33
-
-Copyright (c) 1997, 2019, Oracle.  All rights reserved.
-
-Used parameter files:
-/u01/app/oracle/product/19.3.0/dbhome_1/network/admin/sqlnet.ora
+      Copyright (c) 1982, 2019, Oracle.  All rights reserved.
 
 
-Used TNSNAMES adapter to resolve the alias
-Attempting to contact (DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = 127.0.0.1)(PORT = 1521)) (CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = appspdb)))
-OK (10 msec)
+      Connected to:
+      Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+      Version 19.3.0.0.0
 
-#CONECT ON PDB AND CREATE NEW TABLE
+      SQL> alter session set container=APPSPDB;
 
-sqlplus danilo/<$password>@APPSPDB
+      Session altered.
 
-SQL*Plus: Release 19.0.0.0.0 - Production on Fri Aug 14 17:02:39 2020
-Version 19.3.0.0.0
+      SQL> create user danilo identified by "<$password>" default tablespace users temporary tablespace temp profile default account unlock;
 
-Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+      User created.
 
-Last Successful login time: Fri Aug 14 2020 16:46:08 -03:00
+      SQL> grant create session, create table to danilo;
 
-Connected to:
-Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
-Version 19.3.0.0.0
+      Grant succeeded.
 
-SQL> create table emp(id number);
+      SQL> alter user danilo quota 500M on users;  
 
-Table created.
+      User altered.
 
-SQL> begin
-for i in 1 .. 100000 loop
-insert into emp values(i);
-end loop;
-end;
-/  2    3    4    5    6  
+      SQL> exit
 
-PL/SQL procedure successfully completed.
+###### CONFIGURE CONNECTION STRING ON TNSNAMES.ORA
 
-SQL> select count(*) from emp; 
+    [oracle@ol719c ~]$ vi /u01/app/oracle/product/19.3.0/dbhome_1/network/admin/tnsnames.ora
 
-  COUNT(*)
-----------
-    100000
+      APPSPDB =
+        (DESCRIPTION =
+          (ADDRESS = (PROTOCOL = TCP)(HOST = 127.0.0.1)(PORT = 1521))
+          (CONNECT_DATA =
+            (SERVER = DEDICATED)
+            (SERVICE_NAME = appspdb)
+          )
+        )
 
-SQL> SELECT TO_CHAR (SYSDATE, 'MM-DD-YYYY HH24:MI:SS') "NOW" FROM DUAL;
+    [oracle@ol719c ~]$ tnsping APPSPDB
 
-NOW
--------------------
-08-14-2020 17:04:13
+      TNS Ping Utility for Linux: Version 19.0.0.0.0 - Production on 14-AUG-2020 16:39:33
 
-SQL> exit
-Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
-Version 19.3.0.0.0
+      Copyright (c) 1997, 2019, Oracle.  All rights reserved.
+
+      Used parameter files:
+      /u01/app/oracle/product/19.3.0/dbhome_1/network/admin/sqlnet.ora
+
+
+      Used TNSNAMES adapter to resolve the alias
+      Attempting to contact (DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = 127.0.0.1)(PORT = 1521)) (CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = appspdb)))
+    OK (10 msec)
+
+###### CONECT ON PDB AND CREATE NEW TABLE
+
+    [oracle@ol719c ~]$ sqlplus danilo/<$password>@APPSPDB
+
+      SQL*Plus: Release 19.0.0.0.0 - Production on Fri Aug 14 17:02:39 2020
+      Version 19.3.0.0.0
+
+      Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+      Last Successful login time: Fri Aug 14 2020 16:46:08 -03:00
+
+      Connected to:
+      Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+      Version 19.3.0.0.0
+
+      SQL> create table emp(id number);
+
+      Table created.
+
+      SQL> begin
+      for i in 1 .. 100000 loop
+      insert into emp values(i);
+      end loop;
+      end;
+      / 
+
+      PL/SQL procedure successfully completed.
+
+      SQL> select count(*) from emp; 
+
+        COUNT(*)
+      ----------
+          100000
+
+      SQL> SELECT TO_CHAR (SYSDATE, 'MM-DD-YYYY HH24:MI:SS') "NOW" FROM DUAL;
+
+      NOW
+      -------------------
+      08-14-2020 17:04:13
+
+      SQL> exit
+      Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+      Version 19.3.0.0.0
 
 sqlplus / as sysdba
 
