@@ -7,7 +7,7 @@
 
 ###### BUILD VIRTUAL MACHINE ON VIRTUALIZER
     
-    [root@exated ~]# virt-install --virt-type kvm --name ol9d --memory 4096 --vcpus 2 --os-variant ol7.5 --cdrom /var/lib/libvirt/images/OracleLinux-R7-U5-x86_64-dvd.iso --network bridge=br0,model=virtio --disk path=/var/lib/libvirt/images/ol9d.qcow2,size=50 --graphics vnc,port=5901,listen=0.0.0.0
+    [root@exated ~]# virt-install --virt-type kvm --name ol719csi --memory 4096 --vcpus 2 --os-variant ol7.5 --cdrom /var/lib/libvirt/images/OracleLinux-R7-U5-x86_64-dvd.iso --network bridge=br0,model=virtio --disk path=/var/lib/libvirt/images/ol719csi.qcow2,size=50 --graphics vnc,port=5901,listen=0.0.0.0
 
 ###### CONFIGURE HOSTNAME
 
