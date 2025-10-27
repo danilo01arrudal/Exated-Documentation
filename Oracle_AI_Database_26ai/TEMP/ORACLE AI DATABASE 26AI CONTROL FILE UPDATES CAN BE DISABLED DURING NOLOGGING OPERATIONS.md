@@ -17,7 +17,7 @@
 >> *Oracle Base Database Service Enterprise Edition - Extreme Performance*
 
 > *There are several means of inserting or initially loading data into your tables. Most commonly used are the following:*
->> *SQL*Loader*
+>> *SQL Loader*
 >> *CREATE TABLE ... AS SELECT statement (CTAS)*
 >> *INSERT statement*
 >> *MERGE statement*
