@@ -4,6 +4,7 @@
     [✓] 11.2.0.2    [✓] 12.1    [✓] 12.2    [✓] 18c    [✓] 19c    [✓] 21c    [✓] 23ai    [✓] 26ai
 
 > *Available On*
+>> *Standard Edition 2*
 
 
 ![oracle database 19c logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
