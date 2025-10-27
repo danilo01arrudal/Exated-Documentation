@@ -19,7 +19,7 @@
 > *-SQL*Loader*
 > *-CREATE TABLE ... AS SELECT statement (CTAS)*
 > *-INSERT statement*
-> *-MERGE statement**
+> *-MERGE statement*
 
 
 ![oracle database 19c logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
