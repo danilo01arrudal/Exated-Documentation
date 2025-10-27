@@ -6,4 +6,4 @@ Control File Updates Can Be Disabled During NOLOGGING Operations
 
 > *Enable EXTERNAL PARTITION attribute for mytbl table:*
 
-![oracle database 19c logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Database_19c/images/oracle_database_19c_logo.png)
+![oracle database 19c logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
