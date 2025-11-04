@@ -152,25 +152,24 @@
               Next log sequence to archive  9
               Current log sequence	      9
 
-#NOTE
-It is not possible to execute the switch logfile command connected to a pluggable database
+> *It is not possible to execute the switch logfile command connected to a pluggable database*
 
-SQL> alter system switch logfile;
-alter system switch logfile
-*
-ERROR at line 1:
-ORA-65040: operation not allowed from within a pluggable database
+              SQL> alter system switch logfile;
+              alter system switch logfile
+              *
+              ERROR at line 1:
+              ORA-65040: operation not allowed from within a pluggable database
 
-SQL> alter session set container=CDB$ROOT;
-Session altered.
+              SQL> alter session set container=CDB$ROOT;
+              Session altered.
 
-SQL> alter system switch logfile;
-System altered.
+              SQL> alter system switch logfile;
+              System altered.
 
-SQL> !ls -ltr /u01/app/oracle/fast_recovery_area/APPSCDB/archivelog/2025_11_04/
-total 4592
--rw-r----- 1 oracle oinstall 2330112 Nov  4 11:40 o1_mf_1_11_njkydmqy_.arc
--rw-r----- 1 oracle oinstall 2368000 Nov  4 11:41 o1_mf_1_12_njkzvonr_.arc
+              SQL> !ls -ltr /u01/app/oracle/fast_recovery_area/APPSCDB/archivelog/2025_11_04/
+              total 4592
+              -rw-r----- 1 oracle oinstall 2330112 Nov  4 11:40 o1_mf_1_11_njkydmqy_.arc
+              -rw-r----- 1 oracle oinstall 2368000 Nov  4 11:41 o1_mf_1_12_njkzvonr_.arc
 
 
 
