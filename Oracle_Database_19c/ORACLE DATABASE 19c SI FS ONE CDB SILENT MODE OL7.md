@@ -1,23 +1,23 @@
 .
+
 .
+
 .
+
 .
+
 .
+
 .
+
 .
+
 .
+
 .
+
 .
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
+
 **ORACLE DATABASE 19c SI FS ONE CDB SILENT MODE OL7.5**
 
 
