@@ -397,5 +397,4 @@
     [root@ol719csi ~]# systemctl daemon-reload
     [root@ol719csi ~]# systemctl enable dbora.service
 
-###### writed by: Danilo Arruda
-###### ter 18 fev 2025
+###### Copyright © 2025 by Exated
