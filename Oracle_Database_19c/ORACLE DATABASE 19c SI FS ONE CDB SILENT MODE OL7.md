@@ -398,4 +398,4 @@
     [root@ol719csi ~]# systemctl daemon-reload
     [root@ol719csi ~]# systemctl enable dbora.service
 
-###### Copyright © 2025 by Exated
+###### Copyright © 2025 by Exated Software Ltda
