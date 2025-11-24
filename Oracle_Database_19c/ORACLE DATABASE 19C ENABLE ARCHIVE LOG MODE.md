@@ -45,7 +45,7 @@
 ###### NOTE
 > *"In Oracle multitenent database we have redo logs present at container database, there is no redo logs at pluggable database."*
 
-![oracle database 19c logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Database_19c/images/oracle_database_19c_logo.png) 
+![oracle database 19c logo](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Database_19c/images/oracle_database_19c_logo.png) 
 
 ###### CHECK ENVIRONMENT
 > *Check the current environment configuration*
