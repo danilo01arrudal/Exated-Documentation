@@ -61,7 +61,7 @@
        Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production Version 19.3.0.0.0
 
        SQL> select GROUP#, THREAD#, SEQUENCE#, BYTES, ARC, STATUS, NEXT_TIME from v$log;
-       GROUP#    THREAD#  SEQUENCE#      BYTES  BLOCKSIZE     MEMBERS    ARC STATUS           NEXT_TIME
+       GROUP#     THREAD#    SEQUENCE#       BYTES  BLOCKSIZE    MEMBERS ARC STATUS           NEXT_TIME
        ---------- ---------- ---------- ---------- ---------- ---------- --- ---------------- ---------
                 1          1         13  209715200        512          1 YES INACTIVE         04-NOV-25
                 2          1         14  209715200        512          1 NO  CURRENT          
