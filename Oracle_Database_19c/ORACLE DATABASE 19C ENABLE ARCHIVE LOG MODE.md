@@ -1,25 +1,3 @@
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
 **ORACLE DATABASE 19C ENABLE ARCHIVE LOG MODE**
 
 > *Oracle Database lets you save filled groups of redo log files to one or more offline destinations, known collectively as the archived redo log.*
@@ -43,11 +21,13 @@
 >> *Get information about the history of a database using the LogMiner utility*
 
 ###### NOTE
+
 > *"In Oracle multitenent database we have redo logs present at container database, there is no redo logs at pluggable database."*
 
 ![oracle database 19c logo](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Database_19c/images/oracle_database_19c_logo.png) 
 
 ###### CHECK ENVIRONMENT
+
 > *Check the current environment configuration*
 
        [oracle@ol719csi ~]$ sqlplus / as sysdba
@@ -105,6 +85,7 @@
        -rw-r-----. 1 oracle oinstall 18726912 Nov  4 11:40 control02.ctl
 
 ###### CONFIGURATION
+
 > *Below are the parameters required to enable archivelog mode.*
 
 >> *LOG_ARCHIVE_DEST_1 defines the address where the archives will be copied.*
@@ -115,6 +96,7 @@
        SQL> ALTER SYSTEM SET LOG_ARCHIVE_FORMAT='%t_%s_%r.arc' SCOPE=spfile;
 
 ###### RESTART ENVIRONMENT
+
 > *For the parameters to be applied, a restart of the database instance is necessary. We are modifying static parameters that affect how the instance works.*
 
 > *The environment must be started in mount mode:
