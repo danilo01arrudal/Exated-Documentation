@@ -1,3 +1,25 @@
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
 **ORACLE DATABASE 19C ENABLE ARCHIVE LOG MODE**
 
 > *Oracle Database lets you save filled groups of redo log files to one or more offline destinations, known collectively as the archived redo log.*
