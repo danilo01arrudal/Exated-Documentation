@@ -60,19 +60,19 @@
        Connected to:
        Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production Version 19.3.0.0.0
 
-       SQL> select * from v$log;
-       GROUP#    THREAD#  SEQUENCE#      BYTES  BLOCKSIZE    MEMBERS ARC STATUS           FIRST_CHANGE# FIRST_TIM NEXT_CHANGE# NEXT_TIME     CON_ID
-       ---------- ---------- ---------- ---------- ---------- ---------- --- ---------------- ------------- --------- ------------ --------- ----------
-              1          1         13  209715200        512          1 YES INACTIVE               2272746 03-NOV-25      2374586 04-NOV-25          0
-              2          1         14  209715200        512          1 NO  CURRENT                2374586 04-NOV-25   1.8447E+19                    0
-              3          1         12  209715200        512          1 YES INACTIVE               2270701 03-NOV-25      2272746 03-NOV-25          0
+       SQL> select GROUP#, THREAD#, SEQUENCE#, BYTES, ARC, STATUS, NEXT_TIME from v$log;
+       GROUP#    THREAD#  SEQUENCE#      BYTES  BLOCKSIZE     MEMBERS    ARC STATUS           NEXT_TIME
+       ---------- ---------- ---------- ---------- ---------- ---------- --- ---------------- ---------
+                1          1         13  209715200        512          1 YES INACTIVE         04-NOV-25
+                2          1         14  209715200        512          1 NO  CURRENT          
+                3          1         12  209715200        512          1 YES INACTIVE         03-NOV-25
 
-       SQL> select * from v$logfile;
-       GROUP# STATUS  TYPE    MEMBER                                                                 IS_     CON_ID
-       ---------- ------- ------- ---------------------------------------------------------------------- --- ----------
-              3         ONLINE  /u01/app/oracle/oradata/APPSCDB/redo03.log                             NO           0
-              2         ONLINE  /u01/app/oracle/oradata/APPSCDB/redo02.log                             NO           0
-              1         ONLINE  /u01/app/oracle/oradata/APPSCDB/redo01.log                             NO           0
+       SQL> select GROUP#, STATUS, MEMBER   * from v$logfile;
+       GROUP#      STATUS MEMBER                                        
+       ---------- ------- ----------------------------------------------
+              3    ONLINE  /u01/app/oracle/oradata/APPSCDB/redo03.log   
+              2    ONLINE  /u01/app/oracle/oradata/APPSCDB/redo02.log   
+              1    ONLINE  /u01/app/oracle/oradata/APPSCDB/redo01.log   
    
        SQL> select name,open_mode,log_mode from v$database;
        NAME	    OPEN_MODE	           LOG_MODE
