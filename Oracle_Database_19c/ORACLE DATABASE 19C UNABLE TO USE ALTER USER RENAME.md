@@ -24,6 +24,10 @@
 
 .
 
+.
+
+.
+
 ###### CREATE USER AND TRY RENAME 
 
         [oracle@ol719csi ~]$ sqlplus / as sysdba
