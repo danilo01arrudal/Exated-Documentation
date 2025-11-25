@@ -30,7 +30,7 @@
 
 .
 
-###### CREATE USER AND TRY RENAME 
+###### CONNECT PDB
 
         [oracle@ol719csi ~]$ sqlplus / as sysdba
 
@@ -55,6 +55,8 @@
 
             Session altered.
 
+###### CREATE USER AND DEFINE PASSWORD
+
             SQL> create user EXATED identified by "exated";
 
             User created.
@@ -62,6 +64,8 @@
             SQL> grant connect, resource to EXATED;
 
             Grant succeeded.
+
+###### TRY RENAME USER
 
             SQL> alter session set "_enable_rename_user"=true;
 
