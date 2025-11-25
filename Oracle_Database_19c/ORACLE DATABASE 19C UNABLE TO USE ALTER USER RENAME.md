@@ -4,32 +4,6 @@
 > *This functionality was removed in 19c, and attempting to execute this command will result in an error.*
 > *To effectively "change" a schema name in Oracle 19c, the common approach involves creating a new user and migrating the objects from the old schema to the new one*
 
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
 ###### CONNECT PDB
 
         [oracle@ol719csi ~]$ sqlplus / as sysdba
