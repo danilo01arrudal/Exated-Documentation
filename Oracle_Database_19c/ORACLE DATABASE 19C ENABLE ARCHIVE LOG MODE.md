@@ -16,13 +16,6 @@
 
 .
 
-.
-
-.
-
-.
-
-.
 
 **ORACLE DATABASE 19C ENABLE ARCHIVE LOG MODE**
 
