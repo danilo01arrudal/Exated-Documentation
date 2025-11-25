@@ -231,3 +231,5 @@
       connected to target database: APPSCDB (DBID=4059180582)
 
       RMAN> BACKUP PLUGGABLE DATABASE appspdb, fusionpdb;
+
+###### Copyright © 2025 by Exated Software Ltda      
