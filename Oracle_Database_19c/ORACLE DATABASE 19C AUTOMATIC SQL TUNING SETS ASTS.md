@@ -30,8 +30,6 @@
 > *The resource utilization for normal systems is negligible and can be ignored in most cases; this is true for both space and CPU consumption.* 
 > *The following SQL statements provide an insight into the resources used.*
 
-![oracle database 19c logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Database_19c/images/oracle_database_19c_logo.png)
-
 ###### RUNTIME PERFORMANCE
 > *You can acquire a summary of runtime performance for the ASTS task as follows:*
 
