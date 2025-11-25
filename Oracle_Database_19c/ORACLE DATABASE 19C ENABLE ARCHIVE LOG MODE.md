@@ -201,8 +201,7 @@
        -rw-r----- 1 oracle oinstall 2330112 Nov  4 11:40 o1_mf_1_11_njkydmqy_.arc
        -rw-r----- 1 oracle oinstall 2368000 Nov  4 11:41 o1_mf_1_12_njkzvonr_.arc
 
-
-
+###### Copyright © 2025 by Exated Software Ltda
 
 
 
