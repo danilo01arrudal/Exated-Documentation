@@ -23,6 +23,14 @@
     [root@ol9n2 ~]# vi /sys/devices/system/clocksource/clocksource0/current_clocksource
     tsc
 
+###### SET ON /etc/fstab TMPFS PARTITION
+
+    [root@ol9n1 ~]# vi /etc/fstab
+		tmpfs      				  /dev/shm        	  tmpfs   defaults,size=4G	0 0
+ 
+	[root@ol9n2 ~]# vi /etc/fstab
+ 		tmpfs      				  /dev/shm        	  tmpfs   defaults,size=4G	0 0
+
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE HOSTNAME NODE 1)
 
     [root@ol9n1 ~]# hostnamectl set-hostname ol9n1.appsdba.info
@@ -459,18 +467,18 @@
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CREATE ASM DEVICES RULES )
 
     [root@ol9n1 ~]# cat <<EOF > /etc/udev/rules.d/99-oracle-asmdevices.rules
-    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405c2b1cd5d2f25490fa18a78e36", SYMLINK+="asm-disk1", OWNER="grid", GROUP="asmadmin", MODE="0660"
-    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="360014058c1b0ce71fe24475aa4139ecc", SYMLINK+="asm-disk2", OWNER="grid", GROUP="asmadmin", MODE="0660"
-    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="360014051c3e44ceaf57418fa35d05cb5", SYMLINK+="asm-disk3", OWNER="grid", GROUP="asmadmin", MODE="0660"
-    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405e87d20fdda164e60bd17dac7d", SYMLINK+="asm-disk4", OWNER="grid", GROUP="asmadmin", MODE="0660"
-    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="3600140590bc1307e3a44a679c89c7014", SYMLINK+="asm-disk5", OWNER="grid", GROUP="asmadmin", MODE="0660"
+    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405c2b1cd5d2f25490fa18a78e36", SYMLINK+="asm-disk1", OWNER="grid", GROUP="asmdba", MODE="0660"
+    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="360014058c1b0ce71fe24475aa4139ecc", SYMLINK+="asm-disk2", OWNER="grid", GROUP="asmdba", MODE="0660"
+    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="360014051c3e44ceaf57418fa35d05cb5", SYMLINK+="asm-disk3", OWNER="grid", GROUP="asmdba", MODE="0660"
+    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405e87d20fdda164e60bd17dac7d", SYMLINK+="asm-disk4", OWNER="grid", GROUP="asmdba", MODE="0660"
+    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="3600140590bc1307e3a44a679c89c7014", SYMLINK+="asm-disk5", OWNER="grid", GROUP="asmdba", MODE="0660"
     EOF
     [root@ol9n2 ~]# cat <<EOF > /etc/udev/rules.d/99-oracle-asmdevices.rules
-    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405c2b1cd5d2f25490fa18a78e36", SYMLINK+="asm-disk1", OWNER="grid", GROUP="asmadmin", MODE="0660"
-    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="360014058c1b0ce71fe24475aa4139ecc", SYMLINK+="asm-disk2", OWNER="grid", GROUP="asmadmin", MODE="0660"
-    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="360014051c3e44ceaf57418fa35d05cb5", SYMLINK+="asm-disk3", OWNER="grid", GROUP="asmadmin", MODE="0660"
-    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405e87d20fdda164e60bd17dac7d", SYMLINK+="asm-disk4", OWNER="grid", GROUP="asmadmin", MODE="0660"
-    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="3600140590bc1307e3a44a679c89c7014", SYMLINK+="asm-disk5", OWNER="grid", GROUP="asmadmin", MODE="0660"
+    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405c2b1cd5d2f25490fa18a78e36", SYMLINK+="asm-disk1", OWNER="grid", GROUP="asmdba", MODE="0660"
+    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="360014058c1b0ce71fe24475aa4139ecc", SYMLINK+="asm-disk2", OWNER="grid", GROUP="asmdba", MODE="0660"
+    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="360014051c3e44ceaf57418fa35d05cb5", SYMLINK+="asm-disk3", OWNER="grid", GROUP="asmdba", MODE="0660"
+    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405e87d20fdda164e60bd17dac7d", SYMLINK+="asm-disk4", OWNER="grid", GROUP="asmdba", MODE="0660"
+    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="3600140590bc1307e3a44a679c89c7014", SYMLINK+="asm-disk5", OWNER="grid", GROUP="asmdba", MODE="0660"
     EOF
 
     [root@ol9n1 ~]# udevadm test /block/sda/sda1

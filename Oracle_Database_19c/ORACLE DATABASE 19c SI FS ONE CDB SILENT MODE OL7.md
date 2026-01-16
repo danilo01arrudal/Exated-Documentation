@@ -1,69 +1,66 @@
 **ORACLE DATABASE 19c SI FS ONE CDB SILENT MODE OL7.5**
 
-
 > *Oracle Database 19c has features such as advanced partitioning, multitenancy support, data compression, and automation tools such as the Autonomous Health Framework, 19c is ideal for mission-critical environments. In addition, it includes improvements in machine learning, integration with big data, and support for hybrid architectures, being widely used in on-premises and cloud databases.*
-
-![oracle database 19c logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Database_19c/images/oracle_database_19c_logo.png)
 
 ###### BUILD VIRTUAL MACHINE ON VIRTUALIZER
     
-    [root@exated ~]# virt-install --virt-type kvm --name ol9d --memory 4096 --vcpus 2 --os-variant ol9.5 --cdrom /var/lib/libvirt/images/OracleLinux-R9-U5-x86_64-dvd.iso --network bridge=br0,model=virtio --disk path=/var/lib/libvirt/images/ol9d.qcow2,size=50
+    [root@exated ~]# virt-install --virt-type kvm --name ol719csi --memory 4096 --vcpus 2 --os-variant ol7.5 --cdrom /var/lib/libvirt/images/OracleLinux-R7-U5-x86_64-dvd.iso --network bridge=br0,model=virtio --disk path=/var/lib/libvirt/images/ol719csi.qcow2,size=50 --graphics vnc,port=5901,listen=0.0.0.0
 
 ###### CONFIGURE HOSTNAME
 
-    [root@ ~]# hostnamectl set-hostname ol719c
+    [root@ ~]# hostnamectl set-hostname ol719csi
 
 ###### INSTALL PRE-INSTALL PACKAGES
 
-    [root@ol719c ~]# yum install oracle-database-preinstall-19c
+    [root@ol719csi ~]# yum install oracle-database-preinstall-19c
 
 ###### DISABLE SELINUX
 
-    [root@ol719c ~]# sed -i 's/SELINUX=.*/SELINUX=disabled/' /etc/selinux/config && setenforce 0
+    [root@ol719csi ~]# sed -i 's/SELINUX=.*/SELINUX=disabled/' /etc/selinux/config && setenforce 0
 
 ###### CONFIGURE STATIC NETWORK
     
-    [root@ol719c ~]# nmcli device
+    [root@ol719csi ~]# nmcli device
     DEVICE  TYPE      STATE                   CONNECTION 
     enp1s0  ethernet  conectado               enp1s0     
     lo      loopback  connected (externally)  lo   
 
-    [root@ol719c ~]# nmcli connection show 
+    [root@ol719csi ~]# nmcli connection show 
     NAME    UUID                                  TYPE      DEVICE 
     enp1s0  82e45657-ca14-380d-adfc-ac71a5aa7281  ethernet  enp1s0 
     lo      c30f3777-2d34-40f9-9fdb-da73383b9848  loopback  lo  
 
-    [root@ol719c ~]# nmcli con modify 'enp1s0' iframe enp1s0 ipv4.method manual ipv4.addresses 192.168.18.211/24 gw4 192.168.18.1
-    [root@ol719c ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.201
-    [root@ol719c ~]# nmcli con down 'enp1s0'
-    [root@ol719c ~]# nmcli con up 'enp1s0'
+    [root@ol719csi ~]# nmcli con modify 'enp1s0' ifname enp1s0 ipv4.method manual ipv4.addresses 192.168.18.211/24 gw4 192.168.18.1
+    [root@ol719csi ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.201
+    [root@ol719csi ~]# nmcli con down 'enp1s0'
+    [root@ol719csi ~]# nmcli con up 'enp1s0'
 
-    [root@ol719c ~]# ip addr show enp1s0
+    [root@ol719csi ~]# ip addr show enp1s0
     2: enp1s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 52:54:00:bc:5a:a4 brd ff:ff:ff:ff:ff:ff
     inet 192.168.18.101/24 brd 192.168.18.255 scope global noprefixroute enp1s0
        valid_lft forever preferred_lft forever
 
-    [root@ol719c ~]# ip route show
+    [root@ol719csi ~]# ip route show
     default via 192.168.18.1 dev enp1s0 proto static metric 100 
     192.168.18.0/24 dev enp1s0 proto kernel scope link src 192.168.18.101 metric 100 
 
 ###### CREATE ORACLE_BASE AND ORACLE_HOME DIRECTORIES
 
-    [root@ol719c ~]# mkdir -p /u01/app/oracle/product/19.3.0/dbhome_1/
-    [root@ol719c ~]# chown -R oracle:oinstall /u01
-    [root@ol719c ~]# chmod -R 775 /u01
+    [root@ol719csi ~]# mkdir -p /u01/app/oracle/product/19.3.0/dbhome_1/
+    [root@ol719csi ~]# chown -R oracle:oinstall /u01
+    [root@ol719csi ~]# chmod -R 775 /u01
 
 ###### CONFIGURE VARIABLES
 
-    [root@ol719c ~]# su - oracle
-    [oracle@ol719c ~]$ mkdir /home/oracle/scripts
-    [oracle@ol719c ~]$ cat > /home/oracle/scripts/setEnv.sh <<EOF
+    [root@ol719csi ~]# su - oracle
+    [oracle@ol719csi ~]$ mkdir /home/oracle/scripts
+    [oracle@ol719csi ~]$ cat > /home/oracle/scripts/setEnv.sh <<EOF
     # Oracle Settings
     export TMP=/tmp
     export TMPDIR=\$TMP
 
-    export ORACLE_HOSTNAME=ol719c
+    export ORACLE_HOSTNAME=ol719csi
     export ORACLE_UNQNAME=appscdb
     export ORACLE_BASE=/u01/app/oracle
     export ORACLE_HOME=\$ORACLE_BASE/product/19.3.0/dbhome_1
@@ -77,9 +74,9 @@
     export CLASSPATH=\$ORACLE_HOME/jlib:\$ORACLE_HOME/rdbms/jlib
     EOF
 
-    [oracle@ol719c ~]$ echo ". /home/oracle/scripts/setEnv.sh" >> /home/oracle/.bash_profile
+    [oracle@ol719csi ~]$ echo ". /home/oracle/scripts/setEnv.sh" >> /home/oracle/.bash_profile
 
-    [oracle@ol719c ~]$ cat > /home/oracle/scripts/start_all.sh <<EOF
+    [oracle@ol719csi ~]$ cat > /home/oracle/scripts/start_all.sh <<EOF
     #!/bin/bash
     . /home/oracle/scripts/setEnv.sh
 
@@ -90,7 +87,7 @@
     dbstart \$ORACLE_HOME
     EOF
 
-    [oracle@ol719c ~]$ cat > /home/oracle/scripts/stop_all.sh <<EOF
+    [oracle@ol719csi ~]$ cat > /home/oracle/scripts/stop_all.sh <<EOF
     #!/bin/bash
     . /home/oracle/scripts/setEnv.sh
 
@@ -101,8 +98,8 @@
     dbshut \$ORACLE_HOME
     EOF
 
-    [oracle@ol719c ~]$ chown -R oracle:oinstall /home/oracle/scripts
-    [oracle@ol719c ~]$ chmod u+x /home/oracle/scripts/*.sh
+    [oracle@ol719csi ~]$ chown -R oracle:oinstall /home/oracle/scripts
+    [oracle@ol719csi ~]$ chmod u+x /home/oracle/scripts/*.sh
 
 ###### DOWNLOAD ORACLE DATABASE SOFTWARE
    
@@ -110,12 +107,12 @@
 
 ###### MOVE AND UNZIP DATABASE SOFTWARE
  
-    [oracle@ol719c ~]$ mv LINUX.X64_193000_db_home.zip /u01/app/oracle/product/19.3.0/dbhome_1/
-    [oracle@ol719c dbhome_1]$ gunzip LINUX.X64_193000_db_home.zip
+    [oracle@ol719csi ~]$ mv LINUX.X64_193000_db_home.zip /u01/app/oracle/product/19.3.0/dbhome_1/
+    [oracle@ol719csi dbhome_1]$ gunzip LINUX.X64_193000_db_home.zip
 
 ###### CREATE db_install.rsp INSTALL RESPONSE FILE
 
-    [oracle@ol719c ~]$ vi db_install.rsp
+    [oracle@ol719csi ~]$ vi db_install.rsp
     oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v19.0.0
     oracle.install.option=INSTALL_DB_SWONLY
     UNIX_GROUP_NAME=oinstall
@@ -161,15 +158,15 @@
 
 ###### EXECUTE runInstaller 
     
-    [oracle@ol719c ~]$ cd $ORACLE_HOME
-    [oracle@ol719c ~]$ ./runInstaller -silent -responseFile /home/oracle/db_install.rsp
-    [oracle@ol719c ~]$ exit
-    [root@ol719c ~]# /u01/app/oraInventory/orainstRoot.sh
-    [root@ol719c ~]# /u01/app/oracle/product/19.3.0/dbhome_1/root.sh
+    [oracle@ol719csi ~]$ cd $ORACLE_HOME
+    [oracle@ol719csi ~]$ ./runInstaller -silent -responseFile /home/oracle/db_install.rsp
+    [oracle@ol719csi ~]$ exit
+    [root@ol719csi ~]# /u01/app/oraInventory/orainstRoot.sh
+    [root@ol719csi ~]# /u01/app/oracle/product/19.3.0/dbhome_1/root.sh
 
 ###### CREATE dbca.rsp response file
 
-    [oracle@ol719c ~]$ vi dbca.rsp
+    [oracle@ol719csi ~]$ vi dbca.rsp
     responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v19.0.0
     gdbName=appscdb
     sid=appscdb1
@@ -231,7 +228,7 @@
 
 ###### CREATE netca.rsp response file
 
-    [oracle@ol719c ~]$ vi netca.rsp
+    [oracle@ol719csi ~]$ vi netca.rsp
     [GENERAL]
     RESPONSEFILE_VERSION="19.0"
     CREATE_TYPE="CUSTOM"
@@ -249,15 +246,15 @@
 
 ###### CREATE DATABASE 
 
-    [oracle@ol719c ~]$ dbca -silent -createDatabase -responseFile /home/oracle/dbca.rsp
+    [oracle@ol719csi ~]$ dbca -silent -createDatabase -responseFile /home/oracle/dbca.rsp
 
 ###### CREATE LISTENER
 
-    [oracle@ol719c ~]$ netca -silent -responsefile /home/oracle/netca.rsp
+    [oracle@ol719csi ~]$ netca -silent -responsefile /home/oracle/netca.rsp
 
 ###### START LISTENER
 
-	[oracle@ol719c ~]$ lsnrctl status
+	[oracle@ol719csi ~]$ lsnrctl status
 
 	LSNRCTL for Linux: Version 19.0.0.0.0 - Production on 18-MAY-2025 23:10:52
 
@@ -273,15 +270,15 @@
 	Trace Level               off
 	Security                  ON: Local OS Authentication
 	SNMP                      OFF
-	Listener Log File         /u01/app/oracle/diag/tnslsnr/ol719c/listener/alert/log.xml
+	Listener Log File         /u01/app/oracle/diag/tnslsnr/ol719csi/listener/alert/log.xml
 	Listening Endpoints Summary...
-  		(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=ol719c.appsdba.info)(PORT=1521)))
+  		(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=ol719csi.appsdba.info)(PORT=1521)))
 	The listener supports no services
 	The command completed successfully
 
 ###### ENABLE AUTOMATIC START PDB
 
-	[oracle@ol719c ~]$ sqlplus / as sysdba
+	[oracle@ol719csi ~]$ sqlplus / as sysdba
 
 	SQL*Plus: Release 19.0.0.0.0 - Production on Sun May 18 23:12:44 2025
 	Version 19.3.0.0.0
@@ -344,12 +341,12 @@
 
 ###### AUTOMATIC START SERVICE ORACLE
 
-	[root@ol719c ~]# vi /etc/oratab
+	[root@ol719csi ~]# vi /etc/oratab
  				appscdb1:/u01/app/oracle/product/19.3.0/dbhome_1:Y
 
 ###### CONFIGURE ORACLE DATABASE DAEMON 
 
-    [root@ol719c ~]# vi /lib/systemd/system/dbora.service
+    [root@ol719csi ~]# vi /lib/systemd/system/dbora.service
     [Unit]
     Description=The Oracle Database Service
     After=syslog.target network.target
@@ -374,8 +371,7 @@
     [Install]
     WantedBy=multi-user.target
 
-    [root@ol719c ~]# systemctl daemon-reload
-    [root@ol719c ~]# systemctl enable dbora.service
+    [root@ol719csi ~]# systemctl daemon-reload
+    [root@ol719csi ~]# systemctl enable dbora.service
 
-###### writed by: Danilo Arruda
-###### ter 18 fev 2025
+###### Copyright © 2025 by Exated Software Ltda

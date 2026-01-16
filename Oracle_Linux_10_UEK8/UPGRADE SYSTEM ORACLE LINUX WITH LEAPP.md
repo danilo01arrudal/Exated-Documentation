@@ -1,0 +1,43 @@
+# UPGRADE SYSTEM ORACLE LINUX WITH LEAPP 
+
+> *The Leapp utility is a framework for updating and upgrading operating systems and applications. The utility's component packages enable the creation of different workflows into profiles for updating software.*
+
+>    *The preupgrade phase, where system checks are performed to verify if the software can be upgraded.*
+
+>    *The actual upgrade, which process is based on configuration files that map packages between previous and current versions of the software packages.*
+
+![Oracle linux 10 logo.](https://github.com/danilo01arrudal/Documentation/blob/main/Oracle_Linux_10_UEK8/images/Oracle_linux_10.png)
+
+###### OBTAIN THE LATEST ORACLE LINUX 9 PACKAGES.
+
+    [root@exated ~]# dnf update -y
+
+###### REBOOT THE SYSTEM
+
+    [root@exated ~]# init 6
+
+###### INSTALL THE LEAPP UTILITY USING THE FOLLOWING COMMAND
+
+    [root@exated ~]# dnf install -y leapp-upgrade
+
+###### ENABLE ORACLE LINUX 10 REPOSITORY
+
+    [root@exated ~]# curl -o /etc/yum.repos.d/oracle-linux-10.repo http://yum.oracle.com/public-yum-ol10.repo
+    [root@exated ~]# dnf config-manager --enable ol10_baseos_latest ol10_appstream ol10_UEKR8
+    [root@exated ~]# yum repolist
+
+###### RUNNING THE PREUPGRADE
+
+    [root@exated ~]# leapp preupgrade --oraclelinux
+
+###### RUNNING THE UPGRADE
+
+    [root@exated ~]# leapp upgrade --oraclelinux
+
+###### REBOOT THE SYSTEM
+
+    [root@exated ~]# init 6
+
+###### writed by: Danilo Arruda
+###### qua 8 sep 2025 
+

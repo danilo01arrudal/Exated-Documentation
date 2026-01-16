@@ -47,7 +47,7 @@
 
 ###### CONFIGURE HOSTNAME
     [root@localhost ~]# hostnamectl 
-    [root@localhost ~]# hostnamectl set-hostname ol7dns
+    [root@localhost ~]# hostnamectl set-hostname ol9dns
     [root@localhost ~]# hostnamectl --static 
 
 ###### CONFIGURE /ETC/HOSTS FILE
