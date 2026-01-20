@@ -4,6 +4,10 @@
 
 ![bind9 logo.](https://github.com/danilo01arrudal/Exated/blob/main/Bind/images/bind.png)
 
+###### BUILD MACHINE
+
+    [root@localhost ~]# virt-install --virt-type kvm --name ol9bind --memory 2048 --vcpus 1 --os-variant ol9.7 --cdrom /var/lib/libvirt/images/OracleLinux-R9-U7-x86_64-dvd.iso --network bridge=br0,model=virtio --disk path=/var/lib/libvirt/images/ol9d.qcow2,size=10
+
 ###### REMOVE DNSMASQ AND AVAHI-DAEMON
     [root@localhost ~]# systemctl stop dnsmasq
     [root@localhost ~]# systemctl stop avahi-daemon
