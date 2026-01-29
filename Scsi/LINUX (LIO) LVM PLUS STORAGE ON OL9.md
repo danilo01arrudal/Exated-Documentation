@@ -32,26 +32,26 @@ In simple terms, LIO allows a Linux server to share its storage devices (such as
 
 ###### CONFIGURE DEVICES
 
-    [root@ol9scsi ~]# fdisk -l    
-    Disco /dev/nvme1n1: 931,51 GiB, 1000204886016 bytes, 1953525168 setores
-    Modelo de disco: KINGSTON SA2000M81000G                  
-    Unidades: setor de 1 * 512 = 512 bytes
-    Tamanho de setor (lógico/físico): 512 bytes / 512 bytes
-    Tamanho E/S (mínimo/ótimo): 512 bytes / 512 bytes
-    Tipo de rótulo do disco: gpt
-    Identificador do disco: E1A6E5FF-EF06-4B50-B3EF-7B192F6A3ADE
+    [root@ol9scsi ~]# fdisk -l
+    Disk /dev/sda: 20 GiB, 21474836480 bytes, 41943040 sectors
+    Disk model: QEMU HARDDISK   
+    Units: sectors of 1 * 512 = 512 bytes
+    Sector size (logical/physical): 512 bytes / 512 bytes
+    I/O size (minimum/optimal): 512 bytes / 512 bytes
+    Disklabel type: dos
+    Disk identifier: 0x60411e4d
 
-    Disco /dev/nvme0n1: 931,51 GiB, 1000204886016 bytes, 1953525168 setores
-    Modelo de disco: KINGSTON SA2000M81000G                  
-    Unidades: setor de 1 * 512 = 512 bytes
-    Tamanho de setor (lógico/físico): 512 bytes / 512 bytes
-    Tamanho E/S (mínimo/ótimo): 512 bytes / 512 bytes
-    Tipo de rótulo do disco: gpt
-    Identificador do disco: 0DED2B1E-DF36-45EB-B5AA-1DB6D15C9B3E
+    Device     Boot    Start      End  Sectors Size Id Type
+    /dev/sda1           2048 39845887 39843840  19G 8e Linux LVM
+    /dev/sda2  *    39845888 41943039  2097152   1G 83 Linux
 
-    [root@ol9scsi ~]# fdisk /dev/nvme0n1
-    n > p > 1 > w
-    [root@ol9scsi ~]# fdisk /dev/nvme1n1
+    Disk /dev/sdb: 160 GiB, 171798691840 bytes, 335544320 sectors
+    Disk model: QEMU HARDDISK   
+    Units: sectors of 1 * 512 = 512 bytes
+    Sector size (logical/physical): 512 bytes / 512 bytes
+    I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+    [root@ol9scsi ~]# fdisk /dev/sdb 
     n > p > 1 > w
 
 ###### CONFIGURE LVM 
