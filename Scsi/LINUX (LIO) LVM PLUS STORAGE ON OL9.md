@@ -22,6 +22,10 @@ In simple terms, LIO allows a Linux server to share its storage devices (such as
 
 >    *Online Resizing: The ability to increase or decrease the size of Logical Volumes without having to dismount them.*
 
+###### BUILD MACHINE
+
+virt-install --virt-type kvm --name ol9scci --memory 8192 --vcpus 2 --os-variant ol9.7 --cdrom /var/lib/libvirt/images/OracleLinux-R9-U7-x86_64-dvd.iso --network bridge=br0,model=virtio --disk path=/var/lib/libvirt/images/ol9scsi.qcow2,size=20 --disk path=/var/lib/libvirt/images/ol9scsi-data01.qcow2,size=160
+
 ###### INSTALL LVM2
 
     [root@exated ~]# yum install -y lvm2
