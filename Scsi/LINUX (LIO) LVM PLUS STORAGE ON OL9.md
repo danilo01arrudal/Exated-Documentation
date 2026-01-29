@@ -24,15 +24,15 @@ In simple terms, LIO allows a Linux server to share its storage devices (such as
 
 ###### BUILD MACHINE
 
-virt-install --virt-type kvm --name ol9scci --memory 8192 --vcpus 2 --os-variant ol9.7 --cdrom /var/lib/libvirt/images/OracleLinux-R9-U7-x86_64-dvd.iso --network bridge=br0,model=virtio --disk path=/var/lib/libvirt/images/ol9scsi.qcow2,size=20 --disk path=/var/lib/libvirt/images/ol9scsi-data01.qcow2,size=160
+    [root@ol9scsi ~]# virt-install --virt-type kvm --name ol9scci --memory 8192 --vcpus 2 --os-variant ol9.7 --cdrom /var/lib/libvirt/images/OracleLinux-R9-U7-x86_64-dvd.iso --network bridge=br0,model=virtio --disk path=/var/lib/libvirt/images/ol9scsi.qcow2,size=20 --disk path=/var/lib/libvirt/images/ol9scsi-data01.qcow2,size=160
 
 ###### INSTALL LVM2
 
-    [root@exated ~]# yum install -y lvm2
+    [root@ol9scsi ~]# yum install -y lvm2
 
 ###### CONFIGURE DEVICES
 
-    [root@exated ~]# fdisk -l    
+    [root@ol9scsi ~]# fdisk -l    
     Disco /dev/nvme1n1: 931,51 GiB, 1000204886016 bytes, 1953525168 setores
     Modelo de disco: KINGSTON SA2000M81000G                  
     Unidades: setor de 1 * 512 = 512 bytes
@@ -49,22 +49,22 @@ virt-install --virt-type kvm --name ol9scci --memory 8192 --vcpus 2 --os-variant
     Tipo de rótulo do disco: gpt
     Identificador do disco: 0DED2B1E-DF36-45EB-B5AA-1DB6D15C9B3E
 
-    [root@exated ~]# fdisk /dev/nvme0n1
+    [root@ol9scsi ~]# fdisk /dev/nvme0n1
     n > p > 1 > w
-    [root@exated ~]# fdisk /dev/nvme1n1
+    [root@ol9scsi ~]# fdisk /dev/nvme1n1
     n > p > 1 > w
 
 ###### CONFIGURE LVM 
 
-    [root@exated ~]# pvcreate /dev/nvme0n1p1
-    [root@exated ~]# pvcreate /dev/nvme1n1p1
-    [root@exated ~]# vgcreate vg_lun_storage /dev/nvme0n1p1 /dev/nvme1n1p1 
-    [root@exated ~]# lvcreate -n lv_lun_storage_l0 -L 20G vg_lun_storage
-    [root@exated ~]# lvcreate -n lv_lun_storage_l1 -L 20G vg_lun_storage
-    [root@exated ~]# lvcreate -n lv_lun_storage_l2 -L 20G vg_lun_storage
-    [root@exated ~]# lvcreate -n lv_lun_storage_l3 -L 20G vg_lun_storage
-    [root@exated ~]# lvcreate -n lv_lun_storage_l4 -L 20G vg_lun_storage  
-    [root@exated ~]# lvs
+    [root@ol9scsi ~]# pvcreate /dev/nvme0n1p1
+    [root@ol9scsi ~]# pvcreate /dev/nvme1n1p1
+    [root@ol9scsi ~]# vgcreate vg_lun_storage /dev/nvme0n1p1 /dev/nvme1n1p1 
+    [root@ol9scsi ~]# lvcreate -n lv_lun_storage_l0 -L 20G vg_lun_storage
+    [root@ol9scsi ~]# lvcreate -n lv_lun_storage_l1 -L 20G vg_lun_storage
+    [root@ol9scsi ~]# lvcreate -n lv_lun_storage_l2 -L 20G vg_lun_storage
+    [root@ol9scsi ~]# lvcreate -n lv_lun_storage_l3 -L 20G vg_lun_storage
+    [root@ol9scsi ~]# lvcreate -n lv_lun_storage_l4 -L 20G vg_lun_storage  
+    [root@ol9scsi ~]# lvs
     LV                VG             Attr       LSize  Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert                                                  
     lv_lun_storage_l0 vg_lun_storage -wi-a----- 20,00g                                                    
     lv_lun_storage_l1 vg_lun_storage -wi-a----- 20,00g                                                    
@@ -87,12 +87,12 @@ virt-install --virt-type kvm --name ol9scci --memory 8192 --vcpus 2 --os-variant
 
 ###### INSTALL AND CONFIGURE TARGETCLI
 
-    [root@exated ~]# yum install -y targetcli
+    [root@ol9scsi ~]# yum install -y targetcli
 
-    [root@exated ~]# systemctl start target.service
-    [root@exated ~]# systemctl enable target.service
+    [root@ol9scsi ~]# systemctl start target.service
+    [root@ol9scsi ~]# systemctl enable target.service
 
-    [root@exated ~]# targetcli
+    [root@ol9scsi ~]# targetcli
     targetcli shell version 2.1.57
     Copyright 2011-2013 by Datera, Inc and others.
     For help on commands, type 'help'.
@@ -215,8 +215,8 @@ virt-install --virt-type kvm --name ol9scci --memory 8192 --vcpus 2 --os-variant
 
 ###### OPEN ON FIREWALL ISCSI COMMUNICATION
 
-    [root@exated ~]# firewall-cmd --zone=public --add-port=3260/tcp --permanent
-    [root@exated ~]# firewall-cmd --reload
+    [root@ol9scsi ~]# firewall-cmd --zone=public --add-port=3260/tcp --permanent
+    [root@ol9scsi ~]# firewall-cmd --reload
 
 ###### DESTROY ISCSI CONFIGURATION
 
