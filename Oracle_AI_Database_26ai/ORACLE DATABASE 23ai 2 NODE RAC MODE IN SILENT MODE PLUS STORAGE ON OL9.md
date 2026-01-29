@@ -4,83 +4,83 @@
 
 ![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
 
-###### BUILD VIRTUAL MACHINE ON VIRTUALIZER OL9N1 
+###### BUILD VIRTUAL MACHINE ON VIRTUALIZER ol926ain1 
 
     virt-install --virt-type kvm --name ol926ain1 --memory 8192 --vcpus 2 --os-variant ol9.7 --cdrom /var/lib/libvirt/images/OracleLinux-R9-U7-x86_64-dvd.iso --network bridge=br0,model=virtio --network bridge=br0,model=virtio --network network=priv0,model=virtio --disk path=/var/lib/libvirt/images/ol926ain1.qcow2,size=59
 
-###### BUILD VIRTUAL MACHINE ON VIRTUALIZER OL9N2 
+###### BUILD VIRTUAL MACHINE ON VIRTUALIZER ol926ain2 
 
     virt-install --virt-type kvm --name ol926ain2 --memory 8192 --vcpus 2 --os-variant ol9.7 --cdrom /var/lib/libvirt/images/OracleLinux-R9-U7-x86_64-dvd.iso --network bridge=br0,model=virtio --network bridge=br0,model=virtio --network network=priv0,model=virtio --disk path=/var/lib/libvirt/images/ol926ain2.qcow2,size=59
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CHANGE THE CLOCK SOURCE IN THE SYSTEM )
 
-    [root@ol9n1 ~]# cat /sys/devices/system/clocksource/clocksource0/current_clocksource
+    [root@ol926ain1 ~]# cat /sys/devices/system/clocksource/clocksource0/current_clocksource
     kvm-clock
-    [root@ol9n1 ~]# cat /sys/devices/system/clocksource/clocksource0/available_clocksource
+    [root@ol926ain1 ~]# cat /sys/devices/system/clocksource/clocksource0/available_clocksource
     kvm-clock tsc acpi_pm 
-    [root@ol9n1 ~]# vi /sys/devices/system/clocksource/clocksource0/current_clocksource
+    [root@ol926ain1 ~]# vi /sys/devices/system/clocksource/clocksource0/current_clocksource
     tsc
-    [root@ol9n2 ~]# vi /sys/devices/system/clocksource/clocksource0/current_clocksource
+    [root@ol926ain2 ~]# vi /sys/devices/system/clocksource/clocksource0/current_clocksource
     tsc
 
 ###### SET ON /etc/fstab TMPFS PARTITION
 
-    [root@ol9n1 ~]# vi /etc/fstab
+    [root@ol926ain1 ~]# vi /etc/fstab
 		tmpfs      				  /dev/shm        	  tmpfs   defaults,size=4G	0 0
  
-	[root@ol9n2 ~]# vi /etc/fstab
+	[root@ol926ain2 ~]# vi /etc/fstab
  		tmpfs      				  /dev/shm        	  tmpfs   defaults,size=4G	0 0
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE HOSTNAME NODE 1)
 
-    [root@ol9n1 ~]# hostnamectl set-hostname ol9n1.appsdba.info
+    [root@ol926ain1 ~]# hostnamectl set-hostname ol926ain1.appsdba.info
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE SHOSTNAME NODE 2)
 
-    [root@ol9n2 ~]# hostnamectl set-hostname ol9n2.appsdba.info
+    [root@ol926ain2 ~]# hostnamectl set-hostname ol926ain2.appsdba.info
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE STATIC NETWORK NODE 1)
 
-    [root@ol9n1 ~]# nmcli device
+    [root@ol926ain1 ~]# nmcli device
     DEVICE  TYPE      STATE                   CONNECTION 
     enp1s0  ethernet  conectado               enp1s0     
     enp2s0  ethernet  conectado               enp2s0     
     enp3s0  ethernet  conectado               enp3s0     
     lo      loopback  connected (externally)  lo   
-    [root@ol9n1 ~]# nmcli connection show  
+    [root@ol926ain1 ~]# nmcli connection show  
     NAME    UUID                                  TYPE      DEVICE 
     enp1s0  266c6c59-2242-376f-932a-2fada4e31d3a  ethernet  enp1s0 
     enp2s0  3a982c55-28e5-3dd6-a476-a8d37a2eb1de  ethernet  enp2s0 
     enp3s0  5e71fb5c-912d-3e64-9093-67f57b60bf34  ethernet  enp3s0 
     lo      a5fbe03a-188f-4b0d-948c-93045f58939b  loopback  lo
-    [root@ol9n1 ~]# nmcli con modify 'enp1s0' ifname enp1s0 ipv4.method manual ipv4.addresses 192.168.18.121/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled
-    [root@ol9n1 ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.201 
-    [root@ol9n1 ~]# nmcli con down 'enp1s0'; nmcli con up 'enp1s0'  
-    [root@ol9n1 ~]# ip addr show enp1s0
+    [root@ol926ain1 ~]# nmcli con modify 'enp1s0' ifname enp1s0 ipv4.method manual ipv4.addresses 192.168.18.121/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled
+    [root@ol926ain1 ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.201 
+    [root@ol926ain1 ~]# nmcli con down 'enp1s0'; nmcli con up 'enp1s0'  
+    [root@ol926ain1 ~]# ip addr show enp1s0
     2: enp1s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 52:54:00:28:86:aa brd ff:ff:ff:ff:ff:ff
     inet 192.168.18.121/24 brd 192.168.18.255 scope global noprefixroute enp1s0
        valid_lft forever preferred_lft forever
-    [root@ol9n1 ~]# nmcli con modify 'enp2s0' ifname enp2s0 ipv4.method manual ipv4.addresses 192.168.18.151/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
-    [root@ol9n1 ~]# nmcli con modify 'enp2s0' ipv4.dns 192.168.18.201 
-    [root@ol9n1 ~]# nmcli con down 'enp2s0'
-    [root@ol9n1 ~]# ip addr show enp2s0
+    [root@ol926ain1 ~]# nmcli con modify 'enp2s0' ifname enp2s0 ipv4.method manual ipv4.addresses 192.168.18.151/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
+    [root@ol926ain1 ~]# nmcli con modify 'enp2s0' ipv4.dns 192.168.18.201 
+    [root@ol926ain1 ~]# nmcli con down 'enp2s0'
+    [root@ol926ain1 ~]# ip addr show enp2s0
     3: enp2s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 52:54:00:40:74:a1 brd ff:ff:ff:ff:ff:ff
-    [root@ol9n1 ~]# nmcli con modify 'enp3s0' ifname enp3s0 ipv4.method manual ipv4.addresses 192.168.100.101/24 ipv4.gateway 192.168.100.1 autoconnect yes ipv6.method disabled
-    [root@ol9n1 ~]# nmcli con down 'enp3s0'; nmcli con up 'enp3s0'
-    [root@ol9n1 ~]# ip addr show enp3s0 
+    [root@ol926ain1 ~]# nmcli con modify 'enp3s0' ifname enp3s0 ipv4.method manual ipv4.addresses 192.168.100.101/24 ipv4.gateway 192.168.100.1 autoconnect yes ipv6.method disabled
+    [root@ol926ain1 ~]# nmcli con down 'enp3s0'; nmcli con up 'enp3s0'
+    [root@ol926ain1 ~]# ip addr show enp3s0 
     4: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 52:54:00:7f:44:40 brd ff:ff:ff:ff:ff:ff
     inet 192.168.100.101/24 brd 192.168.100.255 scope global noprefixroute enp3s0
        valid_lft forever preferred_lft forever
-    [root@ol9n1 ~]# nmcli device
+    [root@ol926ain1 ~]# nmcli device
     DEVICE  TYPE      STATE                   CONNECTION 
     enp1s0  ethernet  conectado               enp1s0     
     enp3s0  ethernet  conectado               enp3s0     
     lo      loopback  connected (externally)  lo         
     enp2s0  ethernet  desconectado            --         
-    [root@ol9n1 ~]# nmcli connection show  
+    [root@ol926ain1 ~]# nmcli connection show  
     NAME    UUID                                  TYPE      DEVICE 
     enp1s0  266c6c59-2242-376f-932a-2fada4e31d3a  ethernet  enp1s0 
     enp3s0  5e71fb5c-912d-3e64-9093-67f57b60bf34  ethernet  enp3s0 
@@ -89,49 +89,49 @@
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE STATIC NETWORK NODE 2)
 
-    [root@ol9n2 ~]# nmcli device
+    [root@ol926ain2 ~]# nmcli device
     DEVICE  TYPE      STATE                   CONNECTION 
     enp1s0  ethernet  conectado               enp1s0     
     enp2s0  ethernet  conectado               enp2s0     
     enp3s0  ethernet  conectado               enp3s0     
     lo      loopback  connected (externally)  lo   
-    [root@ol9n2 ~]# nmcli connection show  
+    [root@ol926ain2 ~]# nmcli connection show  
     NAME    UUID                                  TYPE      DEVICE 
     enp3s0  c722a703-83de-36a0-ba0b-129c115b155b  ethernet  enp3s0 
     enp1s0  6970aff6-c896-396b-ada4-645795be91bb  ethernet  enp1s0 
     enp2s0  189431ad-d482-3853-86da-40818b54653f  ethernet  enp2s0 
     lo      c88169e7-1918-478d-8015-77da6638ee58  loopback  lo 
-    [root@ol9n2 ~]# nmcli con modify 'enp1s0' ifname enp1s0 ipv4.method manual ipv4.addresses 192.168.18.122/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
-    [root@ol9n2 ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.201 
-    [root@ol9n2 ~]# nmcli con down 'enp1s0'; nmcli con up 'enp1s0'
-    [root@ol9n2 ~]# ip addr show enp1s0
+    [root@ol926ain2 ~]# nmcli con modify 'enp1s0' ifname enp1s0 ipv4.method manual ipv4.addresses 192.168.18.122/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
+    [root@ol926ain2 ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.201 
+    [root@ol926ain2 ~]# nmcli con down 'enp1s0'; nmcli con up 'enp1s0'
+    [root@ol926ain2 ~]# ip addr show enp1s0
     2: enp1s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 52:54:00:6b:00:2d brd ff:ff:ff:ff:ff:ff
     inet 192.168.18.122/24 brd 192.168.18.255 scope global noprefixroute enp1s0
        valid_lft forever preferred_lft forever
-    [root@ol9n2 ~]# nmcli con modify 'enp2s0' ifname enp2s0 ipv4.method manual ipv4.addresses 192.168.18.152/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
-    [root@ol9n2 ~]# nmcli con modify 'enp2s0' ipv4.dns 192.168.18.201 
-    [root@ol9n2 ~]# nmcli con down 'enp2s0'
+    [root@ol926ain2 ~]# nmcli con modify 'enp2s0' ifname enp2s0 ipv4.method manual ipv4.addresses 192.168.18.152/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
+    [root@ol926ain2 ~]# nmcli con modify 'enp2s0' ipv4.dns 192.168.18.201 
+    [root@ol926ain2 ~]# nmcli con down 'enp2s0'
     Conexão “enp2s0” desativada com sucesso (caminho D-Bus ativo: /org/freedesktop/NetworkManager/ActiveConnection/5)
-    [root@ol9n2 ~]# ip addr show enp2s0
+    [root@ol926ain2 ~]# ip addr show enp2s0
     3: enp2s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 52:54:00:82:3a:0e brd ff:ff:ff:ff:ff:ff
-    [root@ol9n2 ~]# nmcli con modify 'enp3s0' ifname enp3s0 ipv4.method manual ipv4.addresses 192.168.100.102/24 ipv4.gateway 192.168.100.1 autoconnect yes ipv6.method disabled 
-    [root@ol9n2 ~]# nmcli con down 'enp3s0'; nmcli con up 'enp3s0' 
+    [root@ol926ain2 ~]# nmcli con modify 'enp3s0' ifname enp3s0 ipv4.method manual ipv4.addresses 192.168.100.102/24 ipv4.gateway 192.168.100.1 autoconnect yes ipv6.method disabled 
+    [root@ol926ain2 ~]# nmcli con down 'enp3s0'; nmcli con up 'enp3s0' 
     Conexão “enp3s0” desativada com sucesso (caminho D-Bus ativo: /org/freedesktop/NetworkManager/ActiveConnection/4)
     Conexão ativada com sucesso (caminho D-Bus ativo: /org/freedesktop/NetworkManager/ActiveConnection/7)
-    [root@ol9n2 ~]# ip addr show enp3s0  
+    [root@ol926ain2 ~]# ip addr show enp3s0  
     4: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 52:54:00:5d:35:1f brd ff:ff:ff:ff:ff:ff
     inet 192.168.100.102/24 brd 192.168.100.255 scope global noprefixroute enp3s0
        valid_lft forever preferred_lft forever
-    [root@ol9n2 ~]# nmcli device
+    [root@ol926ain2 ~]# nmcli device
     DEVICE  TYPE      STATE                   CONNECTION 
     enp1s0  ethernet  conectado               enp1s0     
     enp3s0  ethernet  conectado               enp3s0     
     lo      loopback  connected (externally)  lo         
     enp2s0  ethernet  desconectado            --         
-    [root@ol9n2 ~]# nmcli connection show
+    [root@ol926ain2 ~]# nmcli connection show
     NAME    UUID                                  TYPE      DEVICE 
     enp1s0  6970aff6-c896-396b-ada4-645795be91bb  ethernet  enp1s0 
     enp3s0  c722a703-83de-36a0-ba0b-129c115b155b  ethernet  enp3s0 
@@ -140,63 +140,63 @@
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( DISABLE AVAHI )
 
-    [root@ol9n1 ~]# systemctl disable avahi-daemon.socket avahi-daemon.service 
+    [root@ol926ain1 ~]# systemctl disable avahi-daemon.socket avahi-daemon.service 
     Removed "/etc/systemd/system/multi-user.target.wants/avahi-daemon.service".
     Removed "/etc/systemd/system/sockets.target.wants/avahi-daemon.socket".
     Removed "/etc/systemd/system/dbus-org.freedesktop.Avahi.service".
-    [root@ol9n1 ~]# systemctl mask avahi-daemon.socket avahi-daemon.service 
+    [root@ol926ain1 ~]# systemctl mask avahi-daemon.socket avahi-daemon.service 
     Created symlink /etc/systemd/system/avahi-daemon.socket → /dev/null.
     Created symlink /etc/systemd/system/avahi-daemon.service → /dev/null.
-    [root@ol9n1 ~]# systemctl stop avahi-daemon.socket avahi-daemon.service
+    [root@ol926ain1 ~]# systemctl stop avahi-daemon.socket avahi-daemon.service
 
-    [root@ol9n2 ~]# systemctl disable avahi-daemon.socket avahi-daemon.service
+    [root@ol926ain2 ~]# systemctl disable avahi-daemon.socket avahi-daemon.service
     Removed "/etc/systemd/system/multi-user.target.wants/avahi-daemon.service".
     Removed "/etc/systemd/system/dbus-org.freedesktop.Avahi.service".
     Removed "/etc/systemd/system/sockets.target.wants/avahi-daemon.socket".
-    [root@ol9n2 ~]# systemctl mask avahi-daemon.socket avahi-daemon.service 
+    [root@ol926ain2 ~]# systemctl mask avahi-daemon.socket avahi-daemon.service 
     Created symlink /etc/systemd/system/avahi-daemon.socket → /dev/null.
     Created symlink /etc/systemd/system/avahi-daemon.service → /dev/null.
-    [root@ol9n2 ~]# systemctl stop avahi-daemon.socket avahi-daemon.service
+    [root@ol926ain2 ~]# systemctl stop avahi-daemon.socket avahi-daemon.service
 
 ### PRE REQUIREMENTS ORACLE ENVIRONMENT ( FIREWALL AND SELINUX )
 
-    [root@ol9n1 ~]# sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
-    [root@ol9n2 ~]# sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+    [root@ol926ain1 ~]# sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+    [root@ol926ain2 ~]# sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 
-    [root@ol9n1 ~]# systemctl stop firewalld; systemctl disable firewalld 
-    [root@ol9n2 ~]# systemctl stop firewalld; systemctl disable firewalld
+    [root@ol926ain1 ~]# systemctl stop firewalld; systemctl disable firewalld 
+    [root@ol926ain2 ~]# systemctl stop firewalld; systemctl disable firewalld
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( PACKAGES )
 
-    [root@ol9n1 ~]# yum install -y oracle-database-preinstall-23ai.x86_64
-    [root@ol9n2 ~]# yum install -y oracle-database-preinstall-23ai.x86_64
-    [root@ol9n1 ~]# yum install -y https://yum.oracle.com/repo/OracleLinux/OL9/addons/x86_64/getPackage/oracleasm-support-3.0.0-7.el9.x86_64.rpm
-    [root@ol9n2 ~]# yum install -y https://yum.oracle.com/repo/OracleLinux/OL9/addons/x86_64/getPackage/oracleasm-support-3.0.0-7.el9.x86_64.rpm
-    [root@ol9n1 ~]# rpm -ivh oracleasmlib-3.0.0-13.el9.x86_64.rpm
-    [root@ol9n2 ~]# rpm -ivh oracleasmlib-3.0.0-13.el9.x86_64.rpm
-    [root@ol9n1 ~]# yum install -y chkconfig
-    [root@ol9n2 ~]# yum install -y chkconfig
-    [root@ol9n1 ~]# yum install -y iscsi-initiator-utils udisks2-iscsi 
-    [root@ol9n2 ~]# yum install -y iscsi-initiator-utils udisks2-iscsi 
+    [root@ol926ain1 ~]# yum install -y oracle-database-preinstall-23ai.x86_64
+    [root@ol926ain2 ~]# yum install -y oracle-database-preinstall-23ai.x86_64
+    [root@ol926ain1 ~]# yum install -y https://yum.oracle.com/repo/OracleLinux/OL9/addons/x86_64/getPackage/oracleasm-support-3.0.0-7.el9.x86_64.rpm
+    [root@ol926ain2 ~]# yum install -y https://yum.oracle.com/repo/OracleLinux/OL9/addons/x86_64/getPackage/oracleasm-support-3.0.0-7.el9.x86_64.rpm
+    [root@ol926ain1 ~]# rpm -ivh oracleasmlib-3.0.0-13.el9.x86_64.rpm
+    [root@ol926ain2 ~]# rpm -ivh oracleasmlib-3.0.0-13.el9.x86_64.rpm
+    [root@ol926ain1 ~]# yum install -y chkconfig
+    [root@ol926ain2 ~]# yum install -y chkconfig
+    [root@ol926ain1 ~]# yum install -y iscsi-initiator-utils udisks2-iscsi 
+    [root@ol926ain2 ~]# yum install -y iscsi-initiator-utils udisks2-iscsi 
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( PLUGGABLE AUTHENTICATION MODULES )
 
-    [root@ol9n1 ~]# echo "session         required        pam_limits.so" >> /etc/pam.d/su 
-    [root@ol9n1 ~]# echo "session         required        pam_unix.so" >> /etc/pam.d/su
-    [root@ol9n2 ~]# echo "session         required        pam_limits.so" >> /etc/pam.d/su 
-    [root@ol9n2 ~]# echo "session         required        pam_unix.so" >> /etc/pam.d/su 
-    [root@ol9n1 ~]# echo "session    required     pam_limits.so" >> /etc/pam.d/sshd
-    [root@ol9n1 ~]# echo "session    required     pam_unix.so" >> /etc/pam.d/sshd
-    [root@ol9n2 ~]# echo "session    required     pam_limits.so" >> /etc/pam.d/sshd
-    [root@ol9n2 ~]# echo "session    required     pam_unix.so" >> /etc/pam.d/sshd
-    [root@ol9n1 ~]# echo "session    required     pam_limits.so" >> /etc/pam.d/login
-    [root@ol9n1 ~]# echo "session    required     pam_unix.so" >> /etc/pam.d/login
-    [root@ol9n2 ~]# echo "session    required     pam_limits.so" >> /etc/pam.d/login
-    [root@ol9n2 ~]# echo "session    required     pam_unix.so" >> /etc/pam.d/login
+    [root@ol926ain1 ~]# echo "session         required        pam_limits.so" >> /etc/pam.d/su 
+    [root@ol926ain1 ~]# echo "session         required        pam_unix.so" >> /etc/pam.d/su
+    [root@ol926ain2 ~]# echo "session         required        pam_limits.so" >> /etc/pam.d/su 
+    [root@ol926ain2 ~]# echo "session         required        pam_unix.so" >> /etc/pam.d/su 
+    [root@ol926ain1 ~]# echo "session    required     pam_limits.so" >> /etc/pam.d/sshd
+    [root@ol926ain1 ~]# echo "session    required     pam_unix.so" >> /etc/pam.d/sshd
+    [root@ol926ain2 ~]# echo "session    required     pam_limits.so" >> /etc/pam.d/sshd
+    [root@ol926ain2 ~]# echo "session    required     pam_unix.so" >> /etc/pam.d/sshd
+    [root@ol926ain1 ~]# echo "session    required     pam_limits.so" >> /etc/pam.d/login
+    [root@ol926ain1 ~]# echo "session    required     pam_unix.so" >> /etc/pam.d/login
+    [root@ol926ain2 ~]# echo "session    required     pam_limits.so" >> /etc/pam.d/login
+    [root@ol926ain2 ~]# echo "session    required     pam_unix.so" >> /etc/pam.d/login
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( SECURITY LIMITS )
 
-    [root@ol9n1 ~]# cat <<EOF >> /etc/security/limits.conf
+    [root@ol926ain1 ~]# cat <<EOF >> /etc/security/limits.conf
     *    hard    nofile     327680
     *    soft    nofile     262144
     *    hard    nproc      327680
@@ -206,7 +206,7 @@
     *    hard    stack      16384
     *    soft    stack      10240
     EOF
-    [root@ol9n2 ~]# cat <<EOF >> /etc/security/limits.conf
+    [root@ol926ain2 ~]# cat <<EOF >> /etc/security/limits.conf
     *    hard    nofile     327680
     *    soft    nofile     262144
     *    hard    nproc      327680
@@ -219,36 +219,36 @@
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CREATE USERS )
 
-    [root@ol9n1 ~]# userdel oracle; rm -Rvf /home/oracle; rm -Rvf /var/mail/oracle 
-    [root@ol9n2 ~]# userdel oracle; rm -Rvf /home/oracle; rm -Rvf /var/mail/oracle 
-    [root@ol9n1 ~]# groupadd -g 54321 oinstall; groupadd -g 54322 dba; groupadd -g 54323 oper; groupadd -g 54324 backupdba; groupadd -g 54325 dgdba; groupadd -g 54326 kmdba; groupadd -g 54327 asmdba; groupadd -g 54328 asmoper; groupadd -g 54329 asmadmin; groupadd -g 54330 racdba; useradd -m -u 54331 -g oinstall -G dba,oper,backupdba,dgdba,kmdba,asmdba,asmadmin,racdba -d /home/oracle -s /bin/bash  oracle; useradd -m -u 54332 -g oinstall -G dba,asmadmin,asmdba,asmoper -d /home/grid -s /bin/bash  grid; id oracle; id grid
-    [root@ol9n2 ~]# groupadd -g 54321 oinstall; groupadd -g 54322 dba; groupadd -g 54323 oper; groupadd -g 54324 backupdba; groupadd -g 54325 dgdba; groupadd -g 54326 kmdba; groupadd -g 54327 asmdba; groupadd -g 54328 asmoper; groupadd -g 54329 asmadmin; groupadd -g 54330 racdba; useradd -m -u 54331 -g oinstall -G dba,oper,backupdba,dgdba,kmdba,asmdba,asmadmin,racdba -d /home/oracle -s /bin/bash  oracle; useradd -m -u 54332 -g oinstall -G dba,asmadmin,asmdba,asmoper -d /home/grid -s /bin/bash  grid; id oracle; id grid
-    [root@ol9n1 ~]# passwd oracle
-    [root@ol9n2 ~]# passwd oracle
-    [root@ol9n1 ~]# passwd grid
-    [root@ol9n2 ~]# passwd grid
+    [root@ol926ain1 ~]# userdel oracle; rm -Rvf /home/oracle; rm -Rvf /var/mail/oracle 
+    [root@ol926ain2 ~]# userdel oracle; rm -Rvf /home/oracle; rm -Rvf /var/mail/oracle 
+    [root@ol926ain1 ~]# groupadd -g 54321 oinstall; groupadd -g 54322 dba; groupadd -g 54323 oper; groupadd -g 54324 backupdba; groupadd -g 54325 dgdba; groupadd -g 54326 kmdba; groupadd -g 54327 asmdba; groupadd -g 54328 asmoper; groupadd -g 54329 asmadmin; groupadd -g 54330 racdba; useradd -m -u 54331 -g oinstall -G dba,oper,backupdba,dgdba,kmdba,asmdba,asmadmin,racdba -d /home/oracle -s /bin/bash  oracle; useradd -m -u 54332 -g oinstall -G dba,asmadmin,asmdba,asmoper -d /home/grid -s /bin/bash  grid; id oracle; id grid
+    [root@ol926ain2 ~]# groupadd -g 54321 oinstall; groupadd -g 54322 dba; groupadd -g 54323 oper; groupadd -g 54324 backupdba; groupadd -g 54325 dgdba; groupadd -g 54326 kmdba; groupadd -g 54327 asmdba; groupadd -g 54328 asmoper; groupadd -g 54329 asmadmin; groupadd -g 54330 racdba; useradd -m -u 54331 -g oinstall -G dba,oper,backupdba,dgdba,kmdba,asmdba,asmadmin,racdba -d /home/oracle -s /bin/bash  oracle; useradd -m -u 54332 -g oinstall -G dba,asmadmin,asmdba,asmoper -d /home/grid -s /bin/bash  grid; id oracle; id grid
+    [root@ol926ain1 ~]# passwd oracle
+    [root@ol926ain2 ~]# passwd oracle
+    [root@ol926ain1 ~]# passwd grid
+    [root@ol926ain2 ~]# passwd grid
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CREATE DIRECTORIES )
 
-    [root@ol9n1 ~]# mkdir -p /u01/app/grid; mkdir -p /u01/app/23.7.0/grid; mkdir -p /u01/app/oracle; mkdir -p /u01/app/oracle/product/23.7.0/dbhome_1; chmod -R 775 /u01; chown -R grid:oinstall /u01; chown -R oracle:oinstall /u01/app/oracle; chown oracle:oinstall -R /home/oracle
-    [root@ol9n2 ~]# mkdir -p /u01/app/grid; mkdir -p /u01/app/23.7.0/grid; mkdir -p /u01/app/oracle; mkdir -p /u01/app/oracle/product/23.7.0/dbhome_1; chmod -R 775 /u01; chown -R grid:oinstall /u01; chown -R oracle:oinstall /u01/app/oracle; chown oracle:oinstall -R /home/oracle
+    [root@ol926ain1 ~]# mkdir -p /u01/app/grid; mkdir -p /u01/app/23.7.0/grid; mkdir -p /u01/app/oracle; mkdir -p /u01/app/oracle/product/23.7.0/dbhome_1; chmod -R 775 /u01; chown -R grid:oinstall /u01; chown -R oracle:oinstall /u01/app/oracle; chown oracle:oinstall -R /home/oracle
+    [root@ol926ain2 ~]# mkdir -p /u01/app/grid; mkdir -p /u01/app/23.7.0/grid; mkdir -p /u01/app/oracle; mkdir -p /u01/app/oracle/product/23.7.0/dbhome_1; chmod -R 775 /u01; chown -R grid:oinstall /u01; chown -R oracle:oinstall /u01/app/oracle; chown oracle:oinstall -R /home/oracle
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE /ETC/RESOLV.CONF )
 
-    [root@ol9n1 ~]# cat <<EOF > /etc/resolv.conf
+    [root@ol926ain1 ~]# cat <<EOF > /etc/resolv.conf
     nameserver 192.168.18.201
     search appsdba.info
     EOF
-    [root@ol9n1 ~]# chattr +i /etc/resolv.conf
-    [root@ol9n2 ~]# cat <<EOF > /etc/resolv.conf
+    [root@ol926ain1 ~]# chattr +i /etc/resolv.conf
+    [root@ol926ain2 ~]# cat <<EOF > /etc/resolv.conf
     nameserver 192.168.18.201
     search appsdba.info
     EOF
-    [root@ol9n2 ~]# chattr +i /etc/resolv.conf
+    [root@ol926ain2 ~]# chattr +i /etc/resolv.conf
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( ENVIRONMENT VARIABLES NODE 1 )
 
-    [root@ol9n1 ~]# cat <<EOF > /home/grid/.bash_profile 
+    [root@ol926ain1 ~]# cat <<EOF > /home/grid/.bash_profile 
     # .bash_profile
 
     # Get the aliases and functions
@@ -266,8 +266,8 @@
     umask 22
     export PATH
     EOF
-    [root@ol9n1 ~]# chown grid:oinstall /home/grid/.bash_profile
-    [root@ol9n1 ~]# cat <<EOF > /home/oracle/.bash_profile
+    [root@ol926ain1 ~]# chown grid:oinstall /home/grid/.bash_profile
+    [root@ol926ain1 ~]# cat <<EOF > /home/oracle/.bash_profile
     # .bash_profile
 
     # Get the aliases and functions
@@ -285,8 +285,8 @@
     umask 22
     export PATH
     EOF
-    [root@ol9n1 ~]# chown oracle:oinstall /home/oracle/.bash_profile
-    [root@ol9n1 ~]# cat <<EOF > /root/.bash_profile 
+    [root@ol926ain1 ~]# chown oracle:oinstall /home/oracle/.bash_profile
+    [root@ol926ain1 ~]# cat <<EOF > /root/.bash_profile 
     # .bash_profile
 
     # Get the aliases and functions
@@ -304,7 +304,7 @@
     
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( ENVIRONMENT VARIABLES NODE 2 )
 
-    [root@ol9n2 ~]# cat <<EOF > /home/grid/.bash_profile 
+    [root@ol926ain2 ~]# cat <<EOF > /home/grid/.bash_profile 
     # .bash_profile
 
     # Get the aliases and functions
@@ -322,8 +322,8 @@
     umask 22
     export PATH
     EOF
-    [root@ol9n2 ~]# chown grid:oinstall /home/grid/.bash_profile
-    [root@ol9n2 ~]# cat <<EOF > /home/oracle/.bash_profile
+    [root@ol926ain2 ~]# chown grid:oinstall /home/grid/.bash_profile
+    [root@ol926ain2 ~]# cat <<EOF > /home/oracle/.bash_profile
     # .bash_profile
 
     # Get the aliases and functions
@@ -341,8 +341,8 @@
     umask 22
     export PATH
     EOF
-    [root@ol9n2 ~]# chown oracle:oinstall /home/oracle/.bash_profile
-    [root@ol9n2 ~]# cat <<EOF > /root/.bash_profile 
+    [root@ol926ain2 ~]# chown oracle:oinstall /home/oracle/.bash_profile
+    [root@ol926ain2 ~]# cat <<EOF > /root/.bash_profile 
     # .bash_profile
 
     # Get the aliases and functions
@@ -360,8 +360,8 @@
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE ORACLE ASM LIBRARY NODE 1 )
     
-    [root@ol9n1 ~]# source /root/.bash_profile
-    [root@ol9n1 ~]# oracleasm configure -i
+    [root@ol926ain1 ~]# source /root/.bash_profile
+    [root@ol926ain1 ~]# oracleasm configure -i
     Configuring the Oracle ASM library driver.
 
     This will configure the on-boot properties of the Oracle ASM library
@@ -380,8 +380,8 @@
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE ORACLE ASM LIBRARY NODE 2 )
 
-    [root@ol9n2 ~]# source /root/.bash_profile
-    [root@ol9n2 ~]# oracleasm configure -i
+    [root@ol926ain2 ~]# source /root/.bash_profile
+    [root@ol926ain2 ~]# oracleasm configure -i
     Configuring the Oracle ASM library driver.
 
     This will configure the on-boot properties of the Oracle ASM library
@@ -400,38 +400,38 @@
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( GET ISCSI ID )
 
-    [root@ol9n1 ~]# iscsiadm -m discovery -t sendtargets -p 192.168.18.200 
+    [root@ol926ain1 ~]# iscsiadm -m discovery -t sendtargets -p 192.168.18.200 
     192.168.18.200:3260,1 iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0
-    [root@ol9n2 ~]# iscsiadm -m discovery -t sendtargets -p 192.168.18.200
+    [root@ol926ain2 ~]# iscsiadm -m discovery -t sendtargets -p 192.168.18.200
     192.168.18.200:3260,1 iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0
-    [root@ol9n1 ~]# cat /etc/iscsi/initiatorname.iscsi
+    [root@ol926ain1 ~]# cat /etc/iscsi/initiatorname.iscsi
     InitiatorName=iqn.1988-12.com.oracle:58e84cb3eaf6
-    [root@ol9n2 ~]# cat /etc/iscsi/initiatorname.iscsi
+    [root@ol926ain2 ~]# cat /etc/iscsi/initiatorname.iscsi
     InitiatorName=iqn.1988-12.com.oracle:e647892de987
     
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( LOGIN ISCSI )
     
-    [root@ol9n1 ~]# iscsiadm -m node -T  iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0 -p 192.168.18.200 -l
+    [root@ol926ain1 ~]# iscsiadm -m node -T  iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0 -p 192.168.18.200 -l
     Logging in to [iface: default, target: iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0, portal: 192.168.18.200,3260]
     Login to [iface: default, target: iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0, portal: 192.168.18.200,3260] successful.
-    [root@ol9n2 ~]# iscsiadm -m node -T  iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0 -p 192.168.18.200 -l 
+    [root@ol926ain2 ~]# iscsiadm -m node -T  iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0 -p 192.168.18.200 -l 
     Logging in to [iface: default, target: iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0, portal: 192.168.18.200,3260]
     Login to [iface: default, target: iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0, portal: 192.168.18.200,3260] successful.
     
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( AUTOMATIC LOGIN ISCSI )
 
-    [root@ol9n1 ~]# iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0 -p 192.168.18.200 -o update -n node.startup -v automatic
-    [root@ol9n2 ~]# iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0 -p 192.168.18.200 -o update -n node.startup -v automatic
+    [root@ol926ain1 ~]# iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0 -p 192.168.18.200 -o update -n node.startup -v automatic
+    [root@ol926ain2 ~]# iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0 -p 192.168.18.200 -o update -n node.startup -v automatic
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CHECK ISCSI DISKS )
 
-    [root@ol9n1 ~]# fdisk -l | grep "Disco /dev/sd"
+    [root@ol926ain1 ~]# fdisk -l | grep "Disco /dev/sd"
     Disco /dev/sda: 20 GiB, 21474836480 bytes, 41943040 setores
     Disco /dev/sde: 20 GiB, 21474836480 bytes, 41943040 setores
     Disco /dev/sdb: 20 GiB, 21474836480 bytes, 41943040 setores
     Disco /dev/sdd: 20 GiB, 21474836480 bytes, 41943040 setores
     Disco /dev/sdc: 20 GiB, 21474836480 bytes, 41943040 setores
-    [root@ol9n2 ~]# fdisk -l | grep "Disco /dev/sd" 
+    [root@ol926ain2 ~]# fdisk -l | grep "Disco /dev/sd" 
     Disco /dev/sda: 20 GiB, 21474836480 bytes, 41943040 setores
     Disco /dev/sdb: 20 GiB, 21474836480 bytes, 41943040 setores
     Disco /dev/sdd: 20 GiB, 21474836480 bytes, 41943040 setores
@@ -440,40 +440,40 @@
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CREATE PARTITION ISCSI DISKS )
 
-    [root@ol9n1 ~]# fdisk /dev/sda
+    [root@ol926ain1 ~]# fdisk /dev/sda
     n > p > 1 > w
-    [root@ol9n1 ~]# fdisk /dev/sdb
+    [root@ol926ain1 ~]# fdisk /dev/sdb
     n > p > 1 > w
-    [root@ol9n1 ~]# fdisk /dev/sdc
+    [root@ol926ain1 ~]# fdisk /dev/sdc
     n > p > 1 > w
-    [root@ol9n1 ~]# fdisk /dev/sdd
+    [root@ol926ain1 ~]# fdisk /dev/sdd
     n > p > 1 > w
-    [root@ol9n1 ~]# fdisk /dev/sde
+    [root@ol926ain1 ~]# fdisk /dev/sde
     n > p > 1 > w
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( GET ISCSI DISKS UUID )
 
-    [root@ol9n1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sda1 
+    [root@ol926ain1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sda1 
     36001405c2b1cd5d2f25490fa18a78e36
-    [root@ol9n1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sdb1 
+    [root@ol926ain1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sdb1 
     360014058c1b0ce71fe24475aa4139ecc
-    [root@ol9n1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sdc1 
+    [root@ol926ain1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sdc1 
     360014051c3e44ceaf57418fa35d05cb5
-    [root@ol9n1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sdd1 
+    [root@ol926ain1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sdd1 
     36001405e87d20fdda164e60bd17dac7d
-    [root@ol9n1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sde1 
+    [root@ol926ain1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sde1 
     3600140590bc1307e3a44a679c89c7014
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CREATE ASM DEVICES RULES )
 
-    [root@ol9n1 ~]# cat <<EOF > /etc/udev/rules.d/99-oracle-asmdevices.rules
+    [root@ol926ain1 ~]# cat <<EOF > /etc/udev/rules.d/99-oracle-asmdevices.rules
     KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405c2b1cd5d2f25490fa18a78e36", SYMLINK+="asm-disk1", OWNER="grid", GROUP="asmdba", MODE="0660"
     KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="360014058c1b0ce71fe24475aa4139ecc", SYMLINK+="asm-disk2", OWNER="grid", GROUP="asmdba", MODE="0660"
     KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="360014051c3e44ceaf57418fa35d05cb5", SYMLINK+="asm-disk3", OWNER="grid", GROUP="asmdba", MODE="0660"
     KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405e87d20fdda164e60bd17dac7d", SYMLINK+="asm-disk4", OWNER="grid", GROUP="asmdba", MODE="0660"
     KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="3600140590bc1307e3a44a679c89c7014", SYMLINK+="asm-disk5", OWNER="grid", GROUP="asmdba", MODE="0660"
     EOF
-    [root@ol9n2 ~]# cat <<EOF > /etc/udev/rules.d/99-oracle-asmdevices.rules
+    [root@ol926ain2 ~]# cat <<EOF > /etc/udev/rules.d/99-oracle-asmdevices.rules
     KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405c2b1cd5d2f25490fa18a78e36", SYMLINK+="asm-disk1", OWNER="grid", GROUP="asmdba", MODE="0660"
     KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="360014058c1b0ce71fe24475aa4139ecc", SYMLINK+="asm-disk2", OWNER="grid", GROUP="asmdba", MODE="0660"
     KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="360014051c3e44ceaf57418fa35d05cb5", SYMLINK+="asm-disk3", OWNER="grid", GROUP="asmdba", MODE="0660"
@@ -481,65 +481,65 @@
     KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="3600140590bc1307e3a44a679c89c7014", SYMLINK+="asm-disk5", OWNER="grid", GROUP="asmdba", MODE="0660"
     EOF
 
-    [root@ol9n1 ~]# udevadm test /block/sda/sda1
-    [root@ol9n1 ~]# udevadm test /block/sdb/sdb1
-    [root@ol9n1 ~]# udevadm test /block/sdc/sdc1
-    [root@ol9n1 ~]# udevadm test /block/sdd/sdd1
-    [root@ol9n1 ~]# udevadm test /block/sde/sde1
-    [root@ol9n1 ~]# udevadm control --reload-rules
-    [root@ol9n1 ~]# /sbin/udevadm trigger
-    [root@ol9n2 ~]# udevadm test /block/sda/sda1
-    [root@ol9n2 ~]# udevadm test /block/sdb/sdb1
-    [root@ol9n2 ~]# udevadm test /block/sdc/sdc1
-    [root@ol9n2 ~]# udevadm test /block/sdd/sdd1
-    [root@ol9n2 ~]# udevadm test /block/sde/sde1
-    [root@ol9n2 ~]# udevadm control --reload-rules
-    [root@ol9n2 ~]# /sbin/udevadm trigger
+    [root@ol926ain1 ~]# udevadm test /block/sda/sda1
+    [root@ol926ain1 ~]# udevadm test /block/sdb/sdb1
+    [root@ol926ain1 ~]# udevadm test /block/sdc/sdc1
+    [root@ol926ain1 ~]# udevadm test /block/sdd/sdd1
+    [root@ol926ain1 ~]# udevadm test /block/sde/sde1
+    [root@ol926ain1 ~]# udevadm control --reload-rules
+    [root@ol926ain1 ~]# /sbin/udevadm trigger
+    [root@ol926ain2 ~]# udevadm test /block/sda/sda1
+    [root@ol926ain2 ~]# udevadm test /block/sdb/sdb1
+    [root@ol926ain2 ~]# udevadm test /block/sdc/sdc1
+    [root@ol926ain2 ~]# udevadm test /block/sdd/sdd1
+    [root@ol926ain2 ~]# udevadm test /block/sde/sde1
+    [root@ol926ain2 ~]# udevadm control --reload-rules
+    [root@ol926ain2 ~]# /sbin/udevadm trigger
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CHECK ASM DEVICES RULES )
 
-    [root@ol9n1 ~]# ls -ltr /dev/asm-disk*
+    [root@ol926ain1 ~]# ls -ltr /dev/asm-disk*
     lrwxrwxrwx 1 root root 4 fev 28 14:34 /dev/asm-disk1 -> sda1
-    [root@ol9n1 ~]# ls -ltr /dev/sda1
+    [root@ol926ain1 ~]# ls -ltr /dev/sda1
     brw-rw---- 1 grid asmadmin 8, 1 fev 28 14:34 /dev/sda1
 
 ###### SSH KEY EXCHANGE ( NODE 1 )
 
-    [root@ol9n1 ~]# su - root -c "ssh-keygen -t rsa"
-    [root@ol9n1 ~]# su - oracle -c "ssh-keygen -t rsa"
-    [root@ol9n1 ~]# su - grid -c "ssh-keygen -t rsa"
-    [root@ol9n1 ~]# su - root -c "cat /root/.ssh/id_rsa.pub > /root/.ssh/authorized_keys"
-    [root@ol9n1 ~]# su - oracle -c "cat /home/oracle/.ssh/id_rsa.pub > /home/oracle/.ssh/authorized_keys"
-    [root@ol9n1 ~]# su - grid -c "cat /home/grid/.ssh/id_rsa.pub > /home/grid/.ssh/authorized_keys"
-    [root@ol9n1 ~]# chmod 600 /root/.ssh/authorized_keys
-    [root@ol9n1 ~]# chmod 600 /home/oracle/.ssh/authorized_keys
-    [root@ol9n1 ~]# chmod 600 /home/grid/.ssh/authorized_keys
-    [root@ol9n1 ~]# ssh-copy-id -i .ssh/id_rsa.pub root@192.168.18.122
-    [root@ol9n1 ~]# su - oracle
-    [oracle@ol9n1 ~]$ ssh-copy-id -i .ssh/id_rsa.pub oracle@192.168.18.122
-    [oracle@ol9n1 ~]$ exit
-    [root@ol9n1 ~]# su - grid
-    [grid@ol9n1 ~]$ ssh-copy-id -i .ssh/id_rsa.pub grid@192.168.18.122
-    [grid@ol9n1 ~]$ exit
+    [root@ol926ain1 ~]# su - root -c "ssh-keygen -t rsa"
+    [root@ol926ain1 ~]# su - oracle -c "ssh-keygen -t rsa"
+    [root@ol926ain1 ~]# su - grid -c "ssh-keygen -t rsa"
+    [root@ol926ain1 ~]# su - root -c "cat /root/.ssh/id_rsa.pub > /root/.ssh/authorized_keys"
+    [root@ol926ain1 ~]# su - oracle -c "cat /home/oracle/.ssh/id_rsa.pub > /home/oracle/.ssh/authorized_keys"
+    [root@ol926ain1 ~]# su - grid -c "cat /home/grid/.ssh/id_rsa.pub > /home/grid/.ssh/authorized_keys"
+    [root@ol926ain1 ~]# chmod 600 /root/.ssh/authorized_keys
+    [root@ol926ain1 ~]# chmod 600 /home/oracle/.ssh/authorized_keys
+    [root@ol926ain1 ~]# chmod 600 /home/grid/.ssh/authorized_keys
+    [root@ol926ain1 ~]# ssh-copy-id -i .ssh/id_rsa.pub root@192.168.18.122
+    [root@ol926ain1 ~]# su - oracle
+    [oracle@ol926ain1 ~]$ ssh-copy-id -i .ssh/id_rsa.pub oracle@192.168.18.122
+    [oracle@ol926ain1 ~]$ exit
+    [root@ol926ain1 ~]# su - grid
+    [grid@ol926ain1 ~]$ ssh-copy-id -i .ssh/id_rsa.pub grid@192.168.18.122
+    [grid@ol926ain1 ~]$ exit
     
 ###### SSH KEY EXCHANGE ( NODE 2 )
 
-    [root@ol9n2 ~]# su - root -c "ssh-keygen -t rsa"
-    [root@ol9n2 ~]# su - oracle -c "ssh-keygen -t rsa"
-    [root@ol9n2 ~]# su - grid -c "ssh-keygen -t rsa"
-    [root@ol9n2 ~]# su - root -c "cat /root/.ssh/id_rsa.pub > /root/.ssh/authorized_keys"
-    [root@ol9n2 ~]# su - oracle -c "cat /home/oracle/.ssh/id_rsa.pub > /home/oracle/.ssh/authorized_keys"
-    [root@ol9n2 ~]# su - grid -c "cat /home/grid/.ssh/id_rsa.pub > /home/grid/.ssh/authorized_keys"
-    [root@ol9n2 ~]# chmod 600 /root/.ssh/authorized_keys
-    [root@ol9n2 ~]# chmod 600 /home/oracle/.ssh/authorized_keys
-    [root@ol9n2 ~]# chmod 600 /home/grid/.ssh/authorized_keys
-    [root@ol9n2 ~]# ssh-copy-id -i .ssh/id_rsa.pub root@192.168.18.121
-    [root@ol9n2 ~]# su - oracle
-    [oracle@ol9n2 ~]$ ssh-copy-id -i .ssh/id_rsa.pub oracle@192.168.18.121
-    [oracle@ol9n2 ~]$ exit
-    [root@ol9n2 ~]# su - grid
-    [grid@ol9n2 ~]$ ssh-copy-id -i .ssh/id_rsa.pub grid@192.168.18.121
-    [grid@ol9n2 ~]$ exit
+    [root@ol926ain2 ~]# su - root -c "ssh-keygen -t rsa"
+    [root@ol926ain2 ~]# su - oracle -c "ssh-keygen -t rsa"
+    [root@ol926ain2 ~]# su - grid -c "ssh-keygen -t rsa"
+    [root@ol926ain2 ~]# su - root -c "cat /root/.ssh/id_rsa.pub > /root/.ssh/authorized_keys"
+    [root@ol926ain2 ~]# su - oracle -c "cat /home/oracle/.ssh/id_rsa.pub > /home/oracle/.ssh/authorized_keys"
+    [root@ol926ain2 ~]# su - grid -c "cat /home/grid/.ssh/id_rsa.pub > /home/grid/.ssh/authorized_keys"
+    [root@ol926ain2 ~]# chmod 600 /root/.ssh/authorized_keys
+    [root@ol926ain2 ~]# chmod 600 /home/oracle/.ssh/authorized_keys
+    [root@ol926ain2 ~]# chmod 600 /home/grid/.ssh/authorized_keys
+    [root@ol926ain2 ~]# ssh-copy-id -i .ssh/id_rsa.pub root@192.168.18.121
+    [root@ol926ain2 ~]# su - oracle
+    [oracle@ol926ain2 ~]$ ssh-copy-id -i .ssh/id_rsa.pub oracle@192.168.18.121
+    [oracle@ol926ain2 ~]$ exit
+    [root@ol926ain2 ~]# su - grid
+    [grid@ol926ain2 ~]$ ssh-copy-id -i .ssh/id_rsa.pub grid@192.168.18.121
+    [grid@ol926ain2 ~]$ exit
     
 ###### COPY GRID INFRASTRUCTURE SOFTWARE
 
@@ -547,35 +547,35 @@
 
 ###### UNZIP GRID INFRASTRUCTURE SOFTWARE
 
-    [root@ol9n1 ~]# su - grid
-    [grid@ol9n1 grid]$ cd /u01/app/23.7.0/grid/
-    [grid@ol9n1 grid]$ unzip p37370503_230000_Linux-x86-64.zip
-    [grid@ol9n1 grid]$ rm -vf p37370503_230000_Linux-x86-64.zip
+    [root@ol926ain1 ~]# su - grid
+    [grid@ol926ain1 grid]$ cd /u01/app/23.7.0/grid/
+    [grid@ol926ain1 grid]$ unzip p37370503_230000_Linux-x86-64.zip
+    [grid@ol926ain1 grid]$ rm -vf p37370503_230000_Linux-x86-64.zip
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( INSTALL CVU PACKAGE )
 
-    [root@ol9n1 ~]# rpm -ivh /u01/app/23.7.0/grid/cv/rpm/cvuqdisk-1.0.10-1.rpm 
+    [root@ol926ain1 ~]# rpm -ivh /u01/app/23.7.0/grid/cv/rpm/cvuqdisk-1.0.10-1.rpm 
     aviso: /u01/app/23.7.0/grid/cv/rpm/cvuqdisk-1.0.10-1.rpm: Cabeçalho V3 RSA/SHA256 Signature, ID da chave ad986da3: NOKEY
     Verifying...                          ################################# [100%]
     Preparando...                         ################################# [100%]
     Using default group oinstall to install package
     Updating / installing...
         1:cvuqdisk-1.0.10-1                ################################# [100%]
-    [root@ol9n1 ~]# scp /u01/app/23.7.0/grid/cv/rpm/cvuqdisk-1.0.10-1.rpm root@ol9n2:/root/
-    [root@ol9n1 ~]# ssh root@ol9n2
-    [root@ol9n2 ~]# rpm -ivh cvuqdisk-1.0.10-1.rpm 
+    [root@ol926ain1 ~]# scp /u01/app/23.7.0/grid/cv/rpm/cvuqdisk-1.0.10-1.rpm root@ol926ain2:/root/
+    [root@ol926ain1 ~]# ssh root@ol926ain2
+    [root@ol926ain2 ~]# rpm -ivh cvuqdisk-1.0.10-1.rpm 
     aviso: cvuqdisk-1.0.10-1.rpm: Cabeçalho V3 RSA/SHA256 Signature, ID da chave ad986da3: NOKEY
     Verifying...                          ################################# [100%]
     Preparando...                         ################################# [100%]
     Using default group oinstall to install package
     Updating / installing...
        1:cvuqdisk-1.0.10-1                ################################# [100%]
-    [root@ol9n2 ~]# exit
+    [root@ol926ain2 ~]# exit
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( RUNCLUVFY )
 
-    [root@ol9n1 ~]# su - grid
-    [grid@ol9n1 ~]$ /u01/app/23.7.0/grid/runcluvfy.sh stage -pre crsinst -n ol9n1,ol9n2 -verbose -method root
+    [root@ol926ain1 ~]# su - grid
+    [grid@ol926ain1 ~]$ /u01/app/23.7.0/grid/runcluvfy.sh stage -pre crsinst -n ol926ain1,ol926ain2 -verbose -method root
     Digite a senha de "ROOT":
 
     Performing following verification checks ...
@@ -583,335 +583,335 @@
     Memória Física ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         7,7478GB (8124168.0KB)    8GB (8388608.0KB)         aprovado  
-    ol9n1         7,7478GB (8124160.0KB)    8GB (8388608.0KB)         aprovado  
+    ol926ain2         7,7478GB (8124168.0KB)    8GB (8388608.0KB)         aprovado  
+    ol926ain1         7,7478GB (8124160.0KB)    8GB (8388608.0KB)         aprovado  
     Memória Física ...APROVADO
     Memória Física Disponível ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         7,3125GB (7667700.0KB)    50MB (51200.0KB)          aprovado  
-    ol9n1         7,0345GB (7376172.0KB)    50MB (51200.0KB)          aprovado  
+    ol926ain2         7,3125GB (7667700.0KB)    50MB (51200.0KB)          aprovado  
+    ol926ain1         7,0345GB (7376172.0KB)    50MB (51200.0KB)          aprovado  
     Memória Física Disponível ...APROVADO
     Tamanho de Swap ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         8GB (8388604.0KB)         7,7478GB (8124168.0KB)    aprovado  
-    ol9n1         8GB (8388604.0KB)         7,7478GB (8124160.0KB)    aprovado  
+    ol926ain2         8GB (8388604.0KB)         7,7478GB (8124168.0KB)    aprovado  
+    ol926ain1         8GB (8388604.0KB)         7,7478GB (8124160.0KB)    aprovado  
     Tamanho de Swap ...APROVADO
-    Espaço Livre: ol9n2:/usr,ol9n2:/var,ol9n2:/etc,ol9n2:/sbin,ol9n2:/tmp ...
+    Espaço Livre: ol926ain2:/usr,ol926ain2:/var,ol926ain2:/etc,ol926ain2:/sbin,ol926ain2:/tmp ...
     Caminho           Nome do Nó    Ponto de montagem  Disponível    Necessário    Status      
     ----------------  ------------  ------------  ------------  ------------  ------------
-    /usr              ol9n2         /             42,4229GB     25MB          aprovado    
-    /var              ol9n2         /             42,4229GB     5MB           aprovado    
-    /etc              ol9n2         /             42,4229GB     25MB          aprovado    
-    /sbin             ol9n2         /             42,4229GB     10MB          aprovado    
-    /tmp              ol9n2         /             42,4229GB     1GB           aprovado    
-    Espaço Livre: ol9n2:/usr,ol9n2:/var,ol9n2:/etc,ol9n2:/sbin,ol9n2:/tmp ...APROVADO
-    Espaço Livre: ol9n1:/usr,ol9n1:/var,ol9n1:/etc,ol9n1:/sbin,ol9n1:/tmp ...
+    /usr              ol926ain2         /             42,4229GB     25MB          aprovado    
+    /var              ol926ain2         /             42,4229GB     5MB           aprovado    
+    /etc              ol926ain2         /             42,4229GB     25MB          aprovado    
+    /sbin             ol926ain2         /             42,4229GB     10MB          aprovado    
+    /tmp              ol926ain2         /             42,4229GB     1GB           aprovado    
+    Espaço Livre: ol926ain2:/usr,ol926ain2:/var,ol926ain2:/etc,ol926ain2:/sbin,ol926ain2:/tmp ...APROVADO
+    Espaço Livre: ol926ain1:/usr,ol926ain1:/var,ol926ain1:/etc,ol926ain1:/sbin,ol926ain1:/tmp ...
     Caminho           Nome do Nó    Ponto de montagem  Disponível    Necessário    Status      
     ----------------  ------------  ------------  ------------  ------------  ------------
-    /usr              ol9n1         /             39,7291GB     25MB          aprovado    
-    /var              ol9n1         /             39,7291GB     5MB           aprovado    
-    /etc              ol9n1         /             39,7291GB     25MB          aprovado    
-    /sbin             ol9n1         /             39,7291GB     10MB          aprovado    
-    /tmp              ol9n1         /             39,7291GB     1GB           aprovado    
-    Espaço Livre: ol9n1:/usr,ol9n1:/var,ol9n1:/etc,ol9n1:/sbin,ol9n1:/tmp ...APROVADO
+    /usr              ol926ain1         /             39,7291GB     25MB          aprovado    
+    /var              ol926ain1         /             39,7291GB     5MB           aprovado    
+    /etc              ol926ain1         /             39,7291GB     25MB          aprovado    
+    /sbin             ol926ain1         /             39,7291GB     10MB          aprovado    
+    /tmp              ol926ain1         /             39,7291GB     1GB           aprovado    
+    Espaço Livre: ol926ain1:/usr,ol926ain1:/var,ol926ain1:/etc,ol926ain1:/sbin,ol926ain1:/tmp ...APROVADO
     Existência de Usuário: grid ...
     Nome do Nó    Status                    Comentário              
     ------------  ------------------------  ------------------------
-    ol9n2         aprovado                  existe(54332)           
-    ol9n1         aprovado                  existe(54332)           
+    ol926ain2         aprovado                  existe(54332)           
+    ol926ain1         aprovado                  existe(54332)           
 
     Usuários com o Mesmo UID: 54332 ...APROVADO
     Existência de Usuário: grid ...APROVADO
     Existência de Grupo: asmadmin ...
     Nome do Nó    Status                    Comentário              
     ------------  ------------------------  ------------------------
-    ol9n2         aprovado                  existe                  
-    ol9n1         aprovado                  existe                  
+    ol926ain2         aprovado                  existe                  
+    ol926ain1         aprovado                  existe                  
     Existência de Grupo: asmadmin ...APROVADO
     Existência de Grupo: asmdba ...
     Nome do Nó    Status                    Comentário              
     ------------  ------------------------  ------------------------
-    ol9n2         aprovado                  existe                  
-    ol9n1         aprovado                  existe                  
+    ol926ain2         aprovado                  existe                  
+    ol926ain1         aprovado                  existe                  
     Existência de Grupo: asmdba ...APROVADO
     Existência de Grupo: oinstall ...
     Nome do Nó    Status                    Comentário              
     ------------  ------------------------  ------------------------
-    ol9n2         aprovado                  existe                  
-    ol9n1         aprovado                  existe                  
+    ol926ain2         aprovado                  existe                  
+    ol926ain1         aprovado                  existe                  
     Existência de Grupo: oinstall ...APROVADO
     Participação em Grupos: asmdba ...
     Nome do Nó        O Usuário Já Existe  O Grupo Já Existe  Usuário no Grupo  Status          
     ----------------  ------------  ------------  ------------  ----------------
-    ol9n2             sim           sim           sim           aprovado        
-    ol9n1             sim           sim           sim           aprovado        
+    ol926ain2             sim           sim           sim           aprovado        
+    ol926ain1             sim           sim           sim           aprovado        
     Participação em Grupos: asmdba ...APROVADO
     Participação em Grupos: asmadmin ...
     Nome do Nó        O Usuário Já Existe  O Grupo Já Existe  Usuário no Grupo  Status          
     ----------------  ------------  ------------  ------------  ----------------
-    ol9n2             sim           sim           sim           aprovado        
-    ol9n1             sim           sim           sim           aprovado        
+    ol926ain2             sim           sim           sim           aprovado        
+    ol926ain1             sim           sim           sim           aprovado        
     Participação em Grupos: asmadmin ...APROVADO
     Participação em Grupos: oinstall(Principal) ...
     Nome do Nó        O Usuário Já Existe  O Grupo Já Existe  Usuário no Grupo  Principal     Status      
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol9n2             sim           sim           sim           sim           aprovado    
-    ol9n1             sim           sim           sim           sim           aprovado    
+    ol926ain2             sim           sim           sim           sim           aprovado    
+    ol926ain1             sim           sim           sim           sim           aprovado    
     Participação em Grupos: oinstall(Principal) ...APROVADO
     Nível da Execução ...
     Nome do Nó    nível de execução         Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         5                         3,5                       aprovado  
-    ol9n1         5                         3,5                       aprovado  
+    ol926ain2         5                         3,5                       aprovado  
+    ol926ain1         5                         3,5                       aprovado  
     Nível da Execução ...APROVADO
     Arquitetura ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         x86_64                    x86_64                    aprovado  
-    ol9n1         x86_64                    x86_64                    aprovado  
+    ol926ain2         x86_64                    x86_64                    aprovado  
+    ol926ain1         x86_64                    x86_64                    aprovado  
     Arquitetura ...APROVADO
     Versão do Kernel do SO ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         5.15.0-302.167.6.el9uek.x86_64  5.15.0              aprovado  
-    ol9n1         5.15.0-302.167.6.el9uek.x86_64  5.15.0              aprovado  
+    ol926ain2         5.15.0-302.167.6.el9uek.x86_64  5.15.0              aprovado  
+    ol926ain1         5.15.0-302.167.6.el9uek.x86_64  5.15.0              aprovado  
     Versão do Kernel do SO ...APROVADO
     Parâmetro de Kernel do SO: semmsl ...
     Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol9n1             250           250           250           aprovado    
-    ol9n2             250           250           250           aprovado    
+    ol926ain1             250           250           250           aprovado    
+    ol926ain2             250           250           250           aprovado    
     Parâmetro de Kernel do SO: semmsl ...APROVADO
     Parâmetro de Kernel do SO: semmns ...
     Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol9n1             32000         32000         32000         aprovado    
-    ol9n2             32000         32000         32000         aprovado    
+    ol926ain1             32000         32000         32000         aprovado    
+    ol926ain2             32000         32000         32000         aprovado    
     Parâmetro de Kernel do SO: semmns ...APROVADO
     Parâmetro de Kernel do SO: semopm ...
     Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol9n1             100           100           100           aprovado    
-    ol9n2             100           100           100           aprovado    
+    ol926ain1             100           100           100           aprovado    
+    ol926ain2             100           100           100           aprovado    
     Parâmetro de Kernel do SO: semopm ...APROVADO
     Parâmetro de Kernel do SO: semmni ...
     Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol9n1             128           128           128           aprovado    
-    ol9n2             128           128           128           aprovado    
+    ol926ain1             128           128           128           aprovado    
+    ol926ain2             128           128           128           aprovado    
     Parâmetro de Kernel do SO: semmni ...APROVADO
     Parâmetro de Kernel do SO: shmmax ...
     Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol9n1             4398046511104  4398046511104  4159569920  aprovado    
-    ol9n2             4398046511104  4398046511104  4159574016  aprovado    
+    ol926ain1             4398046511104  4398046511104  4159569920  aprovado    
+    ol926ain2             4398046511104  4398046511104  4159574016  aprovado    
     Parâmetro de Kernel do SO: shmmax ...APROVADO
     Parâmetro de Kernel do SO: shmmni ...
     Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol9n1             4096          4096          4096          aprovado    
-    ol9n2             4096          4096          4096          aprovado    
+    ol926ain1             4096          4096          4096          aprovado    
+    ol926ain2             4096          4096          4096          aprovado    
     Parâmetro de Kernel do SO: shmmni ...APROVADO
     Parâmetro de Kernel do SO: shmall ...
     Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol9n1             1073741824    1073741824    1073741824    aprovado    
-    ol9n2             1073741824    1073741824    1073741824    aprovado    
+    ol926ain1             1073741824    1073741824    1073741824    aprovado    
+    ol926ain2             1073741824    1073741824    1073741824    aprovado    
     Parâmetro de Kernel do SO: shmall ...APROVADO
     Parâmetro de Kernel do SO: file-max ...
     Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol9n1             6815744       6815744       6815744       aprovado    
-    ol9n2             6815744       6815744       6815744       aprovado    
+    ol926ain1             6815744       6815744       6815744       aprovado    
+    ol926ain2             6815744       6815744       6815744       aprovado    
     Parâmetro de Kernel do SO: file-max ...APROVADO
     Parâmetro de Kernel do SO: ip_local_port_range ...
     Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol9n1             between 9000 & 65535  between 9000 & 65535  between 9000 & 65535  aprovado    
-    ol9n2             between 9000 & 65535  between 9000 & 65535  between 9000 & 65535  aprovado    
+    ol926ain1             between 9000 & 65535  between 9000 & 65535  between 9000 & 65535  aprovado    
+    ol926ain2             between 9000 & 65535  between 9000 & 65535  between 9000 & 65535  aprovado    
     Parâmetro de Kernel do SO: ip_local_port_range ...APROVADO
     Parâmetro de Kernel do SO: rmem_default ...
     Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol9n1             262144        262144        262144        aprovado    
-    ol9n2             262144        262144        262144        aprovado    
+    ol926ain1             262144        262144        262144        aprovado    
+    ol926ain2             262144        262144        262144        aprovado    
     Parâmetro de Kernel do SO: rmem_default ...APROVADO
     Parâmetro de Kernel do SO: rmem_max ...
     Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol9n1             4194304       4194304       4194304       aprovado    
-    ol9n2             4194304       4194304       4194304       aprovado    
+    ol926ain1             4194304       4194304       4194304       aprovado    
+    ol926ain2             4194304       4194304       4194304       aprovado    
     Parâmetro de Kernel do SO: rmem_max ...APROVADO
     Parâmetro de Kernel do SO: wmem_default ...
     Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol9n1             262144        262144        262144        aprovado    
-    ol9n2             262144        262144        262144        aprovado    
+    ol926ain1             262144        262144        262144        aprovado    
+    ol926ain2             262144        262144        262144        aprovado    
     Parâmetro de Kernel do SO: wmem_default ...APROVADO
     Parâmetro de Kernel do SO: wmem_max ...
     Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol9n1             1048576       1048576       1048576       aprovado    
-    ol9n2             1048576       1048576       1048576       aprovado    
+    ol926ain1             1048576       1048576       1048576       aprovado    
+    ol926ain2             1048576       1048576       1048576       aprovado    
     Parâmetro de Kernel do SO: wmem_max ...APROVADO
     Parâmetro de Kernel do SO: aio-max-nr ...
     Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol9n1             1048576       1048576       1048576       aprovado    
-    ol9n2             1048576       1048576       1048576       aprovado    
+    ol926ain1             1048576       1048576       1048576       aprovado    
+    ol926ain2             1048576       1048576       1048576       aprovado    
     Parâmetro de Kernel do SO: aio-max-nr ...APROVADO
     Parâmetro de Kernel do SO: panic_on_oops ...
     Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol9n1             1             1             1             aprovado    
-    ol9n2             1             1             1             aprovado    
+    ol926ain1             1             1             1             aprovado    
+    ol926ain2             1             1             1             aprovado    
     Parâmetro de Kernel do SO: panic_on_oops ...APROVADO
     Parâmetro de Kernel do SO: kernel.panic ...
     Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol9n1             10            10            at least 1    aprovado    
-    ol9n2             10            10            at least 1    aprovado    
+    ol926ain1             10            10            at least 1    aprovado    
+    ol926ain2             10            10            at least 1    aprovado    
     Parâmetro de Kernel do SO: kernel.panic ...APROVADO
     Pacote: kmod-20-21 (x86_64) ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         kmod(x86_64)-28-10.0.1.el9  kmod(x86_64)-20-21        aprovado  
-    ol9n1         kmod(x86_64)-28-10.0.1.el9  kmod(x86_64)-20-21        aprovado  
+    ol926ain2         kmod(x86_64)-28-10.0.1.el9  kmod(x86_64)-20-21        aprovado  
+    ol926ain1         kmod(x86_64)-28-10.0.1.el9  kmod(x86_64)-20-21        aprovado  
     Pacote: kmod-20-21 (x86_64) ...APROVADO
     Pacote: kmod-libs-20-21 (x86_64) ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         kmod-libs(x86_64)-28-10.0.1.el9  kmod-libs(x86_64)-20-21   aprovado  
-    ol9n1         kmod-libs(x86_64)-28-10.0.1.el9  kmod-libs(x86_64)-20-21   aprovado  
+    ol926ain2         kmod-libs(x86_64)-28-10.0.1.el9  kmod-libs(x86_64)-20-21   aprovado  
+    ol926ain1         kmod-libs(x86_64)-28-10.0.1.el9  kmod-libs(x86_64)-20-21   aprovado  
     Pacote: kmod-libs-20-21 (x86_64) ...APROVADO
     Pacote: binutils-2.35.2 ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         binutils-2.35.2-54.0.1.el9  binutils-2.35.2           aprovado  
-    ol9n1         binutils-2.35.2-54.0.1.el9  binutils-2.35.2           aprovado  
+    ol926ain2         binutils-2.35.2-54.0.1.el9  binutils-2.35.2           aprovado  
+    ol926ain1         binutils-2.35.2-54.0.1.el9  binutils-2.35.2           aprovado  
     Pacote: binutils-2.35.2 ...APROVADO
     Pacote: fontconfig-2.14.0 (x86_64) ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         fontconfig(x86_64)-2.14.0-2.el9_1  fontconfig(x86_64)-2.14.0  aprovado  
-    ol9n1         fontconfig(x86_64)-2.14.0-2.el9_1  fontconfig(x86_64)-2.14.0  aprovado  
+    ol926ain2         fontconfig(x86_64)-2.14.0-2.el9_1  fontconfig(x86_64)-2.14.0  aprovado  
+    ol926ain1         fontconfig(x86_64)-2.14.0-2.el9_1  fontconfig(x86_64)-2.14.0  aprovado  
     Pacote: fontconfig-2.14.0 (x86_64) ...APROVADO
     Pacote: libxcrypt-compat-4.4.18 ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         libxcrypt-compat-4.4.18-3.el9  libxcrypt-compat-4.4.18   aprovado  
-    ol9n1         libxcrypt-compat-4.4.18-3.el9  libxcrypt-compat-4.4.18   aprovado  
+    ol926ain2         libxcrypt-compat-4.4.18-3.el9  libxcrypt-compat-4.4.18   aprovado  
+    ol926ain1         libxcrypt-compat-4.4.18-3.el9  libxcrypt-compat-4.4.18   aprovado  
     Pacote: libxcrypt-compat-4.4.18 ...APROVADO
     Pacote: libgcc-11.3.1 (x86_64) ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         libgcc(x86_64)-11.5.0-2.0.1.el9  libgcc(x86_64)-11.3.1     aprovado  
-    ol9n1         libgcc(x86_64)-11.5.0-2.0.1.el9  libgcc(x86_64)-11.3.1     aprovado  
+    ol926ain2         libgcc(x86_64)-11.5.0-2.0.1.el9  libgcc(x86_64)-11.3.1     aprovado  
+    ol926ain1         libgcc(x86_64)-11.5.0-2.0.1.el9  libgcc(x86_64)-11.3.1     aprovado  
     Pacote: libgcc-11.3.1 (x86_64) ...APROVADO
     Pacote: libstdc++-11.3.1 (x86_64) ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         libstdc++(x86_64)-11.5.0-2.0.1.el9  libstdc++(x86_64)-11.3.1  aprovado  
-    ol9n1         libstdc++(x86_64)-11.5.0-2.0.1.el9  libstdc++(x86_64)-11.3.1  aprovado  
+    ol926ain2         libstdc++(x86_64)-11.5.0-2.0.1.el9  libstdc++(x86_64)-11.3.1  aprovado  
+    ol926ain1         libstdc++(x86_64)-11.5.0-2.0.1.el9  libstdc++(x86_64)-11.3.1  aprovado  
     Pacote: libstdc++-11.3.1 (x86_64) ...APROVADO
     Pacote: sysstat-12.5.4 ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         sysstat-12.5.4-9.0.2.el9  sysstat-12.5.4            aprovado  
-    ol9n1         sysstat-12.5.4-9.0.2.el9  sysstat-12.5.4            aprovado  
+    ol926ain2         sysstat-12.5.4-9.0.2.el9  sysstat-12.5.4            aprovado  
+    ol926ain1         sysstat-12.5.4-9.0.2.el9  sysstat-12.5.4            aprovado  
     Pacote: sysstat-12.5.4 ...APROVADO
     Pacote: ksh ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         ksh                       ksh                       aprovado  
-    ol9n1         ksh                       ksh                       aprovado  
+    ol926ain2         ksh                       ksh                       aprovado  
+    ol926ain1         ksh                       ksh                       aprovado  
     Pacote: ksh ...APROVADO
     Pacote: make-4.3 ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         make-4.3-8.el9            make-4.3                  aprovado  
-    ol9n1         make-4.3-8.el9            make-4.3                  aprovado  
+    ol926ain2         make-4.3-8.el9            make-4.3                  aprovado  
+    ol926ain1         make-4.3-8.el9            make-4.3                  aprovado  
     Pacote: make-4.3 ...APROVADO
     Pacote: glibc-2.34 (x86_64) ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         glibc(x86_64)-2.34-125.0.1.el9_5.1  glibc(x86_64)-2.34        aprovado  
-    ol9n1         glibc(x86_64)-2.34-125.0.1.el9_5.1  glibc(x86_64)-2.34        aprovado  
+    ol926ain2         glibc(x86_64)-2.34-125.0.1.el9_5.1  glibc(x86_64)-2.34        aprovado  
+    ol926ain1         glibc(x86_64)-2.34-125.0.1.el9_5.1  glibc(x86_64)-2.34        aprovado  
     Pacote: glibc-2.34 (x86_64) ...APROVADO
     Pacote: glibc-devel-2.34 (x86_64) ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         glibc-devel(x86_64)-2.34-125.0.1.el9_5.1  glibc-devel(x86_64)-2.34  aprovado  
-    ol9n1         glibc-devel(x86_64)-2.34-125.0.1.el9_5.1  glibc-devel(x86_64)-2.34  aprovado  
+    ol926ain2         glibc-devel(x86_64)-2.34-125.0.1.el9_5.1  glibc-devel(x86_64)-2.34  aprovado  
+    ol926ain1         glibc-devel(x86_64)-2.34-125.0.1.el9_5.1  glibc-devel(x86_64)-2.34  aprovado  
     Pacote: glibc-devel-2.34 (x86_64) ...APROVADO
     Pacote: libaio-0.3.111 (x86_64) ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         libaio(x86_64)-0.3.111-13.el9  libaio(x86_64)-0.3.111    aprovado  
-    ol9n1         libaio(x86_64)-0.3.111-13.el9  libaio(x86_64)-0.3.111    aprovado  
+    ol926ain2         libaio(x86_64)-0.3.111-13.el9  libaio(x86_64)-0.3.111    aprovado  
+    ol926ain1         libaio(x86_64)-0.3.111-13.el9  libaio(x86_64)-0.3.111    aprovado  
     Pacote: libaio-0.3.111 (x86_64) ...APROVADO
     Pacote: nfs-utils-2.5.4 ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         nfs-utils-2.5.4-27.0.1.el9  nfs-utils-2.5.4           aprovado  
-    ol9n1         nfs-utils-2.5.4-27.0.1.el9  nfs-utils-2.5.4           aprovado  
+    ol926ain2         nfs-utils-2.5.4-27.0.1.el9  nfs-utils-2.5.4           aprovado  
+    ol926ain1         nfs-utils-2.5.4-27.0.1.el9  nfs-utils-2.5.4           aprovado  
     Pacote: nfs-utils-2.5.4 ...APROVADO
     Pacote: smartmontools-7.2-6 ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         smartmontools-7.2-9.el9   smartmontools-7.2-6       aprovado  
-    ol9n1         smartmontools-7.2-9.el9   smartmontools-7.2-6       aprovado  
+    ol926ain2         smartmontools-7.2-9.el9   smartmontools-7.2-6       aprovado  
+    ol926ain1         smartmontools-7.2-9.el9   smartmontools-7.2-6       aprovado  
     Pacote: smartmontools-7.2-6 ...APROVADO
     Pacote: net-tools-2.0-0.62 ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         net-tools-2.0-0.64.20160912git.el9  net-tools-2.0-0.62        aprovado  
-    ol9n1         net-tools-2.0-0.64.20160912git.el9  net-tools-2.0-0.62        aprovado  
+    ol926ain2         net-tools-2.0-0.64.20160912git.el9  net-tools-2.0-0.62        aprovado  
+    ol926ain1         net-tools-2.0-0.64.20160912git.el9  net-tools-2.0-0.62        aprovado  
     Pacote: net-tools-2.0-0.62 ...APROVADO
     Pacote: policycoreutils-3.5-1 ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         policycoreutils-3.6-2.1.el9  policycoreutils-3.5-1     aprovado  
-    ol9n1         policycoreutils-3.6-2.1.el9  policycoreutils-3.5-1     aprovado  
+    ol926ain2         policycoreutils-3.6-2.1.el9  policycoreutils-3.5-1     aprovado  
+    ol926ain1         policycoreutils-3.6-2.1.el9  policycoreutils-3.5-1     aprovado  
     Pacote: policycoreutils-3.5-1 ...APROVADO
     Pacote: policycoreutils-python-utils-3.5-1 ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         policycoreutils-python-utils-3.6-2.1.el9  policycoreutils-python-utils-3.5-1  aprovado  
-    ol9n1         policycoreutils-python-utils-3.6-2.1.el9  policycoreutils-python-utils-3.5-1  aprovado  
+    ol926ain2         policycoreutils-python-utils-3.6-2.1.el9  policycoreutils-python-utils-3.5-1  aprovado  
+    ol926ain1         policycoreutils-python-utils-3.6-2.1.el9  policycoreutils-python-utils-3.5-1  aprovado  
     Pacote: policycoreutils-python-utils-3.5-1 ...APROVADO
     Usuários com o Mesmo UID: 0 ...APROVADO
     ID do Grupo Atual ...APROVADO
     Consistência de usuário-raiz ...
     Nome do Nó                            Status                  
     ------------------------------------  ------------------------
-    ol9n2                                 aprovado                
-    ol9n1                                 aprovado                
+    ol926ain2                                 aprovado                
+    ol926ain1                                 aprovado                
     Consistência de usuário-raiz ...APROVADO
     Pacote: psmisc-22.6-19 ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         psmisc-23.4-3.el9         psmisc-22.6-19            aprovado  
-    ol9n1         psmisc-23.4-3.el9         psmisc-22.6-19            aprovado  
+    ol926ain2         psmisc-23.4-3.el9         psmisc-22.6-19            aprovado  
+    ol926ain1         psmisc-23.4-3.el9         psmisc-22.6-19            aprovado  
     Pacote: psmisc-22.6-19 ...APROVADO
     Nome do host ...APROVADO
     Conectividade de Nó ...
     Arquivo dos Hosts ...
     Nome do Nó                            Status                  
     ------------------------------------  ------------------------
-    ol9n1                                 aprovado                
-    ol9n2                                 aprovado                
+    ol926ain1                                 aprovado                
+    ol926ain2                                 aprovado                
     Arquivo dos Hosts ...APROVADO
-    Informações de interface para o nó "ol9n1"
+    Informações de interface para o nó "ol926ain1"
 
     Nome   Endereço IP     Sub-rede        Gateway         Gateway Def.    Endereço HW       MTU   
     ------ --------------- --------------- --------------- --------------- ----------------- ------
     enp1s0 192.168.18.121  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:28:86:AA 1500  
     enp3s0 192.168.100.101 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:7F:44:40 1500  
     
-    Informações de interface para o nó "ol9n2"
+    Informações de interface para o nó "ol926ain2"
     Nome   Endereço IP     Sub-rede        Gateway         Gateway Def.    Endereço HW       MTU   
     ------ --------------- --------------- --------------- --------------- ----------------- ------
     enp1s0 192.168.18.122  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:6B:00:2D 1500  
@@ -920,22 +920,22 @@
     Verificar: Consistência de MTU da sub-rede "192.168.18.0".
     Nó                Nome          Endereço IP   Sub-rede      MTU             
     ----------------  ------------  ------------  ------------  ----------------
-    ol9n1             enp1s0        192.168.18.121  192.168.18.0  1500            
-    ol9n2             enp1s0        192.168.18.122  192.168.18.0  1500            
+    ol926ain1             enp1s0        192.168.18.121  192.168.18.0  1500            
+    ol926ain2             enp1s0        192.168.18.122  192.168.18.0  1500            
     
     Verificar: Consistência de MTU da sub-rede "192.168.100.0".
     Nó                Nome          Endereço IP   Sub-rede      MTU             
     ----------------  ------------  ------------  ------------  ----------------
-    ol9n1             enp3s0        192.168.100.101  192.168.100.0  1500            
-    ol9n2             enp3s0        192.168.100.102  192.168.100.0  1500            
+    ol926ain1             enp3s0        192.168.100.101  192.168.100.0  1500            
+    ol926ain2             enp3s0        192.168.100.102  192.168.100.0  1500            
 
     Origem                      Destino                     Conectado?                
     --------------------------  --------------------------  --------------------------
-    ol9n1[enp1s0:192.168.18.121]  ol9n2[enp1s0:192.168.18.122]  sim                       
+    ol926ain1[enp1s0:192.168.18.121]  ol926ain2[enp1s0:192.168.18.122]  sim                       
 
     Origem                      Destino                     Conectado?                
     --------------------------  --------------------------  --------------------------
-    ol9n1[enp3s0:192.168.100.101]  ol9n2[enp3s0:192.168.100.102]  sim                       
+    ol926ain1[enp3s0:192.168.100.101]  ol926ain2[enp3s0:192.168.100.102]  sim                       
     Verifique se o tamanho máximo (MTU) do pacote passa pela sub-rede ...APROVADO
     consistência de máscara para a sub-rede "192.168.18.0" ...APROVADO
     consistência de máscara para a sub-rede "192.168.100.0" ...APROVADO
@@ -949,22 +949,22 @@
 
     Nome do Nó                            Status                  
     ------------------------------------  ------------------------
-    ol9n1                                 aprovado                
-    ol9n2                                 aprovado                
+    ol926ain1                                 aprovado                
+    ol926ain2                                 aprovado                
     Verificação da instalação e da configuração de ASMLib ...APROVADO
     NTP (Network Time Protocol) ...
     Daemon 'chronyd' ...
     Nome do Nó                            Em execução?            
     ------------------------------------  ------------------------
-    ol9n2                                 sim                     
-    ol9n1                                 sim                     
+    ol926ain2                                 sim                     
+    ol926ain1                                 sim                     
 
     Daemon 'chronyd' ...APROVADO
     Daemon ou serviço NTP usando a porta UDP 123 ...
     Nome do Nó                            Porta Aberta?           
     ------------------------------------  ------------------------
-    ol9n2                                 sim                     
-    ol9n1                                 sim                     
+    ol926ain2                                 sim                     
+    ol926ain1                                 sim                     
 
     Daemon ou serviço NTP usando a porta UDP 123 ...APROVADO
     O daemon chrony está sincronizado com pelo menos uma origem de tempo externa ...APROVADO
@@ -973,14 +973,14 @@
     Máscara do Usuário ...
     Nome do Nó    Disponível                Necessário                Comentário
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         0022                      0022                      aprovado  
-    ol9n1         0022                      0022                      aprovado  
+    ol926ain2         0022                      0022                      aprovado  
+    ol926ain1         0022                      0022                      aprovado  
     Máscara do Usuário ...APROVADO
     O Usuário Não Está no Grupo "root": grid ...
     Nome do Nó    Status                    Comentário              
     ------------  ------------------------  ------------------------
-    ol9n2         aprovado                  não existe              
-    ol9n1         aprovado                  não existe              
+    ol926ain2         aprovado                  não existe              
+    ol926ain1         aprovado                  não existe              
     O Usuário Não Está no Grupo "root": grid ...APROVADO
     Consistência do fuso horário ...APROVADO
     Path existence, ownership, permissions and attributes ...
@@ -991,44 +991,44 @@
     Integridade de resolv.conf ...
     Nome do Nó                            Status                  
     ------------------------------------  ------------------------
-    ol9n1                                 aprovado                
-    ol9n2                                 aprovado                
+    ol926ain1                                 aprovado                
+    ol926ain2                                 aprovado                
     
-    verificando resposta para o nome "ol9n2" de cada um dos servidores de nome
+    verificando resposta para o nome "ol926ain2" de cada um dos servidores de nome
     especificados em "/etc/resolv.conf"
 
     Nome do Nó    Origem                    Comentário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         192.168.18.201            IPv4                      aprovado  
+    ol926ain2         192.168.18.201            IPv4                      aprovado  
     
-    verificando resposta para o nome "ol9n1" de cada um dos servidores de nome especificados em "/etc/resolv.conf"
+    verificando resposta para o nome "ol926ain1" de cada um dos servidores de nome especificados em "/etc/resolv.conf"
 
     Nome do Nó    Origem                    Comentário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n1         192.168.18.201            IPv4                      aprovado  
+    ol926ain1         192.168.18.201            IPv4                      aprovado  
     Integridade de resolv.conf ...APROVADO
     Serviço do nome DNS/NIS ...APROVADO
     O daemon "avahi-daemon" não está configurado e em execução ...
     Nome do Nó    Configurado               Status                  
     ------------  ------------------------  ------------------------
-    ol9n2         não                       aprovado                
-    ol9n1         não                       aprovado                
+    ol926ain2         não                       aprovado                
+    ol926ain1         não                       aprovado                
 
     Nome do Nó    Em execução?              Status                  
     ------------  ------------------------  ------------------------
-    ol9n2         não                       aprovado                
-    ol9n1         não                       aprovado                
+    ol926ain2         não                       aprovado                
+    ol926ain1         não                       aprovado                
     O daemon "avahi-daemon" não está configurado e em execução ...APROVADO
     O daemon "proxyt" não está configurado e em execução ...
     Nome do Nó    Configurado               Status                  
     ------------  ------------------------  ------------------------
-    ol9n2         não                       aprovado                
-    ol9n1         não                       aprovado                
+    ol926ain2         não                       aprovado                
+    ol926ain1         não                       aprovado                
 
     Nome do Nó    Em execução?              Status                  
     ------------  ------------------------  ------------------------
-    ol9n2         não                       aprovado                
-    ol9n1         não                       aprovado                
+    ol926ain2         não                       aprovado                
+    ol926ain1         não                       aprovado                
     O daemon "proxyt" não está configurado e em execução ...APROVADO
     Soquetes do domínio ...APROVADO
     Equivalência de Usuário ...APROVADO
@@ -1054,7 +1054,7 @@
 
 ###### CREATE RESPONSE FILE ( GRID.RSP )
 
-    [grid@ol9n1 ~]$ vi /home/grid/grid.rsp
+    [grid@ol926ain1 ~]$ vi /home/grid/grid.rsp
 	oracle.install.responseFileVersion=/oracle/install/rspfmt_crsinstall_response_schema_v23.0.0
 	INVENTORY_LOCATION=/u01/app/oraInventory
 	installOption=CRS_CONFIG
@@ -1076,7 +1076,7 @@
 	gnsSubDomain=
 	gnsVIPAddress=
 	sites=
-	clusterNodes=ol9n1.appsdba.info:ol9n1-vip.appsdba.info,ol9n2.appsdba.info:ol9n2-vip.appsdba.info
+	clusterNodes=ol926ain1.appsdba.info:ol926ain1-vip.appsdba.info,ol926ain2.appsdba.info:ol926ain2-vip.appsdba.info
 	networkInterfaceList=enp1s0:192.168.18.0:1,enp3s0:192.168.100.0:5
 	storageOption=FLEX_ASM_STORAGE
 	votingFilesLocations=
@@ -1121,16 +1121,16 @@
 
 ###### INSTALL GRID 23AI 
 
-    [root@ol9n1 ~]# su - grid
-    [grid@ol9n1 ~]$ /u01/app/23.7.0/grid/gridSetup.sh -silent -responseFile /home/oracle/gridsetup.rsp
+    [root@ol926ain1 ~]# su - grid
+    [grid@ol926ain1 ~]$ /u01/app/23.7.0/grid/gridSetup.sh -silent -responseFile /home/oracle/gridsetup.rsp
     As a root user, execute the following script(s):
         1. /u01/app/oraInventory/orainstRoot.sh
         2. /u01/app/23.7.0/grid/root.sh
  
 	Execute /u01/app/oraInventory/orainstRoot.sh on the following nodes:
-	[ol9n1, ol9n2]
+	[ol926ain1, ol926ain2]
 	Execute /u01/app/19.0.0/grid/root.sh on the following nodes:
-	[ol9n1, ol9n2]
+	[ol926ain1, ol926ain2]
  
 	Run the script on the local node first. After successful completion, you can start the script in parallel on all other nodes.
  
@@ -1139,36 +1139,36 @@
 
 ###### CLUSTER INSTALL ( SET EXADATA PARAMETER )
 
-    [root@ol9n1 ~]# cat /u01/app/23.7.0/grid/crs/install/crsconfig_params |grep ASMCA_ARGS
+    [root@ol926ain1 ~]# cat /u01/app/23.7.0/grid/crs/install/crsconfig_params |grep ASMCA_ARGS
     ASMCA_ARGS=
-    [root@ol9n1 ~]# su - grid
-    [grid@ol9n1 ~]$ vi /u01/app/23.7.0/grid/crs/install/crsconfig_params
+    [root@ol926ain1 ~]# su - grid
+    [grid@ol926ain1 ~]$ vi /u01/app/23.7.0/grid/crs/install/crsconfig_params
     ASMCA_ARGS=-param "_exadata_feature_on=true"
-    [grid@ol9n1 ~]$ exit
+    [grid@ol926ain1 ~]$ exit
 
-    [root@ol9n2 ~]# cat /u01/app/23.7.0/grid/crs/install/crsconfig_params |grep ASMCA_ARGS 
+    [root@ol926ain2 ~]# cat /u01/app/23.7.0/grid/crs/install/crsconfig_params |grep ASMCA_ARGS 
     ASMCA_ARGS=
-    [root@ol9n2 ~]# su - grid
-    [grid@ol9n2 ~]$ vi /u01/app/23.7.0/grid/crs/install/crsconfig_params 
+    [root@ol926ain2 ~]# su - grid
+    [grid@ol926ain2 ~]$ vi /u01/app/23.7.0/grid/crs/install/crsconfig_params 
     ASMCA_ARGS=-param "_exadata_feature_on=true"
-    [grid@ol9n2 ~]$ exit
+    [grid@ol926ain2 ~]$ exit
 
 ###### RUN ROOT ORAINSTALL FOR GRID
 
-    [root@ol9n1 ~]# /u01/app/oraInventory/orainstRoot.sh
-    [root@ol9n2 ~]# /u01/app/oraInventory/orainstRoot.sh    
-    [root@ol9n1 ~]# /u01/app/23.7.0/grid/root.sh
-    [root@ol9n2 ~]# /u01/app/23.7.0/grid/root.sh
+    [root@ol926ain1 ~]# /u01/app/oraInventory/orainstRoot.sh
+    [root@ol926ain2 ~]# /u01/app/oraInventory/orainstRoot.sh    
+    [root@ol926ain1 ~]# /u01/app/23.7.0/grid/root.sh
+    [root@ol926ain2 ~]# /u01/app/23.7.0/grid/root.sh
 
 ###### POST INSTALL CONFIGURATION GRID 
 
-    [root@ol9n1 ~]# su - grid
-    [grid@ol9n1 ~]$ /u01/app/23.7.0/grid/gridSetup.sh -executeConfigTools -responseFile /home/oracle/gridsetup.rsp -silent
+    [root@ol926ain1 ~]# su - grid
+    [grid@ol926ain1 ~]$ /u01/app/23.7.0/grid/gridSetup.sh -executeConfigTools -responseFile /home/oracle/gridsetup.rsp -silent
 
 ###### POST INSTALL CHECK ENVIRONMENT ( RUNCLUVFY )
 
-    [root@ol9n1 ~]# su - grid
-    [grid@ol9n1 ~]$ /u01/app/23.7.0/grid/runcluvfy.sh stage -post crsinst -n ol9n1,ol9n2 -verbose -method root
+    [root@ol926ain1 ~]# su - grid
+    [grid@ol926ain1 ~]$ /u01/app/23.7.0/grid/runcluvfy.sh stage -post crsinst -n ol926ain1,ol926ain2 -verbose -method root
     Digite a senha de "ROOT":
 
     Initializing ...
@@ -1179,11 +1179,11 @@
     Arquivo dos Hosts ...
     Nome do Nó                            Status                  
     ------------------------------------  ------------------------
-    ol9n1                                 aprovado                
-    ol9n2                                 aprovado                
+    ol926ain1                                 aprovado                
+    ol926ain2                                 aprovado                
     Arquivo dos Hosts ...APROVADO
 
-    Informações de interface para o nó "ol9n1"
+    Informações de interface para o nó "ol926ain1"
 
     Nome   Endereço IP     Sub-rede        Gateway         Gateway Def.    Endereço HW       MTU   
     ------ --------------- --------------- --------------- --------------- ----------------- ------
@@ -1194,7 +1194,7 @@
     enp1s0 192.168.18.187  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:28:86:AA 1500  
     enp3s0 192.168.100.101 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:7F:44:40 1500  
 
-    Informações de interface para o nó "ol9n2"
+    Informações de interface para o nó "ol926ain2"
 
     Nome   Endereço IP     Sub-rede        Gateway         Gateway Def.    Endereço HW       MTU   
     ------ --------------- --------------- --------------- --------------- ----------------- ------
@@ -1207,47 +1207,47 @@
 
     Nó                Nome          Endereço IP   Sub-rede      MTU             
     ----------------  ------------  ------------  ------------  ----------------
-    ol9n1             enp3s0        192.168.100.101  192.168.100.0  1500            
-    ol9n2             enp3s0        192.168.100.102  192.168.100.0  1500            
+    ol926ain1             enp3s0        192.168.100.101  192.168.100.0  1500            
+    ol926ain2             enp3s0        192.168.100.102  192.168.100.0  1500            
 
     Verificar: Consistência de MTU da sub-rede "192.168.18.0".
 
     Nó                Nome          Endereço IP   Sub-rede      MTU             
     ----------------  ------------  ------------  ------------  ----------------
-    ol9n1             enp1s0        192.168.18.121  192.168.18.0  1500            
-    ol9n1             enp1s0        192.168.18.185  192.168.18.0  1500            
-    ol9n1             enp1s0        192.168.18.151  192.168.18.0  1500            
-    ol9n1             enp1s0        192.168.18.184  192.168.18.0  1500            
-    ol9n1             enp1s0        192.168.18.187  192.168.18.0  1500            
-    ol9n2             enp1s0        192.168.18.122  192.168.18.0  1500            
-    ol9n2             enp1s0        192.168.18.152  192.168.18.0  1500            
-    ol9n2             enp1s0        192.168.18.186  192.168.18.0  1500            
+    ol926ain1             enp1s0        192.168.18.121  192.168.18.0  1500            
+    ol926ain1             enp1s0        192.168.18.185  192.168.18.0  1500            
+    ol926ain1             enp1s0        192.168.18.151  192.168.18.0  1500            
+    ol926ain1             enp1s0        192.168.18.184  192.168.18.0  1500            
+    ol926ain1             enp1s0        192.168.18.187  192.168.18.0  1500            
+    ol926ain2             enp1s0        192.168.18.122  192.168.18.0  1500            
+    ol926ain2             enp1s0        192.168.18.152  192.168.18.0  1500            
+    ol926ain2             enp1s0        192.168.18.186  192.168.18.0  1500            
 
     Origem                      Destino                     Conectado?                
     --------------------------  --------------------------  --------------------------
-    ol9n1[enp1s0:192.168.18.121]  ol9n2[enp1s0:192.168.18.122]  sim                       
-    ol9n1[enp1s0:192.168.18.121]  ol9n2[enp1s0:192.168.18.152]  sim                       
-    ol9n1[enp1s0:192.168.18.121]  ol9n2[enp1s0:192.168.18.186]  sim                       
-    ol9n1[enp1s0:192.168.18.185]  ol9n2[enp1s0:192.168.18.122]  sim                       
-    ol9n1[enp1s0:192.168.18.185]  ol9n2[enp1s0:192.168.18.152]  sim                       
-    ol9n1[enp1s0:192.168.18.185]  ol9n2[enp1s0:192.168.18.186]  sim                       
-    ol9n1[enp1s0:192.168.18.151]  ol9n2[enp1s0:192.168.18.122]  sim                       
-    ol9n1[enp1s0:192.168.18.151]  ol9n2[enp1s0:192.168.18.152]  sim                       
-    ol9n1[enp1s0:192.168.18.151]  ol9n2[enp1s0:192.168.18.186]  sim                       
-    ol9n1[enp1s0:192.168.18.184]  ol9n2[enp1s0:192.168.18.122]  sim                       
-    ol9n1[enp1s0:192.168.18.184]  ol9n2[enp1s0:192.168.18.152]  sim                       
-    ol9n1[enp1s0:192.168.18.184]  ol9n2[enp1s0:192.168.18.186]  sim                       
-    ol9n1[enp1s0:192.168.18.187]  ol9n2[enp1s0:192.168.18.122]  sim                       
-    ol9n1[enp1s0:192.168.18.187]  ol9n2[enp1s0:192.168.18.152]  sim                       
-    ol9n1[enp1s0:192.168.18.187]  ol9n2[enp1s0:192.168.18.186]  sim                       
+    ol926ain1[enp1s0:192.168.18.121]  ol926ain2[enp1s0:192.168.18.122]  sim                       
+    ol926ain1[enp1s0:192.168.18.121]  ol926ain2[enp1s0:192.168.18.152]  sim                       
+    ol926ain1[enp1s0:192.168.18.121]  ol926ain2[enp1s0:192.168.18.186]  sim                       
+    ol926ain1[enp1s0:192.168.18.185]  ol926ain2[enp1s0:192.168.18.122]  sim                       
+    ol926ain1[enp1s0:192.168.18.185]  ol926ain2[enp1s0:192.168.18.152]  sim                       
+    ol926ain1[enp1s0:192.168.18.185]  ol926ain2[enp1s0:192.168.18.186]  sim                       
+    ol926ain1[enp1s0:192.168.18.151]  ol926ain2[enp1s0:192.168.18.122]  sim                       
+    ol926ain1[enp1s0:192.168.18.151]  ol926ain2[enp1s0:192.168.18.152]  sim                       
+    ol926ain1[enp1s0:192.168.18.151]  ol926ain2[enp1s0:192.168.18.186]  sim                       
+    ol926ain1[enp1s0:192.168.18.184]  ol926ain2[enp1s0:192.168.18.122]  sim                       
+    ol926ain1[enp1s0:192.168.18.184]  ol926ain2[enp1s0:192.168.18.152]  sim                       
+    ol926ain1[enp1s0:192.168.18.184]  ol926ain2[enp1s0:192.168.18.186]  sim                       
+    ol926ain1[enp1s0:192.168.18.187]  ol926ain2[enp1s0:192.168.18.122]  sim                       
+    ol926ain1[enp1s0:192.168.18.187]  ol926ain2[enp1s0:192.168.18.152]  sim                       
+    ol926ain1[enp1s0:192.168.18.187]  ol926ain2[enp1s0:192.168.18.186]  sim                       
 
     Origem                      Destino                     Conectado?                
     --------------------------  --------------------------  --------------------------
-    ol9n1[enp3s0:192.168.100.101]  ol9n2[enp3s0:192.168.100.102]  sim                       
+    ol926ain1[enp3s0:192.168.100.101]  ol926ain2[enp3s0:192.168.100.102]  sim                       
 
     Origem                      Destino                     Conectado?                
     --------------------------  --------------------------  --------------------------
-    ol9n1[enp3s0:169.254.6.91]  ol9n2[enp3s0:169.254.9.106]  sim                       
+    ol926ain1[enp3s0:169.254.6.91]  ol926ain2[enp3s0:169.254.9.106]  sim                       
     Verifique se o tamanho máximo (MTU) do pacote passa pela sub-rede ...APROVADO
     consistência de máscara para a sub-rede "192.168.18.0" ...APROVADO
     consistência de máscara para a sub-rede "192.168.100.0" ...APROVADO
@@ -1269,18 +1269,18 @@
     Path "/etc/oracle/maps" ...APROVADO
     Path "/etc/oraInst.loc" ...APROVADO
     Path "/etc/tmpfiles.d/oracleGI.conf" ...APROVADO
-    Path "/u01/app/grid/diag/crs/ol9n1/crs/metadata" ...APROVADO
-    Path "/u01/app/grid/diag/crs/ol9n1/crs/lck" ...APROVADO
-    Path "/u01/app/grid/diag/crs/ol9n1/crs/log" ...APROVADO
-    Path "/u01/app/grid/diag/crs/ol9n1/crs/trace" ...APROVADO
-    Path "/u01/app/grid/diag/crs/ol9n1/crs/cdump" ...APROVADO
-    Path "/u01/app/grid/diag/crs/ol9n1/crs/metadata_pv" ...APROVADO
-    Path "/u01/app/grid/diag/crs/ol9n1/crs/alert" ...APROVADO
-    Path "/u01/app/grid/diag/crs/ol9n1/crs/sweep" ...APROVADO
-    Path "/u01/app/grid/diag/crs/ol9n1/crs/stage" ...APROVADO
-    Path "/u01/app/grid/diag/crs/ol9n1/crs/metadata_dgif" ...APROVADO
-    Path "/u01/app/grid/diag/crs/ol9n1/crs/incpkg" ...APROVADO
-    Path "/u01/app/grid/diag/crs/ol9n1/crs/incident" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/metadata" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/lck" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/log" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/trace" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/cdump" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/metadata_pv" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/alert" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/sweep" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/stage" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/metadata_dgif" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/incpkg" ...APROVADO
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/incident" ...APROVADO
     Path "/u01/app/23.7.0/grid/gpnp/wallets/peer/cwallet.sso" ...APROVADO
     Path "/u01/app/23.7.0/grid/gpnp/wallets/root/ewallet.p12" ...APROVADO
     Path "/u01/app/23.7.0/grid/gpnp/profiles/peer/profile.xml" ...APROVADO
@@ -1288,20 +1288,20 @@
     Integridade de Gerenciador de Cluster ...
     Nome do Nó                            Status                  
     ------------------------------------  ------------------------
-    ol9n1                                 em execução             
-    ol9n2                                 em execução             
+    ol926ain1                                 em execução             
+    ol926ain2                                 em execução             
     Integridade de Gerenciador de Cluster ...APROVADO
     Máscara do Usuário ...
     Nome do Nó    Disponível                Necessário                Comentário
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         0022                      0022                      aprovado  
-    ol9n1         0022                      0022                      aprovado  
+    ol926ain2         0022                      0022                      aprovado  
+    ol926ain1         0022                      0022                      aprovado  
     Máscara do Usuário ...APROVADO
     Integridade de Cluster ...
     Nome do Nó                          
     ------------------------------------
-    ol9n1                               
-    ol9n2                               
+    ol926ain1                               
+    ol926ain2                               
     Integridade de Cluster ...APROVADO
     Integridade do OCR ...APROVADO
     Integridade CRS ...
@@ -1313,40 +1313,40 @@
 
     Nome do Nó    Necessário                Em execução?              Comentário
     ------------  ------------------------  ------------------------  ----------
-    ol9n1         sim                       sim                       aprovado  
-    ol9n2         sim                       sim                       aprovado  
+    ol926ain1         sim                       sim                       aprovado  
+    ol926ain2         sim                       sim                       aprovado  
 
     Verificando a existência do aplicativo de nó NETWORK (obrigatório)
 
     Nome do Nó    Necessário                Em execução?              Comentário
     ------------  ------------------------  ------------------------  ----------
-    ol9n1         sim                       sim                       aprovado  
-    ol9n2         sim                       sim                       aprovado  
+    ol926ain1         sim                       sim                       aprovado  
+    ol926ain2         sim                       sim                       aprovado  
 
     Verificando a existência do aplicativo de nó ONS (opcional)
 
     Nome do Nó    Necessário                Em execução?              Comentário
     ------------  ------------------------  ------------------------  ----------
-    ol9n1         não                       sim                       aprovado  
-    ol9n2         não                       sim                       aprovado  
+    ol926ain1         não                       sim                       aprovado  
+    ol926ain2         não                       sim                       aprovado  
     
     Existência de Aplicativo de Nó ...APROVADO
     SCAN ("Single Client Access Name", Nome de Acesso de Cliente Único) ...
     Nome do SCAN      Nó            Em execução?  ListenerName  Porta         Em execução?
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol9n-scan         ol9n1         true          LISTENER_SCAN1  1521          true        
-    ol9n-scan         ol9n1         true          LISTENER_SCAN2  1521          true        
-    ol9n-scan         ol9n1         true          LISTENER_SCAN3  1521          true        
-    ol9n-scan         ol9n2         true          LISTENER_SCAN4  1521          true        
+    ol9n-scan         ol926ain1         true          LISTENER_SCAN1  1521          true        
+    ol9n-scan         ol926ain1         true          LISTENER_SCAN2  1521          true        
+    ol9n-scan         ol926ain1         true          LISTENER_SCAN3  1521          true        
+    ol9n-scan         ol926ain2         true          LISTENER_SCAN4  1521          true        
 
     Verificando a conectividade TCP com os listeners SCAN...
 
     Nó            ListenerName              Conectividade do TCP?   
     ------------  ------------------------  ------------------------
-    ol9n1         LISTENER_SCAN1            sim                     
-    ol9n1         LISTENER_SCAN2            sim                     
-    ol9n1         LISTENER_SCAN3            sim                     
-    ol9n1         LISTENER_SCAN4            sim                     
+    ol926ain1         LISTENER_SCAN1            sim                     
+    ol926ain1         LISTENER_SCAN2            sim                     
+    ol926ain1         LISTENER_SCAN3            sim                     
+    ol926ain1         LISTENER_SCAN4            sim                     
 
     Serviço do nome DNS/NIS 'ol9n-scan' ...
       Integridade do Arquivo de Configuração da Switch do Serviço de Nome ...APROVADO
@@ -1365,8 +1365,8 @@
     Integridade de ASM ...
     Nó                                    Em execução?            
     ------------------------------------  ------------------------
-    ol9n1                                 sim                     
-    ol9n2                                 sim                     
+    ol926ain1                                 sim                     
+    ol926ain2                                 sim                     
   
     Integridade de ASM ...APROVADO
     ASM Network ...APROVADO
@@ -1374,8 +1374,8 @@
     O Usuário Não Está no Grupo "root": grid ...
     Nome do Nó    Status                    Comentário              
     ------------  ------------------------  ------------------------
-    ol9n2         aprovado                  não existe              
-    ol9n1         aprovado                  não existe              
+    ol926ain2         aprovado                  não existe              
+    ol926ain1         aprovado                  não existe              
   
     O Usuário Não Está no Grupo "root": grid ...APROVADO
     Sincronização do Relógio ...
@@ -1383,15 +1383,15 @@
     Daemon 'chronyd' ...
     Nome do Nó                            Em execução?            
     ------------------------------------  ------------------------
-    ol9n2                                 sim                     
-    ol9n1                                 sim                     
+    ol926ain2                                 sim                     
+    ol926ain1                                 sim                     
 
     Daemon 'chronyd' ...APROVADO
     Daemon ou serviço NTP usando a porta UDP 123 ...
     Nome do Nó                            Porta Aberta?           
     ------------------------------------  ------------------------
-    ol9n2                                 sim                     
-    ol9n1                                 sim                     
+    ol926ain2                                 sim                     
+    ol926ain1                                 sim                     
 
     Daemon ou serviço NTP usando a porta UDP 123 ...APROVADO
     O daemon chrony está sincronizado com pelo menos uma origem de tempo externa ...APROVADO
@@ -1404,8 +1404,8 @@
     Pacote: psmisc-22.6-19 ...
     Nome do Nó    Disponível                Necessário                Status    
     ------------  ------------------------  ------------------------  ----------
-    ol9n2         psmisc-23.4-3.el9         psmisc-22.6-19            aprovado  
-    ol9n1         psmisc-23.4-3.el9         psmisc-22.6-19            aprovado  
+    ol926ain2         psmisc-23.4-3.el9         psmisc-22.6-19            aprovado  
+    ol926ain1         psmisc-23.4-3.el9         psmisc-22.6-19            aprovado  
     Pacote: psmisc-22.6-19 ...APROVADO
   
     Opções de montagem do sistema de arquivos para o caminho GI_HOME ...APROVADO
@@ -1454,171 +1454,171 @@
     Home do Grid:                 /u01/app/23.7.0/grid
     Usuário:                      grid
     Sistema operacional:          Linux5.15.0-302.167.6.el9uek.x86_64
-    [grid@ol9n1 ~]$ exit
+    [grid@ol926ain1 ~]$ exit
 
 ###### CHECK CLUSTER STATUS ( CRSCTL )
 
-    [grid@ol9n1 ~]$ /u01/app/23.7.0/grid/bin/crsctl check cluster -all
+    [grid@ol926ain1 ~]$ /u01/app/23.7.0/grid/bin/crsctl check cluster -all
     **************************************************************
-    ol9n1:
+    ol926ain1:
     CRS-4537: Cluster Ready Services is online
     CRS-4529: Cluster Synchronization Services is online
     CRS-4533: Event Manager is online
     **************************************************************
-    ol9n2:
+    ol926ain2:
     CRS-4537: Cluster Ready Services is online
     CRS-4529: Cluster Synchronization Services is online
     CRS-4533: Event Manager is online
     **************************************************************
 
-    [grid@ol9n1 ~]$ /u01/app/23.7.0/grid/bin/crsctl stat res -t 
+    [grid@ol926ain1 ~]$ /u01/app/23.7.0/grid/bin/crsctl stat res -t 
     --------------------------------------------------------------------------------
     Name           Target  State        Server                   State details       
     --------------------------------------------------------------------------------
     Local Resources
     --------------------------------------------------------------------------------
     ora.LISTENER.lsnr
-               ONLINE  ONLINE       ol9n1                    STABLE
-               ONLINE  ONLINE       ol9n2                    STABLE
+               ONLINE  ONLINE       ol926ain1                    STABLE
+               ONLINE  ONLINE       ol926ain2                    STABLE
     ora.chad
-               ONLINE  ONLINE       ol9n1                    STABLE
-               ONLINE  ONLINE       ol9n2                    STABLE
+               ONLINE  ONLINE       ol926ain1                    STABLE
+               ONLINE  ONLINE       ol926ain2                    STABLE
     ora.helper
-               OFFLINE OFFLINE      ol9n1                    STABLE
-               OFFLINE OFFLINE      ol9n2                    IDLE,STABLE
+               OFFLINE OFFLINE      ol926ain1                    STABLE
+               OFFLINE OFFLINE      ol926ain2                    IDLE,STABLE
     ora.net1.network
-               ONLINE  ONLINE       ol9n1                    STABLE
-               ONLINE  ONLINE       ol9n2                    STABLE
+               ONLINE  ONLINE       ol926ain1                    STABLE
+               ONLINE  ONLINE       ol926ain2                    STABLE
     ora.ons
-               ONLINE  ONLINE       ol9n1                    STABLE
-               ONLINE  ONLINE       ol9n2                    STABLE
+               ONLINE  ONLINE       ol926ain1                    STABLE
+               ONLINE  ONLINE       ol926ain2                    STABLE
     --------------------------------------------------------------------------------
     Cluster Resources
     --------------------------------------------------------------------------------
     ora.ASMNET1LSNR_ASM.lsnr(ora.asmgroup)
-      1        ONLINE  ONLINE       ol9n1                    STABLE
-      2        ONLINE  ONLINE       ol9n2                    STABLE
+      1        ONLINE  ONLINE       ol926ain1                    STABLE
+      2        ONLINE  ONLINE       ol926ain2                    STABLE
     ora.DATA.dg(ora.asmgroup)
-      1        ONLINE  ONLINE       ol9n1                    STABLE
-      2        ONLINE  ONLINE       ol9n2                    STABLE
+      1        ONLINE  ONLINE       ol926ain1                    STABLE
+      2        ONLINE  ONLINE       ol926ain2                    STABLE
     ora.LISTENER_SCAN1.lsnr
-      1        ONLINE  ONLINE       ol9n1                    STABLE
+      1        ONLINE  ONLINE       ol926ain1                    STABLE
     ora.LISTENER_SCAN2.lsnr
-      1        ONLINE  ONLINE       ol9n1                    STABLE
+      1        ONLINE  ONLINE       ol926ain1                    STABLE
     ora.LISTENER_SCAN3.lsnr
-      1        ONLINE  ONLINE       ol9n1                    STABLE
+      1        ONLINE  ONLINE       ol926ain1                    STABLE
     ora.LISTENER_SCAN4.lsnr
-      1        ONLINE  ONLINE       ol9n2                    STABLE
+      1        ONLINE  ONLINE       ol926ain2                    STABLE
     ora.asm(ora.asmgroup)
-      1        ONLINE  ONLINE       ol9n1                    Started,STABLE
-      2        ONLINE  ONLINE       ol9n2                    Started,STABLE
+      1        ONLINE  ONLINE       ol926ain1                    Started,STABLE
+      2        ONLINE  ONLINE       ol926ain2                    Started,STABLE
     ora.asmnet1.asmnetwork(ora.asmgroup)
-      1        ONLINE  ONLINE       ol9n1                    STABLE
-      2        ONLINE  ONLINE       ol9n2                    STABLE
+      1        ONLINE  ONLINE       ol926ain1                    STABLE
+      2        ONLINE  ONLINE       ol926ain2                    STABLE
     ora.cdp1.cdp
-      1        ONLINE  ONLINE       ol9n1                    STABLE
+      1        ONLINE  ONLINE       ol926ain1                    STABLE
     ora.cdp2.cdp
-      1        ONLINE  ONLINE       ol9n1                    STABLE
+      1        ONLINE  ONLINE       ol926ain1                    STABLE
     ora.cdp3.cdp
-      1        ONLINE  ONLINE       ol9n1                    STABLE
+      1        ONLINE  ONLINE       ol926ain1                    STABLE
     ora.cdp4.cdp
-      1        ONLINE  ONLINE       ol9n2                    STABLE
+      1        ONLINE  ONLINE       ol926ain2                    STABLE
     ora.cvu
-      1        ONLINE  ONLINE       ol9n1                    STABLE
-    ora.ol9n1.vip
-      1        ONLINE  ONLINE       ol9n1                    STABLE
-    ora.ol9n2.vip
-      1        ONLINE  ONLINE       ol9n2                    STABLE
+      1        ONLINE  ONLINE       ol926ain1                    STABLE
+    ora.ol926ain1.vip
+      1        ONLINE  ONLINE       ol926ain1                    STABLE
+    ora.ol926ain2.vip
+      1        ONLINE  ONLINE       ol926ain2                    STABLE
     ora.rhpserver
       1        OFFLINE OFFLINE                               STABLE
     ora.scan1.vip
-      1        ONLINE  ONLINE       ol9n1                    STABLE
+      1        ONLINE  ONLINE       ol926ain1                    STABLE
     ora.scan2.vip
-      1        ONLINE  ONLINE       ol9n1                    STABLE
+      1        ONLINE  ONLINE       ol926ain1                    STABLE
     ora.scan3.vip
-      1        ONLINE  ONLINE       ol9n1                    STABLE
+      1        ONLINE  ONLINE       ol926ain1                    STABLE
     ora.scan4.vip
-      1        ONLINE  ONLINE       ol9n2                    STABLE
+      1        ONLINE  ONLINE       ol926ain2                    STABLE
     --------------------------------------------------------------------------------
-    [grid@ol9n1 ~]$ exit
+    [grid@ol926ain1 ~]$ exit
 
-    [root@ol9n1 ~]# export ORACLE_HOME=/u01/app/23.7.0/grid
-    [root@ol9n1 ~]# export PATH=$PATH:$ORACLE_HOME/bin
-    [root@ol9n1 ~]# crsctl status resource
+    [root@ol926ain1 ~]# export ORACLE_HOME=/u01/app/23.7.0/grid
+    [root@ol926ain1 ~]# export PATH=$PATH:$ORACLE_HOME/bin
+    [root@ol926ain1 ~]# crsctl status resource
     NAME=ora.ASMNET1LSNR_ASM.lsnr(ora.asmgroup)
     TYPE=ora.asm_listener.type
     TARGET=ONLINE         , ONLINE
-    STATE=ONLINE on ol9n1, ONLINE on ol9n2
+    STATE=ONLINE on ol926ain1, ONLINE on ol926ain2
 
     NAME=ora.DATA.dg(ora.asmgroup)
     TYPE=ora.diskgroup.type
     TARGET=ONLINE         , ONLINE
-    STATE=ONLINE on ol9n1, ONLINE on ol9n2
+    STATE=ONLINE on ol926ain1, ONLINE on ol926ain2
 
     NAME=ora.LISTENER.lsnr
     TYPE=ora.listener.type
     TARGET=ONLINE         , ONLINE
-    STATE=ONLINE on ol9n1, ONLINE on ol9n2
+    STATE=ONLINE on ol926ain1, ONLINE on ol926ain2
 
     NAME=ora.LISTENER_SCAN1.lsnr
     TYPE=ora.scan_listener.type
     TARGET=ONLINE
-    STATE=ONLINE on ol9n1
+    STATE=ONLINE on ol926ain1
 
     NAME=ora.LISTENER_SCAN2.lsnr
     TYPE=ora.scan_listener.type
     TARGET=ONLINE
-    STATE=ONLINE on ol9n1
+    STATE=ONLINE on ol926ain1
 
     NAME=ora.LISTENER_SCAN3.lsnr
     TYPE=ora.scan_listener.type
     TARGET=ONLINE
-    STATE=ONLINE on ol9n1
+    STATE=ONLINE on ol926ain1
 
     NAME=ora.LISTENER_SCAN4.lsnr
     TYPE=ora.scan_listener.type
     TARGET=ONLINE
-    STATE=ONLINE on ol9n2
+    STATE=ONLINE on ol926ain2
 
     NAME=ora.asm(ora.asmgroup)
     TYPE=ora.asm.type
     TARGET=ONLINE         , ONLINE
-    STATE=ONLINE on ol9n1, ONLINE on ol9n2
+    STATE=ONLINE on ol926ain1, ONLINE on ol926ain2
 
     NAME=ora.asmnet1.asmnetwork(ora.asmgroup)
     TYPE=ora.asm_network.type
     TARGET=ONLINE         , ONLINE
-    STATE=ONLINE on ol9n1, ONLINE on ol9n2
+    STATE=ONLINE on ol926ain1, ONLINE on ol926ain2
 
     NAME=ora.cdp1.cdp
     TYPE=ora.cdp.type
     TARGET=ONLINE
-    STATE=ONLINE on ol9n1
+    STATE=ONLINE on ol926ain1
 
     NAME=ora.cdp2.cdp
     TYPE=ora.cdp.type
     TARGET=ONLINE
-    STATE=ONLINE on ol9n1
+    STATE=ONLINE on ol926ain1
 
     NAME=ora.cdp3.cdp
     TYPE=ora.cdp.type
     TARGET=ONLINE
-    STATE=ONLINE on ol9n1
+    STATE=ONLINE on ol926ain1
 
     NAME=ora.cdp4.cdp
     TYPE=ora.cdp.type
     TARGET=ONLINE
-    STATE=ONLINE on ol9n2
+    STATE=ONLINE on ol926ain2
 
     NAME=ora.chad
     TYPE=ora.chad.type
     TARGET=ONLINE         , ONLINE
-    STATE=ONLINE on ol9n1, ONLINE on ol9n2
+    STATE=ONLINE on ol926ain1, ONLINE on ol926ain2
 
     NAME=ora.cvu
     TYPE=ora.cvu.type
     TARGET=ONLINE
-    STATE=ONLINE on ol9n1
+    STATE=ONLINE on ol926ain1
 
     NAME=ora.helper
     TYPE=ora.helper.type
@@ -1628,22 +1628,22 @@
     NAME=ora.net1.network
     TYPE=ora.network.type
     TARGET=ONLINE         , ONLINE
-    STATE=ONLINE on ol9n1, ONLINE on ol9n2
+    STATE=ONLINE on ol926ain1, ONLINE on ol926ain2
 
-    NAME=ora.ol9n1.vip
+    NAME=ora.ol926ain1.vip
     TYPE=ora.cluster_vip_net1.type
     TARGET=ONLINE
-    STATE=ONLINE on ol9n1
+    STATE=ONLINE on ol926ain1
 
-    NAME=ora.ol9n2.vip
+    NAME=ora.ol926ain2.vip
     TYPE=ora.cluster_vip_net1.type
     TARGET=ONLINE
-    STATE=ONLINE on ol9n2
+    STATE=ONLINE on ol926ain2
 
     NAME=ora.ons
     TYPE=ora.ons.type
     TARGET=ONLINE         , ONLINE
-    STATE=ONLINE on ol9n1, ONLINE on ol9n2
+    STATE=ONLINE on ol926ain1, ONLINE on ol926ain2
 
     NAME=ora.rhpserver
     TYPE=ora.rhpserver.type
@@ -1653,26 +1653,26 @@
     NAME=ora.scan1.vip
     TYPE=ora.scan_vip.type
     TARGET=ONLINE
-    STATE=ONLINE on ol9n1
+    STATE=ONLINE on ol926ain1
 
     NAME=ora.scan2.vip
     TYPE=ora.scan_vip.type
     TARGET=ONLINE
-    STATE=ONLINE on ol9n1
+    STATE=ONLINE on ol926ain1
 
     NAME=ora.scan3.vip
     TYPE=ora.scan_vip.type
     TARGET=ONLINE
-    STATE=ONLINE on ol9n1
+    STATE=ONLINE on ol926ain1
 
     NAME=ora.scan4.vip
     TYPE=ora.scan_vip.type
     TARGET=ONLINE
-    STATE=ONLINE on ol9n2
+    STATE=ONLINE on ol926ain2
 
 ###### CREATE DISKGRUOP FRA ON ASM ( ASMCA )
 
-    [grid@ol9n1 ~]$ asmca -silent -createDiskGroup -diskGroupName FRA -disk '/dev/asm-disk5' -redundancy EXTERNAL -au_size 4 -compatible.asm 23.0.0 -compatible.rdbms 19.0.0
+    [grid@ol926ain1 ~]$ asmca -silent -createDiskGroup -diskGroupName FRA -disk '/dev/asm-disk5' -redundancy EXTERNAL -au_size 4 -compatible.asm 23.0.0 -compatible.rdbms 19.0.0
 
 ###### COPY GRID INFRASTRUCTURE SOFTWARE
 
@@ -1680,18 +1680,18 @@
 
 ###### UNZIP GRID INFRASTRUCTURE SOFTWARE
 
-    [root@ol9n1 ~]# su - oracle
-    [oracle@ol9n1 ~]$ cd /u01/app/oracle/product/23.7.0/dbhome_1/
-    [oracle@ol9n1 dbhome_1]$ unzip p37370465_230000_Linux-x86-64.zip
-    [oracle@ol9n1 dbhome_1]$ rm -vf p37370465_230000_Linux-x86-64.zip
+    [root@ol926ain1 ~]# su - oracle
+    [oracle@ol926ain1 ~]$ cd /u01/app/oracle/product/23.7.0/dbhome_1/
+    [oracle@ol926ain1 dbhome_1]$ unzip p37370465_230000_Linux-x86-64.zip
+    [oracle@ol926ain1 dbhome_1]$ rm -vf p37370465_230000_Linux-x86-64.zip
 
 ###### INSTALL ORACLE DATABASE 23AI SOFTWARE 
 
-     [root@ol9n1 ~]# su - oracle 
+     [root@ol926ain1 ~]# su - oracle 
 
 ###### CREATE A DATABASE RESPONSE FILE 
 
-    [oracle@ol9n1 ~]$ vi /home/oracle/dbca.rsp
+    [oracle@ol926ain1 ~]$ vi /home/oracle/dbca.rsp
     responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v23.0.0
     gdbName=oradbc.appsdba.info
     sid=oradbc
@@ -1711,7 +1711,7 @@
     pdbName=pdboradbc
     useLocalUndoForPDBs=true
     pdbAdminPassword=
-    nodelist=ol9n1,ol9n2
+    nodelist=ol926ain1,ol926ain2
     sehaNodeList=
     templateName=/u01/app/oracle/product/23.7.0/dbhome_1/assistants/dbca/templates/General_Purpose.dbc
     sysPassword=
@@ -1761,7 +1761,7 @@
     
 ###### CREATE ORACLE DATABASE IN SILENT MODE ( DBCA )
 
-    [oracle@ol9n1 ~]$ dbca -silent -createDatabase -responseFile /home/oracle/dbca.rsp
+    [oracle@ol926ain1 ~]$ dbca -silent -createDatabase -responseFile /home/oracle/dbca.rsp
     Informe a senha do usuário SYS: 
 
     Informe a senha do usuário SYSTEM: 
@@ -1824,156 +1824,156 @@
 
 ###### CHECK POST DATABASE CREATION
 
-    [oracle@ol9n1 ~]$ ps -ef | grep pmon
+    [oracle@ol926ain1 ~]$ ps -ef | grep pmon
     grid       40049    1566  0 mar01 ?        00:00:00 asm_pmon_+ASM1
     oracle    220203    1566  0 00:48 ?        00:00:00 ora_pmon_oradbc1
 
-    [oracle@ol9n2 ~]$ ps -ef | grep pmon
+    [oracle@ol926ain2 ~]$ ps -ef | grep pmon
     grid       46177       1  0 mar01 ?        00:00:00 asm_pmon_+ASM2
     oracle    193366       1  0 00:48 ?        00:00:00 ora_pmon_oradbc2
 
 ###### STOP CLUSTER AND DATABASE 
 
-	[root@ol9n1 ~]# crsctl stop cluster -all
-	CRS-2673: Tentativa de interromper 'ora.crsd' em 'ol9n1'
-	CRS-2673: Tentativa de interromper 'ora.crsd' em 'ol9n2'
-	CRS-2790: Iniciando o shutdown de recursos gerenciados pelo Cluster Ready Services no servidor 'ol9n2'
-	CRS-2673: Tentativa de interromper 'ora.chad' em 'ol9n2'
-	CRS-2673: Tentativa de interromper 'ora.oradbc.oradbc_pdboradbc.svc' em 'ol9n2'
-	CRS-2673: Tentativa de interromper 'ora.cdp4.cdp' em 'ol9n2'
-	CRS-2790: Iniciando o shutdown de recursos gerenciados pelo Cluster Ready Services no servidor 'ol9n1'
-	CRS-2673: Tentativa de interromper 'ora.cdp1.cdp' em 'ol9n1'
-	CRS-2673: Tentativa de interromper 'ora.cdp2.cdp' em 'ol9n1'
-	CRS-2673: Tentativa de interromper 'ora.oradbc.oradbc_pdboradbc.svc' em 'ol9n1'
-	CRS-2673: Tentativa de interromper 'ora.cdp3.cdp' em 'ol9n1'
-	CRS-2673: Tentativa de interromper 'ora.chad' em 'ol9n1'
-	CRS-2677: Interrupção de 'ora.cdp4.cdp' em 'ol9n2' bem-sucedida
-	CRS-2677: Interrupção de 'ora.oradbc.oradbc_pdboradbc.svc' em 'ol9n2' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.oradbc.pdboradbc.pdb' em 'ol9n2'
-	CRS-2677: Interrupção de 'ora.cdp1.cdp' em 'ol9n1' bem-sucedida
-	CRS-2677: Interrupção de 'ora.cdp2.cdp' em 'ol9n1' bem-sucedida
-	CRS-2677: Interrupção de 'ora.oradbc.pdboradbc.pdb' em 'ol9n2' bem-sucedida
-	CRS-2677: Interrupção de 'ora.cdp3.cdp' em 'ol9n1' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.oradbc.db' em 'ol9n2'
-	CRS-2677: Interrupção de 'ora.oradbc.oradbc_pdboradbc.svc' em 'ol9n1' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.oradbc.pdboradbc.pdb' em 'ol9n1'
-	CRS-2677: Interrupção de 'ora.oradbc.pdboradbc.pdb' em 'ol9n1' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.oradbc.db' em 'ol9n1'
-	CRS-2677: Interrupção de 'ora.oradbc.db' em 'ol9n2' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.LISTENER.lsnr' em 'ol9n2'
-	CRS-2673: Tentativa de interromper 'ora.LISTENER_SCAN4.lsnr' em 'ol9n2'
-	CRS-33673: Tentando interromper o grupo de recursos 'ora.asmgroup' no servidor 'ol9n2'
-	CRS-2673: Tentativa de interromper 'ora.DATA.dg' em 'ol9n2'
-	CRS-2673: Tentativa de interromper 'ora.FRA.dg' em 'ol9n2'
-	CRS-2677: Interrupção de 'ora.DATA.dg' em 'ol9n2' bem-sucedida
-	CRS-2677: Interrupção de 'ora.FRA.dg' em 'ol9n2' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.asm' em 'ol9n2'
-	CRS-2677: Interrupção de 'ora.asm' em 'ol9n2' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.ASMNET1LSNR_ASM.lsnr' em 'ol9n2'
-	CRS-2677: Interrupção de 'ora.LISTENER.lsnr' em 'ol9n2' bem-sucedida
-	CRS-2677: Interrupção de 'ora.LISTENER_SCAN4.lsnr' em 'ol9n2' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.ol9n2.vip' em 'ol9n2'
-	CRS-2673: Tentativa de interromper 'ora.scan4.vip' em 'ol9n2'
-	CRS-2677: Interrupção de 'ora.ol9n2.vip' em 'ol9n2' bem-sucedida
-	CRS-2677: Interrupção de 'ora.ASMNET1LSNR_ASM.lsnr' em 'ol9n2' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.asmnet1.asmnetwork' em 'ol9n2'
-	CRS-2677: Interrupção de 'ora.asmnet1.asmnetwork' em 'ol9n2' bem-sucedida
-	CRS-33677: A interrupção do grupo de recursos 'ora.asmgroup' no servidor 'ol9n2' foi bem-sucedida.
-	CRS-2677: Interrupção de 'ora.scan4.vip' em 'ol9n2' bem-sucedida
-	CRS-2677: Interrupção de 'ora.oradbc.db' em 'ol9n1' bem-sucedida
-	CRS-2677: Interrupção de 'ora.chad' em 'ol9n2' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.LISTENER.lsnr' em 'ol9n1'
-	CRS-2673: Tentativa de interromper 'ora.LISTENER_SCAN1.lsnr' em 'ol9n1'
-	CRS-2673: Tentativa de interromper 'ora.LISTENER_SCAN2.lsnr' em 'ol9n1'
-	CRS-2673: Tentativa de interromper 'ora.LISTENER_SCAN3.lsnr' em 'ol9n1'
-	CRS-33673: Tentando interromper o grupo de recursos 'ora.asmgroup' no servidor 'ol9n1'
-	CRS-2673: Tentativa de interromper 'ora.DATA.dg' em 'ol9n1'
-	CRS-2673: Tentativa de interromper 'ora.FRA.dg' em 'ol9n1'
-	CRS-2673: Tentativa de interromper 'ora.cvu' em 'ol9n1'
-	CRS-2673: Tentativa de interromper 'ora.ons' em 'ol9n2'
-	CRS-2677: Interrupção de 'ora.DATA.dg' em 'ol9n1' bem-sucedida
-	CRS-2677: Interrupção de 'ora.chad' em 'ol9n1' bem-sucedida
-	CRS-2677: Interrupção de 'ora.cvu' em 'ol9n1' bem-sucedida
-	CRS-2677: Interrupção de 'ora.FRA.dg' em 'ol9n1' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.asm' em 'ol9n1'
-	CRS-2677: Interrupção de 'ora.asm' em 'ol9n1' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.ASMNET1LSNR_ASM.lsnr' em 'ol9n1'
-	CRS-2677: Interrupção de 'ora.ons' em 'ol9n2' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.net1.network' em 'ol9n2'
-	CRS-2677: Interrupção de 'ora.net1.network' em 'ol9n2' bem-sucedida
-	CRS-2792: O shut-down de recursos gerenciados pelo Cluster Ready Services em 'ol9n2' foi concluído
-	CRS-2677: Interrupção de 'ora.LISTENER.lsnr' em 'ol9n1' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.ol9n1.vip' em 'ol9n1'
-	CRS-2677: Interrupção de 'ora.LISTENER_SCAN3.lsnr' em 'ol9n1' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.scan3.vip' em 'ol9n1'
-	CRS-2677: Interrupção de 'ora.LISTENER_SCAN1.lsnr' em 'ol9n1' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.scan1.vip' em 'ol9n1'
-	CRS-2677: Interrupção de 'ora.LISTENER_SCAN2.lsnr' em 'ol9n1' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.scan2.vip' em 'ol9n1'
-	CRS-2677: Interrupção de 'ora.ASMNET1LSNR_ASM.lsnr' em 'ol9n1' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.asmnet1.asmnetwork' em 'ol9n1'
-	CRS-2677: Interrupção de 'ora.asmnet1.asmnetwork' em 'ol9n1' bem-sucedida
-	CRS-33677: A interrupção do grupo de recursos 'ora.asmgroup' no servidor 'ol9n1' foi bem-sucedida.
-	CRS-2677: Interrupção de 'ora.ol9n1.vip' em 'ol9n1' bem-sucedida
-	CRS-2677: Interrupção de 'ora.scan3.vip' em 'ol9n1' bem-sucedida
-	CRS-2677: Interrupção de 'ora.scan1.vip' em 'ol9n1' bem-sucedida
-	CRS-2677: Interrupção de 'ora.scan2.vip' em 'ol9n1' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.ons' em 'ol9n1'
-	CRS-2677: Interrupção de 'ora.crsd' em 'ol9n2' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.evmd' em 'ol9n2'
-	CRS-2673: Tentativa de interromper 'ora.storage' em 'ol9n2'
-	CRS-2677: Interrupção de 'ora.storage' em 'ol9n2' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.asm' em 'ol9n2'
-	CRS-2677: Interrupção de 'ora.ons' em 'ol9n1' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.net1.network' em 'ol9n1'
-	CRS-2677: Interrupção de 'ora.net1.network' em 'ol9n1' bem-sucedida
-	CRS-2792: O shut-down de recursos gerenciados pelo Cluster Ready Services em 'ol9n1' foi concluído
-	CRS-2677: Interrupção de 'ora.evmd' em 'ol9n2' bem-sucedida
-	CRS-2677: Interrupção de 'ora.crsd' em 'ol9n1' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.evmd' em 'ol9n1'
-	CRS-2673: Tentativa de interromper 'ora.storage' em 'ol9n1'
-	CRS-2677: Interrupção de 'ora.storage' em 'ol9n1' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.asm' em 'ol9n1'
-	CRS-2677: Interrupção de 'ora.evmd' em 'ol9n1' bem-sucedida
-	CRS-2677: Interrupção de 'ora.asm' em 'ol9n2' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.cluster_interconnect.haip' em 'ol9n2'
-	CRS-2677: Interrupção de 'ora.cluster_interconnect.haip' em 'ol9n2' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.cssd' em 'ol9n2'
-	CRS-2677: Interrupção de 'ora.asm' em 'ol9n1' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.cluster_interconnect.haip' em 'ol9n1'
-	CRS-2677: Interrupção de 'ora.cssd' em 'ol9n2' bem-sucedida
-	CRS-2677: Interrupção de 'ora.cluster_interconnect.haip' em 'ol9n1' bem-sucedida
-	CRS-2673: Tentativa de interromper 'ora.cssd' em 'ol9n1'
-	CRS-2677: Interrupção de 'ora.cssd' em 'ol9n1' bem-sucedida
+	[root@ol926ain1 ~]# crsctl stop cluster -all
+	CRS-2673: Tentativa de interromper 'ora.crsd' em 'ol926ain1'
+	CRS-2673: Tentativa de interromper 'ora.crsd' em 'ol926ain2'
+	CRS-2790: Iniciando o shutdown de recursos gerenciados pelo Cluster Ready Services no servidor 'ol926ain2'
+	CRS-2673: Tentativa de interromper 'ora.chad' em 'ol926ain2'
+	CRS-2673: Tentativa de interromper 'ora.oradbc.oradbc_pdboradbc.svc' em 'ol926ain2'
+	CRS-2673: Tentativa de interromper 'ora.cdp4.cdp' em 'ol926ain2'
+	CRS-2790: Iniciando o shutdown de recursos gerenciados pelo Cluster Ready Services no servidor 'ol926ain1'
+	CRS-2673: Tentativa de interromper 'ora.cdp1.cdp' em 'ol926ain1'
+	CRS-2673: Tentativa de interromper 'ora.cdp2.cdp' em 'ol926ain1'
+	CRS-2673: Tentativa de interromper 'ora.oradbc.oradbc_pdboradbc.svc' em 'ol926ain1'
+	CRS-2673: Tentativa de interromper 'ora.cdp3.cdp' em 'ol926ain1'
+	CRS-2673: Tentativa de interromper 'ora.chad' em 'ol926ain1'
+	CRS-2677: Interrupção de 'ora.cdp4.cdp' em 'ol926ain2' bem-sucedida
+	CRS-2677: Interrupção de 'ora.oradbc.oradbc_pdboradbc.svc' em 'ol926ain2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.oradbc.pdboradbc.pdb' em 'ol926ain2'
+	CRS-2677: Interrupção de 'ora.cdp1.cdp' em 'ol926ain1' bem-sucedida
+	CRS-2677: Interrupção de 'ora.cdp2.cdp' em 'ol926ain1' bem-sucedida
+	CRS-2677: Interrupção de 'ora.oradbc.pdboradbc.pdb' em 'ol926ain2' bem-sucedida
+	CRS-2677: Interrupção de 'ora.cdp3.cdp' em 'ol926ain1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.oradbc.db' em 'ol926ain2'
+	CRS-2677: Interrupção de 'ora.oradbc.oradbc_pdboradbc.svc' em 'ol926ain1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.oradbc.pdboradbc.pdb' em 'ol926ain1'
+	CRS-2677: Interrupção de 'ora.oradbc.pdboradbc.pdb' em 'ol926ain1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.oradbc.db' em 'ol926ain1'
+	CRS-2677: Interrupção de 'ora.oradbc.db' em 'ol926ain2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.LISTENER.lsnr' em 'ol926ain2'
+	CRS-2673: Tentativa de interromper 'ora.LISTENER_SCAN4.lsnr' em 'ol926ain2'
+	CRS-33673: Tentando interromper o grupo de recursos 'ora.asmgroup' no servidor 'ol926ain2'
+	CRS-2673: Tentativa de interromper 'ora.DATA.dg' em 'ol926ain2'
+	CRS-2673: Tentativa de interromper 'ora.FRA.dg' em 'ol926ain2'
+	CRS-2677: Interrupção de 'ora.DATA.dg' em 'ol926ain2' bem-sucedida
+	CRS-2677: Interrupção de 'ora.FRA.dg' em 'ol926ain2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.asm' em 'ol926ain2'
+	CRS-2677: Interrupção de 'ora.asm' em 'ol926ain2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.ASMNET1LSNR_ASM.lsnr' em 'ol926ain2'
+	CRS-2677: Interrupção de 'ora.LISTENER.lsnr' em 'ol926ain2' bem-sucedida
+	CRS-2677: Interrupção de 'ora.LISTENER_SCAN4.lsnr' em 'ol926ain2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.ol926ain2.vip' em 'ol926ain2'
+	CRS-2673: Tentativa de interromper 'ora.scan4.vip' em 'ol926ain2'
+	CRS-2677: Interrupção de 'ora.ol926ain2.vip' em 'ol926ain2' bem-sucedida
+	CRS-2677: Interrupção de 'ora.ASMNET1LSNR_ASM.lsnr' em 'ol926ain2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.asmnet1.asmnetwork' em 'ol926ain2'
+	CRS-2677: Interrupção de 'ora.asmnet1.asmnetwork' em 'ol926ain2' bem-sucedida
+	CRS-33677: A interrupção do grupo de recursos 'ora.asmgroup' no servidor 'ol926ain2' foi bem-sucedida.
+	CRS-2677: Interrupção de 'ora.scan4.vip' em 'ol926ain2' bem-sucedida
+	CRS-2677: Interrupção de 'ora.oradbc.db' em 'ol926ain1' bem-sucedida
+	CRS-2677: Interrupção de 'ora.chad' em 'ol926ain2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.LISTENER.lsnr' em 'ol926ain1'
+	CRS-2673: Tentativa de interromper 'ora.LISTENER_SCAN1.lsnr' em 'ol926ain1'
+	CRS-2673: Tentativa de interromper 'ora.LISTENER_SCAN2.lsnr' em 'ol926ain1'
+	CRS-2673: Tentativa de interromper 'ora.LISTENER_SCAN3.lsnr' em 'ol926ain1'
+	CRS-33673: Tentando interromper o grupo de recursos 'ora.asmgroup' no servidor 'ol926ain1'
+	CRS-2673: Tentativa de interromper 'ora.DATA.dg' em 'ol926ain1'
+	CRS-2673: Tentativa de interromper 'ora.FRA.dg' em 'ol926ain1'
+	CRS-2673: Tentativa de interromper 'ora.cvu' em 'ol926ain1'
+	CRS-2673: Tentativa de interromper 'ora.ons' em 'ol926ain2'
+	CRS-2677: Interrupção de 'ora.DATA.dg' em 'ol926ain1' bem-sucedida
+	CRS-2677: Interrupção de 'ora.chad' em 'ol926ain1' bem-sucedida
+	CRS-2677: Interrupção de 'ora.cvu' em 'ol926ain1' bem-sucedida
+	CRS-2677: Interrupção de 'ora.FRA.dg' em 'ol926ain1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.asm' em 'ol926ain1'
+	CRS-2677: Interrupção de 'ora.asm' em 'ol926ain1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.ASMNET1LSNR_ASM.lsnr' em 'ol926ain1'
+	CRS-2677: Interrupção de 'ora.ons' em 'ol926ain2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.net1.network' em 'ol926ain2'
+	CRS-2677: Interrupção de 'ora.net1.network' em 'ol926ain2' bem-sucedida
+	CRS-2792: O shut-down de recursos gerenciados pelo Cluster Ready Services em 'ol926ain2' foi concluído
+	CRS-2677: Interrupção de 'ora.LISTENER.lsnr' em 'ol926ain1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.ol926ain1.vip' em 'ol926ain1'
+	CRS-2677: Interrupção de 'ora.LISTENER_SCAN3.lsnr' em 'ol926ain1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.scan3.vip' em 'ol926ain1'
+	CRS-2677: Interrupção de 'ora.LISTENER_SCAN1.lsnr' em 'ol926ain1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.scan1.vip' em 'ol926ain1'
+	CRS-2677: Interrupção de 'ora.LISTENER_SCAN2.lsnr' em 'ol926ain1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.scan2.vip' em 'ol926ain1'
+	CRS-2677: Interrupção de 'ora.ASMNET1LSNR_ASM.lsnr' em 'ol926ain1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.asmnet1.asmnetwork' em 'ol926ain1'
+	CRS-2677: Interrupção de 'ora.asmnet1.asmnetwork' em 'ol926ain1' bem-sucedida
+	CRS-33677: A interrupção do grupo de recursos 'ora.asmgroup' no servidor 'ol926ain1' foi bem-sucedida.
+	CRS-2677: Interrupção de 'ora.ol926ain1.vip' em 'ol926ain1' bem-sucedida
+	CRS-2677: Interrupção de 'ora.scan3.vip' em 'ol926ain1' bem-sucedida
+	CRS-2677: Interrupção de 'ora.scan1.vip' em 'ol926ain1' bem-sucedida
+	CRS-2677: Interrupção de 'ora.scan2.vip' em 'ol926ain1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.ons' em 'ol926ain1'
+	CRS-2677: Interrupção de 'ora.crsd' em 'ol926ain2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.evmd' em 'ol926ain2'
+	CRS-2673: Tentativa de interromper 'ora.storage' em 'ol926ain2'
+	CRS-2677: Interrupção de 'ora.storage' em 'ol926ain2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.asm' em 'ol926ain2'
+	CRS-2677: Interrupção de 'ora.ons' em 'ol926ain1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.net1.network' em 'ol926ain1'
+	CRS-2677: Interrupção de 'ora.net1.network' em 'ol926ain1' bem-sucedida
+	CRS-2792: O shut-down de recursos gerenciados pelo Cluster Ready Services em 'ol926ain1' foi concluído
+	CRS-2677: Interrupção de 'ora.evmd' em 'ol926ain2' bem-sucedida
+	CRS-2677: Interrupção de 'ora.crsd' em 'ol926ain1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.evmd' em 'ol926ain1'
+	CRS-2673: Tentativa de interromper 'ora.storage' em 'ol926ain1'
+	CRS-2677: Interrupção de 'ora.storage' em 'ol926ain1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.asm' em 'ol926ain1'
+	CRS-2677: Interrupção de 'ora.evmd' em 'ol926ain1' bem-sucedida
+	CRS-2677: Interrupção de 'ora.asm' em 'ol926ain2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.cluster_interconnect.haip' em 'ol926ain2'
+	CRS-2677: Interrupção de 'ora.cluster_interconnect.haip' em 'ol926ain2' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.cssd' em 'ol926ain2'
+	CRS-2677: Interrupção de 'ora.asm' em 'ol926ain1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.cluster_interconnect.haip' em 'ol926ain1'
+	CRS-2677: Interrupção de 'ora.cssd' em 'ol926ain2' bem-sucedida
+	CRS-2677: Interrupção de 'ora.cluster_interconnect.haip' em 'ol926ain1' bem-sucedida
+	CRS-2673: Tentativa de interromper 'ora.cssd' em 'ol926ain1'
+	CRS-2677: Interrupção de 'ora.cssd' em 'ol926ain1' bem-sucedida
 
-	[root@ol9n1 ~]# crsctl stop has
-	CRS-2791: Starting shutdown of Oracle High Availability Services-managed resources on 'ol9n1'
-	CRS-2673: Attempting to stop 'ora.gpnpd' on 'ol9n1'
-	CRS-2673: Attempting to stop 'ora.crf' on 'ol9n1'
-	CRS-2673: Attempting to stop 'ora.mdnsd' on 'ol9n1'
-	CRS-2673: Attempting to stop 'ora.drivers.acfs' on 'ol9n1'
-	CRS-2677: Stop of 'ora.gpnpd' on 'ol9n1' succeeded
-	CRS-2677: Stop of 'ora.crf' on 'ol9n1' succeeded
-	CRS-2673: Attempting to stop 'ora.gipcd' on 'ol9n1'
-	CRS-2677: Stop of 'ora.gipcd' on 'ol9n1' succeeded
-	CRS-2677: Stop of 'ora.drivers.acfs' on 'ol9n1' succeeded
-	CRS-2677: Stop of 'ora.mdnsd' on 'ol9n1' succeeded
-	CRS-2793: Shutdown of Oracle High Availability Services-managed resources on 'ol9n1' has completed
+	[root@ol926ain1 ~]# crsctl stop has
+	CRS-2791: Starting shutdown of Oracle High Availability Services-managed resources on 'ol926ain1'
+	CRS-2673: Attempting to stop 'ora.gpnpd' on 'ol926ain1'
+	CRS-2673: Attempting to stop 'ora.crf' on 'ol926ain1'
+	CRS-2673: Attempting to stop 'ora.mdnsd' on 'ol926ain1'
+	CRS-2673: Attempting to stop 'ora.drivers.acfs' on 'ol926ain1'
+	CRS-2677: Stop of 'ora.gpnpd' on 'ol926ain1' succeeded
+	CRS-2677: Stop of 'ora.crf' on 'ol926ain1' succeeded
+	CRS-2673: Attempting to stop 'ora.gipcd' on 'ol926ain1'
+	CRS-2677: Stop of 'ora.gipcd' on 'ol926ain1' succeeded
+	CRS-2677: Stop of 'ora.drivers.acfs' on 'ol926ain1' succeeded
+	CRS-2677: Stop of 'ora.mdnsd' on 'ol926ain1' succeeded
+	CRS-2793: Shutdown of Oracle High Availability Services-managed resources on 'ol926ain1' has completed
 	CRS-4133: Oracle High Availability Services has been stopped.
 
-	[root@ol9n2 ~]# crsctl stop has
-	CRS-2791: Starting shutdown of Oracle High Availability Services-managed resources on 'ol9n2'
-	CRS-2673: Attempting to stop 'ora.crf' on 'ol9n2'
-	CRS-2673: Attempting to stop 'ora.drivers.acfs' on 'ol9n2'
-	CRS-2673: Attempting to stop 'ora.gpnpd' on 'ol9n2'
-	CRS-2673: Attempting to stop 'ora.mdnsd' on 'ol9n2'
-	CRS-2677: Stop of 'ora.gpnpd' on 'ol9n2' succeeded
-	CRS-2677: Stop of 'ora.drivers.acfs' on 'ol9n2' succeeded
-	CRS-2677: Stop of 'ora.crf' on 'ol9n2' succeeded
-	CRS-2673: Attempting to stop 'ora.gipcd' on 'ol9n2'
-	CRS-2677: Stop of 'ora.gipcd' on 'ol9n2' succeeded
-	CRS-2677: Stop of 'ora.mdnsd' on 'ol9n2' succeeded
-	CRS-2793: Shutdown of Oracle High Availability Services-managed resources on 'ol9n2' has completed
+	[root@ol926ain2 ~]# crsctl stop has
+	CRS-2791: Starting shutdown of Oracle High Availability Services-managed resources on 'ol926ain2'
+	CRS-2673: Attempting to stop 'ora.crf' on 'ol926ain2'
+	CRS-2673: Attempting to stop 'ora.drivers.acfs' on 'ol926ain2'
+	CRS-2673: Attempting to stop 'ora.gpnpd' on 'ol926ain2'
+	CRS-2673: Attempting to stop 'ora.mdnsd' on 'ol926ain2'
+	CRS-2677: Stop of 'ora.gpnpd' on 'ol926ain2' succeeded
+	CRS-2677: Stop of 'ora.drivers.acfs' on 'ol926ain2' succeeded
+	CRS-2677: Stop of 'ora.crf' on 'ol926ain2' succeeded
+	CRS-2673: Attempting to stop 'ora.gipcd' on 'ol926ain2'
+	CRS-2677: Stop of 'ora.gipcd' on 'ol926ain2' succeeded
+	CRS-2677: Stop of 'ora.mdnsd' on 'ol926ain2' succeeded
+	CRS-2793: Shutdown of Oracle High Availability Services-managed resources on 'ol926ain2' has completed
 	CRS-4133: Oracle High Availability Services has been stopped.
 
 ###### writed by: Danilo Arruda
