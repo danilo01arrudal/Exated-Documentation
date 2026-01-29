@@ -56,21 +56,27 @@ In simple terms, LIO allows a Linux server to share its storage devices (such as
 
 ###### CONFIGURE LVM 
 
-    [root@ol9scsi ~]# pvcreate /dev/nvme0n1p1
-    [root@ol9scsi ~]# pvcreate /dev/nvme1n1p1
-    [root@ol9scsi ~]# vgcreate vg_lun_storage /dev/nvme0n1p1 /dev/nvme1n1p1 
-    [root@ol9scsi ~]# lvcreate -n lv_lun_storage_l0 -L 20G vg_lun_storage
-    [root@ol9scsi ~]# lvcreate -n lv_lun_storage_l1 -L 20G vg_lun_storage
-    [root@ol9scsi ~]# lvcreate -n lv_lun_storage_l2 -L 20G vg_lun_storage
-    [root@ol9scsi ~]# lvcreate -n lv_lun_storage_l3 -L 20G vg_lun_storage
-    [root@ol9scsi ~]# lvcreate -n lv_lun_storage_l4 -L 20G vg_lun_storage  
+    [root@ol9scsi ~]# pvcreate /dev/sdb1 
+      Physical volume "/dev/sdb1" successfully created.
+    [root@ol9scsi ~]# vgcreate vg_lun_storage /dev/sdb1  
+      Volume group "vg_lun_storage" successfully created
+    [root@ol9scsi ~]# lvcreate -n lv_lun_storage_l0 -L 30G vg_lun_storage 
+      Logical volume "lv_lun_storage_l0" created.
+    [root@ol9scsi ~]# lvcreate -n lv_lun_storage_l1 -L 30G vg_lun_storage 
+      Logical volume "lv_lun_storage_l1" created.
+    [root@ol9scsi ~]# lvcreate -n lv_lun_storage_l2 -L 30G vg_lun_storage 
+      Logical volume "lv_lun_storage_l2" created.
+    [root@ol9scsi ~]# lvcreate -n lv_lun_storage_l3 -L 30G vg_lun_storage 
+      Logical volume "lv_lun_storage_l3" created.
+    [root@ol9scsi ~]# lvcreate -n lv_lun_storage_l4 -L 30G vg_lun_storage   
+      Logical volume "lv_lun_storage_l4" created.
     [root@ol9scsi ~]# lvs
-    LV                VG             Attr       LSize  Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert                                                  
-    lv_lun_storage_l0 vg_lun_storage -wi-a----- 20,00g                                                    
-    lv_lun_storage_l1 vg_lun_storage -wi-a----- 20,00g                                                    
-    lv_lun_storage_l2 vg_lun_storage -wi-a----- 20,00g                                                    
-    lv_lun_storage_l3 vg_lun_storage -wi-a----- 20,00g                                                    
-    lv_lun_storage_l4 vg_lun_storage -wi-a----- 20,00g
+      LV                VG             Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert                                                   
+      lv_lun_storage_l0 vg_lun_storage -wi-a-----  30.00g                                                    
+      lv_lun_storage_l1 vg_lun_storage -wi-a-----  30.00g                                                    
+      lv_lun_storage_l2 vg_lun_storage -wi-a-----  30.00g                                                    
+      lv_lun_storage_l3 vg_lun_storage -wi-a-----  30.00g                                                    
+      lv_lun_storage_l4 vg_lun_storage -wi-a-----  30.00g   
 
 
 > *targetcli is a command-line interface (CLI) for configuring the Linux Target Subsystem (LIO), which allows a Linux server to expose storage devices as iSCSI, Fibre Channel, or other network storage protocol targets.*
