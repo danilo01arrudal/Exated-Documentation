@@ -103,55 +103,77 @@ In simple terms, LIO allows a Linux server to share its storage devices (such as
     Copyright 2011-2013 by Datera, Inc and others.
     For help on commands, type 'help'.
 
-    /> ls
-    o- / ......................................................................................................................... [...]
-      o- backstores .............................................................................................................. [...]
-      | o- block .................................................................................................. [Storage Objects: 0]
-      | o- fileio ................................................................................................. [Storage Objects: 0]
-      | o- pscsi .................................................................................................. [Storage Objects: 0]
-      | o- ramdisk ................................................................................................ [Storage Objects: 0]
-      o- iscsi ............................................................................................................ [Targets: 0]
-      o- loopback ......................................................................................................... [Targets: 0]
-      o- vhost ............................................................................................................ [Targets: 0]
-    /> cd /backstores/block
-    /backstores/block> create name=lun0 dev=/dev/vg_lun_storage/lv_lun_storage_l0 
-    Created block storage object lun0 using /dev/vg_lun_storage/lv_lun_storage_l0.
-    /backstores/block> create name=lun1 dev=/dev/vg_lun_storage/lv_lun_storage_l1 
-    Created block storage object lun1 using /dev/vg_lun_storage/lv_lun_storage_l1.
-    /backstores/block> create name=lun2 dev=/dev/vg_lun_storage/lv_lun_storage_l2 
-    Created block storage object lun2 using /dev/vg_lun_storage/lv_lun_storage_l2.
-    /backstores/block> create name=lun3 dev=/dev/vg_lun_storage/lv_lun_storage_l3 
-    Created block storage object lun3 using /dev/vg_lun_storage/lv_lun_storage_l3.
-    /backstores/block> create name=lun4 dev=/dev/vg_lun_storage/lv_lun_storage_l4 
-    Created block storage object lun4 using /dev/vg_lun_storage/lv_lun_storage_l4.
+[root@ol9scsi ~]# targetcli
+targetcli shell version 2.1.57
+Copyright 2011-2013 by Datera, Inc and others.
+For help on commands, type 'help'.
+
+/> ls
+o- / ......................................................................................................................... [...]
+  o- backstores .............................................................................................................. [...]
+  | o- block .................................................................................................. [Storage Objects: 0]
+  | o- fileio ................................................................................................. [Storage Objects: 0]
+  | o- pscsi .................................................................................................. [Storage Objects: 0]
+  | o- ramdisk ................................................................................................ [Storage Objects: 0]
+  o- iscsi ............................................................................................................ [Targets: 0]
+  o- loopback ......................................................................................................... [Targets: 0]
+  o- vhost ............................................................................................................ [Targets: 0]
+/> cd /backstores/block
+/backstores/block> create name=lun0 dev=/dev/vg_lun_storage/lv_lun_storage_l0
+Created block storage object lun0 using /dev/vg_lun_storage/lv_lun_storage_l0.
+/backstores/block> create name=lun1 dev=/dev/vg_lun_storage/lv_lun_storage_l1
+Created block storage object lun1 using /dev/vg_lun_storage/lv_lun_storage_l1.
+/backstores/block> create name=lun2 dev=/dev/vg_lun_storage/lv_lun_storage_l2
+Created block storage object lun2 using /dev/vg_lun_storage/lv_lun_storage_l2.
+/backstores/block> create name=lun3 dev=/dev/vg_lun_storage/lv_lun_storage_l3
+Created block storage object lun3 using /dev/vg_lun_storage/lv_lun_storage_l3.
+/backstores/block> create name=lun4 dev=/dev/vg_lun_storage/lv_lun_storage_l4
+Created block storage object lun4 using /dev/vg_lun_storage/lv_lun_storage_l4.
+/backstores/block> ls
+o- block ...................................................................................................... [Storage Objects: 5]
+  o- lun0 ................................................. [/dev/vg_lun_storage/lv_lun_storage_l0 (30.0GiB) write-thru deactivated]
+  | o- alua ....................................................................................................... [ALUA Groups: 1]
+  |   o- default_tg_pt_gp ........................................................................... [ALUA state: Active/optimized]
+  o- lun1 ................................................. [/dev/vg_lun_storage/lv_lun_storage_l1 (30.0GiB) write-thru deactivated]
+  | o- alua ....................................................................................................... [ALUA Groups: 1]
+  |   o- default_tg_pt_gp ........................................................................... [ALUA state: Active/optimized]
+  o- lun2 ................................................. [/dev/vg_lun_storage/lv_lun_storage_l2 (30.0GiB) write-thru deactivated]
+  | o- alua ....................................................................................................... [ALUA Groups: 1]
+  |   o- default_tg_pt_gp ........................................................................... [ALUA state: Active/optimized]
+  o- lun3 ................................................. [/dev/vg_lun_storage/lv_lun_storage_l3 (30.0GiB) write-thru deactivated]
+  | o- alua ....................................................................................................... [ALUA Groups: 1]
+  |   o- default_tg_pt_gp ........................................................................... [ALUA state: Active/optimized]
+  o- lun4 ................................................. [/dev/vg_lun_storage/lv_lun_storage_l4 (30.0GiB) write-thru deactivated]
+    o- alua ....................................................................................................... [ALUA Groups: 1]
+      o- default_tg_pt_gp ........................................................................... [ALUA state: Active/optimized]
     /backstores/block> cd /iscsi
     /iscsi> create
-    Created target iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0.
+    Created target iqn.2003-01.org.linux-iscsi.ol9scsi.x8664:sn.79e121de92d2.
     Created TPG 1.
     Global pref auto_add_default_portal=true
     Created default portal listening on all IPs (0.0.0.0), port 3260.
     /iscsi> ls
     o- iscsi .............................................................................................................. [Targets: 1]
-      o- iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0 ............................................................ [TPGs: 1]
+      o- iqn.2003-01.org.linux-iscsi.ol9scsi.x8664:sn.79e121de92d2 ........................................................... [TPGs: 1]
         o- tpg1 ................................................................................................. [no-gen-acls, no-auth]
           o- acls ............................................................................................................ [ACLs: 0]
           o- luns ............................................................................................................ [LUNs: 0]
           o- portals ...................................................................................................... [Portals: 1]
             o- 0.0.0.0:3260 ....................................................................................................... [OK]
-    /iscsi> cd iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0
-    /iscsi/iqn.20....ab22dc6d6dc0> cd tpg1/luns
-    /iscsi/iqn.20...dc0/tpg1/luns> create /backstores/block/lun0
+    /iscsi> cd iqn.2003-01.org.linux-iscsi.ol9scsi.x8664:sn.79e121de92d2
+    /iscsi/iqn.20....79e121de92d2> cd tpg1/luns 
+    /iscsi/iqn.20...2d2/tpg1/luns> create /backstores/block/lun0
     Created LUN 0.
-    /iscsi/iqn.20...dc0/tpg1/luns> create /backstores/block/lun1
+    /iscsi/iqn.20...2d2/tpg1/luns> create /backstores/block/lun1
     Created LUN 1.
-    /iscsi/iqn.20...dc0/tpg1/luns> create /backstores/block/lun2
+    /iscsi/iqn.20...2d2/tpg1/luns> create /backstores/block/lun2
     Created LUN 2.
-    /iscsi/iqn.20...dc0/tpg1/luns> create /backstores/block/lun3
+    /iscsi/iqn.20...2d2/tpg1/luns> create /backstores/block/lun3
     Created LUN 3.
-    /iscsi/iqn.20...dc0/tpg1/luns> create /backstores/block/lun4
+    /iscsi/iqn.20...2d2/tpg1/luns> create /backstores/block/lun4
     Created LUN 4.
-    /iscsi/iqn.20...dc0/tpg1/luns> cd ..
-    /iscsi/iqn.20...dc6d6dc0/tpg1> cd acls 
+    /iscsi/iqn.20...2d2/tpg1/luns> cd ..
+    /iscsi/iqn.20...21de92d2/tpg1> cd acls
     /iscsi/iqn.20...dc0/tpg1/acls> create iqn.1988-12.com.oracle:58e84cb3eaf6 
     Created Node ACL for iqn.1988-12.com.oracle:58e84cb3eaf6
     Created mapped LUN 4.
