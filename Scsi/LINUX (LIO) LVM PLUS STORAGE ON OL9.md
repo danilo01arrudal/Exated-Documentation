@@ -168,57 +168,57 @@ In simple terms, LIO allows a Linux server to share its storage devices (such as
     /iscsi/iqn.20...968/tpg1/luns> create /backstores/block/lun4
     Created LUN 4.
 
-    
-    /iscsi/iqn.20...2d2/tpg1/luns> cd ..
-    /iscsi/iqn.20...21de92d2/tpg1> cd acls
-    /iscsi/iqn.20...dc0/tpg1/acls> create iqn.1988-12.com.oracle:58e84cb3eaf6 
-    Created Node ACL for iqn.1988-12.com.oracle:58e84cb3eaf6
+    /iscsi/iqn.20...968/tpg1/luns> cd ..
+    /iscsi/iqn.20...4d69d968/tpg1> cd acls
+    /iscsi/iqn.20...968/tpg1/acls> create iqn.1994-05.com.redhat:a0bb1ac81cd4
+    Created Node ACL for iqn.1994-05.com.redhat:a0bb1ac81cd4
     Created mapped LUN 4.
     Created mapped LUN 3.
     Created mapped LUN 2.
     Created mapped LUN 1.
     Created mapped LUN 0.
-    /iscsi/iqn.20...dc0/tpg1/acls> create iqn.1988-12.com.oracle:e647892de987
-    Created Node ACL for iqn.1988-12.com.oracle:e647892de987
+    /iscsi/iqn.20...968/tpg1/acls> create iqn.1994-05.com.redhat:a0822cd78296
+    Created Node ACL for iqn.1994-05.com.redhat:a0822cd78296
     Created mapped LUN 4.
     Created mapped LUN 3.
     Created mapped LUN 2.
     Created mapped LUN 1.
     Created mapped LUN 0.
-    /> cd /
+
+    /iscsi/iqn.20...968/tpg1/acls> cd / 
     /> ls
     o- / ......................................................................................................................... [...]
       o- backstores .............................................................................................................. [...]
       | o- block .................................................................................................. [Storage Objects: 5]
-      | | o- lun0 ............................................... [/dev/vg_lun_storage/lv_lun_storage_l0 (20.0GiB) write-thru activated]
+      | | o- lun0 ............................................... [/dev/vg_lun_storage/lv_lun_storage_l0 (30.0GiB) write-thru activated]
       | | | o- alua ................................................................................................... [ALUA Groups: 1]
       | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-      | | o- lun1 ............................................... [/dev/vg_lun_storage/lv_lun_storage_l1 (20.0GiB) write-thru activated]
+      | | o- lun1 ............................................... [/dev/vg_lun_storage/lv_lun_storage_l1 (30.0GiB) write-thru activated]
       | | | o- alua ................................................................................................... [ALUA Groups: 1]
       | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-      | | o- lun2 ............................................... [/dev/vg_lun_storage/lv_lun_storage_l2 (20.0GiB) write-thru activated]
+      | | o- lun2 ............................................... [/dev/vg_lun_storage/lv_lun_storage_l2 (30.0GiB) write-thru activated]
       | | | o- alua ................................................................................................... [ALUA Groups: 1]
       | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-      | | o- lun3 ............................................... [/dev/vg_lun_storage/lv_lun_storage_l3 (20.0GiB) write-thru activated]
+      | | o- lun3 ............................................... [/dev/vg_lun_storage/lv_lun_storage_l3 (30.0GiB) write-thru activated]
       | | | o- alua ................................................................................................... [ALUA Groups: 1]
       | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-      | | o- lun4 ............................................... [/dev/vg_lun_storage/lv_lun_storage_l4 (20.0GiB) write-thru activated]
+      | | o- lun4 ............................................... [/dev/vg_lun_storage/lv_lun_storage_l4 (30.0GiB) write-thru activated]
       | |   o- alua ................................................................................................... [ALUA Groups: 1]
       | |     o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
       | o- fileio ................................................................................................. [Storage Objects: 0]
       | o- pscsi .................................................................................................. [Storage Objects: 0]
       | o- ramdisk ................................................................................................ [Storage Objects: 0]
       o- iscsi ............................................................................................................ [Targets: 1]
-      | o- iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0 .......................................................... [TPGs: 1]
+      | o- iqn.2003-01.org.linux-iscsi.ol9scsi.x8664:sn.b4c74d69d968 ......................................................... [TPGs: 1]
       |   o- tpg1 ............................................................................................... [no-gen-acls, no-auth]
       |     o- acls .......................................................................................................... [ACLs: 2]
-      |     | o- iqn.1988-12.com.oracle:58e84cb3eaf6 .................................................................. [Mapped LUNs: 5]
+      |     | o- iqn.1994-05.com.redhat:a0822cd78296 .................................................................. [Mapped LUNs: 5]
       |     | | o- mapped_lun0 .................................................................................. [lun0 block/lun0 (rw)]
       |     | | o- mapped_lun1 .................................................................................. [lun1 block/lun1 (rw)]
       |     | | o- mapped_lun2 .................................................................................. [lun2 block/lun2 (rw)]
       |     | | o- mapped_lun3 .................................................................................. [lun3 block/lun3 (rw)]
       |     | | o- mapped_lun4 .................................................................................. [lun4 block/lun4 (rw)]
-      |     | o- iqn.1988-12.com.oracle:e647892de987 .................................................................. [Mapped LUNs: 5]
+      |     | o- iqn.1994-05.com.redhat:a0bb1ac81cd4 .................................................................. [Mapped LUNs: 5]
       |     |   o- mapped_lun0 .................................................................................. [lun0 block/lun0 (rw)]
       |     |   o- mapped_lun1 .................................................................................. [lun1 block/lun1 (rw)]
       |     |   o- mapped_lun2 .................................................................................. [lun2 block/lun2 (rw)]
