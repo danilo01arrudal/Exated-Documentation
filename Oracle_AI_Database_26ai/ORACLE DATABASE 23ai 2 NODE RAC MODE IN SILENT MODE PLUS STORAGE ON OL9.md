@@ -90,54 +90,57 @@
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE STATIC NETWORK NODE 2)
 
-    [root@ol926ain2 ~]# nmcli device
-    DEVICE  TYPE      STATE                   CONNECTION 
-    enp1s0  ethernet  conectado               enp1s0     
-    enp2s0  ethernet  conectado               enp2s0     
-    enp3s0  ethernet  conectado               enp3s0     
-    lo      loopback  connected (externally)  lo   
-    [root@ol926ain2 ~]# nmcli connection show  
-    NAME    UUID                                  TYPE      DEVICE 
-    enp3s0  c722a703-83de-36a0-ba0b-129c115b155b  ethernet  enp3s0 
-    enp1s0  6970aff6-c896-396b-ada4-645795be91bb  ethernet  enp1s0 
-    enp2s0  189431ad-d482-3853-86da-40818b54653f  ethernet  enp2s0 
-    lo      c88169e7-1918-478d-8015-77da6638ee58  loopback  lo 
+	[root@ol926ain2 ~]# nmcli device 
+	DEVICE  TYPE      STATE                   CONNECTION 
+	ens3    ethernet  connected               ens3       
+	ens4    ethernet  connected               ens4       
+	lo      loopback  connected (externally)  lo         
+	ens5    ethernet  disconnected            --  
+	[root@ol926ain2 ~]# nmcli connection show  
+	NAME  UUID                                  TYPE      DEVICE 
+	ens3  63654c50-513f-3292-80da-c7ca7a816235  ethernet  ens3   
+	ens4  8b94a7ac-0dc3-3956-a2c9-238b50b3fe94  ethernet  ens4   
+	lo    8c000f23-8812-4317-b145-5ceb9eae43fc  loopback  lo     
+	ens5  3e470724-37fb-3c2b-a1e3-1fdbd63e16da  ethernet  --  
     [root@ol926ain2 ~]# nmcli con modify 'enp1s0' ifname enp1s0 ipv4.method manual ipv4.addresses 192.168.18.122/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
     [root@ol926ain2 ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.43 
     [root@ol926ain2 ~]# nmcli con down 'enp1s0'; nmcli con up 'enp1s0'
-    [root@ol926ain2 ~]# ip addr show enp1s0
-    2: enp1s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
-    link/ether 52:54:00:6b:00:2d brd ff:ff:ff:ff:ff:ff
-    inet 192.168.18.122/24 brd 192.168.18.255 scope global noprefixroute enp1s0
+	[root@ol926ain2 ~]# ip addr show ens3 
+	2: ens3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 52:54:00:b7:46:01 brd ff:ff:ff:ff:ff:ff
+    altname enp0s3
+    inet 192.168.18.122/24 brd 192.168.18.255 scope global noprefixroute ens3
        valid_lft forever preferred_lft forever
-    [root@ol926ain2 ~]# nmcli con modify 'enp2s0' ifname enp2s0 ipv4.method manual ipv4.addresses 192.168.18.152/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
-    [root@ol926ain2 ~]# nmcli con modify 'enp2s0' ipv4.dns 192.168.18.201 
-    [root@ol926ain2 ~]# nmcli con down 'enp2s0'
+    [root@ol926ain2 ~]# nmcli con modify 'ens4' ifname ens4 ipv4.method manual ipv4.addresses 192.168.18.152/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
+    [root@ol926ain2 ~]# nmcli con modify 'ens4' ipv4.dns 192.168.18.43 
+    [root@ol926ain2 ~]# nmcli con down 'ens4'
     Conexão “enp2s0” desativada com sucesso (caminho D-Bus ativo: /org/freedesktop/NetworkManager/ActiveConnection/5)
-    [root@ol926ain2 ~]# ip addr show enp2s0
-    3: enp2s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
-    link/ether 52:54:00:82:3a:0e brd ff:ff:ff:ff:ff:ff
-    [root@ol926ain2 ~]# nmcli con modify 'enp3s0' ifname enp3s0 ipv4.method manual ipv4.addresses 192.168.100.102/24 ipv4.gateway 192.168.100.1 autoconnect yes ipv6.method disabled 
-    [root@ol926ain2 ~]# nmcli con down 'enp3s0'; nmcli con up 'enp3s0' 
+	[root@ol926ain2 ~]# ip addr show ens4 
+	3: ens4: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 52:54:00:49:73:d9 brd ff:ff:ff:ff:ff:ff
+    altname enp0s4
+    [root@ol926ain2 ~]# nmcli con modify 'ens5' ifname ens5 ipv4.method manual ipv4.addresses 192.168.100.102/24 ipv4.gateway 192.168.100.1 autoconnect yes ipv6.method disabled 
+    [root@ol926ain2 ~]# nmcli con down 'ens5'; nmcli con up 'ens5' 
     Conexão “enp3s0” desativada com sucesso (caminho D-Bus ativo: /org/freedesktop/NetworkManager/ActiveConnection/4)
     Conexão ativada com sucesso (caminho D-Bus ativo: /org/freedesktop/NetworkManager/ActiveConnection/7)
-    [root@ol926ain2 ~]# ip addr show enp3s0  
-    4: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
-    link/ether 52:54:00:5d:35:1f brd ff:ff:ff:ff:ff:ff
-    inet 192.168.100.102/24 brd 192.168.100.255 scope global noprefixroute enp3s0
+	[root@ol926ain2 ~]# ip addr show ens5   
+	4: ens5: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 52:54:00:c2:f7:e6 brd ff:ff:ff:ff:ff:ff
+    altname enp0s5
+    inet 192.168.100.102/24 brd 192.168.100.255 scope global noprefixroute ens5
        valid_lft forever preferred_lft forever
-    [root@ol926ain2 ~]# nmcli device
-    DEVICE  TYPE      STATE                   CONNECTION 
-    enp1s0  ethernet  conectado               enp1s0     
-    enp3s0  ethernet  conectado               enp3s0     
-    lo      loopback  connected (externally)  lo         
-    enp2s0  ethernet  desconectado            --         
-    [root@ol926ain2 ~]# nmcli connection show
-    NAME    UUID                                  TYPE      DEVICE 
-    enp1s0  6970aff6-c896-396b-ada4-645795be91bb  ethernet  enp1s0 
-    enp3s0  c722a703-83de-36a0-ba0b-129c115b155b  ethernet  enp3s0 
-    lo      c88169e7-1918-478d-8015-77da6638ee58  loopback  lo     
-    enp2s0  189431ad-d482-3853-86da-40818b54653f  ethernet  --  
+	[root@ol926ain2 ~]# nmcli device
+	DEVICE  TYPE      STATE                   CONNECTION 
+	ens3    ethernet  connected               ens3       
+	ens5    ethernet  connected               ens5       
+	lo      loopback  connected (externally)  lo         
+	ens4    ethernet  disconnected            --     
+	[root@ol926ain2 ~]# nmcli connection show
+	NAME  UUID                                  TYPE      DEVICE 
+	ens3  63654c50-513f-3292-80da-c7ca7a816235  ethernet  ens3   
+	ens5  3e470724-37fb-3c2b-a1e3-1fdbd63e16da  ethernet  ens5   
+	lo    081ab6fb-8747-4140-bbad-920622f521dd  loopback  lo     
+	ens4  8b94a7ac-0dc3-3956-a2c9-238b50b3fe94  ethernet  --  
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( DISABLE AVAHI )
 
