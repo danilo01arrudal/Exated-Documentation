@@ -172,12 +172,12 @@
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( PACKAGES )
 
-    [root@ol926ain1 ~]# yum install -y oracle-database-preinstall-23ai.x86_64
-    [root@ol926ain2 ~]# yum install -y oracle-database-preinstall-23ai.x86_64
-    [root@ol926ain1 ~]# yum install -y https://yum.oracle.com/repo/OracleLinux/OL9/addons/x86_64/getPackage/oracleasm-support-3.0.0-7.el9.x86_64.rpm
-    [root@ol926ain2 ~]# yum install -y https://yum.oracle.com/repo/OracleLinux/OL9/addons/x86_64/getPackage/oracleasm-support-3.0.0-7.el9.x86_64.rpm
-    [root@ol926ain1 ~]# rpm -ivh oracleasmlib-3.0.0-13.el9.x86_64.rpm
-    [root@ol926ain2 ~]# rpm -ivh oracleasmlib-3.0.0-13.el9.x86_64.rpm
+    [root@ol926ain1 ~]# yum install -y oracle-ai-database-preinstall-26ai.x86_64
+    [root@ol926ain2 ~]# yum install -y oracle-ai-database-preinstall-26ai.x86_64
+    [root@ol926ain1 ~]# yum install -y https://yum.oracle.com/repo/OracleLinux/OL9/addons/x86_64/getPackage/oracleasm-support-3.1.1-4.el9.x86_64.rpm
+    [root@ol926ain2 ~]# yum install -y https://yum.oracle.com/repo/OracleLinux/OL9/addons/x86_64/getPackage/oracleasm-support-3.1.1-4.el9.x86_64.rpm
+    [root@ol926ain1 ~]# rpm -ivh oracleasmlib-3.1.1-1.el9.x86_64.rpm 
+    [root@ol926ain2 ~]# rpm -ivh oracleasmlib-3.1.1-1.el9.x86_64.rpm 
     [root@ol926ain1 ~]# yum install -y chkconfig
     [root@ol926ain2 ~]# yum install -y chkconfig
     [root@ol926ain1 ~]# yum install -y iscsi-initiator-utils udisks2-iscsi 
