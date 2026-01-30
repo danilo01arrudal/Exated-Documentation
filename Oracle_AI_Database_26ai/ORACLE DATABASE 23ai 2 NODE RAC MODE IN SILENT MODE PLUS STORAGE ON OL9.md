@@ -234,8 +234,8 @@
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CREATE DIRECTORIES )
 
-    [root@ol926ain1 ~]# mkdir -p /u01/app/grid; mkdir -p /u01/app/23.7.0/grid; mkdir -p /u01/app/oracle; mkdir -p /u01/app/oracle/product/23.7.0/dbhome_1; chmod -R 775 /u01; chown -R grid:oinstall /u01; chown -R oracle:oinstall /u01/app/oracle; chown oracle:oinstall -R /home/oracle
-    [root@ol926ain2 ~]# mkdir -p /u01/app/grid; mkdir -p /u01/app/23.7.0/grid; mkdir -p /u01/app/oracle; mkdir -p /u01/app/oracle/product/23.7.0/dbhome_1; chmod -R 775 /u01; chown -R grid:oinstall /u01; chown -R oracle:oinstall /u01/app/oracle; chown oracle:oinstall -R /home/oracle
+    [root@ol926ain1 ~]# mkdir -p /u01/app/grid; mkdir -p /u01/app/23.26.1/grid; mkdir -p /u01/app/oracle; mkdir -p /u01/app/oracle/product/23.26.1/dbhome_1; chmod -R 775 /u01; chown -R grid:oinstall /u01; chown -R oracle:oinstall /u01/app/oracle; chown oracle:oinstall -R /home/oracle
+    [root@ol926ain2 ~]# mkdir -p /u01/app/grid; mkdir -p /u01/app/23.26.1/grid; mkdir -p /u01/app/oracle; mkdir -p /u01/app/oracle/product/23.26.1/dbhome_1; chmod -R 775 /u01; chown -R grid:oinstall /u01; chown -R oracle:oinstall /u01/app/oracle; chown oracle:oinstall -R /home/oracle
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE /ETC/RESOLV.CONF )
 
