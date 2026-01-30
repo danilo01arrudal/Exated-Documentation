@@ -141,33 +141,34 @@ In simple terms, LIO allows a Linux server to share its storage devices (such as
       o- lun4 ................................................. [/dev/vg_lun_storage/lv_lun_storage_l4 (30.0GiB) write-thru deactivated]
         o- alua ....................................................................................................... [ALUA Groups: 1]
           o- default_tg_pt_gp ........................................................................... [ALUA state: Active/optimized]
-
-        /backstores/block> cd /iscsi
-        /iscsi> create
-        Created target iqn.2003-01.org.linux-iscsi.ol9scsi.x8664:sn.79e121de92d2.
-        Created TPG 1.
-        Global pref auto_add_default_portal=true
-        Created default portal listening on all IPs (0.0.0.0), port 3260.
-        /iscsi> ls
-        o- iscsi .............................................................................................................. [Targets: 1]
-          o- iqn.2003-01.org.linux-iscsi.ol9scsi.x8664:sn.79e121de92d2 ........................................................... [TPGs: 1]
-            o- tpg1 ................................................................................................. [no-gen-acls, no-auth]
-              o- acls ............................................................................................................ [ACLs: 0]
-              o- luns ............................................................................................................ [LUNs: 0]
-              o- portals ...................................................................................................... [Portals: 1]
-                o- 0.0.0.0:3260 ....................................................................................................... [OK]
-    /iscsi> cd iqn.2003-01.org.linux-iscsi.ol9scsi.x8664:sn.79e121de92d2
-    /iscsi/iqn.20....79e121de92d2> cd tpg1/luns 
-    /iscsi/iqn.20...2d2/tpg1/luns> create /backstores/block/lun0
+    /backstores/block> cd /iscsi 
+    /iscsi> create
+    Created target iqn.2003-01.org.linux-iscsi.ol9scsi.x8664:sn.b4c74d69d968.
+    Created TPG 1.
+    Global pref auto_add_default_portal=true
+    Created default portal listening on all IPs (0.0.0.0), port 3260.
+    /iscsi> ls
+    o- iscsi .............................................................................................................. [Targets: 1]
+      o- iqn.2003-01.org.linux-iscsi.ol9scsi.x8664:sn.b4c74d69d968 ........................................................... [TPGs: 1]
+        o- tpg1 ................................................................................................. [no-gen-acls, no-auth]
+          o- acls ............................................................................................................ [ACLs: 0]
+          o- luns ............................................................................................................ [LUNs: 0]
+          o- portals ...................................................................................................... [Portals: 1]
+            o- 0.0.0.0:3260 ....................................................................................................... [OK]
+    /iscsi> cd iqn.2003-01.org.linux-iscsi.ol9scsi.x8664:sn.b4c74d69d968 
+    /iscsi/iqn.20....b4c74d69d968> cd tpg1/luns 
+    /iscsi/iqn.20...968/tpg1/luns> create /backstores/block/lun0
     Created LUN 0.
-    /iscsi/iqn.20...2d2/tpg1/luns> create /backstores/block/lun1
+    /iscsi/iqn.20...968/tpg1/luns> create /backstores/block/lun1
     Created LUN 1.
-    /iscsi/iqn.20...2d2/tpg1/luns> create /backstores/block/lun2
+    /iscsi/iqn.20...968/tpg1/luns> create /backstores/block/lun2
     Created LUN 2.
-    /iscsi/iqn.20...2d2/tpg1/luns> create /backstores/block/lun3
+    /iscsi/iqn.20...968/tpg1/luns> create /backstores/block/lun3
     Created LUN 3.
-    /iscsi/iqn.20...2d2/tpg1/luns> create /backstores/block/lun4
+    /iscsi/iqn.20...968/tpg1/luns> create /backstores/block/lun4
     Created LUN 4.
+
+    
     /iscsi/iqn.20...2d2/tpg1/luns> cd ..
     /iscsi/iqn.20...21de92d2/tpg1> cd acls
     /iscsi/iqn.20...dc0/tpg1/acls> create iqn.1988-12.com.oracle:58e84cb3eaf6 
