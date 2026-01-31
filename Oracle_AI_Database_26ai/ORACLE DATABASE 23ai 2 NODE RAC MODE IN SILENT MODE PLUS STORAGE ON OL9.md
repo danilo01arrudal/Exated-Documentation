@@ -472,41 +472,49 @@
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CREATE ASM DEVICES RULES )
 
     [root@ol926ain1 ~]# cat <<EOF > /etc/udev/rules.d/99-oracle-asmdevices.rules
-    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405c2b1cd5d2f25490fa18a78e36", SYMLINK+="asm-disk1", OWNER="grid", GROUP="asmdba", MODE="0660"
-    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="360014058c1b0ce71fe24475aa4139ecc", SYMLINK+="asm-disk2", OWNER="grid", GROUP="asmdba", MODE="0660"
-    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="360014051c3e44ceaf57418fa35d05cb5", SYMLINK+="asm-disk3", OWNER="grid", GROUP="asmdba", MODE="0660"
-    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405e87d20fdda164e60bd17dac7d", SYMLINK+="asm-disk4", OWNER="grid", GROUP="asmdba", MODE="0660"
-    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="3600140590bc1307e3a44a679c89c7014", SYMLINK+="asm-disk5", OWNER="grid", GROUP="asmdba", MODE="0660"
+	KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="3600140530b1b516a4b546498ef061992", SYMLINK+="asm-disk1", OWNER="grid", GROUP="asmdba", MODE="0660"
+	KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405f9da5bf8739e46bd9b78d941b", SYMLINK+="asm-disk2", OWNER="grid", GROUP="asmdba", MODE="0660"
+	KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405e56bcf503218482196cbd1ec3", SYMLINK+="asm-disk3", OWNER="grid", GROUP="asmdba", MODE="0660"
+	KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405a758b88d83ec49fc81d5f21b3", SYMLINK+="asm-disk4", OWNER="grid", GROUP="asmdba", MODE="0660"
+	KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="360014054b4639dcf64b494abb68561b9", SYMLINK+="asm-disk5", OWNER="grid", GROUP="asmdba", MODE="0660"
     EOF
     [root@ol926ain2 ~]# cat <<EOF > /etc/udev/rules.d/99-oracle-asmdevices.rules
-    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405c2b1cd5d2f25490fa18a78e36", SYMLINK+="asm-disk1", OWNER="grid", GROUP="asmdba", MODE="0660"
-    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="360014058c1b0ce71fe24475aa4139ecc", SYMLINK+="asm-disk2", OWNER="grid", GROUP="asmdba", MODE="0660"
-    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="360014051c3e44ceaf57418fa35d05cb5", SYMLINK+="asm-disk3", OWNER="grid", GROUP="asmdba", MODE="0660"
-    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405e87d20fdda164e60bd17dac7d", SYMLINK+="asm-disk4", OWNER="grid", GROUP="asmdba", MODE="0660"
-    KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="3600140590bc1307e3a44a679c89c7014", SYMLINK+="asm-disk5", OWNER="grid", GROUP="asmdba", MODE="0660"
+	KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="3600140530b1b516a4b546498ef061992", SYMLINK+="asm-disk1", OWNER="grid", GROUP="asmdba", MODE="0660"
+	KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405f9da5bf8739e46bd9b78d941b", SYMLINK+="asm-disk2", OWNER="grid", GROUP="asmdba", MODE="0660"
+	KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405e56bcf503218482196cbd1ec3", SYMLINK+="asm-disk3", OWNER="grid", GROUP="asmdba", MODE="0660"
+	KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="36001405a758b88d83ec49fc81d5f21b3", SYMLINK+="asm-disk4", OWNER="grid", GROUP="asmdba", MODE="0660"
+	KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="360014054b4639dcf64b494abb68561b9", SYMLINK+="asm-disk5", OWNER="grid", GROUP="asmdba", MODE="0660"
     EOF
 
-    [root@ol926ain1 ~]# udevadm test /block/sda/sda1
-    [root@ol926ain1 ~]# udevadm test /block/sdb/sdb1
-    [root@ol926ain1 ~]# udevadm test /block/sdc/sdc1
-    [root@ol926ain1 ~]# udevadm test /block/sdd/sdd1
-    [root@ol926ain1 ~]# udevadm test /block/sde/sde1
+    [root@ol926ain1 ~]# udevadm test /block/sda/sdb1
+    [root@ol926ain1 ~]# udevadm test /block/sdb/sdc1
+    [root@ol926ain1 ~]# udevadm test /block/sdc/sdd1
+    [root@ol926ain1 ~]# udevadm test /block/sdd/sde1
+    [root@ol926ain1 ~]# udevadm test /block/sde/sdf1
     [root@ol926ain1 ~]# udevadm control --reload-rules
     [root@ol926ain1 ~]# /sbin/udevadm trigger
-    [root@ol926ain2 ~]# udevadm test /block/sda/sda1
-    [root@ol926ain2 ~]# udevadm test /block/sdb/sdb1
-    [root@ol926ain2 ~]# udevadm test /block/sdc/sdc1
-    [root@ol926ain2 ~]# udevadm test /block/sdd/sdd1
-    [root@ol926ain2 ~]# udevadm test /block/sde/sde1
+    [root@ol926ain2 ~]# udevadm test /block/sda/sdb1
+    [root@ol926ain2 ~]# udevadm test /block/sdb/sdc1
+    [root@ol926ain2 ~]# udevadm test /block/sdc/sdd1
+    [root@ol926ain2 ~]# udevadm test /block/sdd/sde1
+    [root@ol926ain2 ~]# udevadm test /block/sde/sdf1
     [root@ol926ain2 ~]# udevadm control --reload-rules
     [root@ol926ain2 ~]# /sbin/udevadm trigger
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CHECK ASM DEVICES RULES )
 
-    [root@ol926ain1 ~]# ls -ltr /dev/asm-disk*
-    lrwxrwxrwx 1 root root 4 fev 28 14:34 /dev/asm-disk1 -> sda1
-    [root@ol926ain1 ~]# ls -ltr /dev/sda1
-    brw-rw---- 1 grid asmadmin 8, 1 fev 28 14:34 /dev/sda1
+	[root@ol926ain1 ~]# ls -ltr /dev/asm-disk*
+	lrwxrwxrwx 1 root root 4 Jan 31 15:52 /dev/asm-disk5 -> sdf1
+	lrwxrwxrwx 1 root root 4 Jan 31 15:52 /dev/asm-disk3 -> sdd1
+	lrwxrwxrwx 1 root root 4 Jan 31 15:52 /dev/asm-disk1 -> sdb1
+	lrwxrwxrwx 1 root root 4 Jan 31 15:52 /dev/asm-disk4 -> sde1
+	lrwxrwxrwx 1 root root 4 Jan 31 15:52 /dev/asm-disk2 -> sdc1
+	[root@ol926ain2 ~]# ls -ltr /dev/asm-disk*
+	lrwxrwxrwx 1 root root 4 Jan 31 15:52 /dev/asm-disk5 -> sdf1
+	lrwxrwxrwx 1 root root 4 Jan 31 15:52 /dev/asm-disk3 -> sdd1
+	lrwxrwxrwx 1 root root 4 Jan 31 15:52 /dev/asm-disk1 -> sdb1
+	lrwxrwxrwx 1 root root 4 Jan 31 15:52 /dev/asm-disk4 -> sde1
+	lrwxrwxrwx 1 root root 4 Jan 31 15:52 /dev/asm-disk2 -> sdc1
 
 ###### SSH KEY EXCHANGE ( NODE 1 )
 
