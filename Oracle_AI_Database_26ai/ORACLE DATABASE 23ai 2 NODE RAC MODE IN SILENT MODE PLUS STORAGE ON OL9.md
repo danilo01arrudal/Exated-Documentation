@@ -64,6 +64,7 @@
        valid_lft forever preferred_lft forever
     [root@ol926ain1 ~]# nmcli con modify 'ens4' ifname ens4 ipv4.method manual ipv4.addresses 192.168.18.151/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
     [root@ol926ain1 ~]# nmcli con modify 'ens4' ipv4.dns 192.168.18.43 
+	[root@ol926ain1 ~]# nmcli con down 'ens4'
 	[root@ol926ain1 ~]# ip addr show ens4
 	3: ens4: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 52:54:00:2a:bf:a1 brd ff:ff:ff:ff:ff:ff
