@@ -407,48 +407,44 @@
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( GET ISCSI ID )
 
-    [root@ol926ain1 ~]# iscsiadm -m discovery -t sendtargets -p 192.168.18.200 
-    192.168.18.200:3260,1 iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0
-    [root@ol926ain2 ~]# iscsiadm -m discovery -t sendtargets -p 192.168.18.200
-    192.168.18.200:3260,1 iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0
-    [root@ol926ain1 ~]# cat /etc/iscsi/initiatorname.iscsi
-    InitiatorName=iqn.1988-12.com.oracle:58e84cb3eaf6
-    [root@ol926ain2 ~]# cat /etc/iscsi/initiatorname.iscsi
-    InitiatorName=iqn.1988-12.com.oracle:e647892de987
+    [root@ol926ain1 ~]# iscsiadm -m discovery -t sendtargets -p 192.168.18.46
+	192.168.18.46:3260,1 iqn.2003-01.org.linux-iscsi.ol9scsi.x8664:sn.b4c74d69d968
+	[root@ol926ain2 ~]# iscsiadm -m discovery -t sendtargets -p 192.168.18.46
+	192.168.18.46:3260,1 iqn.2003-01.org.linux-iscsi.ol9scsi.x8664:sn.b4c74d69d968
+	[root@ol926ain1 ~]# cat /etc/iscsi/initiatorname.iscsi
+	InitiatorName=iqn.1994-05.com.redhat:a0bb1ac81cd4
+	[root@ol926ain2 ~]# cat /etc/iscsi/initiatorname.iscsi
+	InitiatorName=iqn.1994-05.com.redhat:a0822cd78296
     
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( LOGIN ISCSI )
     
-    [root@ol926ain1 ~]# iscsiadm -m node -T  iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0 -p 192.168.18.200 -l
-    Logging in to [iface: default, target: iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0, portal: 192.168.18.200,3260]
-    Login to [iface: default, target: iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0, portal: 192.168.18.200,3260] successful.
-    [root@ol926ain2 ~]# iscsiadm -m node -T  iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0 -p 192.168.18.200 -l 
-    Logging in to [iface: default, target: iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0, portal: 192.168.18.200,3260]
-    Login to [iface: default, target: iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0, portal: 192.168.18.200,3260] successful.
+	[root@ol926ain1 ~]# iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.ol9scsi.x8664:sn.b4c74d69d968 -p 192.168.18.46 -l
+	[root@ol926ain2 ~]# iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.ol9scsi.x8664:sn.b4c74d69d968 -p 192.168.18.46 -l
     
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( AUTOMATIC LOGIN ISCSI )
 
-    [root@ol926ain1 ~]# iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0 -p 192.168.18.200 -o update -n node.startup -v automatic
-    [root@ol926ain2 ~]# iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.exated.x8664:sn.ab22dc6d6dc0 -p 192.168.18.200 -o update -n node.startup -v automatic
+	[root@ol926ain1 ~]# iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.ol9scsi.x8664:sn.b4c74d69d968 -p 192.168.18.46 -o update -n node.startup -v automatic
+	[root@ol926ain2 ~]# iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.ol9scsi.x8664:sn.b4c74d69d968 -p 192.168.18.46 -o update -n node.startup -v automatic
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CHECK ISCSI DISKS )
 
-    [root@ol926ain1 ~]# fdisk -l | grep "Disco /dev/sd"
-    Disco /dev/sda: 20 GiB, 21474836480 bytes, 41943040 setores
-    Disco /dev/sde: 20 GiB, 21474836480 bytes, 41943040 setores
-    Disco /dev/sdb: 20 GiB, 21474836480 bytes, 41943040 setores
-    Disco /dev/sdd: 20 GiB, 21474836480 bytes, 41943040 setores
-    Disco /dev/sdc: 20 GiB, 21474836480 bytes, 41943040 setores
-    [root@ol926ain2 ~]# fdisk -l | grep "Disco /dev/sd" 
-    Disco /dev/sda: 20 GiB, 21474836480 bytes, 41943040 setores
-    Disco /dev/sdb: 20 GiB, 21474836480 bytes, 41943040 setores
-    Disco /dev/sdd: 20 GiB, 21474836480 bytes, 41943040 setores
-    Disco /dev/sde: 20 GiB, 21474836480 bytes, 41943040 setores
-    Disco /dev/sdc: 20 GiB, 21474836480 bytes, 41943040 setores
+	[root@ol926ain1 ~]# fdisk -l | grep "Disk /dev/sd"
+	Disk /dev/sda: 59 GiB, 63350767616 bytes, 123731968 sectors
+	Disk /dev/sdb: 30 GiB, 32212254720 bytes, 62914560 sectors
+	Disk /dev/sdc: 30 GiB, 32212254720 bytes, 62914560 sectors
+	Disk /dev/sdd: 30 GiB, 32212254720 bytes, 62914560 sectors
+	Disk /dev/sde: 30 GiB, 32212254720 bytes, 62914560 sectors
+	Disk /dev/sdf: 30 GiB, 32212254720 bytes, 62914560 sectors
+	[root@ol926ain2 ~]# fdisk -l | grep "Disk /dev/sd"
+	Disk /dev/sda: 59 GiB, 63350767616 bytes, 123731968 sectors
+	Disk /dev/sdb: 30 GiB, 32212254720 bytes, 62914560 sectors
+	Disk /dev/sdc: 30 GiB, 32212254720 bytes, 62914560 sectors
+	Disk /dev/sdd: 30 GiB, 32212254720 bytes, 62914560 sectors
+	Disk /dev/sde: 30 GiB, 32212254720 bytes, 62914560 sectors
+	Disk /dev/sdf: 30 GiB, 32212254720 bytes, 62914560 sectors
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CREATE PARTITION ISCSI DISKS )
 
-    [root@ol926ain1 ~]# fdisk /dev/sda
-    n > p > 1 > w
     [root@ol926ain1 ~]# fdisk /dev/sdb
     n > p > 1 > w
     [root@ol926ain1 ~]# fdisk /dev/sdc
@@ -456,6 +452,8 @@
     [root@ol926ain1 ~]# fdisk /dev/sdd
     n > p > 1 > w
     [root@ol926ain1 ~]# fdisk /dev/sde
+    n > p > 1 > w
+    [root@ol926ain1 ~]# fdisk /dev/sdf
     n > p > 1 > w
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( GET ISCSI DISKS UUID )
