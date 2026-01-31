@@ -567,14 +567,14 @@
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( INSTALL CVU PACKAGE )
 
-    [root@ol926ain1 ~]# rpm -ivh /u01/app/23.7.0/grid/cv/rpm/cvuqdisk-1.0.10-1.rpm 
-    aviso: /u01/app/23.7.0/grid/cv/rpm/cvuqdisk-1.0.10-1.rpm: Cabeçalho V3 RSA/SHA256 Signature, ID da chave ad986da3: NOKEY
+    [root@ol926ain1 ~]# rpm -ivh /u01/app/23.26.1/grid/cv/rpm/cvuqdisk-1.0.10-1.rpm 
+    aviso: /u01/app/23.26.1/grid/cv/rpm/cvuqdisk-1.0.10-1.rpm: Cabeçalho V3 RSA/SHA256 Signature, ID da chave ad986da3: NOKEY
     Verifying...                          ################################# [100%]
     Preparando...                         ################################# [100%]
     Using default group oinstall to install package
     Updating / installing...
         1:cvuqdisk-1.0.10-1                ################################# [100%]
-    [root@ol926ain1 ~]# scp /u01/app/23.7.0/grid/cv/rpm/cvuqdisk-1.0.10-1.rpm root@ol926ain2:/root/
+    [root@ol926ain1 ~]# scp /u01/app/23.26.1/grid/cv/rpm/cvuqdisk-1.0.10-1.rpm root@ol926ain2:/root/
     [root@ol926ain1 ~]# ssh root@ol926ain2
     [root@ol926ain2 ~]# rpm -ivh cvuqdisk-1.0.10-1.rpm 
     aviso: cvuqdisk-1.0.10-1.rpm: Cabeçalho V3 RSA/SHA256 Signature, ID da chave ad986da3: NOKEY
@@ -588,7 +588,7 @@
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( RUNCLUVFY )
 
     [root@ol926ain1 ~]# su - grid
-    [grid@ol926ain1 ~]$ /u01/app/23.7.0/grid/runcluvfy.sh stage -pre crsinst -n ol926ain1,ol926ain2 -verbose -method root
+    [grid@ol926ain1 ~]$ /u01/app/23.26.1/grid/runcluvfy.sh stage -pre crsinst -n ol926ain1,ol926ain2 -verbose -method root
     Digite a senha de "ROOT":
 
     Performing following verification checks ...
