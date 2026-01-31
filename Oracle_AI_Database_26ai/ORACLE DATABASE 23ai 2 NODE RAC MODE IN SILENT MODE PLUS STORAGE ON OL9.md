@@ -556,14 +556,14 @@
     
 ###### COPY GRID INFRASTRUCTURE SOFTWARE
 
-    [root@exated Downloads]# scp p37370503_230000_Linux-x86-64.zip grid@192.168.18.121:/u01/app/23.7.0/grid
+    [root@exated Downloads]# scp V1054596-01.zip grid@192.168.18.121:/u01/app/23.26.1/grid
 
 ###### UNZIP GRID INFRASTRUCTURE SOFTWARE
 
     [root@ol926ain1 ~]# su - grid
-    [grid@ol926ain1 grid]$ cd /u01/app/23.7.0/grid/
-    [grid@ol926ain1 grid]$ unzip p37370503_230000_Linux-x86-64.zip
-    [grid@ol926ain1 grid]$ rm -vf p37370503_230000_Linux-x86-64.zip
+    [grid@ol926ain1 grid]$ cd /u01/app/23.26.1/grid/
+    [grid@ol926ain1 grid]$ unzip V1054596-01.zip
+    [grid@ol926ain1 grid]$ rm -vf V1054596-01.zip
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( INSTALL CVU PACKAGE )
 
