@@ -458,16 +458,16 @@
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( GET ISCSI DISKS UUID )
 
-    [root@ol926ain1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sda1 
-    36001405c2b1cd5d2f25490fa18a78e36
-    [root@ol926ain1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sdb1 
-    360014058c1b0ce71fe24475aa4139ecc
-    [root@ol926ain1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sdc1 
-    360014051c3e44ceaf57418fa35d05cb5
-    [root@ol926ain1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sdd1 
-    36001405e87d20fdda164e60bd17dac7d
-    [root@ol926ain1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sde1 
-    3600140590bc1307e3a44a679c89c7014
+	[root@ol926ain1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sdb1 
+	3600140530b1b516a4b546498ef061992
+	[root@ol926ain1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sdc1
+	36001405f9da5bf8739e46bd9b78d941b
+	[root@ol926ain1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sdd1 
+	36001405e56bcf503218482196cbd1ec3
+	[root@ol926ain1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sde1 
+	36001405a758b88d83ec49fc81d5f21b3
+	[root@ol926ain1 ~]# /usr/lib/udev/scsi_id -g -u -d /dev/sdf1
+	360014054b4639dcf64b494abb68561b9
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CREATE ASM DEVICES RULES )
 
