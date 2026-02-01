@@ -1086,62 +1086,62 @@
 	
 	checking response for name "ol926ain2" from each of the name servers specified in "/etc/resolv.conf"
 
-    Node Name     Source                    Comment                   Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2     192.168.18.43             IPv4                      passed    
+	    Node Name     Source                    Comment                   Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     192.168.18.43             IPv4                      passed    
 
-checking response for name "ol926ain1" from each of the name servers specified
-in "/etc/resolv.conf"
+	checking response for name "ol926ain1" from each of the name servers specified
+	in "/etc/resolv.conf"
+	
+		Node Name     Source                    Comment                   Status    
+		------------  ------------------------  ------------------------  ----------
+		ol926ain1     192.168.18.43             IPv4                      passed    
+	resolv.conf Integrity ...PASSED
+  	DNS/NIS name service ...PASSED
+  	Daemon "avahi-daemon" not configured and running ...
+	    Node Name     Configured                Status                  
+	    ------------  ------------------------  ------------------------
+	    ol926ain2     no                        passed                  
+	    ol926ain1     no                        passed                  
 
-    Node Name     Source                    Comment                   Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain1     192.168.18.43             IPv4                      passed    
-  resolv.conf Integrity ...PASSED
-  DNS/NIS name service ...PASSED
-  Daemon "avahi-daemon" not configured and running ...
-    Node Name     Configured                Status                  
-    ------------  ------------------------  ------------------------
-    ol926ain2     no                        passed                  
-    ol926ain1     no                        passed                  
+	    Node Name     Running?                  Status                  
+	    ------------  ------------------------  ------------------------
+	    ol926ain2     no                        passed                  
+	    ol926ain1     no                        passed                  
+	Daemon "avahi-daemon" not configured and running ...PASSED
+	Daemon "proxyt" not configured and running ...
+	    Node Name     Configured                Status                  
+	    ------------  ------------------------  ------------------------
+	    ol926ain2     no                        passed                  
+	    ol926ain1     no                        passed                  
 
-    Node Name     Running?                  Status                  
-    ------------  ------------------------  ------------------------
-    ol926ain2     no                        passed                  
-    ol926ain1     no                        passed                  
-  Daemon "avahi-daemon" not configured and running ...PASSED
-  Daemon "proxyt" not configured and running ...
-    Node Name     Configured                Status                  
-    ------------  ------------------------  ------------------------
-    ol926ain2     no                        passed                  
-    ol926ain1     no                        passed                  
-
-    Node Name     Running?                  Status                  
-    ------------  ------------------------  ------------------------
-    ol926ain2     no                        passed                  
-    ol926ain1     no                        passed                  
-  Daemon "proxyt" not configured and running ...PASSED
-  Domain Sockets ...PASSED
-  User Equivalence ...PASSED
-  RPM Package Manager database ...PASSED
-  Maximum locked memory check ...PASSED
-  /dev/shm mounted as temporary file system ...PASSED
-  File system mount option hidepid for proc filesystem ...PASSED
-  SCP binary check ...PASSED
-  Systemd login manager IPC parameter ...PASSED
-  cgroup OS compatibility ...PASSED
-  ORAchk health score ...INFORMATION (PRVH-1507)
-
-Pre-check for cluster services setup was successful. 
-ORAchk health score ...INFORMATION
-PRVH-1507 : ORAchk/EXAchk checks are skipped.
+	    Node Name     Running?                  Status                  
+	    ------------  ------------------------  ------------------------
+	    ol926ain2     no                        passed                  
+	    ol926ain1     no                        passed                  
+	Daemon "proxyt" not configured and running ...PASSED
+	Domain Sockets ...PASSED
+	User Equivalence ...PASSED
+	RPM Package Manager database ...PASSED
+	Maximum locked memory check ...PASSED
+	/dev/shm mounted as temporary file system ...PASSED
+	File system mount option hidepid for proc filesystem ...PASSED
+	SCP binary check ...PASSED
+	Systemd login manager IPC parameter ...PASSED
+	cgroup OS compatibility ...PASSED
+	ORAchk health score ...INFORMATION (PRVH-1507)
+	
+	Pre-check for cluster services setup was successful. 
+	ORAchk health score ...INFORMATION
+	PRVH-1507 : ORAchk/EXAchk checks are skipped.
 
 
-CVU operation performed:      stage -pre crsinst
-Date:                         Feb 1, 2026, 11:54:41 AM
-CVU version:                  23.26.1.0.0 (010926x8664)
-CVU home:                     /u01/app/23.26.1/grid
-User:                         grid
-Operating system:             Linux6.12.0-105.51.5.el9uek.x86_64
+	CVU operation performed:      stage -pre crsinst
+	Date:                         Feb 1, 2026, 11:54:41 AM
+	CVU version:                  23.26.1.0.0 (010926x8664)
+	CVU home:                     /u01/app/23.26.1/grid
+	User:                         grid
+	Operating system:             Linux6.12.0-105.51.5.el9uek.x86_64
 
 ###### CREATE RESPONSE FILE ( GRID.RSP )
 
