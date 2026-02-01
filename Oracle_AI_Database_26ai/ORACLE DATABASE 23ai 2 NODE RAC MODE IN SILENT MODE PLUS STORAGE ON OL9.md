@@ -833,259 +833,258 @@
 	  OS Kernel Parameter: rmem_default ...PASSED
 	  OS Kernel Parameter: rmem_max ...
 	    Node Name         Current       Configured    Required      Status        Comment     
-    ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1         4194304       4194304       4194304       passed      
-    ol926ain2         4194304       4194304       4194304       passed      
-  OS Kernel Parameter: rmem_max ...PASSED
-  OS Kernel Parameter: wmem_default ...
-    Node Name         Current       Configured    Required      Status        Comment     
-    ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1         262144        262144        262144        passed      
-    ol926ain2         262144        262144        262144        passed      
-  OS Kernel Parameter: wmem_default ...PASSED
-  OS Kernel Parameter: wmem_max ...
-    Node Name         Current       Configured    Required      Status        Comment     
-    ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1         1048576       1048576       1048576       passed      
-    ol926ain2         1048576       1048576       1048576       passed      
-  OS Kernel Parameter: wmem_max ...PASSED
-  OS Kernel Parameter: aio-max-nr ...
-    Node Name         Current       Configured    Required      Status        Comment     
-    ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1         1048576       1048576       1048576       passed      
-    ol926ain2         1048576       1048576       1048576       passed      
-  OS Kernel Parameter: aio-max-nr ...PASSED
-  OS Kernel Parameter: panic_on_oops ...
-    Node Name         Current       Configured    Required      Status        Comment     
-    ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1         1             1             1             passed      
-    ol926ain2         1             1             1             passed      
-  OS Kernel Parameter: panic_on_oops ...PASSED
-  OS Kernel Parameter: kernel.panic ...
-    Node Name         Current       Configured    Required      Status        Comment     
-    ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1         10            10            at least 1    passed      
-    ol926ain2         10            10            at least 1    passed      
-  OS Kernel Parameter: kernel.panic ...PASSED
-  Package: binutils-2.35.2 ...
-    Node Name     Available                 Required                  Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2     binutils-2.35.2-67.0.1.el9  binutils-2.35.2           passed    
-    ol926ain1     binutils-2.35.2-67.0.1.el9  binutils-2.35.2           passed    
-  Package: binutils-2.35.2 ...PASSED
-  Package: compat-openssl11-1.1.1 (x86_64) ...
-    Node Name     Available                 Required                  Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2     compat-openssl11(x86_64)-1.1.1k-5.el9_6.1  compat-openssl11(x86_64)-1.1.1  passed    
-    ol926ain1     compat-openssl11(x86_64)-1.1.1k-5.el9_6.1  compat-openssl11(x86_64)-1.1.1  passed    
-  Package: compat-openssl11-1.1.1 (x86_64) ...PASSED
-  Package: fontconfig-2.14.0 (x86_64) ...
-    Node Name     Available                 Required                  Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2     fontconfig(x86_64)-2.14.0-2.el9_1  fontconfig(x86_64)-2.14.0  passed    
-    ol926ain1     fontconfig(x86_64)-2.14.0-2.el9_1  fontconfig(x86_64)-2.14.0  passed    
-  Package: fontconfig-2.14.0 (x86_64) ...PASSED
-  Package: libxcrypt-compat-4.4.18 ...
-    Node Name     Available                 Required                  Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2     libxcrypt-compat-4.4.18-3.el9  libxcrypt-compat-4.4.18   passed    
-    ol926ain1     libxcrypt-compat-4.4.18-3.el9  libxcrypt-compat-4.4.18   passed    
-  Package: libxcrypt-compat-4.4.18 ...PASSED
-  Package: libgcc-11.3.1 (x86_64) ...
-    Node Name     Available                 Required                  Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2     libgcc(x86_64)-11.5.0-11.0.1.el9  libgcc(x86_64)-11.3.1     passed    
-    ol926ain1     libgcc(x86_64)-11.5.0-11.0.1.el9  libgcc(x86_64)-11.3.1     passed    
-  Package: libgcc-11.3.1 (x86_64) ...PASSED
-  Package: libstdc++-11.3.1 (x86_64) ...
-    Node Name     Available                 Required                  Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2     libstdc++(x86_64)-11.5.0-11.0.1.el9  libstdc++(x86_64)-11.3.1  passed    
-    ol926ain1     libstdc++(x86_64)-11.5.0-11.0.1.el9  libstdc++(x86_64)-11.3.1  passed    
-  Package: libstdc++-11.3.1 (x86_64) ...PASSED
-  Package: sysstat-12.5.4 ...
-    Node Name     Available                 Required                  Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2     sysstat-12.5.4-9.0.2.el9  sysstat-12.5.4            passed    
-    ol926ain1     sysstat-12.5.4-9.0.2.el9  sysstat-12.5.4            passed    
-  Package: sysstat-12.5.4 ...PASSED
-  Package: make-4.3 ...
-    Node Name     Available                 Required                  Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2     make-4.3-8.el9            make-4.3                  passed    
-    ol926ain1     make-4.3-8.el9            make-4.3                  passed    
-  Package: make-4.3 ...PASSED
-  Package: glibc-2.34 (x86_64) ...
-    Node Name     Available                 Required                  Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2     glibc(x86_64)-2.34-231.0.1.el9  glibc(x86_64)-2.34        passed    
-    ol926ain1     glibc(x86_64)-2.34-231.0.1.el9  glibc(x86_64)-2.34        passed    
-  Package: glibc-2.34 (x86_64) ...PASSED
-  Package: glibc-devel-2.34 (x86_64) ...
-    Node Name     Available                 Required                  Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2     glibc-devel(x86_64)-2.34-231.0.1.el9  glibc-devel(x86_64)-2.34  passed    
-    ol926ain1     glibc-devel(x86_64)-2.34-231.0.1.el9  glibc-devel(x86_64)-2.34  passed    
-  Package: glibc-devel-2.34 (x86_64) ...PASSED
-  Package: libaio-0.3.111 (x86_64) ...
-    Node Name     Available                 Required                  Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2     libaio(x86_64)-0.3.111-13.el9  libaio(x86_64)-0.3.111    passed    
-    ol926ain1     libaio(x86_64)-0.3.111-13.el9  libaio(x86_64)-0.3.111    passed    
-  Package: libaio-0.3.111 (x86_64) ...PASSED
-  Package: nfs-utils-2.5.4 ...
-    Node Name     Available                 Required                  Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2     nfs-utils-2.5.4-38.0.1.el9  nfs-utils-2.5.4           passed    
-    ol926ain1     nfs-utils-2.5.4-38.0.1.el9  nfs-utils-2.5.4           passed    
-  Package: nfs-utils-2.5.4 ...PASSED
-  Package: smartmontools-7.2-6 ...
-    Node Name     Available                 Required                  Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2     smartmontools-7.2-9.el9   smartmontools-7.2-6       passed    
-    ol926ain1     smartmontools-7.2-9.el9   smartmontools-7.2-6       passed    
-  Package: smartmontools-7.2-6 ...PASSED
-  Package: net-tools-2.0-0.62 ...
-    Node Name     Available                 Required                  Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2     net-tools-2.0-0.64.20160912git.el9  net-tools-2.0-0.62        passed    
-    ol926ain1     net-tools-2.0-0.64.20160912git.el9  net-tools-2.0-0.62        passed    
-  Package: net-tools-2.0-0.62 ...PASSED
-  Package: policycoreutils-3.5-1 ...
-    Node Name     Available                 Required                  Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2     policycoreutils-3.6-3.el9  policycoreutils-3.5-1     passed    
-    ol926ain1     policycoreutils-3.6-3.el9  policycoreutils-3.5-1     passed    
-  Package: policycoreutils-3.5-1 ...PASSED
-  Package: policycoreutils-python-utils-3.5-1 ...
-    Node Name     Available                 Required                  Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2     policycoreutils-python-utils-3.6-3.el9  policycoreutils-python-utils-3.5-1  passed    
-    ol926ain1     policycoreutils-python-utils-3.6-3.el9  policycoreutils-python-utils-3.5-1  passed    
-  Package: policycoreutils-python-utils-3.5-1 ...PASSED
-  Users With Same UID: 0 ...PASSED
-  Current Group ID ...PASSED
-  Root user consistency ...
-    Node Name                             Status                  
-    ------------------------------------  ------------------------
-    ol926ain2                             passed                  
-    ol926ain1                             passed                  
-  Root user consistency ...PASSED
-  Package: psmisc-22.6-19 ...
-    Node Name     Available                 Required                  Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2     psmisc-23.4-3.el9         psmisc-22.6-19            passed    
-    ol926ain1     psmisc-23.4-3.el9         psmisc-22.6-19            passed    
-  Package: psmisc-22.6-19 ...PASSED
-  Host name ...PASSED
-  Node Connectivity ...
-    Hosts File ...
-    Node Name                             Status                  
-    ------------------------------------  ------------------------
-    ol926ain1                             passed                  
-    ol926ain2                             passed                  
-    Hosts File ...PASSED
+	    ----------------  ------------  ------------  ------------  ------------  ------------
+	    ol926ain1         4194304       4194304       4194304       passed      
+	    ol926ain2         4194304       4194304       4194304       passed      
+	  OS Kernel Parameter: rmem_max ...PASSED
+	  OS Kernel Parameter: wmem_default ...
+	    Node Name         Current       Configured    Required      Status        Comment     
+	    ----------------  ------------  ------------  ------------  ------------  ------------
+	    ol926ain1         262144        262144        262144        passed      
+	    ol926ain2         262144        262144        262144        passed      
+	  OS Kernel Parameter: wmem_default ...PASSED
+	  OS Kernel Parameter: wmem_max ...
+    	Node Name         Current       Configured    Required      Status        Comment     
+	    ----------------  ------------  ------------  ------------  ------------  ------------
+	    ol926ain1         1048576       1048576       1048576       passed      
+	    ol926ain2         1048576       1048576       1048576       passed      
+	  OS Kernel Parameter: wmem_max ...PASSED
+	  OS Kernel Parameter: aio-max-nr ...
+	    Node Name         Current       Configured    Required      Status        Comment     
+	    ----------------  ------------  ------------  ------------  ------------  ------------
+	    ol926ain1         1048576       1048576       1048576       passed      
+	    ol926ain2         1048576       1048576       1048576       passed      
+	  OS Kernel Parameter: aio-max-nr ...PASSED
+	  OS Kernel Parameter: panic_on_oops ...
+	    Node Name         Current       Configured    Required      Status        Comment     
+	    ----------------  ------------  ------------  ------------  ------------  ------------
+	    ol926ain1         1             1             1             passed      
+	    ol926ain2         1             1             1             passed      
+	  OS Kernel Parameter: panic_on_oops ...PASSED
+	  OS Kernel Parameter: kernel.panic ...
+	    Node Name         Current       Configured    Required      Status        Comment     
+	    ----------------  ------------  ------------  ------------  ------------  ------------
+	    ol926ain1         10            10            at least 1    passed      
+	    ol926ain2         10            10            at least 1    passed      
+	  OS Kernel Parameter: kernel.panic ...PASSED
+	  Package: binutils-2.35.2 ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     binutils-2.35.2-67.0.1.el9  binutils-2.35.2           passed    
+	    ol926ain1     binutils-2.35.2-67.0.1.el9  binutils-2.35.2           passed    
+	  Package: binutils-2.35.2 ...PASSED
+	  Package: compat-openssl11-1.1.1 (x86_64) ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     compat-openssl11(x86_64)-1.1.1k-5.el9_6.1  compat-openssl11(x86_64)-1.1.1  passed    
+	    ol926ain1     compat-openssl11(x86_64)-1.1.1k-5.el9_6.1  compat-openssl11(x86_64)-1.1.1  passed    
+	  Package: compat-openssl11-1.1.1 (x86_64) ...PASSED
+	  Package: fontconfig-2.14.0 (x86_64) ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     fontconfig(x86_64)-2.14.0-2.el9_1  fontconfig(x86_64)-2.14.0  passed    
+	    ol926ain1     fontconfig(x86_64)-2.14.0-2.el9_1  fontconfig(x86_64)-2.14.0  passed    
+	  Package: fontconfig-2.14.0 (x86_64) ...PASSED
+	  Package: libxcrypt-compat-4.4.18 ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     libxcrypt-compat-4.4.18-3.el9  libxcrypt-compat-4.4.18   passed    
+	    ol926ain1     libxcrypt-compat-4.4.18-3.el9  libxcrypt-compat-4.4.18   passed    
+	  Package: libxcrypt-compat-4.4.18 ...PASSED
+	  Package: libgcc-11.3.1 (x86_64) ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     libgcc(x86_64)-11.5.0-11.0.1.el9  libgcc(x86_64)-11.3.1     passed    
+	    ol926ain1     libgcc(x86_64)-11.5.0-11.0.1.el9  libgcc(x86_64)-11.3.1     passed    
+	  Package: libgcc-11.3.1 (x86_64) ...PASSED
+	  Package: libstdc++-11.3.1 (x86_64) ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     libstdc++(x86_64)-11.5.0-11.0.1.el9  libstdc++(x86_64)-11.3.1  passed    
+	    ol926ain1     libstdc++(x86_64)-11.5.0-11.0.1.el9  libstdc++(x86_64)-11.3.1  passed    
+	  Package: libstdc++-11.3.1 (x86_64) ...PASSED
+	  Package: sysstat-12.5.4 ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     sysstat-12.5.4-9.0.2.el9  sysstat-12.5.4            passed    
+	    ol926ain1     sysstat-12.5.4-9.0.2.el9  sysstat-12.5.4            passed    
+	  Package: sysstat-12.5.4 ...PASSED
+	  Package: make-4.3 ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     make-4.3-8.el9            make-4.3                  passed    
+	    ol926ain1     make-4.3-8.el9            make-4.3                  passed    
+	  Package: make-4.3 ...PASSED
+	  Package: glibc-2.34 (x86_64) ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     glibc(x86_64)-2.34-231.0.1.el9  glibc(x86_64)-2.34        passed    
+	    ol926ain1     glibc(x86_64)-2.34-231.0.1.el9  glibc(x86_64)-2.34        passed    
+	  Package: glibc-2.34 (x86_64) ...PASSED
+	  Package: glibc-devel-2.34 (x86_64) ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     glibc-devel(x86_64)-2.34-231.0.1.el9  glibc-devel(x86_64)-2.34  passed    
+	    ol926ain1     glibc-devel(x86_64)-2.34-231.0.1.el9  glibc-devel(x86_64)-2.34  passed    
+	  Package: glibc-devel-2.34 (x86_64) ...PASSED
+	  Package: libaio-0.3.111 (x86_64) ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     libaio(x86_64)-0.3.111-13.el9  libaio(x86_64)-0.3.111    passed    
+	    ol926ain1     libaio(x86_64)-0.3.111-13.el9  libaio(x86_64)-0.3.111    passed    
+	  Package: libaio-0.3.111 (x86_64) ...PASSED
+	  Package: nfs-utils-2.5.4 ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     nfs-utils-2.5.4-38.0.1.el9  nfs-utils-2.5.4           passed    
+	    ol926ain1     nfs-utils-2.5.4-38.0.1.el9  nfs-utils-2.5.4           passed    
+	  Package: nfs-utils-2.5.4 ...PASSED
+	  Package: smartmontools-7.2-6 ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     smartmontools-7.2-9.el9   smartmontools-7.2-6       passed    
+	    ol926ain1     smartmontools-7.2-9.el9   smartmontools-7.2-6       passed    
+	  Package: smartmontools-7.2-6 ...PASSED
+	  Package: net-tools-2.0-0.62 ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     net-tools-2.0-0.64.20160912git.el9  net-tools-2.0-0.62        passed    
+	    ol926ain1     net-tools-2.0-0.64.20160912git.el9  net-tools-2.0-0.62        passed    
+	  Package: net-tools-2.0-0.62 ...PASSED
+	  Package: policycoreutils-3.5-1 ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     policycoreutils-3.6-3.el9  policycoreutils-3.5-1     passed    
+	    ol926ain1     policycoreutils-3.6-3.el9  policycoreutils-3.5-1     passed    
+	  Package: policycoreutils-3.5-1 ...PASSED
+	  Package: policycoreutils-python-utils-3.5-1 ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     policycoreutils-python-utils-3.6-3.el9  policycoreutils-python-utils-3.5-1  passed    
+	    ol926ain1     policycoreutils-python-utils-3.6-3.el9  policycoreutils-python-utils-3.5-1  passed    
+	  Package: policycoreutils-python-utils-3.5-1 ...PASSED
+	  Users With Same UID: 0 ...PASSED
+	  Current Group ID ...PASSED
+	  Root user consistency ...
+	    Node Name                             Status                  
+	    ------------------------------------  ------------------------
+	    ol926ain2                             passed                  
+	    ol926ain1                             passed                  
+	  Root user consistency ...PASSED
+	  Package: psmisc-22.6-19 ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     psmisc-23.4-3.el9         psmisc-22.6-19            passed    
+	    ol926ain1     psmisc-23.4-3.el9         psmisc-22.6-19            passed    
+	  Package: psmisc-22.6-19 ...PASSED
+	  Host name ...PASSED
+	  Node Connectivity ...
+	    Hosts File ...
+	    Node Name                             Status                  
+	    ------------------------------------  ------------------------
+	    ol926ain1                             passed                  
+	    ol926ain2                             passed                  
+	    Hosts File ...PASSED
+	
+	Interface information for node "ol926ain2"
+	
+		Name   IP Address      Subnet          Gateway         Def. Gateway    HW Address        MTU   
+		------ --------------- --------------- --------------- --------------- ----------------- ------
+		ens3   192.168.18.122  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:B7:46:01 1500  
+		ens5   192.168.100.102 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:C2:F7:E6 1500  
+	
+	Interface information for node "ol926ain1"
+	
+		Name   IP Address      Subnet          Gateway         Def. Gateway    HW Address        MTU   
+		------ --------------- --------------- --------------- --------------- ----------------- ------
+		ens3   192.168.18.121  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:85:AB:D0 1500  
+		ens5   192.168.100.101 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:EE:2F:B4 1500  
+	
+	Check: MTU consistency of the subnet "192.168.18.0".
+	
+		Node              Name          IP Address    Subnet        MTU             
+		----------------  ------------  ------------  ------------  ----------------
+		ol926ain2         ens3          192.168.18.122  192.168.18.0  1500            
+		ol926ain1         ens3          192.168.18.121  192.168.18.0  1500            
 
-Interface information for node "ol926ain2"
+	Check: MTU consistency of the subnet "192.168.100.0".
 
-  Name   IP Address      Subnet          Gateway         Def. Gateway    HW Address        MTU   
-  ------ --------------- --------------- --------------- --------------- ----------------- ------
-  ens3   192.168.18.122  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:B7:46:01 1500  
-  ens5   192.168.100.102 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:C2:F7:E6 1500  
+		Node              Name          IP Address    Subnet        MTU             
+		----------------  ------------  ------------  ------------  ----------------
+		ol926ain2         ens5          192.168.100.102  192.168.100.0  1500            
+		ol926ain1         ens5          192.168.100.101  192.168.100.0  1500            
 
-Interface information for node "ol926ain1"
+	 	Source                      Destination                 Connected?                
+		--------------------------  --------------------------  --------------------------
+		ol926ain1[ens3:192.168.18.121]  ol926ain2[ens3:192.168.18.122]  yes                       
 
-  Name   IP Address      Subnet          Gateway         Def. Gateway    HW Address        MTU   
-  ------ --------------- --------------- --------------- --------------- ----------------- ------
-  ens3   192.168.18.121  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:85:AB:D0 1500  
-  ens5   192.168.100.101 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:EE:2F:B4 1500  
+     	Source                      Destination                 Connected?                
+	 	--------------------------  --------------------------  --------------------------
+		ol926ain1[ens5:192.168.100.101]  ol926ain2[ens5:192.168.100.102]  yes                       
+		Check that maximum (MTU) size packet goes through subnet ...PASSED
+		subnet mask consistency for subnet "192.168.18.0" ...PASSED
+		subnet mask consistency for subnet "192.168.100.0" ...PASSED
+		Node Connectivity ...PASSED
+		Multicast or broadcast check ...
+		Checking subnet "192.168.18.0" for multicast communication with multicast
+		group "224.0.0.251"
 
-Check: MTU consistency of the subnet "192.168.18.0".
+		Subnet        Network Type              Multicast Enabled       	
+		------------  ------------------------  ------------------------
+		192.168.18.0  PRIVATE                   TRUE                    
+		Multicast or broadcast check ...PASSED
+		ASMLib installation and configuration verification. ...
+		'/etc/init.d/oracleasm' ...PASSED
+		'/dev/oracleasm' ...PASSED
 
-    Node              Name          IP Address    Subnet        MTU             
-    ----------------  ------------  ------------  ------------  ----------------
-    ol926ain2         ens3          192.168.18.122  192.168.18.0  1500            
-    ol926ain1         ens3          192.168.18.121  192.168.18.0  1500            
+    	Node Name                             Status                  
+    	------------------------------------  ------------------------
+    	ol926ain1                             passed                  
+      	ol926ain2                             passed                  
+	  	ASMLib installation and configuration verification. ...PASSED
+	  	Network Time Protocol (NTP) ...
+    	Daemon 'chronyd' ...
+		Node Name                             Running?                
+ 		------------------------------------  ------------------------
+	 	ol926ain2                             yes                     
+  		ol926ain1                             yes                     
 
-Check: MTU consistency of the subnet "192.168.100.0".
+	    Daemon 'chronyd' ...PASSED
+	    NTP daemon or service using UDP port 123 ...
+		Node Name                             Port Open?              
+		------------------------------------  ------------------------
+  		ol926ain2                             yes                     
+  		ol926ain1                             yes                     
 
-    Node              Name          IP Address    Subnet        MTU             
-    ----------------  ------------  ------------  ------------  ----------------
-    ol926ain2         ens5          192.168.100.102  192.168.100.0  1500            
-    ol926ain1         ens5          192.168.100.101  192.168.100.0  1500            
-
-    Source                      Destination                 Connected?                
-    --------------------------  --------------------------  --------------------------
-    ol926ain1[ens3:192.168.18.121]  ol926ain2[ens3:192.168.18.122]  yes                       
-
-    Source                      Destination                 Connected?                
-    --------------------------  --------------------------  --------------------------
-    ol926ain1[ens5:192.168.100.101]  ol926ain2[ens5:192.168.100.102]  yes                       
-    Check that maximum (MTU) size packet goes through subnet ...PASSED
-    subnet mask consistency for subnet "192.168.18.0" ...PASSED
-    subnet mask consistency for subnet "192.168.100.0" ...PASSED
-  Node Connectivity ...PASSED
-  Multicast or broadcast check ...
-    Checking subnet "192.168.18.0" for multicast communication with multicast
-    group "224.0.0.251"
-
-    Subnet        Network Type              Multicast Enabled       
-    ------------  ------------------------  ------------------------
-    192.168.18.0  PRIVATE                   TRUE                    
-  Multicast or broadcast check ...PASSED
-  ASMLib installation and configuration verification. ...
-    '/etc/init.d/oracleasm' ...PASSED
-    '/dev/oracleasm' ...PASSED
-
-    Node Name                             Status                  
-    ------------------------------------  ------------------------
-    ol926ain1                             passed                  
-    ol926ain2                             passed                  
-  ASMLib installation and configuration verification. ...PASSED
-  Network Time Protocol (NTP) ...
-    Daemon 'chronyd' ...
-  Node Name                             Running?                
-  ------------------------------------  ------------------------
-  ol926ain2                             yes                     
-  ol926ain1                             yes                     
-
-    Daemon 'chronyd' ...PASSED
-    NTP daemon or service using UDP port 123 ...
-  Node Name                             Port Open?              
-  ------------------------------------  ------------------------
-  ol926ain2                             yes                     
-  ol926ain1                             yes                     
-
-    NTP daemon or service using UDP port 123 ...PASSED
-    chrony daemon is synchronized with at least one external time source ...PASSED
-  Network Time Protocol (NTP) ...PASSED
-  Same core file name pattern ...PASSED
-  User Mask ...
-    Node Name     Available                 Required                  Comment   
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2     0022                      0022                      passed    
-    ol926ain1     0022                      0022                      passed    
-  User Mask ...PASSED
-  User Not In Group "root": grid ...
-    Node Name     Status                    Comment                 
-    ------------  ------------------------  ------------------------
-    ol926ain2     passed                    does not exist          
-    ol926ain1     passed                    does not exist          
-  User Not In Group "root": grid ...PASSED
-  Time zone consistency ...PASSED
-  Path existence, ownership, permissions and attributes ...
-    Path "/var" ...PASSED
-    Path "/dev/shm" ...PASSED
-  Path existence, ownership, permissions and attributes ...PASSED
-  Time offset between nodes ...PASSED
-  resolv.conf Integrity ...
-    Node Name                             Status                  
-    ------------------------------------  ------------------------
-    ol926ain1                             passed                  
-    ol926ain2                             passed                  
-
-checking response for name "ol926ain2" from each of the name servers specified
-in "/etc/resolv.conf"
+	    NTP daemon or service using UDP port 123 ...PASSED
+	    chrony daemon is synchronized with at least one external time source ...PASSED
+	  Network Time Protocol (NTP) ...PASSED
+	  Same core file name pattern ...PASSED
+	  User Mask ...
+	    Node Name     Available                 Required                  Comment   
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     0022                      0022                      passed    
+	    ol926ain1     0022                      0022                      passed    
+	  User Mask ...PASSED
+	  User Not In Group "root": grid ...
+	    Node Name     Status                    Comment                 
+	    ------------  ------------------------  ------------------------
+	    ol926ain2     passed                    does not exist          
+	    ol926ain1     passed                    does not exist          
+	  User Not In Group "root": grid ...PASSED
+	  Time zone consistency ...PASSED
+	  Path existence, ownership, permissions and attributes ...
+	    Path "/var" ...PASSED
+	    Path "/dev/shm" ...PASSED
+	  Path existence, ownership, permissions and attributes ...PASSED
+	  Time offset between nodes ...PASSED
+	  resolv.conf Integrity ...
+	    Node Name                             Status                  
+	    ------------------------------------  ------------------------
+	    ol926ain1                             passed                  
+	    ol926ain2                             passed                  
+	
+	checking response for name "ol926ain2" from each of the name servers specified in "/etc/resolv.conf"
 
     Node Name     Source                    Comment                   Status    
     ------------  ------------------------  ------------------------  ----------
