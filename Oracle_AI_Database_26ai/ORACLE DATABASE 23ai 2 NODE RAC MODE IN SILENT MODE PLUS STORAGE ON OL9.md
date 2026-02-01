@@ -18,9 +18,9 @@
     kvm-clock
     [root@ol926ain1 ~]# cat /sys/devices/system/clocksource/clocksource0/available_clocksource
     kvm-clock tsc acpi_pm 
-    [root@ol926ain1 ~]# vi /sys/devices/system/clocksource/clocksource0/current_clocksource
+    [root@ol926ain1 ~]# echo "tsc" > /sys/devices/system/clocksource/clocksource0/current_clocksource
     tsc
-    [root@ol926ain2 ~]# vi /sys/devices/system/clocksource/clocksource0/current_clocksource
+    [root@ol926ain2 ~]# echo "tsc" >  /sys/devices/system/clocksource/clocksource0/current_clocksource
     tsc
 
 ###### SET ON /etc/fstab TMPFS PARTITION
