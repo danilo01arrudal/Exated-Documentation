@@ -204,24 +204,72 @@
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( SECURITY LIMITS )
 
     [root@ol926ain1 ~]# cat <<EOF >> /etc/security/limits.conf
-    *    hard    nofile     327680
-    *    soft    nofile     262144
-    *    hard    nproc      327680
-    *    soft    nproc      262144
-    *    hard    memlock    3145728
-    *    soft    memlock    3145728
-    *    hard    stack      16384
-    *    soft    stack      10240
+	# oracle-ai-database-preinstall-26ai setting for nofile soft limit is 1024
+	oracle		soft	nofile		1024
+	grid		soft	nofile    	1024
+	# oracle-ai-database-preinstall-26ai setting for nofile hard limit is 65536
+	oracle		hard	nofile		65536
+	grid		hard	nofile    	65536
+	# oracle-ai-database-preinstall-26ai setting for nproc soft limit is 16384
+	# refer orabug15971421 for more info.
+	oracle		soft	nproc		16384
+	grid		soft	nproc		16384
+	# oracle-ai-database-preinstall-26ai setting for nproc hard limit is 16384
+	oracle		hard	nproc		16384
+	grid		hard	nproc		16384 
+	# oracle-ai-database-preinstall-26ai setting for stack soft limit is 10240KB
+	oracle		soft	stack		10240
+	grid		soft	stack		10240
+	# oracle-ai-database-preinstall-26ai setting for stack hard limit is 32768KB
+	oracle		hard	stack		32768
+	grid		hard	stack		32768
+	# oracle-ai-database-preinstall-26ai setting for memlock hard limit is maximum of 128GB on x86_64 or 3GB on x86 OR 90 % of RAM
+	oracle		hard	memlock		134217728
+	grid		hard	memlock		134217728
+	# oracle-ai-database-preinstall-26ai setting for memlock soft limit is maximum of 128GB on x86_64 or 3GB on x86 OR 90% of RAM
+	oracle		soft	memlock		134217728
+	grid		soft    memlock         134217728
+	# oracle-ai-database-preinstall-26ai setting for data soft limit is 'unlimited'
+	oracle		soft	data		unlimited
+	grid		soft    data            unlimited
+	# oracle-ai-database-preinstall-26ai setting for data hard limit is 'unlimited'
+	oracle		hard	data		unlimited
+	grid		hard	data		unlimited
+	# End of file
     EOF
     [root@ol926ain2 ~]# cat <<EOF >> /etc/security/limits.conf
-    *    hard    nofile     327680
-    *    soft    nofile     262144
-    *    hard    nproc      327680
-    *    soft    nproc      262144
-    *    hard    memlock    3145728
-    *    soft    memlock    3145728
-    *    hard    stack      16384
-    *    soft    stack      10240
+	# oracle-ai-database-preinstall-26ai setting for nofile soft limit is 1024
+	oracle		soft	nofile		1024
+	grid		soft	nofile    	1024
+	# oracle-ai-database-preinstall-26ai setting for nofile hard limit is 65536
+	oracle		hard	nofile		65536
+	grid		hard	nofile    	65536
+	# oracle-ai-database-preinstall-26ai setting for nproc soft limit is 16384
+	# refer orabug15971421 for more info.
+	oracle		soft	nproc		16384
+	grid		soft	nproc		16384
+	# oracle-ai-database-preinstall-26ai setting for nproc hard limit is 16384
+	oracle		hard	nproc		16384
+	grid		hard	nproc		16384 
+	# oracle-ai-database-preinstall-26ai setting for stack soft limit is 10240KB
+	oracle		soft	stack		10240
+	grid		soft	stack		10240
+	# oracle-ai-database-preinstall-26ai setting for stack hard limit is 32768KB
+	oracle		hard	stack		32768
+	grid		hard	stack		32768
+	# oracle-ai-database-preinstall-26ai setting for memlock hard limit is maximum of 128GB on x86_64 or 3GB on x86 OR 90 % of RAM
+	oracle		hard	memlock		134217728
+	grid		hard	memlock		134217728
+	# oracle-ai-database-preinstall-26ai setting for memlock soft limit is maximum of 128GB on x86_64 or 3GB on x86 OR 90% of RAM
+	oracle		soft	memlock		134217728
+	grid		soft    memlock         134217728
+	# oracle-ai-database-preinstall-26ai setting for data soft limit is 'unlimited'
+	oracle		soft	data		unlimited
+	grid		soft    data            unlimited
+	# oracle-ai-database-preinstall-26ai setting for data hard limit is 'unlimited'
+	oracle		hard	data		unlimited
+	grid		hard	data		unlimited
+	# End of file
     EOF
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CREATE USERS )
