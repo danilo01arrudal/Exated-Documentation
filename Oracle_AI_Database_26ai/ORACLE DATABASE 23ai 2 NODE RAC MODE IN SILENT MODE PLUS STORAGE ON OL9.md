@@ -636,482 +636,513 @@
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( RUNCLUVFY )
 
     [root@ol926ain1 ~]# su - grid
-    [grid@ol926ain1 ~]$ /u01/app/23.26.1/grid/runcluvfy.sh stage -pre crsinst -n ol926ain1,ol926ain2 -verbose -method root
-    Digite a senha de "ROOT":
+	[grid@ol926ain1 ~]$ /u01/app/23.26.1/grid/runcluvfy.sh stage -pre crsinst -n ol926ain1,ol926ain2 -verbose -method root 
+	Enter "ROOT" password:
 
-    Performing following verification checks ...
+	Initializing ...
 
-    Memória Física ...
-    Nome do Nó    Disponível                Necessário                Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2         7,7478GB (8124168.0KB)    8GB (8388608.0KB)         aprovado  
-    ol926ain1         7,7478GB (8124160.0KB)    8GB (8388608.0KB)         aprovado  
-    Memória Física ...APROVADO
-    Memória Física Disponível ...
-    Nome do Nó    Disponível                Necessário                Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2         7,3125GB (7667700.0KB)    50MB (51200.0KB)          aprovado  
-    ol926ain1         7,0345GB (7376172.0KB)    50MB (51200.0KB)          aprovado  
-    Memória Física Disponível ...APROVADO
-    Tamanho de Swap ...
-    Nome do Nó    Disponível                Necessário                Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2         8GB (8388604.0KB)         7,7478GB (8124168.0KB)    aprovado  
-    ol926ain1         8GB (8388604.0KB)         7,7478GB (8124160.0KB)    aprovado  
-    Tamanho de Swap ...APROVADO
-    Espaço Livre: ol926ain2:/usr,ol926ain2:/var,ol926ain2:/etc,ol926ain2:/sbin,ol926ain2:/tmp ...
-    Caminho           Nome do Nó    Ponto de montagem  Disponível    Necessário    Status      
-    ----------------  ------------  ------------  ------------  ------------  ------------
-    /usr              ol926ain2         /             42,4229GB     25MB          aprovado    
-    /var              ol926ain2         /             42,4229GB     5MB           aprovado    
-    /etc              ol926ain2         /             42,4229GB     25MB          aprovado    
-    /sbin             ol926ain2         /             42,4229GB     10MB          aprovado    
-    /tmp              ol926ain2         /             42,4229GB     1GB           aprovado    
-    Espaço Livre: ol926ain2:/usr,ol926ain2:/var,ol926ain2:/etc,ol926ain2:/sbin,ol926ain2:/tmp ...APROVADO
-    Espaço Livre: ol926ain1:/usr,ol926ain1:/var,ol926ain1:/etc,ol926ain1:/sbin,ol926ain1:/tmp ...
-    Caminho           Nome do Nó    Ponto de montagem  Disponível    Necessário    Status      
-    ----------------  ------------  ------------  ------------  ------------  ------------
-    /usr              ol926ain1         /             39,7291GB     25MB          aprovado    
-    /var              ol926ain1         /             39,7291GB     5MB           aprovado    
-    /etc              ol926ain1         /             39,7291GB     25MB          aprovado    
-    /sbin             ol926ain1         /             39,7291GB     10MB          aprovado    
-    /tmp              ol926ain1         /             39,7291GB     1GB           aprovado    
-    Espaço Livre: ol926ain1:/usr,ol926ain1:/var,ol926ain1:/etc,ol926ain1:/sbin,ol926ain1:/tmp ...APROVADO
-    Existência de Usuário: grid ...
-    Nome do Nó    Status                    Comentário              
-    ------------  ------------------------  ------------------------
-    ol926ain2         aprovado                  existe(54332)           
-    ol926ain1         aprovado                  existe(54332)           
+	Performing following verification checks ...
 
-    Usuários com o Mesmo UID: 54332 ...APROVADO
-    Existência de Usuário: grid ...APROVADO
-    Existência de Grupo: asmadmin ...
-    Nome do Nó    Status                    Comentário              
-    ------------  ------------------------  ------------------------
-    ol926ain2         aprovado                  existe                  
-    ol926ain1         aprovado                  existe                  
-    Existência de Grupo: asmadmin ...APROVADO
-    Existência de Grupo: asmdba ...
-    Nome do Nó    Status                    Comentário              
-    ------------  ------------------------  ------------------------
-    ol926ain2         aprovado                  existe                  
-    ol926ain1         aprovado                  existe                  
-    Existência de Grupo: asmdba ...APROVADO
-    Existência de Grupo: oinstall ...
-    Nome do Nó    Status                    Comentário              
-    ------------  ------------------------  ------------------------
-    ol926ain2         aprovado                  existe                  
-    ol926ain1         aprovado                  existe                  
-    Existência de Grupo: oinstall ...APROVADO
-    Participação em Grupos: asmdba ...
-    Nome do Nó        O Usuário Já Existe  O Grupo Já Existe  Usuário no Grupo  Status          
-    ----------------  ------------  ------------  ------------  ----------------
-    ol926ain2             sim           sim           sim           aprovado        
-    ol926ain1             sim           sim           sim           aprovado        
-    Participação em Grupos: asmdba ...APROVADO
-    Participação em Grupos: asmadmin ...
-    Nome do Nó        O Usuário Já Existe  O Grupo Já Existe  Usuário no Grupo  Status          
-    ----------------  ------------  ------------  ------------  ----------------
-    ol926ain2             sim           sim           sim           aprovado        
-    ol926ain1             sim           sim           sim           aprovado        
-    Participação em Grupos: asmadmin ...APROVADO
-    Participação em Grupos: oinstall(Principal) ...
-    Nome do Nó        O Usuário Já Existe  O Grupo Já Existe  Usuário no Grupo  Principal     Status      
+	  Physical Memory ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     7.7509GB (8127440.0KB)    8GB (8388608.0KB)         passed    
+	    ol926ain1     7.7509GB (8127440.0KB)    8GB (8388608.0KB)         passed    
+	  Physical Memory ...PASSED
+	  Available Physical Memory ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     7.3003GB (7654960.0KB)    50MB (51200.0KB)          passed    
+	    ol926ain1     7.0628GB (7405868.0KB)    50MB (51200.0KB)          passed    
+	  Available Physical Memory ...PASSED
+	  Swap Size ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     8GB (8388604.0KB)         7.7509GB (8127440.0KB)    passed    
+	    ol926ain1     8GB (8388604.0KB)         7.7509GB (8127440.0KB)    passed    
+	  Swap Size ...PASSED
+	  Free Space: ol926ain2:/usr,ol926ain2:/var,ol926ain2:/etc,ol926ain2:/sbin,ol926ain2:/tmp ...
+	    Path              Node Name     Mount point   Available     Required      Status      
+	    ----------------  ------------  ------------  ------------  ------------  ------------
+	    /usr              ol926ain2     /             41.668GB      25MB          passed      
+	    /var              ol926ain2     /             41.668GB      5MB           passed      
+	    /etc              ol926ain2     /             41.668GB      25MB          passed      
+	    /sbin             ol926ain2     /             41.668GB      10MB          passed      
+	    /tmp              ol926ain2     /             41.668GB      1GB           passed      
+	  Free Space: ol926ain2:/usr,ol926ain2:/var,ol926ain2:/etc,ol926ain2:/sbin,ol926ain2:/tmp ...PASSED
+	  Free Space: ol926ain1:/usr,ol926ain1:/var,ol926ain1:/etc,ol926ain1:/sbin,ol926ain1:/tmp ...
+	    Path              Node Name     Mount point   Available     Required      Status      
+	    ----------------  ------------  ------------  ------------  ------------  ------------
+	    /usr              ol926ain1     /             38.8024GB     25MB          passed      
+	    /var              ol926ain1     /             38.8024GB     5MB           passed      
+	    /etc              ol926ain1     /             38.8024GB     25MB          passed      
+	    /sbin             ol926ain1     /             38.8024GB     10MB          passed      
+	    /tmp              ol926ain1     /             38.8024GB     1GB           passed      
+	  Free Space: ol926ain1:/usr,ol926ain1:/var,ol926ain1:/etc,ol926ain1:/sbin,ol926ain1:/tmp ...PASSED
+	  User Existence: grid ...
+	    Node Name     Status                    Comment                 
+	    ------------  ------------------------  ------------------------
+	    ol926ain2     passed                    exists(54332)           
+	    ol926ain1     passed                    exists(54332)           
+
+	    Users With Same UID: 54332 ...PASSED
+	  User Existence: grid ...PASSED
+	  Group Existence: asmadmin ...
+	    Node Name     Status                    Comment                 
+	    ------------  ------------------------  ------------------------
+	    ol926ain2     passed                    exists                  
+	    ol926ain1     passed                    exists                  
+	  Group Existence: asmadmin ...PASSED
+	  Group Existence: asmdba ...
+	    Node Name     Status                    Comment                 
+	    ------------  ------------------------  ------------------------
+	    ol926ain2     passed                    exists                  
+	    ol926ain1     passed                    exists                  
+	  Group Existence: asmdba ...PASSED
+	  Group Existence: oinstall ...
+	    Node Name     Status                    Comment                 
+	    ------------  ------------------------  ------------------------
+	    ol926ain2     passed                    exists                  
+	    ol926ain1     passed                    exists                  
+	  Group Existence: oinstall ...PASSED
+	  Group Membership: asmdba ...
+	    Node Name         User Exists   Group Exists  User in Group  Status          
+	    ----------------  ------------  ------------  ------------  ----------------
+	    ol926ain2         yes           yes           yes           passed          
+	    ol926ain1         yes           yes           yes           passed          
+	  Group Membership: asmdba ...PASSED
+	  Group Membership: asmadmin ...
+	    Node Name         User Exists   Group Exists  User in Group  Status          
+	    ----------------  ------------  ------------  ------------  ----------------
+	    ol926ain2         yes           yes           yes           passed          
+	    ol926ain1         yes           yes           yes           passed          
+	  Group Membership: asmadmin ...PASSED
+	  Group Membership: oinstall(Primary) ...
+	    Node Name         User Exists   Group Exists  User in Group  Primary       Status      
+	    ----------------  ------------  ------------  ------------  ------------  ------------
+	    ol926ain2         yes           yes           yes           yes           passed      
+	    ol926ain1         yes           yes           yes           yes           passed      
+	  Group Membership: oinstall(Primary) ...PASSED
+	  Run Level ...
+	    Node Name     run level                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     5                         3,5                       passed    
+	    ol926ain1     5                         3,5                       passed    
+	  Run Level ...PASSED
+	  Hard Limit: maximum open file descriptors ...
+	    Node Name         Type          Available     Required      Status          
+	    ----------------  ------------  ------------  ------------  ----------------
+	    ol926ain2         hard          65536         65536         passed          
+	    ol926ain1         hard          65536         65536         passed          
+	  Hard Limit: maximum open file descriptors ...PASSED
+	  Soft Limit: maximum open file descriptors ...
+	    Node Name         Type          Available     Required      Status          
+	    ----------------  ------------  ------------  ------------  ----------------
+	    ol926ain2         soft          1024          1024          passed          
+	    ol926ain1         soft          1024          1024          passed          
+	  Soft Limit: maximum open file descriptors ...PASSED
+	  Hard Limit: maximum user processes ...
+	    Node Name         Type          Available     Required      Status          
+	    ----------------  ------------  ------------  ------------  ----------------
+	    ol926ain2         hard          16384         16384         passed          
+	    ol926ain1         hard          16384         16384         passed          
+	  Hard Limit: maximum user processes ...PASSED
+	  Soft Limit: maximum user processes ...
+	    Node Name         Type          Available     Required      Status          
+	    ----------------  ------------  ------------  ------------  ----------------
+	    ol926ain2         soft          16384         2047          passed          
+	    ol926ain1         soft          16384         2047          passed          
+	  Soft Limit: maximum user processes ...PASSED
+	  Soft Limit: maximum stack size ...
+	    Node Name         Type          Available     Required      Status          
+	    ----------------  ------------  ------------  ------------  ----------------
+	    ol926ain2         soft          10240         10240         passed          
+	    ol926ain1         soft          10240         10240         passed          
+	  Soft Limit: maximum stack size ...PASSED
+	  Architecture ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     x86_64                    x86_64                    passed    
+	    ol926ain1     x86_64                    x86_64                    passed    
+	  Architecture ...PASSED
+	  OS Kernel Version ...
+	    Node Name     Available                 Required                  Status    
+	    ------------  ------------------------  ------------------------  ----------
+	    ol926ain2     6.12.0-105.51.5.el9uek.x86_64  5.15.0                    passed    
+	    ol926ain1     6.12.0-105.51.5.el9uek.x86_64  5.15.0                    passed    
+	  OS Kernel Version ...PASSED
+	  OS Kernel Parameter: semmsl ...
+	    Node Name         Current       Configured    Required      Status        Comment     
+	    ----------------  ------------  ------------  ------------  ------------  ------------
+	    ol926ain1         250           250           250           passed      
+	    ol926ain2         250           250           250           passed      
+	  OS Kernel Parameter: semmsl ...PASSED
+	  OS Kernel Parameter: semmns ...
+	    Node Name         Current       Configured    Required      Status        Comment     
+	    ----------------  ------------  ------------  ------------  ------------  ------------
+	    ol926ain1         32000         32000         32000         passed      
+	    ol926ain2         32000         32000         32000         passed      
+	  OS Kernel Parameter: semmns ...PASSED
+	  OS Kernel Parameter: semopm ...
+	    Node Name         Current       Configured    Required      Status        Comment     
+	    ----------------  ------------  ------------  ------------  ------------  ------------
+	    ol926ain1         100           100           100           passed      
+	    ol926ain2         100           100           100           passed      
+	  OS Kernel Parameter: semopm ...PASSED
+	  OS Kernel Parameter: semmni ...
+	    Node Name         Current       Configured    Required      Status        Comment     
+	    ----------------  ------------  ------------  ------------  ------------  ------------
+	    ol926ain1         128           128           128           passed      
+	    ol926ain2         128           128           128           passed      
+	  OS Kernel Parameter: semmni ...PASSED
+	  OS Kernel Parameter: shmmax ...
+	    Node Name         Current       Configured    Required      Status        Comment     
+	    ----------------  ------------  ------------  ------------  ------------  ------------
+	    ol926ain1         4398046511104  4398046511104  4161249280    passed      
+	    ol926ain2         4398046511104  4398046511104  4161249280    passed      
+	  OS Kernel Parameter: shmmax ...PASSED
+	  OS Kernel Parameter: shmmni ...
+	    Node Name         Current       Configured    Required      Status        Comment     
+	    ----------------  ------------  ------------  ------------  ------------  ------------
+	    ol926ain1         4096          4096          4096          passed      
+	    ol926ain2         4096          4096          4096          passed      
+	  OS Kernel Parameter: shmmni ...PASSED
+	  OS Kernel Parameter: shmall ...
+	    Node Name         Current       Configured    Required      Status        Comment     
+	    ----------------  ------------  ------------  ------------  ------------  ------------
+	    ol926ain1         1073741824    1073741824    1073741824    passed      
+	    ol926ain2         1073741824    1073741824    1073741824    passed      
+	  OS Kernel Parameter: shmall ...PASSED
+	  OS Kernel Parameter: file-max ...
+	    Node Name         Current       Configured    Required      Status        Comment     
+	    ----------------  ------------  ------------  ------------  ------------  ------------
+	    ol926ain1         6815744       6815744       6815744       passed      
+	    ol926ain2         6815744       6815744       6815744       passed      
+	  OS Kernel Parameter: file-max ...PASSED
+	  OS Kernel Parameter: ip_local_port_range ...
+	    Node Name         Current       Configured    Required      Status        Comment     
+	    ----------------  ------------  ------------  ------------  ------------  ------------
+	    ol926ain1         between 9000 & 65535  between 9000 & 65535  between 9000 & 65535  passed      
+	    ol926ain2         between 9000 & 65535  between 9000 & 65535  between 9000 & 65535  passed      
+	  OS Kernel Parameter: ip_local_port_range ...PASSED
+	  OS Kernel Parameter: rmem_default ...
+	    Node Name         Current       Configured    Required      Status        Comment     
+	    ----------------  ------------  ------------  ------------  ------------  ------------
+	    ol926ain1         262144        262144        262144        passed      
+	    ol926ain2         262144        262144        262144        passed      
+	  OS Kernel Parameter: rmem_default ...PASSED
+	  OS Kernel Parameter: rmem_max ...
+	    Node Name         Current       Configured    Required      Status        Comment     
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain2             sim           sim           sim           sim           aprovado    
-    ol926ain1             sim           sim           sim           sim           aprovado    
-    Participação em Grupos: oinstall(Principal) ...APROVADO
-    Nível da Execução ...
-    Nome do Nó    nível de execução         Necessário                Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2         5                         3,5                       aprovado  
-    ol926ain1         5                         3,5                       aprovado  
-    Nível da Execução ...APROVADO
-    Arquitetura ...
-    Nome do Nó    Disponível                Necessário                Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2         x86_64                    x86_64                    aprovado  
-    ol926ain1         x86_64                    x86_64                    aprovado  
-    Arquitetura ...APROVADO
-    Versão do Kernel do SO ...
-    Nome do Nó    Disponível                Necessário                Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2         5.15.0-302.167.6.el9uek.x86_64  5.15.0              aprovado  
-    ol926ain1         5.15.0-302.167.6.el9uek.x86_64  5.15.0              aprovado  
-    Versão do Kernel do SO ...APROVADO
-    Parâmetro de Kernel do SO: semmsl ...
-    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ol926ain1         4194304       4194304       4194304       passed      
+    ol926ain2         4194304       4194304       4194304       passed      
+  OS Kernel Parameter: rmem_max ...PASSED
+  OS Kernel Parameter: wmem_default ...
+    Node Name         Current       Configured    Required      Status        Comment     
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1             250           250           250           aprovado    
-    ol926ain2             250           250           250           aprovado    
-    Parâmetro de Kernel do SO: semmsl ...APROVADO
-    Parâmetro de Kernel do SO: semmns ...
-    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ol926ain1         262144        262144        262144        passed      
+    ol926ain2         262144        262144        262144        passed      
+  OS Kernel Parameter: wmem_default ...PASSED
+  OS Kernel Parameter: wmem_max ...
+    Node Name         Current       Configured    Required      Status        Comment     
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1             32000         32000         32000         aprovado    
-    ol926ain2             32000         32000         32000         aprovado    
-    Parâmetro de Kernel do SO: semmns ...APROVADO
-    Parâmetro de Kernel do SO: semopm ...
-    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ol926ain1         1048576       1048576       1048576       passed      
+    ol926ain2         1048576       1048576       1048576       passed      
+  OS Kernel Parameter: wmem_max ...PASSED
+  OS Kernel Parameter: aio-max-nr ...
+    Node Name         Current       Configured    Required      Status        Comment     
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1             100           100           100           aprovado    
-    ol926ain2             100           100           100           aprovado    
-    Parâmetro de Kernel do SO: semopm ...APROVADO
-    Parâmetro de Kernel do SO: semmni ...
-    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ol926ain1         1048576       1048576       1048576       passed      
+    ol926ain2         1048576       1048576       1048576       passed      
+  OS Kernel Parameter: aio-max-nr ...PASSED
+  OS Kernel Parameter: panic_on_oops ...
+    Node Name         Current       Configured    Required      Status        Comment     
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1             128           128           128           aprovado    
-    ol926ain2             128           128           128           aprovado    
-    Parâmetro de Kernel do SO: semmni ...APROVADO
-    Parâmetro de Kernel do SO: shmmax ...
-    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
+    ol926ain1         1             1             1             passed      
+    ol926ain2         1             1             1             passed      
+  OS Kernel Parameter: panic_on_oops ...PASSED
+  OS Kernel Parameter: kernel.panic ...
+    Node Name         Current       Configured    Required      Status        Comment     
     ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1             4398046511104  4398046511104  4159569920  aprovado    
-    ol926ain2             4398046511104  4398046511104  4159574016  aprovado    
-    Parâmetro de Kernel do SO: shmmax ...APROVADO
-    Parâmetro de Kernel do SO: shmmni ...
-    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
-    ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1             4096          4096          4096          aprovado    
-    ol926ain2             4096          4096          4096          aprovado    
-    Parâmetro de Kernel do SO: shmmni ...APROVADO
-    Parâmetro de Kernel do SO: shmall ...
-    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
-    ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1             1073741824    1073741824    1073741824    aprovado    
-    ol926ain2             1073741824    1073741824    1073741824    aprovado    
-    Parâmetro de Kernel do SO: shmall ...APROVADO
-    Parâmetro de Kernel do SO: file-max ...
-    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
-    ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1             6815744       6815744       6815744       aprovado    
-    ol926ain2             6815744       6815744       6815744       aprovado    
-    Parâmetro de Kernel do SO: file-max ...APROVADO
-    Parâmetro de Kernel do SO: ip_local_port_range ...
-    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
-    ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1             between 9000 & 65535  between 9000 & 65535  between 9000 & 65535  aprovado    
-    ol926ain2             between 9000 & 65535  between 9000 & 65535  between 9000 & 65535  aprovado    
-    Parâmetro de Kernel do SO: ip_local_port_range ...APROVADO
-    Parâmetro de Kernel do SO: rmem_default ...
-    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
-    ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1             262144        262144        262144        aprovado    
-    ol926ain2             262144        262144        262144        aprovado    
-    Parâmetro de Kernel do SO: rmem_default ...APROVADO
-    Parâmetro de Kernel do SO: rmem_max ...
-    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
-    ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1             4194304       4194304       4194304       aprovado    
-    ol926ain2             4194304       4194304       4194304       aprovado    
-    Parâmetro de Kernel do SO: rmem_max ...APROVADO
-    Parâmetro de Kernel do SO: wmem_default ...
-    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
-    ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1             262144        262144        262144        aprovado    
-    ol926ain2             262144        262144        262144        aprovado    
-    Parâmetro de Kernel do SO: wmem_default ...APROVADO
-    Parâmetro de Kernel do SO: wmem_max ...
-    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
-    ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1             1048576       1048576       1048576       aprovado    
-    ol926ain2             1048576       1048576       1048576       aprovado    
-    Parâmetro de Kernel do SO: wmem_max ...APROVADO
-    Parâmetro de Kernel do SO: aio-max-nr ...
-    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
-    ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1             1048576       1048576       1048576       aprovado    
-    ol926ain2             1048576       1048576       1048576       aprovado    
-    Parâmetro de Kernel do SO: aio-max-nr ...APROVADO
-    Parâmetro de Kernel do SO: panic_on_oops ...
-    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
-    ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1             1             1             1             aprovado    
-    ol926ain2             1             1             1             aprovado    
-    Parâmetro de Kernel do SO: panic_on_oops ...APROVADO
-    Parâmetro de Kernel do SO: kernel.panic ...
-    Nome do Nó        Atual         Configurado   Necessário    Status        Comentário  
-    ----------------  ------------  ------------  ------------  ------------  ------------
-    ol926ain1             10            10            at least 1    aprovado    
-    ol926ain2             10            10            at least 1    aprovado    
-    Parâmetro de Kernel do SO: kernel.panic ...APROVADO
-    Pacote: kmod-20-21 (x86_64) ...
-    Nome do Nó    Disponível                Necessário                Status    
+    ol926ain1         10            10            at least 1    passed      
+    ol926ain2         10            10            at least 1    passed      
+  OS Kernel Parameter: kernel.panic ...PASSED
+  Package: binutils-2.35.2 ...
+    Node Name     Available                 Required                  Status    
     ------------  ------------------------  ------------------------  ----------
-    ol926ain2         kmod(x86_64)-28-10.0.1.el9  kmod(x86_64)-20-21        aprovado  
-    ol926ain1         kmod(x86_64)-28-10.0.1.el9  kmod(x86_64)-20-21        aprovado  
-    Pacote: kmod-20-21 (x86_64) ...APROVADO
-    Pacote: kmod-libs-20-21 (x86_64) ...
-    Nome do Nó    Disponível                Necessário                Status    
+    ol926ain2     binutils-2.35.2-67.0.1.el9  binutils-2.35.2           passed    
+    ol926ain1     binutils-2.35.2-67.0.1.el9  binutils-2.35.2           passed    
+  Package: binutils-2.35.2 ...PASSED
+  Package: compat-openssl11-1.1.1 (x86_64) ...
+    Node Name     Available                 Required                  Status    
     ------------  ------------------------  ------------------------  ----------
-    ol926ain2         kmod-libs(x86_64)-28-10.0.1.el9  kmod-libs(x86_64)-20-21   aprovado  
-    ol926ain1         kmod-libs(x86_64)-28-10.0.1.el9  kmod-libs(x86_64)-20-21   aprovado  
-    Pacote: kmod-libs-20-21 (x86_64) ...APROVADO
-    Pacote: binutils-2.35.2 ...
-    Nome do Nó    Disponível                Necessário                Status    
+    ol926ain2     compat-openssl11(x86_64)-1.1.1k-5.el9_6.1  compat-openssl11(x86_64)-1.1.1  passed    
+    ol926ain1     compat-openssl11(x86_64)-1.1.1k-5.el9_6.1  compat-openssl11(x86_64)-1.1.1  passed    
+  Package: compat-openssl11-1.1.1 (x86_64) ...PASSED
+  Package: fontconfig-2.14.0 (x86_64) ...
+    Node Name     Available                 Required                  Status    
     ------------  ------------------------  ------------------------  ----------
-    ol926ain2         binutils-2.35.2-54.0.1.el9  binutils-2.35.2           aprovado  
-    ol926ain1         binutils-2.35.2-54.0.1.el9  binutils-2.35.2           aprovado  
-    Pacote: binutils-2.35.2 ...APROVADO
-    Pacote: fontconfig-2.14.0 (x86_64) ...
-    Nome do Nó    Disponível                Necessário                Status    
+    ol926ain2     fontconfig(x86_64)-2.14.0-2.el9_1  fontconfig(x86_64)-2.14.0  passed    
+    ol926ain1     fontconfig(x86_64)-2.14.0-2.el9_1  fontconfig(x86_64)-2.14.0  passed    
+  Package: fontconfig-2.14.0 (x86_64) ...PASSED
+  Package: libxcrypt-compat-4.4.18 ...
+    Node Name     Available                 Required                  Status    
     ------------  ------------------------  ------------------------  ----------
-    ol926ain2         fontconfig(x86_64)-2.14.0-2.el9_1  fontconfig(x86_64)-2.14.0  aprovado  
-    ol926ain1         fontconfig(x86_64)-2.14.0-2.el9_1  fontconfig(x86_64)-2.14.0  aprovado  
-    Pacote: fontconfig-2.14.0 (x86_64) ...APROVADO
-    Pacote: libxcrypt-compat-4.4.18 ...
-    Nome do Nó    Disponível                Necessário                Status    
+    ol926ain2     libxcrypt-compat-4.4.18-3.el9  libxcrypt-compat-4.4.18   passed    
+    ol926ain1     libxcrypt-compat-4.4.18-3.el9  libxcrypt-compat-4.4.18   passed    
+  Package: libxcrypt-compat-4.4.18 ...PASSED
+  Package: libgcc-11.3.1 (x86_64) ...
+    Node Name     Available                 Required                  Status    
     ------------  ------------------------  ------------------------  ----------
-    ol926ain2         libxcrypt-compat-4.4.18-3.el9  libxcrypt-compat-4.4.18   aprovado  
-    ol926ain1         libxcrypt-compat-4.4.18-3.el9  libxcrypt-compat-4.4.18   aprovado  
-    Pacote: libxcrypt-compat-4.4.18 ...APROVADO
-    Pacote: libgcc-11.3.1 (x86_64) ...
-    Nome do Nó    Disponível                Necessário                Status    
+    ol926ain2     libgcc(x86_64)-11.5.0-11.0.1.el9  libgcc(x86_64)-11.3.1     passed    
+    ol926ain1     libgcc(x86_64)-11.5.0-11.0.1.el9  libgcc(x86_64)-11.3.1     passed    
+  Package: libgcc-11.3.1 (x86_64) ...PASSED
+  Package: libstdc++-11.3.1 (x86_64) ...
+    Node Name     Available                 Required                  Status    
     ------------  ------------------------  ------------------------  ----------
-    ol926ain2         libgcc(x86_64)-11.5.0-2.0.1.el9  libgcc(x86_64)-11.3.1     aprovado  
-    ol926ain1         libgcc(x86_64)-11.5.0-2.0.1.el9  libgcc(x86_64)-11.3.1     aprovado  
-    Pacote: libgcc-11.3.1 (x86_64) ...APROVADO
-    Pacote: libstdc++-11.3.1 (x86_64) ...
-    Nome do Nó    Disponível                Necessário                Status    
+    ol926ain2     libstdc++(x86_64)-11.5.0-11.0.1.el9  libstdc++(x86_64)-11.3.1  passed    
+    ol926ain1     libstdc++(x86_64)-11.5.0-11.0.1.el9  libstdc++(x86_64)-11.3.1  passed    
+  Package: libstdc++-11.3.1 (x86_64) ...PASSED
+  Package: sysstat-12.5.4 ...
+    Node Name     Available                 Required                  Status    
     ------------  ------------------------  ------------------------  ----------
-    ol926ain2         libstdc++(x86_64)-11.5.0-2.0.1.el9  libstdc++(x86_64)-11.3.1  aprovado  
-    ol926ain1         libstdc++(x86_64)-11.5.0-2.0.1.el9  libstdc++(x86_64)-11.3.1  aprovado  
-    Pacote: libstdc++-11.3.1 (x86_64) ...APROVADO
-    Pacote: sysstat-12.5.4 ...
-    Nome do Nó    Disponível                Necessário                Status    
+    ol926ain2     sysstat-12.5.4-9.0.2.el9  sysstat-12.5.4            passed    
+    ol926ain1     sysstat-12.5.4-9.0.2.el9  sysstat-12.5.4            passed    
+  Package: sysstat-12.5.4 ...PASSED
+  Package: make-4.3 ...
+    Node Name     Available                 Required                  Status    
     ------------  ------------------------  ------------------------  ----------
-    ol926ain2         sysstat-12.5.4-9.0.2.el9  sysstat-12.5.4            aprovado  
-    ol926ain1         sysstat-12.5.4-9.0.2.el9  sysstat-12.5.4            aprovado  
-    Pacote: sysstat-12.5.4 ...APROVADO
-    Pacote: ksh ...
-    Nome do Nó    Disponível                Necessário                Status    
+    ol926ain2     make-4.3-8.el9            make-4.3                  passed    
+    ol926ain1     make-4.3-8.el9            make-4.3                  passed    
+  Package: make-4.3 ...PASSED
+  Package: glibc-2.34 (x86_64) ...
+    Node Name     Available                 Required                  Status    
     ------------  ------------------------  ------------------------  ----------
-    ol926ain2         ksh                       ksh                       aprovado  
-    ol926ain1         ksh                       ksh                       aprovado  
-    Pacote: ksh ...APROVADO
-    Pacote: make-4.3 ...
-    Nome do Nó    Disponível                Necessário                Status    
+    ol926ain2     glibc(x86_64)-2.34-231.0.1.el9  glibc(x86_64)-2.34        passed    
+    ol926ain1     glibc(x86_64)-2.34-231.0.1.el9  glibc(x86_64)-2.34        passed    
+  Package: glibc-2.34 (x86_64) ...PASSED
+  Package: glibc-devel-2.34 (x86_64) ...
+    Node Name     Available                 Required                  Status    
     ------------  ------------------------  ------------------------  ----------
-    ol926ain2         make-4.3-8.el9            make-4.3                  aprovado  
-    ol926ain1         make-4.3-8.el9            make-4.3                  aprovado  
-    Pacote: make-4.3 ...APROVADO
-    Pacote: glibc-2.34 (x86_64) ...
-    Nome do Nó    Disponível                Necessário                Status    
+    ol926ain2     glibc-devel(x86_64)-2.34-231.0.1.el9  glibc-devel(x86_64)-2.34  passed    
+    ol926ain1     glibc-devel(x86_64)-2.34-231.0.1.el9  glibc-devel(x86_64)-2.34  passed    
+  Package: glibc-devel-2.34 (x86_64) ...PASSED
+  Package: libaio-0.3.111 (x86_64) ...
+    Node Name     Available                 Required                  Status    
     ------------  ------------------------  ------------------------  ----------
-    ol926ain2         glibc(x86_64)-2.34-125.0.1.el9_5.1  glibc(x86_64)-2.34        aprovado  
-    ol926ain1         glibc(x86_64)-2.34-125.0.1.el9_5.1  glibc(x86_64)-2.34        aprovado  
-    Pacote: glibc-2.34 (x86_64) ...APROVADO
-    Pacote: glibc-devel-2.34 (x86_64) ...
-    Nome do Nó    Disponível                Necessário                Status    
+    ol926ain2     libaio(x86_64)-0.3.111-13.el9  libaio(x86_64)-0.3.111    passed    
+    ol926ain1     libaio(x86_64)-0.3.111-13.el9  libaio(x86_64)-0.3.111    passed    
+  Package: libaio-0.3.111 (x86_64) ...PASSED
+  Package: nfs-utils-2.5.4 ...
+    Node Name     Available                 Required                  Status    
     ------------  ------------------------  ------------------------  ----------
-    ol926ain2         glibc-devel(x86_64)-2.34-125.0.1.el9_5.1  glibc-devel(x86_64)-2.34  aprovado  
-    ol926ain1         glibc-devel(x86_64)-2.34-125.0.1.el9_5.1  glibc-devel(x86_64)-2.34  aprovado  
-    Pacote: glibc-devel-2.34 (x86_64) ...APROVADO
-    Pacote: libaio-0.3.111 (x86_64) ...
-    Nome do Nó    Disponível                Necessário                Status    
+    ol926ain2     nfs-utils-2.5.4-38.0.1.el9  nfs-utils-2.5.4           passed    
+    ol926ain1     nfs-utils-2.5.4-38.0.1.el9  nfs-utils-2.5.4           passed    
+  Package: nfs-utils-2.5.4 ...PASSED
+  Package: smartmontools-7.2-6 ...
+    Node Name     Available                 Required                  Status    
     ------------  ------------------------  ------------------------  ----------
-    ol926ain2         libaio(x86_64)-0.3.111-13.el9  libaio(x86_64)-0.3.111    aprovado  
-    ol926ain1         libaio(x86_64)-0.3.111-13.el9  libaio(x86_64)-0.3.111    aprovado  
-    Pacote: libaio-0.3.111 (x86_64) ...APROVADO
-    Pacote: nfs-utils-2.5.4 ...
-    Nome do Nó    Disponível                Necessário                Status    
+    ol926ain2     smartmontools-7.2-9.el9   smartmontools-7.2-6       passed    
+    ol926ain1     smartmontools-7.2-9.el9   smartmontools-7.2-6       passed    
+  Package: smartmontools-7.2-6 ...PASSED
+  Package: net-tools-2.0-0.62 ...
+    Node Name     Available                 Required                  Status    
     ------------  ------------------------  ------------------------  ----------
-    ol926ain2         nfs-utils-2.5.4-27.0.1.el9  nfs-utils-2.5.4           aprovado  
-    ol926ain1         nfs-utils-2.5.4-27.0.1.el9  nfs-utils-2.5.4           aprovado  
-    Pacote: nfs-utils-2.5.4 ...APROVADO
-    Pacote: smartmontools-7.2-6 ...
-    Nome do Nó    Disponível                Necessário                Status    
+    ol926ain2     net-tools-2.0-0.64.20160912git.el9  net-tools-2.0-0.62        passed    
+    ol926ain1     net-tools-2.0-0.64.20160912git.el9  net-tools-2.0-0.62        passed    
+  Package: net-tools-2.0-0.62 ...PASSED
+  Package: policycoreutils-3.5-1 ...
+    Node Name     Available                 Required                  Status    
     ------------  ------------------------  ------------------------  ----------
-    ol926ain2         smartmontools-7.2-9.el9   smartmontools-7.2-6       aprovado  
-    ol926ain1         smartmontools-7.2-9.el9   smartmontools-7.2-6       aprovado  
-    Pacote: smartmontools-7.2-6 ...APROVADO
-    Pacote: net-tools-2.0-0.62 ...
-    Nome do Nó    Disponível                Necessário                Status    
+    ol926ain2     policycoreutils-3.6-3.el9  policycoreutils-3.5-1     passed    
+    ol926ain1     policycoreutils-3.6-3.el9  policycoreutils-3.5-1     passed    
+  Package: policycoreutils-3.5-1 ...PASSED
+  Package: policycoreutils-python-utils-3.5-1 ...
+    Node Name     Available                 Required                  Status    
     ------------  ------------------------  ------------------------  ----------
-    ol926ain2         net-tools-2.0-0.64.20160912git.el9  net-tools-2.0-0.62        aprovado  
-    ol926ain1         net-tools-2.0-0.64.20160912git.el9  net-tools-2.0-0.62        aprovado  
-    Pacote: net-tools-2.0-0.62 ...APROVADO
-    Pacote: policycoreutils-3.5-1 ...
-    Nome do Nó    Disponível                Necessário                Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2         policycoreutils-3.6-2.1.el9  policycoreutils-3.5-1     aprovado  
-    ol926ain1         policycoreutils-3.6-2.1.el9  policycoreutils-3.5-1     aprovado  
-    Pacote: policycoreutils-3.5-1 ...APROVADO
-    Pacote: policycoreutils-python-utils-3.5-1 ...
-    Nome do Nó    Disponível                Necessário                Status    
-    ------------  ------------------------  ------------------------  ----------
-    ol926ain2         policycoreutils-python-utils-3.6-2.1.el9  policycoreutils-python-utils-3.5-1  aprovado  
-    ol926ain1         policycoreutils-python-utils-3.6-2.1.el9  policycoreutils-python-utils-3.5-1  aprovado  
-    Pacote: policycoreutils-python-utils-3.5-1 ...APROVADO
-    Usuários com o Mesmo UID: 0 ...APROVADO
-    ID do Grupo Atual ...APROVADO
-    Consistência de usuário-raiz ...
-    Nome do Nó                            Status                  
+    ol926ain2     policycoreutils-python-utils-3.6-3.el9  policycoreutils-python-utils-3.5-1  passed    
+    ol926ain1     policycoreutils-python-utils-3.6-3.el9  policycoreutils-python-utils-3.5-1  passed    
+  Package: policycoreutils-python-utils-3.5-1 ...PASSED
+  Users With Same UID: 0 ...PASSED
+  Current Group ID ...PASSED
+  Root user consistency ...
+    Node Name                             Status                  
     ------------------------------------  ------------------------
-    ol926ain2                                 aprovado                
-    ol926ain1                                 aprovado                
-    Consistência de usuário-raiz ...APROVADO
-    Pacote: psmisc-22.6-19 ...
-    Nome do Nó    Disponível                Necessário                Status    
+    ol926ain2                             passed                  
+    ol926ain1                             passed                  
+  Root user consistency ...PASSED
+  Package: psmisc-22.6-19 ...
+    Node Name     Available                 Required                  Status    
     ------------  ------------------------  ------------------------  ----------
-    ol926ain2         psmisc-23.4-3.el9         psmisc-22.6-19            aprovado  
-    ol926ain1         psmisc-23.4-3.el9         psmisc-22.6-19            aprovado  
-    Pacote: psmisc-22.6-19 ...APROVADO
-    Nome do host ...APROVADO
-    Conectividade de Nó ...
-    Arquivo dos Hosts ...
-    Nome do Nó                            Status                  
+    ol926ain2     psmisc-23.4-3.el9         psmisc-22.6-19            passed    
+    ol926ain1     psmisc-23.4-3.el9         psmisc-22.6-19            passed    
+  Package: psmisc-22.6-19 ...PASSED
+  Host name ...PASSED
+  Node Connectivity ...
+    Hosts File ...
+    Node Name                             Status                  
     ------------------------------------  ------------------------
-    ol926ain1                                 aprovado                
-    ol926ain2                                 aprovado                
-    Arquivo dos Hosts ...APROVADO
-    Informações de interface para o nó "ol926ain1"
+    ol926ain1                             passed                  
+    ol926ain2                             passed                  
+    Hosts File ...PASSED
 
-    Nome   Endereço IP     Sub-rede        Gateway         Gateway Def.    Endereço HW       MTU   
-    ------ --------------- --------------- --------------- --------------- ----------------- ------
-    enp1s0 192.168.18.121  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:28:86:AA 1500  
-    enp3s0 192.168.100.101 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:7F:44:40 1500  
-    
-    Informações de interface para o nó "ol926ain2"
-    Nome   Endereço IP     Sub-rede        Gateway         Gateway Def.    Endereço HW       MTU   
-    ------ --------------- --------------- --------------- --------------- ----------------- ------
-    enp1s0 192.168.18.122  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:6B:00:2D 1500  
-    enp3s0 192.168.100.102 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:5D:35:1F 1500  
-    
-    Verificar: Consistência de MTU da sub-rede "192.168.18.0".
-    Nó                Nome          Endereço IP   Sub-rede      MTU             
-    ----------------  ------------  ------------  ------------  ----------------
-    ol926ain1             enp1s0        192.168.18.121  192.168.18.0  1500            
-    ol926ain2             enp1s0        192.168.18.122  192.168.18.0  1500            
-    
-    Verificar: Consistência de MTU da sub-rede "192.168.100.0".
-    Nó                Nome          Endereço IP   Sub-rede      MTU             
-    ----------------  ------------  ------------  ------------  ----------------
-    ol926ain1             enp3s0        192.168.100.101  192.168.100.0  1500            
-    ol926ain2             enp3s0        192.168.100.102  192.168.100.0  1500            
+Interface information for node "ol926ain2"
 
-    Origem                      Destino                     Conectado?                
+  Name   IP Address      Subnet          Gateway         Def. Gateway    HW Address        MTU   
+  ------ --------------- --------------- --------------- --------------- ----------------- ------
+  ens3   192.168.18.122  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:B7:46:01 1500  
+  ens5   192.168.100.102 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:C2:F7:E6 1500  
+
+Interface information for node "ol926ain1"
+
+  Name   IP Address      Subnet          Gateway         Def. Gateway    HW Address        MTU   
+  ------ --------------- --------------- --------------- --------------- ----------------- ------
+  ens3   192.168.18.121  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:85:AB:D0 1500  
+  ens5   192.168.100.101 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:EE:2F:B4 1500  
+
+Check: MTU consistency of the subnet "192.168.18.0".
+
+    Node              Name          IP Address    Subnet        MTU             
+    ----------------  ------------  ------------  ------------  ----------------
+    ol926ain2         ens3          192.168.18.122  192.168.18.0  1500            
+    ol926ain1         ens3          192.168.18.121  192.168.18.0  1500            
+
+Check: MTU consistency of the subnet "192.168.100.0".
+
+    Node              Name          IP Address    Subnet        MTU             
+    ----------------  ------------  ------------  ------------  ----------------
+    ol926ain2         ens5          192.168.100.102  192.168.100.0  1500            
+    ol926ain1         ens5          192.168.100.101  192.168.100.0  1500            
+
+    Source                      Destination                 Connected?                
     --------------------------  --------------------------  --------------------------
-    ol926ain1[enp1s0:192.168.18.121]  ol926ain2[enp1s0:192.168.18.122]  sim                       
+    ol926ain1[ens3:192.168.18.121]  ol926ain2[ens3:192.168.18.122]  yes                       
 
-    Origem                      Destino                     Conectado?                
+    Source                      Destination                 Connected?                
     --------------------------  --------------------------  --------------------------
-    ol926ain1[enp3s0:192.168.100.101]  ol926ain2[enp3s0:192.168.100.102]  sim                       
-    Verifique se o tamanho máximo (MTU) do pacote passa pela sub-rede ...APROVADO
-    consistência de máscara para a sub-rede "192.168.18.0" ...APROVADO
-    consistência de máscara para a sub-rede "192.168.100.0" ...APROVADO
-    Conectividade de Nó ...APROVADO
-    Verificação de multicast ou broadcast ...    
-    Verificando sub-rede "192.168.18.0" para comunicação multicast com o grupo multicast "224.0.0.251"
-    Verificação de multicast ou broadcast ...APROVADO
-    Verificação da instalação e da configuração de ASMLib ...
-    '/etc/init.d/oracleasm' ...APROVADO
-    '/dev/oracleasm' ...APROVADO
+    ol926ain1[ens5:192.168.100.101]  ol926ain2[ens5:192.168.100.102]  yes                       
+    Check that maximum (MTU) size packet goes through subnet ...PASSED
+    subnet mask consistency for subnet "192.168.18.0" ...PASSED
+    subnet mask consistency for subnet "192.168.100.0" ...PASSED
+  Node Connectivity ...PASSED
+  Multicast or broadcast check ...
+    Checking subnet "192.168.18.0" for multicast communication with multicast
+    group "224.0.0.251"
 
-    Nome do Nó                            Status                  
+    Subnet        Network Type              Multicast Enabled       
+    ------------  ------------------------  ------------------------
+    192.168.18.0  PRIVATE                   TRUE                    
+  Multicast or broadcast check ...PASSED
+  ASMLib installation and configuration verification. ...
+    '/etc/init.d/oracleasm' ...PASSED
+    '/dev/oracleasm' ...PASSED
+
+    Node Name                             Status                  
     ------------------------------------  ------------------------
-    ol926ain1                                 aprovado                
-    ol926ain2                                 aprovado                
-    Verificação da instalação e da configuração de ASMLib ...APROVADO
-    NTP (Network Time Protocol) ...
+    ol926ain1                             passed                  
+    ol926ain2                             passed                  
+  ASMLib installation and configuration verification. ...PASSED
+  Network Time Protocol (NTP) ...
     Daemon 'chronyd' ...
-    Nome do Nó                            Em execução?            
-    ------------------------------------  ------------------------
-    ol926ain2                                 sim                     
-    ol926ain1                                 sim                     
+  Node Name                             Running?                
+  ------------------------------------  ------------------------
+  ol926ain2                             yes                     
+  ol926ain1                             yes                     
 
-    Daemon 'chronyd' ...APROVADO
-    Daemon ou serviço NTP usando a porta UDP 123 ...
-    Nome do Nó                            Porta Aberta?           
-    ------------------------------------  ------------------------
-    ol926ain2                                 sim                     
-    ol926ain1                                 sim                     
+    Daemon 'chronyd' ...PASSED
+    NTP daemon or service using UDP port 123 ...
+  Node Name                             Port Open?              
+  ------------------------------------  ------------------------
+  ol926ain2                             yes                     
+  ol926ain1                             yes                     
 
-    Daemon ou serviço NTP usando a porta UDP 123 ...APROVADO
-    O daemon chrony está sincronizado com pelo menos uma origem de tempo externa ...APROVADO
-    NTP (Network Time Protocol) ...APROVADO
-    Padrão do nome do arquivo central igual ...APROVADO
-    Máscara do Usuário ...
-    Nome do Nó    Disponível                Necessário                Comentário
+    NTP daemon or service using UDP port 123 ...PASSED
+    chrony daemon is synchronized with at least one external time source ...PASSED
+  Network Time Protocol (NTP) ...PASSED
+  Same core file name pattern ...PASSED
+  User Mask ...
+    Node Name     Available                 Required                  Comment   
     ------------  ------------------------  ------------------------  ----------
-    ol926ain2         0022                      0022                      aprovado  
-    ol926ain1         0022                      0022                      aprovado  
-    Máscara do Usuário ...APROVADO
-    O Usuário Não Está no Grupo "root": grid ...
-    Nome do Nó    Status                    Comentário              
+    ol926ain2     0022                      0022                      passed    
+    ol926ain1     0022                      0022                      passed    
+  User Mask ...PASSED
+  User Not In Group "root": grid ...
+    Node Name     Status                    Comment                 
     ------------  ------------------------  ------------------------
-    ol926ain2         aprovado                  não existe              
-    ol926ain1         aprovado                  não existe              
-    O Usuário Não Está no Grupo "root": grid ...APROVADO
-    Consistência do fuso horário ...APROVADO
-    Path existence, ownership, permissions and attributes ...
-    Path "/var" ...APROVADO
-    Path "/dev/shm" ...APROVADO
-    Path existence, ownership, permissions and attributes ...APROVADO
-    Diferença de horário entre os nós ...APROVADO
-    Integridade de resolv.conf ...
-    Nome do Nó                            Status                  
+    ol926ain2     passed                    does not exist          
+    ol926ain1     passed                    does not exist          
+  User Not In Group "root": grid ...PASSED
+  Time zone consistency ...PASSED
+  Path existence, ownership, permissions and attributes ...
+    Path "/var" ...PASSED
+    Path "/dev/shm" ...PASSED
+  Path existence, ownership, permissions and attributes ...PASSED
+  Time offset between nodes ...PASSED
+  resolv.conf Integrity ...
+    Node Name                             Status                  
     ------------------------------------  ------------------------
-    ol926ain1                                 aprovado                
-    ol926ain2                                 aprovado                
-    
-    verificando resposta para o nome "ol926ain2" de cada um dos servidores de nome
-    especificados em "/etc/resolv.conf"
+    ol926ain1                             passed                  
+    ol926ain2                             passed                  
 
-    Nome do Nó    Origem                    Comentário                Status    
+checking response for name "ol926ain2" from each of the name servers specified
+in "/etc/resolv.conf"
+
+    Node Name     Source                    Comment                   Status    
     ------------  ------------------------  ------------------------  ----------
-    ol926ain2         192.168.18.201            IPv4                      aprovado  
-    
-    verificando resposta para o nome "ol926ain1" de cada um dos servidores de nome especificados em "/etc/resolv.conf"
+    ol926ain2     192.168.18.43             IPv4                      passed    
 
-    Nome do Nó    Origem                    Comentário                Status    
+checking response for name "ol926ain1" from each of the name servers specified
+in "/etc/resolv.conf"
+
+    Node Name     Source                    Comment                   Status    
     ------------  ------------------------  ------------------------  ----------
-    ol926ain1         192.168.18.201            IPv4                      aprovado  
-    Integridade de resolv.conf ...APROVADO
-    Serviço do nome DNS/NIS ...APROVADO
-    O daemon "avahi-daemon" não está configurado e em execução ...
-    Nome do Nó    Configurado               Status                  
+    ol926ain1     192.168.18.43             IPv4                      passed    
+  resolv.conf Integrity ...PASSED
+  DNS/NIS name service ...PASSED
+  Daemon "avahi-daemon" not configured and running ...
+    Node Name     Configured                Status                  
     ------------  ------------------------  ------------------------
-    ol926ain2         não                       aprovado                
-    ol926ain1         não                       aprovado                
+    ol926ain2     no                        passed                  
+    ol926ain1     no                        passed                  
 
-    Nome do Nó    Em execução?              Status                  
+    Node Name     Running?                  Status                  
     ------------  ------------------------  ------------------------
-    ol926ain2         não                       aprovado                
-    ol926ain1         não                       aprovado                
-    O daemon "avahi-daemon" não está configurado e em execução ...APROVADO
-    O daemon "proxyt" não está configurado e em execução ...
-    Nome do Nó    Configurado               Status                  
+    ol926ain2     no                        passed                  
+    ol926ain1     no                        passed                  
+  Daemon "avahi-daemon" not configured and running ...PASSED
+  Daemon "proxyt" not configured and running ...
+    Node Name     Configured                Status                  
     ------------  ------------------------  ------------------------
-    ol926ain2         não                       aprovado                
-    ol926ain1         não                       aprovado                
+    ol926ain2     no                        passed                  
+    ol926ain1     no                        passed                  
 
-    Nome do Nó    Em execução?              Status                  
+    Node Name     Running?                  Status                  
     ------------  ------------------------  ------------------------
-    ol926ain2         não                       aprovado                
-    ol926ain1         não                       aprovado                
-    O daemon "proxyt" não está configurado e em execução ...APROVADO
-    Soquetes do domínio ...APROVADO
-    Equivalência de Usuário ...APROVADO
-    Banco de dados do Gerenciador de Pacotes do RPM ...APROVADO
-    Verificação de máximo de memória bloqueada ...APROVADO
-    /dev/shm montado como sistema de arquivos temporários ...APROVADO
-    Opção de montagem do sistema de arquivos hidepid para o sistema de arquivos proc ...APROVADO
-    Configuração do Driver de Filtro do ASM ...APROVADO
-    Parâmetro IPC do gerenciador de log-in no systemd ...APROVADO
-    ORAchk health score ...INFORMAÇÕES (PRVH-1507)
+    ol926ain2     no                        passed                  
+    ol926ain1     no                        passed                  
+  Daemon "proxyt" not configured and running ...PASSED
+  Domain Sockets ...PASSED
+  User Equivalence ...PASSED
+  RPM Package Manager database ...PASSED
+  Maximum locked memory check ...PASSED
+  /dev/shm mounted as temporary file system ...PASSED
+  File system mount option hidepid for proc filesystem ...PASSED
+  SCP binary check ...PASSED
+  Systemd login manager IPC parameter ...PASSED
+  cgroup OS compatibility ...PASSED
+  ORAchk health score ...INFORMATION (PRVH-1507)
 
-    A pré-verificação de configuração de serviços de cluster foi bem-sucedida. 
-    ORAchk health score ...INFORMAÇÕES
-    PRVH-1507 : ORAchk/EXAchk checks are skipped.
+Pre-check for cluster services setup was successful. 
+ORAchk health score ...INFORMATION
+PRVH-1507 : ORAchk/EXAchk checks are skipped.
 
 
-    Operação do CVU executada:    stage -pre crsinst
-    Data:                         28 de fev de 2025 16:45:22
-    Versão do CVU:                23.7.0.25.1 (011525x8664)
-    Home do CVU:                  /u01/app/23.7.0/grid
-    Usuário:                      grid
-    Sistema operacional:          Linux5.15.0-302.167.6.el9uek.x86_64
+CVU operation performed:      stage -pre crsinst
+Date:                         Feb 1, 2026, 11:54:41 AM
+CVU version:                  23.26.1.0.0 (010926x8664)
+CVU home:                     /u01/app/23.26.1/grid
+User:                         grid
+Operating system:             Linux6.12.0-105.51.5.el9uek.x86_64
 
 ###### CREATE RESPONSE FILE ( GRID.RSP )
 
