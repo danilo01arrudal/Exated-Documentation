@@ -1216,21 +1216,150 @@
 
 ###### INSTALL GRID 23AI 
 
-    [root@ol926ain1 ~]# su - grid
-    [grid@ol926ain1 ~]$ /u01/app/23.26.1/grid/gridSetup.sh -silent -responseFile /home/grid/grid.rsp
-    As a root user, execute the following script(s):
-        1. /u01/app/oraInventory/orainstRoot.sh
-        2. /u01/app/23.7.0/grid/root.sh
- 
-	Execute /u01/app/oraInventory/orainstRoot.sh on the following nodes:
-	[ol926ain1, ol926ain2]
-	Execute /u01/app/19.0.0/grid/root.sh on the following nodes:
-	[ol926ain1, ol926ain2]
- 
-	Run the script on the local node first. After successful completion, you can start the script in parallel on all other nodes.
- 
-	Successfully Setup Software.
-	As install user, execute the following command to complete the configuration.
+[grid@ol926ain1 ~]$ /u01/app/23.26.1/grid/gridSetup.sh -silent -responseFile /home/grid/grid.rsp 
+Launching Oracle Grid Infrastructure Setup Wizard...
+
+ Enter password for 'root' user: 
+The response file for this session can be found at:
+ /u01/app/23.26.1/grid/install/response/grid_2026-02-02_06-24-22PM.rsp
+
+You can find the log of this install session at:
+ /tmp/GridSetupActions2026-02-02_06-24-22PM/gridSetupActions2026-02-02_06-24-22PM.log
+
+[ Start ] NETCA - 2026-02-02 18:30:39.276
+Command: /bin/sh -c /u01/app/23.26.1/grid/bin/netca /orahome /u01/app/23.26.1/grid /instype typical /inscomp client,oraclenet,javavm,server,ano /insprtcl tcp /cfg local /authadp NO_VALUE /responseFile /u01/app/23.26.1/grid/network/install/netca_typ.rsp /silent  /orahnam OraGI23Home1  /ouiinternal
+
+Parsing command line arguments:
+    Parameter "orahome" = /u01/app/23.26.1/grid
+    Parameter "instype" = typical
+    Parameter "inscomp" = client,oraclenet,javavm,server,ano
+    Parameter "insprtcl" = tcp
+    Parameter "cfg" = local
+    Parameter "authadp" = NO_VALUE
+    Parameter "responsefile" = /u01/app/23.26.1/grid/network/install/netca_typ.rsp
+    Parameter "silent" = true
+    Parameter "orahnam" = OraGI23Home1
+    Parameter "ouiinternal" = true
+Done parsing command line arguments.
+Oracle Net Services Configuration:
+Profile configuration complete.
+Profile configuration complete.
+Listener "LISTENER" already exists.
+Oracle Net Services configuration successful. The exit code is 0
+[ Exit Code ] 0
+[ End ] NETCA - 2026-02-02 18:30:44.559
+
+[ Start ] ASMCA - 2026-02-02 18:30:44.591
+Command: /bin/sh -c /u01/app/23.26.1/grid/bin/asmca -silent -postConfigureASM -oui_internal
+SYS_PASSWORD_PROMPT
+ASMSNMP_PASSWORD_PROMPT
+
+Post configuration completed successfully
+
+[ Exit Code ] 0
+[ End ] ASMCA - 2026-02-02 18:30:48.879
+
+[ Start ] CVU - 2026-02-02 18:30:48.949
+Command: /bin/sh -c /u01/app/23.26.1/grid/bin/cluvfy  stage -post crsinst -collect cluster -n all
+
+Initializing ...
+
+Performing following verification checks ...
+
+  Node Connectivity ...
+    Hosts File ...PASSED
+    Check that maximum (MTU) size packet goes through subnet ...PASSED
+    subnet mask consistency for subnet "192.168.18.0" ...PASSED
+    subnet mask consistency for subnet "192.168.100.0" ...PASSED
+  Node Connectivity ...PASSED
+  Multicast or broadcast check ...
+    Checking subnet "192.168.100.0" for multicast communication with multicast
+    group "224.0.0.251"
+
+    Subnet        Network Type              Multicast Enabled       
+    ------------  ------------------------  ------------------------
+    192.168.100.0  PRIVATE                   TRUE                    
+  Multicast or broadcast check ...PASSED
+  Time zone consistency ...PASSED
+  Path existence, ownership, permissions and attributes ...
+    Path "/var" ...PASSED
+    Path "/var/lib/oracle" ...PASSED
+    Path "/u01/app/oraInventory/ContentsXML/inventory.xml" ...PASSED
+    Path "/dev/asm" ...PASSED
+    Path "/dev/shm" ...PASSED
+    Path "/etc/init.d/ohasd" ...PASSED
+    Path "/etc/init.d/init.ohasd" ...PASSED
+    Path "/etc/init.d/init.tfa" ...PASSED
+    Path "/etc/oracle/maps" ...PASSED
+    Path "/etc/oraInst.loc" ...PASSED
+    Path "/etc/tmpfiles.d/oracleGI.conf" ...PASSED
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/stage" ...PASSED
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/alert" ...PASSED
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/lck" ...PASSED
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/log" ...PASSED
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/metadata_dgif" ...PASSED
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/metadata" ...PASSED
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/incpkg" ...PASSED
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/sweep" ...PASSED
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/incident" ...PASSED
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/cdump" ...PASSED
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/trace" ...PASSED
+    Path "/u01/app/grid/diag/crs/ol926ain1/crs/metadata_pv" ...PASSED
+    Path "/u01/app/23.26.1/grid/gpnp/wallets/peer/cwallet.sso" ...PASSED
+    Path "/u01/app/23.26.1/grid/gpnp/wallets/root/cwallet.sso" ...PASSED
+    Path "/u01/app/23.26.1/grid/gpnp/profiles/peer/profile.xml" ...PASSED
+  Path existence, ownership, permissions and attributes ...PASSED
+  Cluster Manager Integrity ...PASSED
+  User Mask ...PASSED
+  Cluster Integrity ...PASSED
+  OCR Integrity ...PASSED
+  CRS Integrity ...
+    Clusterware Version Consistency ...PASSED
+  CRS Integrity ...PASSED
+  Node Application Existence ...PASSED
+  Single Client Access Name (SCAN) ...
+    DNS/NIS name service 'ol926ain-scan' ...
+      Name Service Switch Configuration File Integrity ...PASSED
+    DNS/NIS name service 'ol926ain-scan' ...PASSED
+  Single Client Access Name (SCAN) ...PASSED
+  OLR Integrity ...PASSED
+  Voting Disk ...PASSED
+  ASM Integrity ...PASSED
+  ASM Network ...PASSED
+  ASM disk group free space ...PASSED
+  User Not In Group "root": grid ...PASSED
+  Clock Synchronization ...
+    Network Time Protocol (NTP) ...
+      Daemon 'chronyd' ...PASSED
+      NTP daemon or service using UDP port 123 ...PASSED
+      chrony daemon is synchronized with at least one external time source ...PASSED
+    Network Time Protocol (NTP) ...PASSED
+  Clock Synchronization ...PASSED
+  VIP Subnet configuration check ...PASSED
+  Oracle Net Services configuration ...PASSED
+  Network configuration consistency checks ...PASSED
+  Package: psmisc-22.6-19 ...PASSED
+  File system mount options for path GI_HOME ...PASSED
+  File system mount option hidepid for proc filesystem ...PASSED
+  Cleanup of communication socket files ...PASSED
+  Domain Sockets ...PASSED
+
+Post-check for cluster services setup was successful. 
+
+CVU operation performed:      stage -post crsinst
+Date:                         Feb 2, 2026, 6:30:49 PM
+CVU version:                  23.26.1.0.0 (010926x8664)
+Clusterware version:          23.0.0.0.0
+CVU home:                     /u01/app/23.26.1/grid
+Grid home:                    /u01/app/23.26.1/grid
+User:                         grid
+Operating system:             Linux6.12.0-105.51.5.el9uek.x86_64
+Successfully Setup Software.
+[ Exit Code ] 0
+[ End ] CVU - 2026-02-02 18:31:45.274
+
+Moved the install session logs to:
+ /u01/app/oraInventory/logs/GridSetupActions2026-02-02_06-24-22PM
 
 ###### CLUSTER INSTALL ( SET EXADATA PARAMETER )
 
