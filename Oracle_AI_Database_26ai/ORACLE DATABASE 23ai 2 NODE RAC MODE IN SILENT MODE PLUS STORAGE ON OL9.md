@@ -1362,33 +1362,17 @@
 	Moved the install session logs to:
  	/u01/app/oraInventory/logs/GridSetupActions2026-02-02_06-24-22PM
 
-###### CLUSTER INSTALL ( SET EXADATA PARAMETER )
-
-    [root@ol926ain1 ~]# cat /u01/app/23.7.0/grid/crs/install/crsconfig_params |grep ASMCA_ARGS
-    ASMCA_ARGS=
-    [root@ol926ain1 ~]# su - grid
-    [grid@ol926ain1 ~]$ vi /u01/app/23.7.0/grid/crs/install/crsconfig_params
-    ASMCA_ARGS=-param "_exadata_feature_on=true"
-    [grid@ol926ain1 ~]$ exit
-
-    [root@ol926ain2 ~]# cat /u01/app/23.7.0/grid/crs/install/crsconfig_params |grep ASMCA_ARGS 
-    ASMCA_ARGS=
-    [root@ol926ain2 ~]# su - grid
-    [grid@ol926ain2 ~]$ vi /u01/app/23.7.0/grid/crs/install/crsconfig_params 
-    ASMCA_ARGS=-param "_exadata_feature_on=true"
-    [grid@ol926ain2 ~]$ exit
-
-###### RUN ROOT ORAINSTALL FOR GRID
-
-    [root@ol926ain1 ~]# /u01/app/oraInventory/orainstRoot.sh
-    [root@ol926ain2 ~]# /u01/app/oraInventory/orainstRoot.sh    
-    [root@ol926ain1 ~]# /u01/app/23.7.0/grid/root.sh
-    [root@ol926ain2 ~]# /u01/app/23.7.0/grid/root.sh
-
 ###### POST INSTALL CONFIGURATION GRID 
 
     [root@ol926ain1 ~]# su - grid
-    [grid@ol926ain1 ~]$ /u01/app/23.7.0/grid/gridSetup.sh -executeConfigTools -responseFile /home/oracle/gridsetup.rsp -silent
+	[grid@ol926ain1 ~]$ /u01/app/23.26.1/grid/gridSetup.sh -executeConfigTools -responseFile /home/grid/grid.rsp -silent 
+	Launching Oracle Grid Infrastructure Setup Wizard...
+
+	You can find the logs of this session at:
+	/u01/app/oraInventory/logs/GridSetupActions2026-02-02_06-45-21PM
+
+	Successfully Configured Software.
+	[INS-10115] All configuration tools were previously ran successfully, no further configuration is required.
 
 ###### POST INSTALL CHECK ENVIRONMENT ( RUNCLUVFY )
 
