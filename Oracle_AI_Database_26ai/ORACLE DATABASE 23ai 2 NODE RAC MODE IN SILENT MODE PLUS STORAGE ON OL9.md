@@ -1209,7 +1209,7 @@
 	nodesToDelete=
 	enableAutoFixup=true
 
-###### BEFORE RUN UPDATE THE RESPONSE FILE WITH CORRECT PASSWORD ON
+###### BEFORE RUNNING, UPDATE THE ANSWER FILE WITH THE CORRECT PASSWORD
 
 	sysasmPassword=*******
 	asmsnmpPassword=*******
