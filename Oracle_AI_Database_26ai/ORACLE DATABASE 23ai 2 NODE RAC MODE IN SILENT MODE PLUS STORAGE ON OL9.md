@@ -1209,10 +1209,15 @@
 	nodesToDelete=
 	enableAutoFixup=true
 
+###### BEFORE RUN UPDATE THE RESPONSE FILE WITH CORRECT PASSWORD ON
+
+	sysasmPassword=*******
+	asmsnmpPassword=*******
+
 ###### INSTALL GRID 23AI 
 
     [root@ol926ain1 ~]# su - grid
-    [grid@ol926ain1 ~]$ /u01/app/23.7.0/grid/gridSetup.sh -silent -responseFile /home/oracle/gridsetup.rsp
+    [grid@ol926ain1 ~]$ /u01/app/23.26.1/grid/gridSetup.sh -silent -responseFile /home/grid/grid.rsp
     As a root user, execute the following script(s):
         1. /u01/app/oraInventory/orainstRoot.sh
         2. /u01/app/23.7.0/grid/root.sh
