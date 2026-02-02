@@ -1145,30 +1145,30 @@
 
 ###### CREATE RESPONSE FILE ( GRID.RSP )
 
-    [grid@ol926ain1 ~]$ vi /home/grid/grid.rsp
+	[grid@ol926ain1 ~]$ vi /home/grid/grid.rsp 
 	oracle.install.responseFileVersion=/oracle/install/rspfmt_crsinstall_response_schema_v23.0.0
 	INVENTORY_LOCATION=/u01/app/oraInventory
 	installOption=CRS_CONFIG
 	ORACLE_BASE=/u01/app/grid
 	clusterUsage=RAC
-	zeroDowntimeGIPatching=false
+	zeroDowntimeGIPatching=true
 	skipDriverUpdate=false
 	OSDBA=asmdba
 	OSOPER=asmoper
 	OSASM=asmadmin
 	scanType=LOCAL_SCAN
 	scanClientDataFile=
-	scanName=ol9n-scan
+	scanName=ol926ain-scan
 	scanPort=1521
 	configureAsExtendedCluster=false
-	clusterName=ol9n
+	clusterName=ol926ain
 	configureGNS=false
 	configureDHCPAssignedVIPs=false
 	gnsSubDomain=
 	gnsVIPAddress=
 	sites=
 	clusterNodes=ol926ain1.appsdba.info:ol926ain1-vip.appsdba.info,ol926ain2.appsdba.info:ol926ain2-vip.appsdba.info
-	networkInterfaceList=enp1s0:192.168.18.0:1,enp3s0:192.168.100.0:5
+	networkInterfaceList=ens3:192.168.18.0:1,ens5:192.168.100.0:5
 	storageOption=FLEX_ASM_STORAGE
 	votingFilesLocations=
 	ocrLocations=
@@ -1182,17 +1182,16 @@
 	redundancy=EXTERNAL
 	auSize=4
 	failureGroups=
-	disksWithFailureGroupNames=/dev/asm-disk1,,/dev/asm-disk2,,/dev/asm-disk3,,/dev/asm-disk4,
-	diskList=/dev/asm-disk1,/dev/asm-disk2,/dev/asm-disk3,/dev/asm-disk4
+	disksWithFailureGroupNames=/dev/asm-disk1,,/dev/asm-disk3,,/dev/asm-disk2,,/dev/asm-disk4,
+	diskList=/dev/asm-disk1,/dev/asm-disk3,/dev/asm-disk2,/dev/asm-disk4
 	quorumFailureGroupNames=
 	diskString=/dev/asm-disk*
 	asmsnmpPassword=
-	configureAFD=false
 	ignoreDownNodes=false
 	configureBackupDG=false
 	backupDGName=RECO
 	backupDGRedundancy=NORMAL
-	backupDGAUSize=4
+	backupDGAUSize=1
 	backupDGFailureGroups=
 	backupDGDisksWithFailureGroupNames=
 	backupDGDiskList=
@@ -1208,7 +1207,7 @@
 	sudoUserName=grid
 	batchInfo=
 	nodesToDelete=
-    	enableAutoFixup=false
+	enableAutoFixup=true
 
 ###### INSTALL GRID 23AI 
 
