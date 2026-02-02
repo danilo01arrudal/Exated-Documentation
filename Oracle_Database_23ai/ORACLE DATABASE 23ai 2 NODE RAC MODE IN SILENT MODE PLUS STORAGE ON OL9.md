@@ -501,7 +501,7 @@
     [root@ol9n1 ~]# ls -ltr /dev/asm-disk*
     lrwxrwxrwx 1 root root 4 fev 28 14:34 /dev/asm-disk1 -> sda1
     [root@ol9n1 ~]# ls -ltr /dev/sda1
-    brw-rw---- 1 grid asmadmin 8, 1 fev 28 14:34 /dev/sda1
+    brw-rw---- 1 grid asmdba 8, 1 fev 28 14:34 /dev/sda1
 
 ###### SSH KEY EXCHANGE ( NODE 1 )
 
