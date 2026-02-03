@@ -12,7 +12,7 @@
 
     virt-install --virt-type kvm --name ol926ain2 --memory 8192 --vcpus 2 --os-variant ol9.7 --cdrom /var/lib/libvirt/images/OracleLinux-R9-U7-x86_64-dvd.iso --network bridge=br0,model=virtio --network bridge=br0,model=virtio --network network=priv0,model=virtio --disk path=/var/lib/libvirt/images/ol926ain2.qcow2,size=59
 
-###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CHANGE THE CLOCK SOURCE IN THE SYSTEM )
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( DISABLE FIREWALL )
 
     [root@ol926ain1 ~]# systemctl stop firewalld
     [root@ol926ain1 ~]# systemctl disable firewalld
@@ -204,13 +204,10 @@
     Created symlink /etc/systemd/system/avahi-daemon.service → /dev/null.
     [root@ol926ain2 ~]# systemctl stop avahi-daemon.socket avahi-daemon.service
 
-### PRE REQUIREMENTS ORACLE ENVIRONMENT ( FIREWALL AND SELINUX )
+### PRE REQUIREMENTS ORACLE ENVIRONMENT ( SELINUX )
 
     [root@ol926ain1 ~]# sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
     [root@ol926ain2 ~]# sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
-
-    [root@ol926ain1 ~]# systemctl stop firewalld; systemctl disable firewalld 
-    [root@ol926ain2 ~]# systemctl stop firewalld; systemctl disable firewalld
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( PACKAGES )
 
