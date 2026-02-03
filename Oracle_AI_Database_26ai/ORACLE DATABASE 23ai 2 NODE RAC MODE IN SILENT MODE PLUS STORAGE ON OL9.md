@@ -137,6 +137,46 @@
 	lo    081ab6fb-8747-4140-bbad-920622f521dd  loopback  lo     
 	ens4  8b94a7ac-0dc3-3956-a2c9-238b50b3fe94  ethernet  --  
 
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE /etc/hosts NODE 1)
+
+	[root@ol926ain1 ~]# vi /etc/hosts
+	127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+	::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+	# Public Network - (ens3)
+	192.168.18.121 ol926ain1.appsdba.info ol926ain1
+	192.168.18.122 ol926ain2.appsdba.info ol926ain2
+
+	# Private Interconnect - (ens5)
+	192.168.100.101 ol926ain1-vip.appsdba.info ol926ain1-vip
+	192.168.100.102 ol926ain2-vip.appsdba.info ol926ain2-vip
+
+	# Scan Network
+	192.168.18.184 ol926ain-scan.appsdba.info ol926ain-scan
+	192.168.18.185 ol926ain-scan.appsdba.info ol926ain-scan
+	192.168.18.186 ol926ain-scan.appsdba.info ol926ain-scan
+	192.168.18.187 ol926ain-scan.appsdba.info ol926ain-scan
+
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE /etc/hosts NODE 2)
+
+	[root@ol926ain2 ~]# vi /etc/hosts
+	127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+	::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+	# Public Network - (ens3)
+	192.168.18.121 ol926ain1.appsdba.info ol926ain1
+	192.168.18.122 ol926ain2.appsdba.info ol926ain2
+
+	# Private Interconnect - (ens5)
+	192.168.100.101 ol926ain1-vip.appsdba.info ol926ain1-vip
+	192.168.100.102 ol926ain2-vip.appsdba.info ol926ain2-vip
+
+	# Scan Network
+	192.168.18.184 ol926ain-scan.appsdba.info ol926ain-scan
+	192.168.18.185 ol926ain-scan.appsdba.info ol926ain-scan
+	192.168.18.186 ol926ain-scan.appsdba.info ol926ain-scan
+	192.168.18.187 ol926ain-scan.appsdba.info ol926ain-scan	
+
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( DISABLE AVAHI )
 
     [root@ol926ain1 ~]# systemctl disable avahi-daemon.socket avahi-daemon.service 
