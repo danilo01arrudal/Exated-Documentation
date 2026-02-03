@@ -14,6 +14,13 @@
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CHANGE THE CLOCK SOURCE IN THE SYSTEM )
 
+    [root@ol926ain1 ~]# systemctl stop firewalld
+    [root@ol926ain1 ~]# systemctl disable firewalld
+    [root@ol926ain2 ~]# systemctl stop firewalld
+    [root@ol926ain2 ~]# systemctl disable firewalld
+
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CHANGE THE CLOCK SOURCE IN THE SYSTEM )
+
     [root@ol926ain1 ~]# cat /sys/devices/system/clocksource/clocksource0/current_clocksource
     kvm-clock
     [root@ol926ain1 ~]# cat /sys/devices/system/clocksource/clocksource0/available_clocksource
