@@ -154,9 +154,13 @@
 	192.168.18.121 ol926ain1.appsdba.info ol926ain1
 	192.168.18.122 ol926ain2.appsdba.info ol926ain2
 
+	# VIP Network - (ens4)
+	192.168.18.151 ol926ain1-vip.appsdba.info ol926ain1-vip
+	192.168.18.152 ol926ain2-vip.appsdba.info ol926ain2-vip
+
 	# Private Interconnect - (ens5)
-	192.168.100.101 ol926ain1-vip.appsdba.info ol926ain1-vip
-	192.168.100.102 ol926ain2-vip.appsdba.info ol926ain2-vip
+	192.168.100.101 ol926ain1-priv.appsdba.info ol926ain1-priv
+	192.168.100.102 ol926ain2-priv.appsdba.info ol926ain2-priv
 
 	# Scan Network
 	192.168.18.184 ol926ain-scan.appsdba.info ol926ain-scan
@@ -174,9 +178,13 @@
 	192.168.18.121 ol926ain1.appsdba.info ol926ain1
 	192.168.18.122 ol926ain2.appsdba.info ol926ain2
 
+	# VIP Network - (ens4)
+	192.168.18.151 ol926ain1-vip.appsdba.info ol926ain1-vip
+	192.168.18.152 ol926ain2-vip.appsdba.info ol926ain2-vip
+
 	# Private Interconnect - (ens5)
-	192.168.100.101 ol926ain1-vip.appsdba.info ol926ain1-vip
-	192.168.100.102 ol926ain2-vip.appsdba.info ol926ain2-vip
+	192.168.100.101 ol926ain1-priv.appsdba.info ol926ain1-priv
+	192.168.100.102 ol926ain2-priv.appsdba.info ol926ain2-priv
 
 	# Scan Network
 	192.168.18.184 ol926ain-scan.appsdba.info ol926ain-scan
