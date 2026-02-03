@@ -323,12 +323,12 @@
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE /ETC/RESOLV.CONF )
 
     [root@ol926ain1 ~]# cat <<EOF > /etc/resolv.conf
-    nameserver 192.168.18.201
+    nameserver 192.168.18.43
     search appsdba.info
     EOF
     [root@ol926ain1 ~]# chattr +i /etc/resolv.conf
     [root@ol926ain2 ~]# cat <<EOF > /etc/resolv.conf
-    nameserver 192.168.18.201
+    nameserver 192.168.18.43
     search appsdba.info
     EOF
     [root@ol926ain2 ~]# chattr +i /etc/resolv.conf
