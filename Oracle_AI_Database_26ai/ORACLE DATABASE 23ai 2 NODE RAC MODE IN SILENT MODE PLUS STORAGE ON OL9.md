@@ -672,7 +672,7 @@
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( RUNCLUVFY )
 
     [root@ol926ain1 ~]# su - grid
-	[grid@ol926ain1 ~]$ /u01/app/23.26.1/grid/runcluvfy.sh stage -pre crsinst -n ol926ain1,ol926ain2 -verbose -method root 
+	[grid@ol926ain1 ~]$ /u01/app/23.26.1/grid/runcluvfy.sh stage -pre crsinst -n ol926ain1,ol926ain2 -verbose -method root -skip orachk
 	Enter "ROOT" password:
 
 	Initializing ...
@@ -1155,22 +1155,18 @@
 	    ------------  ------------------------  ------------------------
 	    ol926ain2     no                        passed                  
 	    ol926ain1     no                        passed                  
-	Daemon "proxyt" not configured and running ...PASSED
-	Domain Sockets ...PASSED
-	User Equivalence ...PASSED
-	RPM Package Manager database ...PASSED
-	Maximum locked memory check ...PASSED
-	/dev/shm mounted as temporary file system ...PASSED
-	File system mount option hidepid for proc filesystem ...PASSED
-	SCP binary check ...PASSED
-	Systemd login manager IPC parameter ...PASSED
-	cgroup OS compatibility ...PASSED
-	ORAchk health score ...INFORMATION (PRVH-1507)
-	
-	Pre-check for cluster services setup was successful. 
-	ORAchk health score ...INFORMATION
-	PRVH-1507 : ORAchk/EXAchk checks are skipped.
+  	Daemon "proxyt" not configured and running ...PASSED
+  	Domain Sockets ...PASSED
+  	User Equivalence ...PASSED
+  	RPM Package Manager database ...PASSED
+  	Maximum locked memory check ...PASSED
+  	/dev/shm mounted as temporary file system ...PASSED
+  	File system mount option hidepid for proc filesystem ...PASSED
+  	SCP binary check ...PASSED
+  	Systemd login manager IPC parameter ...PASSED
+  	cgroup OS compatibility ...PASSED
 
+	Pre-check for cluster services setup was successful. 
 
 	CVU operation performed:      stage -pre crsinst
 	Date:                         Feb 1, 2026, 11:54:41 AM
