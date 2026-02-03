@@ -566,18 +566,18 @@
 	KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/\$parent", RESULT=="360014054b4639dcf64b494abb68561b9", SYMLINK+="asm-disk5", OWNER="grid", GROUP="asmdba", MODE="0660"
     EOF
 
-    [root@ol926ain1 ~]# udevadm test /block/sda/sdb1
-    [root@ol926ain1 ~]# udevadm test /block/sdb/sdc1
-    [root@ol926ain1 ~]# udevadm test /block/sdc/sdd1
-    [root@ol926ain1 ~]# udevadm test /block/sdd/sde1
-    [root@ol926ain1 ~]# udevadm test /block/sde/sdf1
+    [root@ol926ain1 ~]# udevadm test /block/sdb/sdb1
+    [root@ol926ain1 ~]# udevadm test /block/sdc/sdc1
+    [root@ol926ain1 ~]# udevadm test /block/sdd/sdd1
+    [root@ol926ain1 ~]# udevadm test /block/sde/sde1
+    [root@ol926ain1 ~]# udevadm test /block/sdf/sdf1
     [root@ol926ain1 ~]# udevadm control --reload-rules
     [root@ol926ain1 ~]# /sbin/udevadm trigger
-    [root@ol926ain2 ~]# udevadm test /block/sda/sdb1
-    [root@ol926ain2 ~]# udevadm test /block/sdb/sdc1
-    [root@ol926ain2 ~]# udevadm test /block/sdc/sdd1
-    [root@ol926ain2 ~]# udevadm test /block/sdd/sde1
-    [root@ol926ain2 ~]# udevadm test /block/sde/sdf1
+    [root@ol926ain2 ~]# udevadm test /block/sdb/sdb1
+    [root@ol926ain2 ~]# udevadm test /block/sdc/sdc1
+    [root@ol926ain2 ~]# udevadm test /block/sdd/sdd1
+    [root@ol926ain2 ~]# udevadm test /block/sde/sde1
+    [root@ol926ain2 ~]# udevadm test /block/sdf/sdf1
     [root@ol926ain2 ~]# udevadm control --reload-rules
     [root@ol926ain2 ~]# /sbin/udevadm trigger
 
