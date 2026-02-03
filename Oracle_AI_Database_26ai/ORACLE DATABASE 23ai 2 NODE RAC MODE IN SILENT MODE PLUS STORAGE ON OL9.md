@@ -31,14 +31,6 @@
 	[root@ol926ain2 ~]# vi /etc/fstab
  		tmpfs      				  /dev/shm        	  tmpfs   defaults,size=4G	0 0
 
-###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE HOSTNAME NODE 1)
-
-    [root@ol926ain1 ~]# hostnamectl set-hostname ol926ain1.appsdba.info
-
-###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE SHOSTNAME NODE 2)
-
-    [root@ol926ain2 ~]# hostnamectl set-hostname ol926ain2.appsdba.info
-
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE STATIC NETWORK NODE 1)
 
 	[root@ol926ain1 ~]# nmcli device
