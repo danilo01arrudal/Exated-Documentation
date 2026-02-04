@@ -64,7 +64,7 @@
     [root@ol926ain1 ~]# nmcli con modify 'enp2s0' ifname enp2s0 ipv4.method manual ipv4.addresses 192.168.18.151/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
     [root@ol926ain1 ~]# nmcli con modify 'enp2s0' ipv4.dns 192.168.18.43 
     [root@ol926ain2 ~]# nmcli con down 'enp2s0'; nmcli con up 'enp2s0'
-	[root@ol926ain1 ~]# ip addr show ens4 
+	[root@ol926ain1 ~]# ip addr show enp2s0 
 	3: enp2s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 52:54:00:6b:81:56 brd ff:ff:ff:ff:ff:ff
     inet 192.168.18.152/24 brd 192.168.18.255 scope global noprefixroute enp2s0
@@ -116,12 +116,11 @@
     [root@ol926ain1 ~]# nmcli con modify 'enp2s0' ifname enp2s0 ipv4.method manual ipv4.addresses 192.168.18.152/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
     [root@ol926ain1 ~]# nmcli con modify 'enp2s0' ipv4.dns 192.168.18.43 
     [root@ol926ain2 ~]# nmcli con down 'enp2s0'; nmcli con up 'enp2s0'
-	[root@ol926ain1 ~]# ip addr show ens4 
+	[root@ol926ain2 ~]# ip addr show enp2s0
 	3: enp2s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
-    link/ether 52:54:00:6b:81:56 brd ff:ff:ff:ff:ff:ff
+    link/ether 52:54:00:71:a9:66 brd ff:ff:ff:ff:ff:ff
     inet 192.168.18.152/24 brd 192.168.18.255 scope global noprefixroute enp2s0
        valid_lft forever preferred_lft forever
-    altname enp0s4
     [root@ol926ain1 ~]# nmcli con modify 'enp3s0' ifname enp3s0 ipv4.method manual ipv4.addresses 192.168.100.102/24 ipv4.gateway 192.168.100.1 autoconnect yes ipv6.method disabled
     [root@ol926ain1 ~]# nmcli con down 'enp3s0'; nmcli con up 'enp3s0'
 	[root@ol926ain1 ~]#  ip addr show enp3s0 
