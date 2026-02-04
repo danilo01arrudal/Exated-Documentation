@@ -63,11 +63,12 @@
        valid_lft forever preferred_lft forever
     [root@ol926ain1 ~]# nmcli con modify 'ens4' ifname ens4 ipv4.method manual ipv4.addresses 192.168.18.151/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
     [root@ol926ain1 ~]# nmcli con modify 'ens4' ipv4.dns 192.168.18.43 
-    [root@ol926ain1 ~]# nmcli connection modify 'ens4' connection.autoconnect no
-	[root@ol926ain1 ~]# nmcli con down 'ens4'
-	[root@ol926ain1 ~]# ip addr show ens4
-	3: ens4: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
-    link/ether 52:54:00:2a:bf:a1 brd ff:ff:ff:ff:ff:ff
+    [root@ol926ain2 ~]# nmcli con down 'ens4'; nmcli con up 'ens4'
+	[root@ol926ain1 ~]# ip addr show ens4 
+	3: enp2s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 52:54:00:6b:81:56 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.18.152/24 brd 192.168.18.255 scope global noprefixroute enp2s0
+       valid_lft forever preferred_lft forever
     altname enp0s4
     [root@ol926ain1 ~]# nmcli con modify 'ens5' ifname ens5 ipv4.method manual ipv4.addresses 192.168.100.101/24 ipv4.gateway 192.168.100.1 autoconnect yes ipv6.method disabled
     [root@ol926ain1 ~]# nmcli con down 'ens5'; nmcli con up 'ens5'
@@ -114,13 +115,12 @@
        valid_lft forever preferred_lft forever
     [root@ol926ain2 ~]# nmcli con modify 'ens4' ifname ens4 ipv4.method manual ipv4.addresses 192.168.18.152/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
     [root@ol926ain2 ~]# nmcli con modify 'ens4' ipv4.dns 192.168.18.43 
-    [root@ol926ain1 ~]# nmcli connection modify 'ens4' connection.autoconnect no
-    [root@ol926ain2 ~]# nmcli con down 'ens4'
-    Conexão “enp2s0” desativada com sucesso (caminho D-Bus ativo: /org/freedesktop/NetworkManager/ActiveConnection/5)
-	[root@ol926ain2 ~]# ip addr show ens4 
-	3: ens4: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
-    link/ether 52:54:00:49:73:d9 brd ff:ff:ff:ff:ff:ff
-    altname enp0s4
+    [root@ol926ain2 ~]# nmcli con down 'ens4'; nmcli con up 'ens4'
+	[root@ol926ain1 ~]# ip addr show ens4 
+	3: enp2s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 52:54:00:6b:81:56 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.18.152/24 brd 192.168.18.255 scope global noprefixroute enp2s0
+       valid_lft forever preferred_lft forever
     [root@ol926ain2 ~]# nmcli con modify 'ens5' ifname ens5 ipv4.method manual ipv4.addresses 192.168.100.102/24 ipv4.gateway 192.168.100.1 autoconnect yes ipv6.method disabled 
     [root@ol926ain2 ~]# nmcli con down 'ens5'; nmcli con up 'ens5' 
     Conexão “enp3s0” desativada com sucesso (caminho D-Bus ativo: /org/freedesktop/NetworkManager/ActiveConnection/4)
