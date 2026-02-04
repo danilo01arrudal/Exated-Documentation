@@ -92,49 +92,49 @@
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE STATIC NETWORK NODE 2)
 
-	[root@ol926ain1 ~]# nmcli device
+	[root@ol926ain2 ~]# nmcli device
 	DEVICE  TYPE      STATE                   CONNECTION 
 	enp1s0  ethernet  connected               enp1s0     
 	enp2s0  ethernet  connected               enp2s0     
 	enp3s0  ethernet  connected               enp3s0     
 	lo      loopback  connected (externally)  lo      
-	[root@ol926ain1 ~]# nmcli connection show 
+	[root@ol926ain2 ~]# nmcli connection show 
 	NAME  UUID                                  TYPE      DEVICE 
 	ens3  aa44fa64-eec9-39ef-a6e0-4afc475c1d3d  ethernet  ens3   
 	ens4  7d3bc5e0-4947-33f0-a9c9-17a38dae09fe  ethernet  ens4   
 	ens5  ab517c35-fa91-30c4-b092-9dc57355067b  ethernet  ens5   
 	lo    248fd8c7-0102-4858-93a9-d38d2ea4fd05  loopback  lo
-    [root@ol926ain1 ~]# nmcli con modify 'enp1s0' ifname enp1s0 ipv4.method manual ipv4.addresses 192.168.18.122/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled
-    [root@ol926ain1 ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.43 
-    [root@ol926ain1 ~]# nmcli con down 'enp1s0'; nmcli con up 'ens3'  
-	[root@ol926ain1 ~]# ip addr show enp1s0
+    [root@ol926ain2 ~]# nmcli con modify 'enp1s0' ifname enp1s0 ipv4.method manual ipv4.addresses 192.168.18.122/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled
+    [root@ol926ain2 ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.43 
+    [root@ol926ain2 ~]# nmcli con down 'enp1s0'; nmcli con up 'ens3'  
+	[root@ol926ain2 ~]# ip addr show enp1s0
 	2: enp1s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 52:54:00:85:ab:d0 brd ff:ff:ff:ff:ff:ff
     altname enp1s0
     inet 192.168.18.121/24 brd 192.168.18.255 scope global noprefixroute ens3
        valid_lft forever preferred_lft forever
-    [root@ol926ain1 ~]# nmcli con modify 'enp2s0' ifname enp2s0 ipv4.method manual ipv4.addresses 192.168.18.152/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
-    [root@ol926ain1 ~]# nmcli con modify 'enp2s0' ipv4.dns 192.168.18.43 
+    [root@ol926ain2 ~]# nmcli con modify 'enp2s0' ifname enp2s0 ipv4.method manual ipv4.addresses 192.168.18.152/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
+    [root@ol926ain2 ~]# nmcli con modify 'enp2s0' ipv4.dns 192.168.18.43 
     [root@ol926ain2 ~]# nmcli con down 'enp2s0'; nmcli con up 'enp2s0'
 	[root@ol926ain2 ~]# ip addr show enp2s0
 	3: enp2s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 52:54:00:71:a9:66 brd ff:ff:ff:ff:ff:ff
     inet 192.168.18.152/24 brd 192.168.18.255 scope global noprefixroute enp2s0
        valid_lft forever preferred_lft forever
-    [root@ol926ain1 ~]# nmcli con modify 'enp3s0' ifname enp3s0 ipv4.method manual ipv4.addresses 192.168.100.102/24 ipv4.gateway 192.168.100.1 autoconnect yes ipv6.method disabled
-    [root@ol926ain1 ~]# nmcli con down 'enp3s0'; nmcli con up 'enp3s0'
-	[root@ol926ain1 ~]#  ip addr show enp3s0 
+    [root@ol926ain2 ~]# nmcli con modify 'enp3s0' ifname enp3s0 ipv4.method manual ipv4.addresses 192.168.100.102/24 ipv4.gateway 192.168.100.1 autoconnect yes ipv6.method disabled
+    [root@ol926ain2 ~]# nmcli con down 'enp3s0'; nmcli con up 'enp3s0'
+	[root@ol926ain2 ~]# ip addr show enp3s0 
 	4: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
-    link/ether 52:54:00:2c:ee:2d brd ff:ff:ff:ff:ff:ff
-    inet 192.168.100.101/24 brd 192.168.100.255 scope global noprefixroute enp3s0
+    link/ether 52:54:00:21:27:af brd ff:ff:ff:ff:ff:ff
+    inet 192.168.100.102/24 brd 192.168.100.255 scope global noprefixroute enp3s0
        valid_lft forever preferred_lft forever
-	[root@ol926ain1 ~]# nmcli device
+	[root@ol926ain2 ~]# nmcli device
 	DEVICE  TYPE      STATE                   CONNECTION 
 	enp1s0  ethernet  connected               enp1s0     
 	enp2s0  ethernet  connected               enp2s0     
 	enp3s0  ethernet  connected               enp3s0     
 	lo      loopback  connected (externally)  lo         
-	[root@ol926ain1 ~]# nmcli connection show 
+	[root@ol926ain2 ~]# nmcli connection show 
 	NAME    UUID                                  TYPE      DEVICE 
 	enp1s0  6b189709-3f1d-3683-bb3d-694e82554e82  ethernet  enp1s0 
 	enp2s0  8eaddc08-759c-3f10-a162-f58ef0800d99  ethernet  enp2s0 
