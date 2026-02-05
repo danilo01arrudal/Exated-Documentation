@@ -153,46 +153,46 @@
 	::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 
 	# Public Network - (enp1s0)
-	192.168.1.121 ol926ain1.appsdba.info ol926ain1
-	192.168.1.122 ol926ain2.appsdba.info ol926ain2
+	192.168.1.121 ol926ain1.appsdba.info 
+	192.168.1.122 ol926ain2.appsdba.info 
 
 	# Public Virtual IP (VIP) addresses for - (enp2s0)
-	192.168.1.151 ol926ain1-vip.appsdba.info ol926ain1-vip
-	192.168.1.152 ol926ain2-vip.appsdba.info ol926ain2-vip
+	192.168.1.151 ol926ain1-vip.appsdba.info 
+	192.168.1.152 ol926ain2-vip.appsdba.info 
 
 	# Internal Network
 	# Private Interconect - (enp3s0)
-	192.168.100.101 ol926ain1-priv.appsdba.info ol926ain1-priv
-	192.168.100.102 ol926ain2-priv.appsdba.info ol926ain2-priv
+	192.168.100.101 ol926ain1-priv.appsdba.info 
+	192.168.100.102 ol926ain2-priv.appsdba.info 
 
 	# Scan Network
-	192.168.1.184 ol926ain-scan.appsdba.info ol926ain-scan
-	192.168.1.185 ol926ain-scan.appsdba.info ol926ain-scan
-	192.168.1.186 ol926ain-scan.appsdba.info ol926ain-scan
-	192.168.1.187 ol926ain-scan.appsdba.info ol926ain-scan 
+	192.168.1.184 ol926ain-scan.appsdba.info 
+	192.168.1.185 ol926ain-scan.appsdba.info 
+	192.168.1.186 ol926ain-scan.appsdba.info 
+	192.168.1.187 ol926ain-scan.appsdba.info 
 
 	[root@ol926ain2 ~]# vi /etc/hosts
 	127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 	::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 
 	# Public Network - (enp1s0)
-	192.168.1.121 ol926ain1.appsdba.info ol926ain1
-	192.168.1.122 ol926ain2.appsdba.info ol926ain2
+	192.168.1.121 ol926ain1.appsdba.info 
+	192.168.1.122 ol926ain2.appsdba.info 
 
 	# Public Virtual IP (VIP) addresses for - (enp2s0)
-	192.168.1.151 ol926ain1-vip.appsdba.info ol926ain1-vip
-	192.168.1.152 ol926ain2-vip.appsdba.info ol926ain2-vip
+	192.168.1.151 ol926ain1-vip.appsdba.info 
+	192.168.1.152 ol926ain2-vip.appsdba.info 
 
 	# Internal Network
 	# Private Interconect - (enp3s0)
-	192.168.100.101 ol926ain1-priv.appsdba.info ol926ain1-priv
-	192.168.100.102 ol926ain2-priv.appsdba.info ol926ain2-priv
+	192.168.100.101 ol926ain1-priv.appsdba.info 
+	192.168.100.102 ol926ain2-priv.appsdba.info 
 
 	# Scan Network
-	192.168.1.184 ol926ain-scan.appsdba.info ol926ain-scan
-	192.168.1.185 ol926ain-scan.appsdba.info ol926ain-scan
-	192.168.1.186 ol926ain-scan.appsdba.info ol926ain-scan
-	192.168.1.187 ol926ain-scan.appsdba.info ol926ain-scan 	
+	192.168.1.184 ol926ain-scan.appsdba.info 
+	192.168.1.185 ol926ain-scan.appsdba.info 
+	192.168.1.186 ol926ain-scan.appsdba.info 
+	192.168.1.187 ol926ain-scan.appsdba.info
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( DISABLE AVAHI )
 
