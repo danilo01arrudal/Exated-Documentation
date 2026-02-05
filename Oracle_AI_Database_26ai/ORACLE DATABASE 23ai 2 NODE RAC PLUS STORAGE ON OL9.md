@@ -1,4 +1,4 @@
-**ORACLE AI DATABASE 26ai 2 NODE RAC MODE IN SILENT MODE PLUS STORAGE ON OL9.5**
+**ORACLE AI DATABASE 26ai 2 NODE RAC PLUS STORAGE ON OL9.5**
 
 > *The main purpose of installing Oracle RAC is to provide high availability and horizontal scalability for Oracle databases. It allows multiple database instances to operate simultaneously on different servers, sharing the same data store. This ensures that, in the event of a server failure, the database remains accessible without interruption, and also allows processing capacity to be increased by adding new servers. Oracle RAC is ideal for mission-critical applications that require continuous performance and fault tolerance, optimizing resource utilization and improving response to increasing transaction demands.*
 
@@ -47,15 +47,13 @@
 
 	[root@ol926ain1 ~]# nmcli device
 	DEVICE  TYPE      STATE                   CONNECTION 
-	enp1s0  ethernet  connected               enp1s0     
-	enp2s0  ethernet  connected               enp2s0     
+	enp1s0  ethernet  connected               enp1s0       
 	enp3s0  ethernet  connected               enp3s0     
 	lo      loopback  connected (externally)  lo      
 	[root@ol926ain1 ~]# nmcli connection show 
 	NAME  UUID                                  TYPE      DEVICE 
-	ens3  aa44fa64-eec9-39ef-a6e0-4afc475c1d3d  ethernet  ens3   
-	ens4  7d3bc5e0-4947-33f0-a9c9-17a38dae09fe  ethernet  ens4   
-	ens5  ab517c35-fa91-30c4-b092-9dc57355067b  ethernet  ens5   
+	enp1s0  aa44fa64-eec9-39ef-a6e0-4afc475c1d3d  ethernet  enp1s0   
+	enp3s0  ab517c35-fa91-30c4-b092-9dc57355067b  ethernet  enp3s0   
 	lo    248fd8c7-0102-4858-93a9-d38d2ea4fd05  loopback  lo
     [root@ol926ain1 ~]# nmcli con modify 'enp1s0' ifname enp1s0 ipv4.method manual ipv4.addresses 192.168.18.121/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled
     [root@ol926ain1 ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.43 
@@ -66,9 +64,6 @@
     altname enp1s0
     inet 192.168.18.121/24 brd 192.168.18.255 scope global noprefixroute ens3
        valid_lft forever preferred_lft forever
-    [root@ol926ain1 ~]# nmcli con modify 'enp2s0' ifname enp2s0 ipv4.method manual ipv4.addresses 192.168.18.151/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
-    [root@ol926ain1 ~]# nmcli con modify 'enp2s0' ipv4.dns 192.168.18.43 
-    [root@ol926ain2 ~]# nmcli con down 'enp2s0';
     [root@ol926ain1 ~]# nmcli con modify 'enp3s0' ifname enp3s0 ipv4.method manual ipv4.addresses 192.168.100.101/24 ipv4.gateway 192.168.100.1 autoconnect yes ipv6.method disabled
     [root@ol926ain1 ~]# nmcli con down 'enp3s0'; nmcli con up 'enp3s0'
 	[root@ol926ain1 ~]#  ip addr show enp3s0 
@@ -78,14 +73,12 @@
        valid_lft forever preferred_lft forever
 	[root@ol926ain1 ~]# nmcli device
 	DEVICE  TYPE      STATE                   CONNECTION 
-	enp1s0  ethernet  connected               enp1s0     
-	enp2s0  ethernet  connected               enp2s0     
+	enp1s0  ethernet  connected               enp1s0      
 	enp3s0  ethernet  connected               enp3s0     
 	lo      loopback  connected (externally)  lo         
 	[root@ol926ain1 ~]# nmcli connection show 
 	NAME    UUID                                  TYPE      DEVICE 
 	enp1s0  6b189709-3f1d-3683-bb3d-694e82554e82  ethernet  enp1s0 
-	enp2s0  8eaddc08-759c-3f10-a162-f58ef0800d99  ethernet  enp2s0 
 	enp3s0  0c094cdd-0d7a-3cbb-a2a2-09e0eaf839e9  ethernet  enp3s0 
 	lo      2928747e-520a-4089-9fd3-9f6a56a91144  loopback  lo    
 
@@ -93,15 +86,13 @@
 
 	[root@ol926ain2 ~]# nmcli device
 	DEVICE  TYPE      STATE                   CONNECTION 
-	enp1s0  ethernet  connected               enp1s0     
-	enp2s0  ethernet  connected               enp2s0     
+	enp1s0  ethernet  connected               enp1s0         
 	enp3s0  ethernet  connected               enp3s0     
 	lo      loopback  connected (externally)  lo      
 	[root@ol926ain2 ~]# nmcli connection show 
 	NAME  UUID                                  TYPE      DEVICE 
-	ens3  aa44fa64-eec9-39ef-a6e0-4afc475c1d3d  ethernet  ens3   
-	ens4  7d3bc5e0-4947-33f0-a9c9-17a38dae09fe  ethernet  ens4   
-	ens5  ab517c35-fa91-30c4-b092-9dc57355067b  ethernet  ens5   
+	enp1s0  aa44fa64-eec9-39ef-a6e0-4afc475c1d3d  ethernet  enp1s0     
+	enp3s0  ab517c35-fa91-30c4-b092-9dc57355067b  ethernet  enp3s0   
 	lo    248fd8c7-0102-4858-93a9-d38d2ea4fd05  loopback  lo
     [root@ol926ain2 ~]# nmcli con modify 'enp1s0' ifname enp1s0 ipv4.method manual ipv4.addresses 192.168.18.122/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled
     [root@ol926ain2 ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.43 
@@ -112,9 +103,6 @@
     altname enp1s0
     inet 192.168.18.121/24 brd 192.168.18.255 scope global noprefixroute ens3
        valid_lft forever preferred_lft forever
-    [root@ol926ain2 ~]# nmcli con modify 'enp2s0' ifname enp2s0 ipv4.method manual ipv4.addresses 192.168.18.152/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
-    [root@ol926ain2 ~]# nmcli con modify 'enp2s0' ipv4.dns 192.168.18.43 
-    [root@ol926ain2 ~]# nmcli con down 'enp2s0';
     [root@ol926ain2 ~]# nmcli con modify 'enp3s0' ifname enp3s0 ipv4.method manual ipv4.addresses 192.168.100.102/24 ipv4.gateway 192.168.100.1 autoconnect yes ipv6.method disabled
     [root@ol926ain2 ~]# nmcli con down 'enp3s0'; nmcli con up 'enp3s0'
 	[root@ol926ain2 ~]# ip addr show enp3s0 
@@ -124,14 +112,12 @@
        valid_lft forever preferred_lft forever
 	[root@ol926ain2 ~]# nmcli device
 	DEVICE  TYPE      STATE                   CONNECTION 
-	enp1s0  ethernet  connected               enp1s0     
-	enp2s0  ethernet  connected               enp2s0     
+	enp1s0  ethernet  connected               enp1s0       
 	enp3s0  ethernet  connected               enp3s0     
 	lo      loopback  connected (externally)  lo         
 	[root@ol926ain2 ~]# nmcli connection show 
 	NAME    UUID                                  TYPE      DEVICE 
 	enp1s0  6b189709-3f1d-3683-bb3d-694e82554e82  ethernet  enp1s0 
-	enp2s0  8eaddc08-759c-3f10-a162-f58ef0800d99  ethernet  enp2s0 
 	enp3s0  0c094cdd-0d7a-3cbb-a2a2-09e0eaf839e9  ethernet  enp3s0 
 	lo      2928747e-520a-4089-9fd3-9f6a56a91144  loopback  lo   
 
@@ -1126,228 +1112,59 @@
 	User:                         grid
 	Operating system:             Linux6.12.0-105.51.5.el9uek.x86_64
 
-###### CREATE RESPONSE FILE ( GRID.RSP )
+###### CHANGE CV_ASSUME_DISTID PARAMETER 
 
-	[grid@ol926ain1 ~]$ vi /home/grid/grid.rsp 
-	oracle.install.responseFileVersion=/oracle/install/rspfmt_crsinstall_response_schema_v23.0.0
-	INVENTORY_LOCATION=/u01/app/oraInventory
-	installOption=CRS_CONFIG
-	ORACLE_BASE=/u01/app/grid
-	clusterUsage=RAC
-	zeroDowntimeGIPatching=true
-	skipDriverUpdate=false
-	OSDBA=asmdba
-	OSOPER=asmoper
-	OSASM=asmadmin
-	scanType=LOCAL_SCAN
-	scanClientDataFile=
-	scanName=ol926ain-scan
-	scanPort=1521
-	configureAsExtendedCluster=false
-	clusterName=ol926ain
-	configureGNS=false
-	configureDHCPAssignedVIPs=false
-	gnsSubDomain=
-	gnsVIPAddress=
-	sites=
-	clusterNodes=ol926ain1.appsdba.info:ol926ain1-vip.appsdba.info,ol926ain2.appsdba.info:ol926ain2-vip.appsdba.info
-	networkInterfaceList=ens3:192.168.18.0:1,ens5:192.168.100.0:5
-	storageOption=FLEX_ASM_STORAGE
-	votingFilesLocations=
-	ocrLocations=
-	clientDataFile=
-	useIPMI=false
-	bmcBinpath=
-	bmcUsername=
-	bmcPassword=
-	sysasmPassword=
-	diskGroupName=DATA
-	redundancy=EXTERNAL
-	auSize=4
-	failureGroups=
-	disksWithFailureGroupNames=/dev/asm-disk1,,/dev/asm-disk3,,/dev/asm-disk2,,/dev/asm-disk4,
-	diskList=/dev/asm-disk1,/dev/asm-disk3,/dev/asm-disk2,/dev/asm-disk4
-	quorumFailureGroupNames=
-	diskString=/dev/asm-disk*
-	asmsnmpPassword=
-	ignoreDownNodes=false
-	configureBackupDG=false
-	backupDGName=RECO
-	backupDGRedundancy=NORMAL
-	backupDGAUSize=1
-	backupDGFailureGroups=
-	backupDGDisksWithFailureGroupNames=
-	backupDGDiskList=
-	backupDGQuorumFailureGroups=
-	managementOption=NONE
-	omsHost=
-	omsPort=0
-	emAdminUser=
-	emAdminPassword=
-	executeRootScript=true
-	configMethod=ROOT
-	sudoPath=/usr/local/bin/sudo
-	sudoUserName=grid
-	batchInfo=
-	nodesToDelete=
-	enableAutoFixup=true
+    [root@ol926ain1 ~]# vi /u01/app/23.26.1/grid/cv/admin/cvu_config
+		CV_ASSUME_DISTID=OL9
 
-###### BEFORE RUNNING, UPDATE THE ANSWER FILE WITH THE CORRECT PASSWORD
+###### INSTALL GRID 26AI 
 
-	sysasmPassword=*******
-	asmsnmpPassword=*******
+	[root@ol926ain1 ~]# xhost + 
+	[root@ol926ain1 ~]# su - grid
+	[grid@ol926ain1 ~]$ export DISPLAY=:0.0 
+	[grid@ol926ain1 ~]$ /u01/app/23.26.1/grid/gridSetup.sh
+	
+![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
 
-###### INSTALL GRID 23AI 
+![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
 
-	[grid@ol926ain1 ~]$ /u01/app/23.26.1/grid/gridSetup.sh -silent -responseFile /home/grid/grid.rsp 
-	Launching Oracle Grid Infrastructure Setup Wizard...
+![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
 
- 	Enter password for 'root' user: 
-	The response file for this session can be found at:
- 	/u01/app/23.26.1/grid/install/response/grid_2026-02-02_06-24-22PM.rsp
+![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
 
-	You can find the log of this install session at:
- 	/tmp/GridSetupActions2026-02-02_06-24-22PM/gridSetupActions2026-02-02_06-24-22PM.log
+![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
 
-	[ Start ] NETCA - 2026-02-02 18:30:39.276
-	Command: /bin/sh -c /u01/app/23.26.1/grid/bin/netca /orahome /u01/app/23.26.1/grid /instype typical /inscomp client,oraclenet,javavm,server,ano /insprtcl tcp /cfg local /authadp NO_VALUE /responseFile /u01/app/23.26.1/grid/network/install/netca_typ.rsp /silent  /orahnam OraGI23Home1  /ouiinternal
+![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
 
-	Parsing command line arguments:
-    	Parameter "orahome" = /u01/app/23.26.1/grid
-   		Parameter "instype" = typical
-    	Parameter "inscomp" = client,oraclenet,javavm,server,ano
-    	Parameter "insprtcl" = tcp
-    	Parameter "cfg" = local
-    	Parameter "authadp" = NO_VALUE
-    	Parameter "responsefile" = /u01/app/23.26.1/grid/network/install/netca_typ.rsp
-    	Parameter "silent" = true
-    	Parameter "orahnam" = OraGI23Home1
-    	Parameter "ouiinternal" = true
-	Done parsing command line arguments.
-	Oracle Net Services Configuration:
-	Profile configuration complete.
-	Profile configuration complete.
-	Listener "LISTENER" already exists.
-	Oracle Net Services configuration successful. The exit code is 0
-	[ Exit Code ] 0
-	[ End ] NETCA - 2026-02-02 18:30:44.559
+![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
 
-	[ Start ] ASMCA - 2026-02-02 18:30:44.591
-	Command: /bin/sh -c /u01/app/23.26.1/grid/bin/asmca -silent -postConfigureASM -oui_internal
-	SYS_PASSWORD_PROMPT
-	ASMSNMP_PASSWORD_PROMPT
+![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
 
-	Post configuration completed successfully
+![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
 
-	[ Exit Code ] 0
-	[ End ] ASMCA - 2026-02-02 18:30:48.879
+![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
 
-	[ Start ] CVU - 2026-02-02 18:30:48.949
-	Command: /bin/sh -c /u01/app/23.26.1/grid/bin/cluvfy  stage -post crsinst -collect cluster -n all
+![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
 
-	Initializing ...
+![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
 
-	Performing following verification checks ...
+![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
 
-  	Node Connectivity ...
-    	Hosts File ...PASSED
-    	Check that maximum (MTU) size packet goes through subnet ...PASSED
-    	subnet mask consistency for subnet "192.168.18.0" ...PASSED
-    	subnet mask consistency for subnet "192.168.100.0" ...PASSED
-  	Node Connectivity ...PASSED
-  	Multicast or broadcast check ...
-    Checking subnet "192.168.100.0" for multicast communication with multicast
-    group "224.0.0.251"
+![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
 
-    Subnet        Network Type              Multicast Enabled       
-    ------------  ------------------------  ------------------------
-    192.168.100.0  PRIVATE                   TRUE                    
-  	
-	Multicast or broadcast check ...PASSED
-  	Time zone consistency ...PASSED
-  	Path existence, ownership, permissions and attributes ...
-    Path "/var" ...PASSED
-    Path "/var/lib/oracle" ...PASSED
-    Path "/u01/app/oraInventory/ContentsXML/inventory.xml" ...PASSED
-    Path "/dev/asm" ...PASSED
-    Path "/dev/shm" ...PASSED
-    Path "/etc/init.d/ohasd" ...PASSED
-    Path "/etc/init.d/init.ohasd" ...PASSED
-    Path "/etc/init.d/init.tfa" ...PASSED
-    Path "/etc/oracle/maps" ...PASSED
-    Path "/etc/oraInst.loc" ...PASSED
-    Path "/etc/tmpfiles.d/oracleGI.conf" ...PASSED
-    Path "/u01/app/grid/diag/crs/ol926ain1/crs/stage" ...PASSED
-    Path "/u01/app/grid/diag/crs/ol926ain1/crs/alert" ...PASSED
-    Path "/u01/app/grid/diag/crs/ol926ain1/crs/lck" ...PASSED
-    Path "/u01/app/grid/diag/crs/ol926ain1/crs/log" ...PASSED
-    Path "/u01/app/grid/diag/crs/ol926ain1/crs/metadata_dgif" ...PASSED
-    Path "/u01/app/grid/diag/crs/ol926ain1/crs/metadata" ...PASSED
-    Path "/u01/app/grid/diag/crs/ol926ain1/crs/incpkg" ...PASSED
-    Path "/u01/app/grid/diag/crs/ol926ain1/crs/sweep" ...PASSED
-    Path "/u01/app/grid/diag/crs/ol926ain1/crs/incident" ...PASSED
-    Path "/u01/app/grid/diag/crs/ol926ain1/crs/cdump" ...PASSED
-    Path "/u01/app/grid/diag/crs/ol926ain1/crs/trace" ...PASSED
-    Path "/u01/app/grid/diag/crs/ol926ain1/crs/metadata_pv" ...PASSED
-    Path "/u01/app/23.26.1/grid/gpnp/wallets/peer/cwallet.sso" ...PASSED
-    Path "/u01/app/23.26.1/grid/gpnp/wallets/root/cwallet.sso" ...PASSED
-    Path "/u01/app/23.26.1/grid/gpnp/profiles/peer/profile.xml" ...PASSED
-  	Path existence, ownership, permissions and attributes ...PASSED
-  	Cluster Manager Integrity ...PASSED
-  	User Mask ...PASSED
-  	Cluster Integrity ...PASSED
-  	OCR Integrity ...PASSED
-  	CRS Integrity ...
-    Clusterware Version Consistency ...PASSED
-  	CRS Integrity ...PASSED
-  	Node Application Existence ...PASSED
-  	Single Client Access Name (SCAN) ...
-    DNS/NIS name service 'ol926ain-scan' ...
-      Name Service Switch Configuration File Integrity ...PASSED
-    DNS/NIS name service 'ol926ain-scan' ...PASSED
-  	Single Client Access Name (SCAN) ...PASSED
-  	OLR Integrity ...PASSED
-  	Voting Disk ...PASSED
-  	ASM Integrity ...PASSED
-  	ASM Network ...PASSED
-  	ASM disk group free space ...PASSED
-  	User Not In Group "root": grid ...PASSED
-  	Clock Synchronization ...
-    Network Time Protocol (NTP) ...
-      Daemon 'chronyd' ...PASSED
-      NTP daemon or service using UDP port 123 ...PASSED
-      chrony daemon is synchronized with at least one external time source ...PASSED
-    Network Time Protocol (NTP) ...PASSED
-  	Clock Synchronization ...PASSED
-  	VIP Subnet configuration check ...PASSED
-  	Oracle Net Services configuration ...PASSED
-  	Network configuration consistency checks ...PASSED
-  	Package: psmisc-22.6-19 ...PASSED
-  	File system mount options for path GI_HOME ...PASSED
-  	File system mount option hidepid for proc filesystem ...PASSED
-  	Cleanup of communication socket files ...PASSED
-  	Domain Sockets ...PASSED
+![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
 
-	Post-check for cluster services setup was successful. 
+![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
 
-	CVU operation performed:      stage -post crsinst
-	Date:                         Feb 2, 2026, 6:30:49 PM
-	CVU version:                  23.26.1.0.0 (010926x8664)
-	Clusterware version:          23.0.0.0.0
-	CVU home:                     /u01/app/23.26.1/grid
-	Grid home:                    /u01/app/23.26.1/grid
-	User:                         grid
-	Operating system:             Linux6.12.0-105.51.5.el9uek.x86_64
-	Successfully Setup Software.
-	[ Exit Code ] 0
-	[ End ] CVU - 2026-02-02 18:31:45.274
+![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
 
-	Moved the install session logs to:
- 	/u01/app/oraInventory/logs/GridSetupActions2026-02-02_06-24-22PM
+![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
+
+![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
 
 ###### POST INSTALL CONFIGURATION GRID 
 
-    [root@ol926ain1 ~]# su - grid
+	[root@ol926ain1 ~]# su - grid
 	[grid@ol926ain1 ~]$ /u01/app/23.26.1/grid/gridSetup.sh -executeConfigTools -responseFile /home/grid/grid.rsp -silent 
 	Launching Oracle Grid Infrastructure Setup Wizard...
 
@@ -1380,8 +1197,7 @@
     Nome   Endereço IP     Sub-rede        Gateway         Gateway Def.    Endereço HW       MTU   
     ------ --------------- --------------- --------------- --------------- ----------------- ------
     enp1s0 192.168.18.121  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:28:86:AA 1500  
-    enp1s0 192.168.18.185  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:28:86:AA 1500  
-    enp1s0 192.168.18.151  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:28:86:AA 1500  
+    enp1s0 192.168.18.185  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:28:86:AA 1500   
     enp1s0 192.168.18.184  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:28:86:AA 1500  
     enp1s0 192.168.18.187  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:28:86:AA 1500  
     enp3s0 192.168.100.101 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:7F:44:40 1500  
@@ -1391,7 +1207,6 @@
     Nome   Endereço IP     Sub-rede        Gateway         Gateway Def.    Endereço HW       MTU   
     ------ --------------- --------------- --------------- --------------- ----------------- ------
     enp1s0 192.168.18.122  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:6B:00:2D 1500  
-    enp1s0 192.168.18.152  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:6B:00:2D 1500  
     enp1s0 192.168.18.186  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:6B:00:2D 1500  
     enp3s0 192.168.100.102 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:5D:35:1F 1500  
     
@@ -1407,30 +1222,21 @@
     Nó                Nome          Endereço IP   Sub-rede      MTU             
     ----------------  ------------  ------------  ------------  ----------------
     ol926ain1             enp1s0        192.168.18.121  192.168.18.0  1500            
-    ol926ain1             enp1s0        192.168.18.185  192.168.18.0  1500            
-    ol926ain1             enp1s0        192.168.18.151  192.168.18.0  1500            
+    ol926ain1             enp1s0        192.168.18.185  192.168.18.0  1500                      
     ol926ain1             enp1s0        192.168.18.184  192.168.18.0  1500            
     ol926ain1             enp1s0        192.168.18.187  192.168.18.0  1500            
-    ol926ain2             enp1s0        192.168.18.122  192.168.18.0  1500            
-    ol926ain2             enp1s0        192.168.18.152  192.168.18.0  1500            
+    ol926ain2             enp1s0        192.168.18.122  192.168.18.0  1500                     
     ol926ain2             enp1s0        192.168.18.186  192.168.18.0  1500            
 
     Origem                      Destino                     Conectado?                
     --------------------------  --------------------------  --------------------------
-    ol926ain1[enp1s0:192.168.18.121]  ol926ain2[enp1s0:192.168.18.122]  sim                       
-    ol926ain1[enp1s0:192.168.18.121]  ol926ain2[enp1s0:192.168.18.152]  sim                       
+    ol926ain1[enp1s0:192.168.18.121]  ol926ain2[enp1s0:192.168.18.122]  sim                                            
     ol926ain1[enp1s0:192.168.18.121]  ol926ain2[enp1s0:192.168.18.186]  sim                       
-    ol926ain1[enp1s0:192.168.18.185]  ol926ain2[enp1s0:192.168.18.122]  sim                       
-    ol926ain1[enp1s0:192.168.18.185]  ol926ain2[enp1s0:192.168.18.152]  sim                       
-    ol926ain1[enp1s0:192.168.18.185]  ol926ain2[enp1s0:192.168.18.186]  sim                       
-    ol926ain1[enp1s0:192.168.18.151]  ol926ain2[enp1s0:192.168.18.122]  sim                       
-    ol926ain1[enp1s0:192.168.18.151]  ol926ain2[enp1s0:192.168.18.152]  sim                       
-    ol926ain1[enp1s0:192.168.18.151]  ol926ain2[enp1s0:192.168.18.186]  sim                       
-    ol926ain1[enp1s0:192.168.18.184]  ol926ain2[enp1s0:192.168.18.122]  sim                       
-    ol926ain1[enp1s0:192.168.18.184]  ol926ain2[enp1s0:192.168.18.152]  sim                       
+    ol926ain1[enp1s0:192.168.18.185]  ol926ain2[enp1s0:192.168.18.122]  sim                                         
+    ol926ain1[enp1s0:192.168.18.185]  ol926ain2[enp1s0:192.168.18.186]  sim                                           
+    ol926ain1[enp1s0:192.168.18.184]  ol926ain2[enp1s0:192.168.18.122]  sim                                             
     ol926ain1[enp1s0:192.168.18.184]  ol926ain2[enp1s0:192.168.18.186]  sim                       
-    ol926ain1[enp1s0:192.168.18.187]  ol926ain2[enp1s0:192.168.18.122]  sim                       
-    ol926ain1[enp1s0:192.168.18.187]  ol926ain2[enp1s0:192.168.18.152]  sim                       
+    ol926ain1[enp1s0:192.168.18.187]  ol926ain2[enp1s0:192.168.18.122]  sim                                           
     ol926ain1[enp1s0:192.168.18.187]  ol926ain2[enp1s0:192.168.18.186]  sim                       
 
     Origem                      Destino                     Conectado?                
@@ -1877,7 +1683,7 @@
     [oracle@ol926ain1 dbhome_1]$ unzip p37370465_230000_Linux-x86-64.zip
     [oracle@ol926ain1 dbhome_1]$ rm -vf p37370465_230000_Linux-x86-64.zip
 
-###### INSTALL ORACLE DATABASE 23AI SOFTWARE 
+###### INSTALL ORACLE DATABASE 26AI SOFTWARE 
 
      [root@ol926ain1 ~]# su - oracle 
 
