@@ -1115,7 +1115,7 @@
 ###### CHANGE CV_ASSUME_DISTID PARAMETER 
 
     [root@ol926ain1 ~]# vi /u01/app/23.26.1/grid/cv/admin/cvu_config
-		CV_ASSUME_DISTID=OL9
+	CV_ASSUME_DISTID=OL9
 
 ###### INSTALL GRID 26AI 
 
@@ -1160,17 +1160,123 @@
 
 ![oracle database 26ai grid_018](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_018.png)
 
-###### POST INSTALL CONFIGURATION GRID 
+###### INSTALL GRID 26AI RUN CONFIGURATION SCRIPTS {orainstRoot.sh} NODE 1
 
-	[root@ol926ain1 ~]# su - grid
-	[grid@ol926ain1 ~]$ /u01/app/23.26.1/grid/gridSetup.sh -executeConfigTools -responseFile /home/grid/grid.rsp -silent 
-	Launching Oracle Grid Infrastructure Setup Wizard...
+	[root@ol926ain1 ~]# /u01/app/oraInventory/orainstRoot.sh
+	Changing permissions of /u01/app/oraInventory.
+	Adding read,write permissions for group.
+	Removing read,write,execute permissions for world.
 
-	You can find the logs of this session at:
-	/u01/app/oraInventory/logs/GridSetupActions2026-02-02_06-45-21PM
+	Changing groupname of /u01/app/oraInventory to oinstall.
+	The execution of the script is complete.
 
-	Successfully Configured Software.
-	[INS-10115] All configuration tools were previously ran successfully, no further configuration is required.
+###### INSTALL GRID 26AI RUN CONFIGURATION SCRIPTS {orainstRoot.sh} NODE 2
+
+	[root@ol926ain2 ~]# /u01/app/oraInventory/orainstRoot.sh
+	Changing permissions of /u01/app/oraInventory.
+	Adding read,write permissions for group.
+	Removing read,write,execute permissions for world.
+
+	Changing groupname of /u01/app/oraInventory to oinstall.
+	The execution of the script is complete.
+
+###### INSTALL GRID 26AI RUN CONFIGURATION SCRIPTS {root.sh} NODE 1
+
+	[root@ol926ain1 ~]# /u01/app/23.26.1/grid/root.sh
+	Performing root user operation.
+
+	The following environment variables are set as:
+    	ORACLE_OWNER= grid
+    	ORACLE_HOME=  /u01/app/23.26.1/grid
+
+	Enter the full pathname of the local bin directory: [/usr/local/bin]: 
+
+	Entries will be added to the /etc/oratab file as needed by
+	Database Configuration Assistant when a database is created
+	Finished running generic part of root script.
+	Now product-specific root actions will be performed.
+	RAC option enabled on: Linux
+	Executing command '/u01/app/23.26.1/grid/perl/bin/perl -I/u01/app/23.26.1/grid/perl/lib -I/u01/app/23.26.1/grid/crs/install /u01/app/23.26.1/grid/crs/install/rootcrs.pl '
+	Using configuration parameter file: /u01/app/23.26.1/grid/crs/install/crsconfig_params
+	The log of current session can be found at:
+	  /u01/app/grid/crsdata/ol926ain1/crsconfig/rootcrs_ol926ain1_2026-02-05_08-14-46PM.log
+	2026/02/05 20:14:49 CLSRSC-594: Executing installation step 1 of 18: 'ValidateEnv'.
+	2026/02/05 20:14:49 CLSRSC-594: Executing installation step 2 of 18: 'CheckRootCert'.
+	2026/02/05 20:14:49 CLSRSC-594: Executing installation step 3 of 18: 'GenSiteGUIDs'.
+	2026/02/05 20:14:50 CLSRSC-594: Executing installation step 4 of 18: 'SetupOSD'.
+	2026/02/05 20:14:50 CLSRSC-594: Executing installation step 5 of 18: 'CheckCRSConfig'.
+	2026/02/05 20:14:50 CLSRSC-594: Executing installation step 6 of 18: 'SetupLocalGPNP'.
+	2026/02/05 20:14:51 CLSRSC-594: Executing installation step 7 of 18: 'CreateRootCert'.
+	2026/02/05 20:14:51 CLSRSC-594: Executing installation step 8 of 18: 'ConfigOLR'.
+	2026/02/05 20:14:51 CLSRSC-594: Executing installation step 9 of 18: 'ConfigCHMOS'.
+	2026/02/05 20:14:51 CLSRSC-594: Executing installation step 10 of 18: 'CreateOHASD'.
+	2026/02/05 20:14:52 CLSRSC-594: Executing installation step 11 of 18: 'ConfigOHASD'.
+	2026/02/05 20:14:56 CLSRSC-594: Executing installation step 12 of 18: 'SetupTFA'.
+	2026/02/05 20:14:56 CLSRSC-594: Executing installation step 13 of 18: 'InstallACFS'.
+	2026/02/05 20:14:58 CLSRSC-594: Executing installation step 14 of 18: 'CheckFirstNode'.
+	2026/02/05 20:14:58 CLSRSC-594: Executing installation step 15 of 18: 'InitConfig'.
+	CRS-4256: Updating the profile
+	Successful addition of voting disk 39f7ba31af5f4fc7bf8488ab79092348.
+	Successfully replaced voting disk group with +DATA.
+	CRS-4256: Updating the profile
+	CRS-4266: Voting file(s) successfully replaced
+	##  STATE    File Universal Id                File Name Disk group
+	--  -----    -----------------                --------- ---------
+	 1. ONLINE   39f7ba31af5f4fc7bf8488ab79092348 (/dev/asm-disk1) [DATA]
+	Located 1 voting disk(s).
+	2026/02/05 20:15:50 CLSRSC-594: Executing installation step 16 of 18: 'StartCluster'.
+	2026/02/05 20:16:10 CLSRSC-343: Successfully started Oracle Clusterware stack
+	2026/02/05 20:16:11 CLSRSC-4002: Successfully installed Oracle Autonomous Health Framework (AHF).
+	2026/02/05 20:16:12 CLSRSC-594: Executing installation step 17 of 18: 'ConfigNode'.
+	clscfg: EXISTING configuration version 23 detected.
+	Successfully accumulated necessary OCR keys.
+	Creating OCR keys for user 'root', privgrp 'root'..
+	Operation successful.
+	2026/02/05 20:16:36 CLSRSC-594: Executing installation step 18 of 18: 'PostConfig'.
+	2026/02/05 20:17:02 CLSRSC-325: Configure Oracle Grid Infrastructure for a Cluster ... succeeded
+
+###### INSTALL GRID 26AI RUN CONFIGURATION SCRIPTS {root.sh} NODE 1
+
+	[root@ol926ain2 ~]# /u01/app/23.26.1/grid/root.sh 
+	Performing root user operation.
+	
+	The following environment variables are set as:
+	    ORACLE_OWNER= grid
+	    ORACLE_HOME=  /u01/app/23.26.1/grid
+	
+	Enter the full pathname of the local bin directory: [/usr/local/bin]: 
+	
+	Entries will be added to the /etc/oratab file as needed by
+	Database Configuration Assistant when a database is created
+	Finished running generic part of root script.
+	Now product-specific root actions will be performed.
+	RAC option enabled on: Linux
+	Executing command '/u01/app/23.26.1/grid/perl/bin/perl -I/u01/app/23.26.1/grid/perl/lib -I/u01/app/23.26.1/grid/crs/install /u01/app/23.26.1/grid/crs/install/rootcrs.pl '
+	Using configuration parameter file: /u01/app/23.26.1/grid/crs/install/crsconfig_params
+	The log of current session can be found at:
+	  /u01/app/grid/crsdata/ol926ain2/crsconfig/rootcrs_ol926ain2_2026-02-05_08-17-12PM.log
+	2026/02/05 20:17:15 CLSRSC-594: Executing installation step 1 of 18: 'ValidateEnv'.
+	2026/02/05 20:17:15 CLSRSC-594: Executing installation step 2 of 18: 'CheckRootCert'.
+	2026/02/05 20:17:16 CLSRSC-594: Executing installation step 3 of 18: 'GenSiteGUIDs'.
+	2026/02/05 20:17:16 CLSRSC-594: Executing installation step 4 of 18: 'SetupOSD'.
+	2026/02/05 20:17:16 CLSRSC-594: Executing installation step 5 of 18: 'CheckCRSConfig'.
+	2026/02/05 20:17:16 CLSRSC-594: Executing installation step 6 of 18: 'SetupLocalGPNP'.
+	2026/02/05 20:17:16 CLSRSC-594: Executing installation step 7 of 18: 'CreateRootCert'.
+	2026/02/05 20:17:16 CLSRSC-594: Executing installation step 8 of 18: 'ConfigOLR'.
+	2026/02/05 20:17:17 CLSRSC-594: Executing installation step 9 of 18: 'ConfigCHMOS'.
+	2026/02/05 20:17:17 CLSRSC-594: Executing installation step 10 of 18: 'CreateOHASD'.
+	2026/02/05 20:17:17 CLSRSC-594: Executing installation step 11 of 18: 'ConfigOHASD'.
+	2026/02/05 20:17:32 CLSRSC-330: Adding Clusterware entries to file 'oracle-ohasd.service'
+	2026/02/05 20:17:39 CLSRSC-594: Executing installation step 12 of 18: 'SetupTFA'.
+	2026/02/05 20:17:39 CLSRSC-594: Executing installation step 13 of 18: 'InstallACFS'.
+	2026/02/05 20:17:40 CLSRSC-594: Executing installation step 14 of 18: 'CheckFirstNode'.
+	2026/02/05 20:17:40 CLSRSC-594: Executing installation step 15 of 18: 'InitConfig'.
+	2026/02/05 20:17:47 CLSRSC-594: Executing installation step 16 of 18: 'StartCluster'.
+	2026/02/05 20:17:58 CLSRSC-343: Successfully started Oracle Clusterware stack
+	2026/02/05 20:17:58 CLSRSC-594: Executing installation step 17 of 18: 'ConfigNode'.
+	2026/02/05 20:17:58 CLSRSC-594: Executing installation step 18 of 18: 'PostConfig'.
+	2026/02/05 20:18:00 CLSRSC-325: Configure Oracle Grid Infrastructure for a Cluster ... succeeded
+	2026/02/05 20:19:00 CLSRSC-4002: Successfully installed Oracle Autonomous Health Framework (AHF).
 
 ###### POST INSTALL CHECK ENVIRONMENT ( RUNCLUVFY )
 
