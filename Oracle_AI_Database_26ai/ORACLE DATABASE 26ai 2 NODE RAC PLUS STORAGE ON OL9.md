@@ -1235,7 +1235,7 @@
 	2026/02/05 20:16:36 CLSRSC-594: Executing installation step 18 of 18: 'PostConfig'.
 	2026/02/05 20:17:02 CLSRSC-325: Configure Oracle Grid Infrastructure for a Cluster ... succeeded
 
-###### INSTALL GRID 26AI RUN CONFIGURATION SCRIPTS {root.sh} NODE 1
+###### INSTALL GRID 26AI RUN CONFIGURATION SCRIPTS {root.sh} NODE 2
 
 	[root@ol926ain2 ~]# /u01/app/23.26.1/grid/root.sh 
 	Performing root user operation.
