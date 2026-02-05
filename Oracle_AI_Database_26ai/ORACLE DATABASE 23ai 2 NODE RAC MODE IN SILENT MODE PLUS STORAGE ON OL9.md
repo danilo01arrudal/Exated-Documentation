@@ -68,13 +68,7 @@
        valid_lft forever preferred_lft forever
     [root@ol926ain1 ~]# nmcli con modify 'enp2s0' ifname enp2s0 ipv4.method manual ipv4.addresses 192.168.18.151/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
     [root@ol926ain1 ~]# nmcli con modify 'enp2s0' ipv4.dns 192.168.18.43 
-    [root@ol926ain2 ~]# nmcli con down 'enp2s0'; nmcli con up 'enp2s0'
-	[root@ol926ain1 ~]# ip addr show enp2s0 
-	3: enp2s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
-    link/ether 52:54:00:6b:81:56 brd ff:ff:ff:ff:ff:ff
-    inet 192.168.18.152/24 brd 192.168.18.255 scope global noprefixroute enp2s0
-       valid_lft forever preferred_lft forever
-    altname enp0s4
+    [root@ol926ain2 ~]# nmcli con down 'enp2s0';
     [root@ol926ain1 ~]# nmcli con modify 'enp3s0' ifname enp3s0 ipv4.method manual ipv4.addresses 192.168.100.101/24 ipv4.gateway 192.168.100.1 autoconnect yes ipv6.method disabled
     [root@ol926ain1 ~]# nmcli con down 'enp3s0'; nmcli con up 'enp3s0'
 	[root@ol926ain1 ~]#  ip addr show enp3s0 
@@ -120,12 +114,7 @@
        valid_lft forever preferred_lft forever
     [root@ol926ain2 ~]# nmcli con modify 'enp2s0' ifname enp2s0 ipv4.method manual ipv4.addresses 192.168.18.152/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled 
     [root@ol926ain2 ~]# nmcli con modify 'enp2s0' ipv4.dns 192.168.18.43 
-    [root@ol926ain2 ~]# nmcli con down 'enp2s0'; nmcli con up 'enp2s0'
-	[root@ol926ain2 ~]# ip addr show enp2s0
-	3: enp2s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
-    link/ether 52:54:00:71:a9:66 brd ff:ff:ff:ff:ff:ff
-    inet 192.168.18.152/24 brd 192.168.18.255 scope global noprefixroute enp2s0
-       valid_lft forever preferred_lft forever
+    [root@ol926ain2 ~]# nmcli con down 'enp2s0';
     [root@ol926ain2 ~]# nmcli con modify 'enp3s0' ifname enp3s0 ipv4.method manual ipv4.addresses 192.168.100.102/24 ipv4.gateway 192.168.100.1 autoconnect yes ipv6.method disabled
     [root@ol926ain2 ~]# nmcli con down 'enp3s0'; nmcli con up 'enp3s0'
 	[root@ol926ain2 ~]# ip addr show enp3s0 
@@ -145,54 +134,6 @@
 	enp2s0  8eaddc08-759c-3f10-a162-f58ef0800d99  ethernet  enp2s0 
 	enp3s0  0c094cdd-0d7a-3cbb-a2a2-09e0eaf839e9  ethernet  enp3s0 
 	lo      2928747e-520a-4089-9fd3-9f6a56a91144  loopback  lo   
-
-###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE /etc/hosts )
-
-	[root@ol926ain1 ~]# vi /etc/hosts
-	127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
-	::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-
-	# Public Network - (enp1s0)
-	192.168.1.121 ol926ain1.appsdba.info 
-	192.168.1.122 ol926ain2.appsdba.info 
-
-	# Public Virtual IP (VIP) addresses for - (enp2s0)
-	192.168.1.151 ol926ain1-vip.appsdba.info 
-	192.168.1.152 ol926ain2-vip.appsdba.info 
-
-	# Internal Network
-	# Private Interconect - (enp3s0)
-	192.168.100.101 ol926ain1-priv.appsdba.info 
-	192.168.100.102 ol926ain2-priv.appsdba.info 
-
-	# Scan Network
-	192.168.1.184 ol926ain-scan.appsdba.info 
-	192.168.1.185 ol926ain-scan.appsdba.info 
-	192.168.1.186 ol926ain-scan.appsdba.info 
-	192.168.1.187 ol926ain-scan.appsdba.info 
-
-	[root@ol926ain2 ~]# vi /etc/hosts
-	127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
-	::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-
-	# Public Network - (enp1s0)
-	192.168.1.121 ol926ain1.appsdba.info 
-	192.168.1.122 ol926ain2.appsdba.info 
-
-	# Public Virtual IP (VIP) addresses for - (enp2s0)
-	192.168.1.151 ol926ain1-vip.appsdba.info 
-	192.168.1.152 ol926ain2-vip.appsdba.info 
-
-	# Internal Network
-	# Private Interconect - (enp3s0)
-	192.168.100.101 ol926ain1-priv.appsdba.info 
-	192.168.100.102 ol926ain2-priv.appsdba.info 
-
-	# Scan Network
-	192.168.1.184 ol926ain-scan.appsdba.info 
-	192.168.1.185 ol926ain-scan.appsdba.info 
-	192.168.1.186 ol926ain-scan.appsdba.info 
-	192.168.1.187 ol926ain-scan.appsdba.info
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( DISABLE AVAHI )
 
