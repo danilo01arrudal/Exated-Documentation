@@ -12,6 +12,12 @@
 
     virt-install --virt-type kvm --name ol826ain2 --memory 8192 --vcpus 2 --os-variant ol8.10 --cdrom /var/lib/libvirt/images/OracleLinux-R8-U10-x86_64-dvd.iso --network bridge=br0,model=virtio --network network=priv0,model=virtio --disk path=/var/lib/libvirt/images/ol826ain2.qcow2,size=59
 
+###### PARTITIONING CONFIGURATION 
+
+	/ 		48gb
+	/boot 	1gb
+	swap	10gb
+
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( DISABLE FIREWALL )
 
     [root@ol826ain1 ~]# systemctl stop firewalld
