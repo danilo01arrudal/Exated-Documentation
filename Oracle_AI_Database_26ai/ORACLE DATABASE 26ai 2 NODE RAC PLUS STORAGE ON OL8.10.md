@@ -6,11 +6,11 @@
 
 ###### BUILD VIRTUAL MACHINE ON VIRTUALIZER ol826ain1 
 
-    virt-install --virt-type kvm --name ol826ain1 --memory 8192 --vcpus 2 --os-variant ol8.10 --cdrom /var/lib/libvirt/images/OracleLinux-R8-U10-x86_64-dvd.iso --network bridge=br0,model=virtio --network network=priv0,model=virtio --disk path=/var/lib/libvirt/images/ol826ain1.qcow2,size=59
+    virt-install --virt-type kvm --name ol826ain1 --memory 10240 --vcpus 2 --os-variant ol8.10 --cdrom /var/lib/libvirt/images/OracleLinux-R8-U10-x86_64-dvd.iso --network bridge=br0,model=virtio --network network=priv0,model=virtio --disk path=/var/lib/libvirt/images/ol826ain1.qcow2,size=59
 
 ###### BUILD VIRTUAL MACHINE ON VIRTUALIZER ol826ain2 
 
-    virt-install --virt-type kvm --name ol826ain2 --memory 8192 --vcpus 2 --os-variant ol8.10 --cdrom /var/lib/libvirt/images/OracleLinux-R8-U10-x86_64-dvd.iso --network bridge=br0,model=virtio --network network=priv0,model=virtio --disk path=/var/lib/libvirt/images/ol826ain2.qcow2,size=59
+    virt-install --virt-type kvm --name ol826ain2 --memory 10240 --vcpus 2 --os-variant ol8.10 --cdrom /var/lib/libvirt/images/OracleLinux-R8-U10-x86_64-dvd.iso --network bridge=br0,model=virtio --network network=priv0,model=virtio --disk path=/var/lib/libvirt/images/ol826ain2.qcow2,size=59
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( DISABLE FIREWALL )
 
