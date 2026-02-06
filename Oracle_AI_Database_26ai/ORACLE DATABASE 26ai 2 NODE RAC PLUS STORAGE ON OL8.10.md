@@ -618,14 +618,14 @@
 	[grid@ol826ain1 ~]$ /u01/app/23.26.1/grid/runcluvfy.sh stage -pre crsinst -n ol826ain1,ol826ain2 -verbose -method root -skip orachk 
 	Enter "ROOT" password:
 
-Pre-check for cluster services setup was successful. 
+	Pre-check for cluster services setup was successful. 
 
-CVU operation performed:      stage -pre crsinst
-Date:                         Feb 6, 2026, 6:30:20 PM
-CVU version:                  23.26.1.0.0 (010926x8664)
-CVU home:                     /u01/app/23.26.1/grid
-User:                         grid
-Operating system:             Linux5.15.0-206.153.7.1.el8uek.x86_64
+	CVU operation performed:      stage -pre crsinst
+	Date:                         Feb 6, 2026, 6:30:20 PM
+	CVU version:                  23.26.1.0.0 (010926x8664)
+	CVU home:                     /u01/app/23.26.1/grid
+	User:                         grid
+	Operating system:             Linux5.15.0-206.153.7.1.el8uek.x86_64
 
 ###### CHANGE CV_ASSUME_DISTID PARAMETER 
 
