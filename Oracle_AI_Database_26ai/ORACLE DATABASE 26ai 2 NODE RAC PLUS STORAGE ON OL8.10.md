@@ -615,7 +615,7 @@
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( RUNCLUVFY )
 
     [root@ol826ain1 ~]# su - grid
-	[grid@ol826ain1 ~]$ /u01/app/23.26.1/grid/runcluvfy.sh stage -pre crsinst -n ol826ain1,ol826ain2 -verbose -method root -skip orachk
+	[grid@ol826ain1 ~]$ /u01/app/23.26.1/grid/runcluvfy.sh stage -pre crsinst -n ol826ain1,ol826ain2 -verbose -method root -skip orachk 
 	Enter "ROOT" password:
 
 	Initializing ...
@@ -625,52 +625,52 @@
 	  Physical Memory ...
 	    Node Name     Available                 Required                  Status    
 	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     7.7509GB (8127440.0KB)    8GB (8388608.0KB)         passed    
-	    ol826ain1     7.7509GB (8127440.0KB)    8GB (8388608.0KB)         passed    
+	    ol826ain2     9.432GB (9890152.0KB)     8GB (8388608.0KB)         passed    
+	    ol826ain1     9.7054GB (1.0176872E7KB)  8GB (8388608.0KB)         passed    
 	  Physical Memory ...PASSED
 	  Available Physical Memory ...
 	    Node Name     Available                 Required                  Status    
 	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     7.3003GB (7654960.0KB)    50MB (51200.0KB)          passed    
-	    ol826ain1     7.0628GB (7405868.0KB)    50MB (51200.0KB)          passed    
+	    ol826ain2     8.9611GB (9396396.0KB)    50MB (51200.0KB)          passed    
+	    ol826ain1     9.0301GB (9468720.0KB)    50MB (51200.0KB)          passed    
 	  Available Physical Memory ...PASSED
 	  Swap Size ...
 	    Node Name     Available                 Required                  Status    
 	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     8GB (8388604.0KB)         7.7509GB (8127440.0KB)    passed    
-	    ol826ain1     8GB (8388604.0KB)         7.7509GB (8127440.0KB)    passed    
+	    ol826ain2     10GB (1.0485756E7KB)      9.432GB (9890152.0KB)     passed    
+	    ol826ain1     10GB (1.0485756E7KB)      9.7054GB (1.0176872E7KB)  passed    
 	  Swap Size ...PASSED
 	  Free Space: ol826ain2:/usr,ol826ain2:/var,ol826ain2:/etc,ol826ain2:/sbin,ol826ain2:/tmp ...
 	    Path              Node Name     Mount point   Available     Required      Status      
 	    ----------------  ------------  ------------  ------------  ------------  ------------
-	    /usr              ol826ain2     /             41.668GB      25MB          passed      
-	    /var              ol826ain2     /             41.668GB      5MB           passed      
-	    /etc              ol826ain2     /             41.668GB      25MB          passed      
-	    /sbin             ol826ain2     /             41.668GB      10MB          passed      
-	    /tmp              ol826ain2     /             41.668GB      1GB           passed      
+	    /usr              ol826ain2     /             42.8848GB     25MB          passed      
+	    /var              ol826ain2     /             42.8848GB     5MB           passed      
+	    /etc              ol826ain2     /             42.8848GB     25MB          passed      
+	    /sbin             ol826ain2     /             42.8848GB     10MB          passed      
+	    /tmp              ol826ain2     /             42.8848GB     1GB           passed      
 	  Free Space: ol826ain2:/usr,ol826ain2:/var,ol826ain2:/etc,ol826ain2:/sbin,ol826ain2:/tmp ...PASSED
 	  Free Space: ol826ain1:/usr,ol826ain1:/var,ol826ain1:/etc,ol826ain1:/sbin,ol826ain1:/tmp ...
 	    Path              Node Name     Mount point   Available     Required      Status      
 	    ----------------  ------------  ------------  ------------  ------------  ------------
-	    /usr              ol826ain1     /             38.8024GB     25MB          passed      
-	    /var              ol826ain1     /             38.8024GB     5MB           passed      
-	    /etc              ol826ain1     /             38.8024GB     25MB          passed      
-	    /sbin             ol826ain1     /             38.8024GB     10MB          passed      
-	    /tmp              ol826ain1     /             38.8024GB     1GB           passed      
+	    /usr              ol826ain1     /             39.5554GB     25MB          passed      
+	    /var              ol826ain1     /             39.5554GB     5MB           passed      
+	    /etc              ol826ain1     /             39.5554GB     25MB          passed      
+	    /sbin             ol826ain1     /             39.5554GB     10MB          passed      
+	    /tmp              ol826ain1     /             39.5554GB     1GB           passed      
 	  Free Space: ol826ain1:/usr,ol826ain1:/var,ol826ain1:/etc,ol826ain1:/sbin,ol826ain1:/tmp ...PASSED
 	  User Existence: grid ...
 	    Node Name     Status                    Comment                 
 	    ------------  ------------------------  ------------------------
 	    ol826ain2     passed                    exists(54332)           
 	    ol826ain1     passed                    exists(54332)           
-
+	
 	    Users With Same UID: 54332 ...PASSED
 	  User Existence: grid ...PASSED
 	  Group Existence: asmadmin ...
 	    Node Name     Status                    Comment                 
-	    ------------  ------------------------  ------------------------
-	    ol826ain2     passed                    exists                  
-	    ol826ain1     passed                    exists                  
+ 		------------  ------------------------  ------------------------
+ 		ol826ain2     passed                    exists                  
+ 	    ol826ain1     passed                    exists                  
 	  Group Existence: asmadmin ...PASSED
 	  Group Existence: asmdba ...
 	    Node Name     Status                    Comment                 
@@ -747,376 +747,371 @@
 	  OS Kernel Version ...
 	    Node Name     Available                 Required                  Status    
 	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     6.12.0-105.51.5.el9uek.x86_64  5.15.0                    passed    
-	    ol826ain1     6.12.0-105.51.5.el9uek.x86_64  5.15.0                    passed    
-	  OS Kernel Version ...PASSED
-	  OS Kernel Parameter: semmsl ...
-	    Node Name         Current       Configured    Required      Status        Comment     
-	    ----------------  ------------  ------------  ------------  ------------  ------------
-	    ol826ain1         250           250           250           passed      
-	    ol826ain2         250           250           250           passed      
-	  OS Kernel Parameter: semmsl ...PASSED
-	  OS Kernel Parameter: semmns ...
-	    Node Name         Current       Configured    Required      Status        Comment     
-	    ----------------  ------------  ------------  ------------  ------------  ------------
-	    ol826ain1         32000         32000         32000         passed      
-	    ol826ain2         32000         32000         32000         passed      
-	  OS Kernel Parameter: semmns ...PASSED
-	  OS Kernel Parameter: semopm ...
-	    Node Name         Current       Configured    Required      Status        Comment     
-	    ----------------  ------------  ------------  ------------  ------------  ------------
-	    ol826ain1         100           100           100           passed      
-	    ol826ain2         100           100           100           passed      
-	  OS Kernel Parameter: semopm ...PASSED
-	  OS Kernel Parameter: semmni ...
-	    Node Name         Current       Configured    Required      Status        Comment     
-	    ----------------  ------------  ------------  ------------  ------------  ------------
-	    ol826ain1         128           128           128           passed      
-	    ol826ain2         128           128           128           passed      
-	  OS Kernel Parameter: semmni ...PASSED
-	  OS Kernel Parameter: shmmax ...
-	    Node Name         Current       Configured    Required      Status        Comment     
-	    ----------------  ------------  ------------  ------------  ------------  ------------
-	    ol826ain1         4398046511104  4398046511104  4161249280    passed      
-	    ol826ain2         4398046511104  4398046511104  4161249280    passed      
-	  OS Kernel Parameter: shmmax ...PASSED
-	  OS Kernel Parameter: shmmni ...
-	    Node Name         Current       Configured    Required      Status        Comment     
-	    ----------------  ------------  ------------  ------------  ------------  ------------
-	    ol826ain1         4096          4096          4096          passed      
-	    ol826ain2         4096          4096          4096          passed      
-	  OS Kernel Parameter: shmmni ...PASSED
-	  OS Kernel Parameter: shmall ...
-	    Node Name         Current       Configured    Required      Status        Comment     
-	    ----------------  ------------  ------------  ------------  ------------  ------------
-	    ol826ain1         1073741824    1073741824    1073741824    passed      
-	    ol826ain2         1073741824    1073741824    1073741824    passed      
-	  OS Kernel Parameter: shmall ...PASSED
-	  OS Kernel Parameter: file-max ...
-	    Node Name         Current       Configured    Required      Status        Comment     
-	    ----------------  ------------  ------------  ------------  ------------  ------------
-	    ol826ain1         6815744       6815744       6815744       passed      
-	    ol826ain2         6815744       6815744       6815744       passed      
-	  OS Kernel Parameter: file-max ...PASSED
-	  OS Kernel Parameter: ip_local_port_range ...
-	    Node Name         Current       Configured    Required      Status        Comment     
-	    ----------------  ------------  ------------  ------------  ------------  ------------
-	    ol826ain1         between 9000 & 65535  between 9000 & 65535  between 9000 & 65535  passed      
-	    ol826ain2         between 9000 & 65535  between 9000 & 65535  between 9000 & 65535  passed      
-	  OS Kernel Parameter: ip_local_port_range ...PASSED
-	  OS Kernel Parameter: rmem_default ...
-	    Node Name         Current       Configured    Required      Status        Comment     
-	    ----------------  ------------  ------------  ------------  ------------  ------------
-	    ol826ain1         262144        262144        262144        passed      
-	    ol826ain2         262144        262144        262144        passed      
-	  OS Kernel Parameter: rmem_default ...PASSED
-	  OS Kernel Parameter: rmem_max ...
-	    Node Name         Current       Configured    Required      Status        Comment     
-	    ----------------  ------------  ------------  ------------  ------------  ------------
-	    ol826ain1         4194304       4194304       4194304       passed      
-	    ol826ain2         4194304       4194304       4194304       passed      
-	  OS Kernel Parameter: rmem_max ...PASSED
-	  OS Kernel Parameter: wmem_default ...
-	    Node Name         Current       Configured    Required      Status        Comment     
-	    ----------------  ------------  ------------  ------------  ------------  ------------
-	    ol826ain1         262144        262144        262144        passed      
-	    ol826ain2         262144        262144        262144        passed      
-	  OS Kernel Parameter: wmem_default ...PASSED
-	  OS Kernel Parameter: wmem_max ...
-    	Node Name         Current       Configured    Required      Status        Comment     
-	    ----------------  ------------  ------------  ------------  ------------  ------------
-	    ol826ain1         1048576       1048576       1048576       passed      
-	    ol826ain2         1048576       1048576       1048576       passed      
-	  OS Kernel Parameter: wmem_max ...PASSED
-	  OS Kernel Parameter: aio-max-nr ...
-	    Node Name         Current       Configured    Required      Status        Comment     
-	    ----------------  ------------  ------------  ------------  ------------  ------------
-	    ol826ain1         1048576       1048576       1048576       passed      
-	    ol826ain2         1048576       1048576       1048576       passed      
-	  OS Kernel Parameter: aio-max-nr ...PASSED
-	  OS Kernel Parameter: panic_on_oops ...
-	    Node Name         Current       Configured    Required      Status        Comment     
-	    ----------------  ------------  ------------  ------------  ------------  ------------
-	    ol826ain1         1             1             1             passed      
-	    ol826ain2         1             1             1             passed      
-	  OS Kernel Parameter: panic_on_oops ...PASSED
-	  OS Kernel Parameter: kernel.panic ...
-	    Node Name         Current       Configured    Required      Status        Comment     
-	    ----------------  ------------  ------------  ------------  ------------  ------------
-	    ol826ain1         10            10            at least 1    passed      
-	    ol826ain2         10            10            at least 1    passed      
-	  OS Kernel Parameter: kernel.panic ...PASSED
-	  Package: binutils-2.35.2 ...
-	    Node Name     Available                 Required                  Status    
-	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     binutils-2.35.2-67.0.1.el9  binutils-2.35.2           passed    
-	    ol826ain1     binutils-2.35.2-67.0.1.el9  binutils-2.35.2           passed    
-	  Package: binutils-2.35.2 ...PASSED
-	  Package: compat-openssl11-1.1.1 (x86_64) ...
-	    Node Name     Available                 Required                  Status    
-	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     compat-openssl11(x86_64)-1.1.1k-5.el9_6.1  compat-openssl11(x86_64)-1.1.1  passed    
-	    ol826ain1     compat-openssl11(x86_64)-1.1.1k-5.el9_6.1  compat-openssl11(x86_64)-1.1.1  passed    
-	  Package: compat-openssl11-1.1.1 (x86_64) ...PASSED
-	  Package: fontconfig-2.14.0 (x86_64) ...
-	    Node Name     Available                 Required                  Status    
-	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     fontconfig(x86_64)-2.14.0-2.el9_1  fontconfig(x86_64)-2.14.0  passed    
-	    ol826ain1     fontconfig(x86_64)-2.14.0-2.el9_1  fontconfig(x86_64)-2.14.0  passed    
-	  Package: fontconfig-2.14.0 (x86_64) ...PASSED
-	  Package: libxcrypt-compat-4.4.18 ...
-	    Node Name     Available                 Required                  Status    
-	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     libxcrypt-compat-4.4.18-3.el9  libxcrypt-compat-4.4.18   passed    
-	    ol826ain1     libxcrypt-compat-4.4.18-3.el9  libxcrypt-compat-4.4.18   passed    
-	  Package: libxcrypt-compat-4.4.18 ...PASSED
-	  Package: libgcc-11.3.1 (x86_64) ...
-	    Node Name     Available                 Required                  Status    
-	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     libgcc(x86_64)-11.5.0-11.0.1.el9  libgcc(x86_64)-11.3.1     passed    
-	    ol826ain1     libgcc(x86_64)-11.5.0-11.0.1.el9  libgcc(x86_64)-11.3.1     passed    
-	  Package: libgcc-11.3.1 (x86_64) ...PASSED
-	  Package: libstdc++-11.3.1 (x86_64) ...
-	    Node Name     Available                 Required                  Status    
-	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     libstdc++(x86_64)-11.5.0-11.0.1.el9  libstdc++(x86_64)-11.3.1  passed    
-	    ol826ain1     libstdc++(x86_64)-11.5.0-11.0.1.el9  libstdc++(x86_64)-11.3.1  passed    
-	  Package: libstdc++-11.3.1 (x86_64) ...PASSED
-	  Package: sysstat-12.5.4 ...
-	    Node Name     Available                 Required                  Status    
-	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     sysstat-12.5.4-9.0.2.el9  sysstat-12.5.4            passed    
-	    ol826ain1     sysstat-12.5.4-9.0.2.el9  sysstat-12.5.4            passed    
-	  Package: sysstat-12.5.4 ...PASSED
-	  Package: make-4.3 ...
-	    Node Name     Available                 Required                  Status    
-	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     make-4.3-8.el9            make-4.3                  passed    
-	    ol826ain1     make-4.3-8.el9            make-4.3                  passed    
-	  Package: make-4.3 ...PASSED
-	  Package: glibc-2.34 (x86_64) ...
-	    Node Name     Available                 Required                  Status    
-	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     glibc(x86_64)-2.34-231.0.1.el9  glibc(x86_64)-2.34        passed    
-	    ol826ain1     glibc(x86_64)-2.34-231.0.1.el9  glibc(x86_64)-2.34        passed    
-	  Package: glibc-2.34 (x86_64) ...PASSED
-	  Package: glibc-devel-2.34 (x86_64) ...
-	    Node Name     Available                 Required                  Status    
-	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     glibc-devel(x86_64)-2.34-231.0.1.el9  glibc-devel(x86_64)-2.34  passed    
-	    ol826ain1     glibc-devel(x86_64)-2.34-231.0.1.el9  glibc-devel(x86_64)-2.34  passed    
-	  Package: glibc-devel-2.34 (x86_64) ...PASSED
-	  Package: libaio-0.3.111 (x86_64) ...
-	    Node Name     Available                 Required                  Status    
-	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     libaio(x86_64)-0.3.111-13.el9  libaio(x86_64)-0.3.111    passed    
-	    ol826ain1     libaio(x86_64)-0.3.111-13.el9  libaio(x86_64)-0.3.111    passed    
-	  Package: libaio-0.3.111 (x86_64) ...PASSED
-	  Package: nfs-utils-2.5.4 ...
-	    Node Name     Available                 Required                  Status    
-	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     nfs-utils-2.5.4-38.0.1.el9  nfs-utils-2.5.4           passed    
-	    ol826ain1     nfs-utils-2.5.4-38.0.1.el9  nfs-utils-2.5.4           passed    
-	  Package: nfs-utils-2.5.4 ...PASSED
-	  Package: smartmontools-7.2-6 ...
-	    Node Name     Available                 Required                  Status    
-	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     smartmontools-7.2-9.el9   smartmontools-7.2-6       passed    
-	    ol826ain1     smartmontools-7.2-9.el9   smartmontools-7.2-6       passed    
-	  Package: smartmontools-7.2-6 ...PASSED
-	  Package: net-tools-2.0-0.62 ...
-	    Node Name     Available                 Required                  Status    
-	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     net-tools-2.0-0.64.20160912git.el9  net-tools-2.0-0.62        passed    
-	    ol826ain1     net-tools-2.0-0.64.20160912git.el9  net-tools-2.0-0.62        passed    
-	  Package: net-tools-2.0-0.62 ...PASSED
-	  Package: policycoreutils-3.5-1 ...
-	    Node Name     Available                 Required                  Status    
-	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     policycoreutils-3.6-3.el9  policycoreutils-3.5-1     passed    
-	    ol826ain1     policycoreutils-3.6-3.el9  policycoreutils-3.5-1     passed    
-	  Package: policycoreutils-3.5-1 ...PASSED
-	  Package: policycoreutils-python-utils-3.5-1 ...
-	    Node Name     Available                 Required                  Status    
-	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     policycoreutils-python-utils-3.6-3.el9  policycoreutils-python-utils-3.5-1  passed    
-	    ol826ain1     policycoreutils-python-utils-3.6-3.el9  policycoreutils-python-utils-3.5-1  passed    
-	  Package: policycoreutils-python-utils-3.5-1 ...PASSED
-	  Users With Same UID: 0 ...PASSED
-	  Current Group ID ...PASSED
-	  Root user consistency ...
-	    Node Name                             Status                  
-	    ------------------------------------  ------------------------
-	    ol826ain2                             passed                  
-	    ol826ain1                             passed                  
-	  Root user consistency ...PASSED
-	  Package: psmisc-22.6-19 ...
-	    Node Name     Available                 Required                  Status    
-	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     psmisc-23.4-3.el9         psmisc-22.6-19            passed    
-	    ol826ain1     psmisc-23.4-3.el9         psmisc-22.6-19            passed    
-	  Package: psmisc-22.6-19 ...PASSED
-	  Host name ...PASSED
-	  Node Connectivity ...
-	    Hosts File ...
-	    Node Name                             Status                  
-	    ------------------------------------  ------------------------
-	    ol826ain1                             passed                  
-	    ol826ain2                             passed                  
-	    Hosts File ...PASSED
-	
-	Interface information for node "ol826ain2"
-	
-		Name   IP Address      Subnet          Gateway         Def. Gateway    HW Address        MTU   
-		------ --------------- --------------- --------------- --------------- ----------------- ------
-		ens3   192.168.18.122  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:B7:46:01 1500  
-		ens5   192.168.100.102 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:C2:F7:E6 1500  
-	
-	Interface information for node "ol826ain1"
-	
-		Name   IP Address      Subnet          Gateway         Def. Gateway    HW Address        MTU   
-		------ --------------- --------------- --------------- --------------- ----------------- ------
-		ens3   192.168.18.121  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:85:AB:D0 1500  
-		ens5   192.168.100.101 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:EE:2F:B4 1500  
-	
-	Check: MTU consistency of the subnet "192.168.18.0".
-	
-		Node              Name          IP Address    Subnet        MTU             
-		----------------  ------------  ------------  ------------  ----------------
-		ol826ain2         ens3          192.168.18.122  192.168.18.0  1500            
-		ol826ain1         ens3          192.168.18.121  192.168.18.0  1500            
+	    ol826ain2     5.15.0-206.153.7.1.el8uek.x86_64  5.4.17                    passed    
+	    ol826ain1     5.15.0-206.153.7.1.el8uek.x86_64  5.4.17                    passed    
+  OS Kernel Version ...PASSED
+  OS Kernel Parameter: semmsl ...
+    Node Name         Current       Configured    Required      Status        Comment     
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol826ain1         250           250           250           passed      
+    ol826ain2         250           250           250           passed      
+  OS Kernel Parameter: semmsl ...PASSED
+  OS Kernel Parameter: semmns ...
+    Node Name         Current       Configured    Required      Status        Comment     
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol826ain1         32000         32000         32000         passed      
+    ol826ain2         32000         32000         32000         passed      
+  OS Kernel Parameter: semmns ...PASSED
+  OS Kernel Parameter: semopm ...
+    Node Name         Current       Configured    Required      Status        Comment     
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol826ain1         100           100           100           passed      
+    ol826ain2         100           100           100           passed      
+  OS Kernel Parameter: semopm ...PASSED
+  OS Kernel Parameter: semmni ...
+    Node Name         Current       Configured    Required      Status        Comment     
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol826ain1         128           128           128           passed      
+    ol826ain2         128           128           128           passed      
+  OS Kernel Parameter: semmni ...PASSED
+  OS Kernel Parameter: shmmax ...
+    Node Name         Current       Configured    Required      Status        Comment     
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol826ain1         4398046511104  4398046511104  5210558464    passed      
+    ol826ain2         4398046511104  4398046511104  5063757824    passed      
+  OS Kernel Parameter: shmmax ...PASSED
+  OS Kernel Parameter: shmmni ...
+    Node Name         Current       Configured    Required      Status        Comment     
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol826ain1         4096          4096          4096          passed      
+    ol826ain2         4096          4096          4096          passed      
+  OS Kernel Parameter: shmmni ...PASSED
+  OS Kernel Parameter: shmall ...
+    Node Name         Current       Configured    Required      Status        Comment     
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol826ain1         1073741824    1073741824    1073741824    passed      
+    ol826ain2         1073741824    1073741824    1073741824    passed      
+  OS Kernel Parameter: shmall ...PASSED
+  OS Kernel Parameter: file-max ...
+    Node Name         Current       Configured    Required      Status        Comment     
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol826ain1         6815744       6815744       6815744       passed      
+    ol826ain2         6815744       6815744       6815744       passed      
+  OS Kernel Parameter: file-max ...PASSED
+  OS Kernel Parameter: ip_local_port_range ...
+    Node Name         Current       Configured    Required      Status        Comment     
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol826ain1         between 9000 & 65535  between 9000 & 65535  between 9000 & 65535  passed      
+    ol826ain2         between 9000 & 65535  between 9000 & 65535  between 9000 & 65535  passed      
+  OS Kernel Parameter: ip_local_port_range ...PASSED
+  OS Kernel Parameter: rmem_default ...
+    Node Name         Current       Configured    Required      Status        Comment     
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol826ain1         262144        262144        262144        passed      
+    ol826ain2         262144        262144        262144        passed      
+  OS Kernel Parameter: rmem_default ...PASSED
+  OS Kernel Parameter: rmem_max ...
+    Node Name         Current       Configured    Required      Status        Comment     
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol826ain1         4194304       4194304       4194304       passed      
+    ol826ain2         4194304       4194304       4194304       passed      
+  OS Kernel Parameter: rmem_max ...PASSED
+  OS Kernel Parameter: wmem_default ...
+    Node Name         Current       Configured    Required      Status        Comment     
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol826ain1         262144        262144        262144        passed      
+    ol826ain2         262144        262144        262144        passed      
+  OS Kernel Parameter: wmem_default ...PASSED
+  OS Kernel Parameter: wmem_max ...
+    Node Name         Current       Configured    Required      Status        Comment     
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol826ain1         1048576       1048576       1048576       passed      
+    ol826ain2         1048576       1048576       1048576       passed      
+  OS Kernel Parameter: wmem_max ...PASSED
+  OS Kernel Parameter: aio-max-nr ...
+    Node Name         Current       Configured    Required      Status        Comment     
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol826ain1         1048576       1048576       1048576       passed      
+    ol826ain2         1048576       1048576       1048576       passed      
+  OS Kernel Parameter: aio-max-nr ...PASSED
+  OS Kernel Parameter: panic_on_oops ...
+    Node Name         Current       Configured    Required      Status        Comment     
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol826ain1         1             1             1             passed      
+    ol826ain2         1             1             1             passed      
+  OS Kernel Parameter: panic_on_oops ...PASSED
+  OS Kernel Parameter: kernel.panic ...
+    Node Name         Current       Configured    Required      Status        Comment     
+    ----------------  ------------  ------------  ------------  ------------  ------------
+    ol826ain1         10            10            at least 1    passed      
+    ol826ain2         10            10            at least 1    passed      
+  OS Kernel Parameter: kernel.panic ...PASSED
+  Package: binutils-2.30-113.0.2 ...
+    Node Name     Available                 Required                  Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol826ain2     binutils-2.30-123.0.2.el8  binutils-2.30-113.0.2     passed    
+    ol826ain1     binutils-2.30-123.0.2.el8  binutils-2.30-113.0.2     passed    
+  Package: binutils-2.30-113.0.2 ...PASSED
+  Package: libgcc-8.5.0 (x86_64) ...
+    Node Name     Available                 Required                  Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol826ain2     libgcc(x86_64)-8.5.0-21.0.1.el8  libgcc(x86_64)-8.5.0      passed    
+    ol826ain1     libgcc(x86_64)-8.5.0-21.0.1.el8  libgcc(x86_64)-8.5.0      passed    
+  Package: libgcc-8.5.0 (x86_64) ...PASSED
+  Package: libstdc++-8.5.0 (x86_64) ...
+    Node Name     Available                 Required                  Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol826ain2     libstdc++(x86_64)-8.5.0-21.0.1.el8  libstdc++(x86_64)-8.5.0   passed    
+    ol826ain1     libstdc++(x86_64)-8.5.0-21.0.1.el8  libstdc++(x86_64)-8.5.0   passed    
+  Package: libstdc++-8.5.0 (x86_64) ...PASSED
+  Package: compat-openssl10-1.0.2 (x86_64) ...
+    Node Name     Available                 Required                  Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol826ain2     compat-openssl10(x86_64)-1.0.2o-4.el8_10.1  compat-openssl10(x86_64)-1.0.2  passed    
+    ol826ain1     compat-openssl10(x86_64)-1.0.2o-4.el8_10.1  compat-openssl10(x86_64)-1.0.2  passed    
+  Package: compat-openssl10-1.0.2 (x86_64) ...PASSED
+  Package: fontconfig-2.13.1 (x86_64) ...
+    Node Name     Available                 Required                  Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol826ain2     fontconfig(x86_64)-2.13.1-4.el8  fontconfig(x86_64)-2.13.1  passed    
+    ol826ain1     fontconfig(x86_64)-2.13.1-4.el8  fontconfig(x86_64)-2.13.1  passed    
+  Package: fontconfig-2.13.1 (x86_64) ...PASSED
+  Package: sysstat-11.7.3 ...
+    Node Name     Available                 Required                  Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol826ain2     sysstat-11.7.3-13.0.2.el8_10  sysstat-11.7.3            passed    
+    ol826ain1     sysstat-11.7.3-13.0.2.el8_10  sysstat-11.7.3            passed    
+  Package: sysstat-11.7.3 ...PASSED
+  Package: make-4.2.1 ...
+    Node Name     Available                 Required                  Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol826ain2     make-4.2.1-11.el8         make-4.2.1                passed    
+    ol826ain1     make-4.2.1-11.el8         make-4.2.1                passed    
+  Package: make-4.2.1 ...PASSED
+  Package: glibc-2.28 (x86_64) ...
+    Node Name     Available                 Required                  Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol826ain2     glibc(x86_64)-2.28-251.0.2.el8  glibc(x86_64)-2.28        passed    
+    ol826ain1     glibc(x86_64)-2.28-251.0.2.el8  glibc(x86_64)-2.28        passed    
+  Package: glibc-2.28 (x86_64) ...PASSED
+  Package: glibc-devel-2.28 (x86_64) ...
+    Node Name     Available                 Required                  Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol826ain2     glibc-devel(x86_64)-2.28-251.0.2.el8  glibc-devel(x86_64)-2.28  passed    
+    ol826ain1     glibc-devel(x86_64)-2.28-251.0.2.el8  glibc-devel(x86_64)-2.28  passed    
+  Package: glibc-devel-2.28 (x86_64) ...PASSED
+  Package: libaio-0.3.112 (x86_64) ...
+    Node Name     Available                 Required                  Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol826ain2     libaio(x86_64)-0.3.112-1.el8  libaio(x86_64)-0.3.112    passed    
+    ol826ain1     libaio(x86_64)-0.3.112-1.el8  libaio(x86_64)-0.3.112    passed    
+  Package: libaio-0.3.112 (x86_64) ...PASSED
+  Package: nfs-utils-2.3.3-51 ...
+    Node Name     Available                 Required                  Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol826ain2     nfs-utils-2.3.3-59.0.1.el8  nfs-utils-2.3.3-51        passed    
+    ol826ain1     nfs-utils-2.3.3-59.0.1.el8  nfs-utils-2.3.3-51        passed    
+  Package: nfs-utils-2.3.3-51 ...PASSED
+  Package: smartmontools-7.1-1 ...
+    Node Name     Available                 Required                  Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol826ain2     smartmontools-7.1-3.el8   smartmontools-7.1-1       passed    
+    ol826ain1     smartmontools-7.1-3.el8   smartmontools-7.1-1       passed    
+  Package: smartmontools-7.1-1 ...PASSED
+  Package: net-tools-2.0-0.52 ...
+    Node Name     Available                 Required                  Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol826ain2     net-tools-2.0-0.52.20160912git.el8  net-tools-2.0-0.52        passed    
+    ol826ain1     net-tools-2.0-0.52.20160912git.el8  net-tools-2.0-0.52        passed    
+  Package: net-tools-2.0-0.52 ...PASSED
+  Package: policycoreutils-2.9-1 ...
+    Node Name     Available                 Required                  Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol826ain2     policycoreutils-2.9-25.0.1.el8  policycoreutils-2.9-1     passed    
+    ol826ain1     policycoreutils-2.9-25.0.1.el8  policycoreutils-2.9-1     passed    
+  Package: policycoreutils-2.9-1 ...PASSED
+  Package: policycoreutils-python-utils-2.9-1 ...
+    Node Name     Available                 Required                  Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol826ain2     policycoreutils-python-utils-2.9-25.0.1.el8  policycoreutils-python-utils-2.9-1  passed    
+    ol826ain1     policycoreutils-python-utils-2.9-25.0.1.el8  policycoreutils-python-utils-2.9-1  passed    
+  Package: policycoreutils-python-utils-2.9-1 ...PASSED
+  Users With Same UID: 0 ...PASSED
+  Current Group ID ...PASSED
+  Root user consistency ...
+    Node Name                             Status                  
+    ------------------------------------  ------------------------
+    ol826ain2                             passed                  
+    ol826ain1                             passed                  
+  Root user consistency ...PASSED
+  Package: psmisc-22.6-19 ...
+    Node Name     Available                 Required                  Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol826ain2     psmisc-23.1-5.el8         psmisc-22.6-19            passed    
+    ol826ain1     psmisc-23.1-5.el8         psmisc-22.6-19            passed    
+  Package: psmisc-22.6-19 ...PASSED
+  Host name ...PASSED
+  Node Connectivity ...
+    Hosts File ...
+    Node Name                             Status                  
+    ------------------------------------  ------------------------
+    ol826ain1                             passed                  
+    ol826ain2                             passed                  
+    Hosts File ...PASSED
 
-	Check: MTU consistency of the subnet "192.168.100.0".
+Interface information for node "ol826ain1"
 
-		Node              Name          IP Address    Subnet        MTU             
-		----------------  ------------  ------------  ------------  ----------------
-		ol826ain2         ens5          192.168.100.102  192.168.100.0  1500            
-		ol826ain1         ens5          192.168.100.101  192.168.100.0  1500            
+  Name   IP Address      Subnet          Gateway         Def. Gateway    HW Address        MTU   
+  ------ --------------- --------------- --------------- --------------- ----------------- ------
+  enp1s0 192.168.18.121  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:BD:93:D3 1500  
+  enp2s0 192.168.100.101 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:FC:B5:DB 1500  
 
-	 	Source                      Destination                 Connected?                
-		--------------------------  --------------------------  --------------------------
-		ol826ain1[ens3:192.168.18.121]  ol826ain2[ens3:192.168.18.122]  yes                       
+Interface information for node "ol826ain2"
 
-     	Source                      Destination                 Connected?                
-	 	--------------------------  --------------------------  --------------------------
-		ol826ain1[ens5:192.168.100.101]  ol826ain2[ens5:192.168.100.102]  yes                       
-		Check that maximum (MTU) size packet goes through subnet ...PASSED
-		subnet mask consistency for subnet "192.168.18.0" ...PASSED
-		subnet mask consistency for subnet "192.168.100.0" ...PASSED
-		Node Connectivity ...PASSED
-		Multicast or broadcast check ...
-		Checking subnet "192.168.18.0" for multicast communication with multicast
-		group "224.0.0.251"
+  Name   IP Address      Subnet          Gateway         Def. Gateway    HW Address        MTU   
+  ------ --------------- --------------- --------------- --------------- ----------------- ------
+  enp1s0 192.168.18.122  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:67:38:B8 1500  
+  enp2s0 192.168.100.102 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:0F:71:2C 1500  
 
-		Subnet        Network Type              Multicast Enabled       	
-		------------  ------------------------  ------------------------
-		192.168.18.0  PRIVATE                   TRUE                    
-		Multicast or broadcast check ...PASSED
-		ASMLib installation and configuration verification. ...
-		'/etc/init.d/oracleasm' ...PASSED
-		'/dev/oracleasm' ...PASSED
+Check: MTU consistency of the subnet "192.168.18.0".
 
-    	Node Name                             Status                  
-    	------------------------------------  ------------------------
-    	ol826ain1                             passed                  
-      	ol826ain2                             passed                  
-	  	ASMLib installation and configuration verification. ...PASSED
-	  	Network Time Protocol (NTP) ...
-    	Daemon 'chronyd' ...
-		Node Name                             Running?                
- 		------------------------------------  ------------------------
-	 	ol826ain2                             yes                     
-  		ol826ain1                             yes                     
+    Node              Name          IP Address    Subnet        MTU             
+    ----------------  ------------  ------------  ------------  ----------------
+    ol826ain1         enp1s0        192.168.18.121  192.168.18.0  1500            
+    ol826ain2         enp1s0        192.168.18.122  192.168.18.0  1500            
 
-	    Daemon 'chronyd' ...PASSED
-	    NTP daemon or service using UDP port 123 ...
-		Node Name                             Port Open?              
-		------------------------------------  ------------------------
-  		ol826ain2                             yes                     
-  		ol826ain1                             yes                     
+Check: MTU consistency of the subnet "192.168.100.0".
 
-	    NTP daemon or service using UDP port 123 ...PASSED
-	    chrony daemon is synchronized with at least one external time source ...PASSED
-	  Network Time Protocol (NTP) ...PASSED
-	  Same core file name pattern ...PASSED
-	  User Mask ...
-	    Node Name     Available                 Required                  Comment   
-	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     0022                      0022                      passed    
-	    ol826ain1     0022                      0022                      passed    
-	  User Mask ...PASSED
-	  User Not In Group "root": grid ...
-	    Node Name     Status                    Comment                 
-	    ------------  ------------------------  ------------------------
-	    ol826ain2     passed                    does not exist          
-	    ol826ain1     passed                    does not exist          
-	  User Not In Group "root": grid ...PASSED
-	  Time zone consistency ...PASSED
-	  Path existence, ownership, permissions and attributes ...
-	    Path "/var" ...PASSED
-	    Path "/dev/shm" ...PASSED
-	  Path existence, ownership, permissions and attributes ...PASSED
-	  Time offset between nodes ...PASSED
-	  resolv.conf Integrity ...
-	    Node Name                             Status                  
-	    ------------------------------------  ------------------------
-	    ol826ain1                             passed                  
-	    ol826ain2                             passed                  
-	
-	checking response for name "ol826ain2" from each of the name servers specified in "/etc/resolv.conf"
+    Node              Name          IP Address    Subnet        MTU             
+    ----------------  ------------  ------------  ------------  ----------------
+    ol826ain1         enp2s0        192.168.100.101  192.168.100.0  1500            
+    ol826ain2         enp2s0        192.168.100.102  192.168.100.0  1500            
 
-	    Node Name     Source                    Comment                   Status    
-	    ------------  ------------------------  ------------------------  ----------
-	    ol826ain2     192.168.18.43             IPv4                      passed    
+    Source                      Destination                 Connected?                
+    --------------------------  --------------------------  --------------------------
+    ol826ain1[enp1s0:192.168.18.121]  ol826ain2[enp1s0:192.168.18.122]  yes                       
 
-	checking response for name "ol826ain1" from each of the name servers specified
-	in "/etc/resolv.conf"
-	
-		Node Name     Source                    Comment                   Status    
-		------------  ------------------------  ------------------------  ----------
-		ol826ain1     192.168.18.43             IPv4                      passed    
-	resolv.conf Integrity ...PASSED
-  	DNS/NIS name service ...PASSED
-  	Daemon "avahi-daemon" not configured and running ...
-	    Node Name     Configured                Status                  
-	    ------------  ------------------------  ------------------------
-	    ol826ain2     no                        passed                  
-	    ol826ain1     no                        passed                  
+    Source                      Destination                 Connected?                
+    --------------------------  --------------------------  --------------------------
+    ol826ain1[enp2s0:192.168.100.101]  ol826ain2[enp2s0:192.168.100.102]  yes                       
+    Check that maximum (MTU) size packet goes through subnet ...PASSED
+    subnet mask consistency for subnet "192.168.18.0" ...PASSED
+    subnet mask consistency for subnet "192.168.100.0" ...PASSED
+  Node Connectivity ...PASSED
+  Multicast or broadcast check ...
+    Checking subnet "192.168.18.0" for multicast communication with multicast
+    group "224.0.0.251"
 
-	    Node Name     Running?                  Status                  
-	    ------------  ------------------------  ------------------------
-	    ol826ain2     no                        passed                  
-	    ol826ain1     no                        passed                  
-	Daemon "avahi-daemon" not configured and running ...PASSED
-	Daemon "proxyt" not configured and running ...
-	    Node Name     Configured                Status                  
-	    ------------  ------------------------  ------------------------
-	    ol826ain2     no                        passed                  
-	    ol826ain1     no                        passed                  
+    Subnet        Network Type              Multicast Enabled       
+    ------------  ------------------------  ------------------------
+    192.168.18.0  PRIVATE                   TRUE                    
+  Multicast or broadcast check ...PASSED
+  ASMLib installation and configuration verification. ...
+    '/etc/init.d/oracleasm' ...PASSED
+    '/dev/oracleasm' ...PASSED
 
-	    Node Name     Running?                  Status                  
-	    ------------  ------------------------  ------------------------
-	    ol826ain2     no                        passed                  
-	    ol826ain1     no                        passed                  
-  	Daemon "proxyt" not configured and running ...PASSED
-  	Domain Sockets ...PASSED
-  	User Equivalence ...PASSED
-  	RPM Package Manager database ...PASSED
-  	Maximum locked memory check ...PASSED
-  	/dev/shm mounted as temporary file system ...PASSED
-  	File system mount option hidepid for proc filesystem ...PASSED
-  	SCP binary check ...PASSED
-  	Systemd login manager IPC parameter ...PASSED
-  	cgroup OS compatibility ...PASSED
+    Node Name                             Status                  
+    ------------------------------------  ------------------------
+    ol826ain1                             passed                  
+    ol826ain2                             passed                  
+  ASMLib installation and configuration verification. ...PASSED
+  Network Time Protocol (NTP) ...
+    Daemon 'chronyd' ...
+  Node Name                             Running?                
+  ------------------------------------  ------------------------
+  ol826ain2                             yes                     
+  ol826ain1                             yes                     
 
-	Pre-check for cluster services setup was successful. 
+    Daemon 'chronyd' ...PASSED
+    NTP daemon or service using UDP port 123 ...
+  Node Name                             Port Open?              
+  ------------------------------------  ------------------------
+  ol826ain2                             yes                     
+  ol826ain1                             yes                     
 
-	CVU operation performed:      stage -pre crsinst
-	Date:                         Feb 1, 2026, 11:54:41 AM
-	CVU version:                  23.26.1.0.0 (010926x8664)
-	CVU home:                     /u01/app/23.26.1/grid
-	User:                         grid
-	Operating system:             Linux6.12.0-105.51.5.el9uek.x86_64
+    NTP daemon or service using UDP port 123 ...PASSED
+    chrony daemon is synchronized with at least one external time source ...PASSED
+  Network Time Protocol (NTP) ...PASSED
+  Same core file name pattern ...PASSED
+  User Mask ...
+    Node Name     Available                 Required                  Comment   
+    ------------  ------------------------  ------------------------  ----------
+    ol826ain2     0022                      0022                      passed    
+    ol826ain1     0022                      0022                      passed    
+  User Mask ...PASSED
+  User Not In Group "root": grid ...
+    Node Name     Status                    Comment                 
+    ------------  ------------------------  ------------------------
+    ol826ain2     passed                    does not exist          
+    ol826ain1     passed                    does not exist          
+  User Not In Group "root": grid ...PASSED
+  Time zone consistency ...PASSED
+  Path existence, ownership, permissions and attributes ...
+    Path "/var" ...PASSED
+    Path "/dev/shm" ...PASSED
+  Path existence, ownership, permissions and attributes ...PASSED
+  Time offset between nodes ...PASSED
+  resolv.conf Integrity ...
+    Node Name                             Status                  
+    ------------------------------------  ------------------------
+    ol826ain1                             passed                  
+    ol826ain2                             passed                  
+
+checking response for name "ol826ain1" from each of the name servers specified
+in "/etc/resolv.conf"
+
+    Node Name     Source                    Comment                   Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol826ain1     192.168.18.43             IPv4                      passed    
+
+checking response for name "ol826ain2" from each of the name servers specified
+in "/etc/resolv.conf"
+
+    Node Name     Source                    Comment                   Status    
+    ------------  ------------------------  ------------------------  ----------
+    ol826ain2     192.168.18.43             IPv4                      passed    
+  resolv.conf Integrity ...PASSED
+  DNS/NIS name service ...PASSED
+  Daemon "avahi-daemon" not configured and running ...
+    Node Name     Configured                Status                  
+    ------------  ------------------------  ------------------------
+    ol826ain2     no                        passed                  
+    ol826ain1     no                        passed                  
+
+    Node Name     Running?                  Status                  
+    ------------  ------------------------  ------------------------
+    ol826ain2     no                        passed                  
+    ol826ain1     no                        passed                  
+  Daemon "avahi-daemon" not configured and running ...PASSED
+  Daemon "proxyt" not configured and running ...
+    Node Name     Configured                Status                  
+    ------------  ------------------------  ------------------------
+    ol826ain2     no                        passed                  
+    ol826ain1     no                        passed                  
+
+    Node Name     Running?                  Status                  
+    ------------  ------------------------  ------------------------
+    ol826ain2     no                        passed                  
+    ol826ain1     no                        passed                  
+  Daemon "proxyt" not configured and running ...PASSED
+  Domain Sockets ...PASSED
+  User Equivalence ...PASSED
+  RPM Package Manager database ...PASSED
+  Maximum locked memory check ...PASSED
+  /dev/shm mounted as temporary file system ...PASSED
+  File system mount option hidepid for proc filesystem ...PASSED
+  SCP binary check ...PASSED
+  Systemd login manager IPC parameter ...PASSED
+  cgroup OS compatibility ...PASSED
+
+Pre-check for cluster services setup was successful. 
+
+CVU operation performed:      stage -pre crsinst
+Date:                         Feb 6, 2026, 6:30:20 PM
+CVU version:                  23.26.1.0.0 (010926x8664)
+CVU home:                     /u01/app/23.26.1/grid
+User:                         grid
+Operating system:             Linux5.15.0-206.153.7.1.el8uek.x86_64
 
 ###### CHANGE CV_ASSUME_DISTID PARAMETER 
 
