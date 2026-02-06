@@ -48,12 +48,12 @@
 	[root@ol826ain1 ~]# nmcli device
 	DEVICE  TYPE      STATE                   CONNECTION 
 	enp1s0  ethernet  connected               enp1s0       
-	enp3s0  ethernet  connected               enp3s0     
+	enp2s0  ethernet  connected               enp2s0     
 	lo      loopback  connected (externally)  lo      
 	[root@ol826ain1 ~]# nmcli connection show 
 	NAME  UUID                                  TYPE      DEVICE 
 	enp1s0  aa44fa64-eec9-39ef-a6e0-4afc475c1d3d  ethernet  enp1s0   
-	enp3s0  ab517c35-fa91-30c4-b092-9dc57355067b  ethernet  enp3s0   
+	enp2s0  ab517c35-fa91-30c4-b092-9dc57355067b  ethernet  enp2s0   
 	lo    248fd8c7-0102-4858-93a9-d38d2ea4fd05  loopback  lo
     [root@ol826ain1 ~]# nmcli con modify 'enp1s0' ifname enp1s0 ipv4.method manual ipv4.addresses 192.168.18.121/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled
     [root@ol826ain1 ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.43 
@@ -64,22 +64,22 @@
     altname enp1s0
     inet 192.168.18.121/24 brd 192.168.18.255 scope global noprefixroute ens3
        valid_lft forever preferred_lft forever
-    [root@ol826ain1 ~]# nmcli con modify 'enp3s0' ifname enp3s0 ipv4.method manual ipv4.addresses 192.168.100.101/24 ipv4.gateway 192.168.100.1 autoconnect yes ipv6.method disabled
-    [root@ol826ain1 ~]# nmcli con down 'enp3s0'; nmcli con up 'enp3s0'
-	[root@ol826ain1 ~]#  ip addr show enp3s0 
-	4: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    [root@ol826ain1 ~]# nmcli con modify 'enp2s0' ifname enp2s0 ipv4.method manual ipv4.addresses 192.168.100.101/24 ipv4.gateway 192.168.100.1 autoconnect yes ipv6.method disabled
+    [root@ol826ain1 ~]# nmcli con down 'enp2s0'; nmcli con up 'enp2s0'
+	[root@ol826ain1 ~]#  ip addr show enp2s0 
+	4: enp2s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 52:54:00:2c:ee:2d brd ff:ff:ff:ff:ff:ff
-    inet 192.168.100.101/24 brd 192.168.100.255 scope global noprefixroute enp3s0
+    inet 192.168.100.101/24 brd 192.168.100.255 scope global noprefixroute enp2s0
        valid_lft forever preferred_lft forever
 	[root@ol826ain1 ~]# nmcli device
 	DEVICE  TYPE      STATE                   CONNECTION 
 	enp1s0  ethernet  connected               enp1s0      
-	enp3s0  ethernet  connected               enp3s0     
+	enp2s0  ethernet  connected               enp2s0     
 	lo      loopback  connected (externally)  lo         
 	[root@ol826ain1 ~]# nmcli connection show 
 	NAME    UUID                                  TYPE      DEVICE 
 	enp1s0  6b189709-3f1d-3683-bb3d-694e82554e82  ethernet  enp1s0 
-	enp3s0  0c094cdd-0d7a-3cbb-a2a2-09e0eaf839e9  ethernet  enp3s0 
+	enp2s0  0c094cdd-0d7a-3cbb-a2a2-09e0eaf839e9  ethernet  enp2s0 
 	lo      2928747e-520a-4089-9fd3-9f6a56a91144  loopback  lo    
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE STATIC NETWORK NODE 2)
@@ -87,12 +87,12 @@
 	[root@ol826ain2 ~]# nmcli device
 	DEVICE  TYPE      STATE                   CONNECTION 
 	enp1s0  ethernet  connected               enp1s0         
-	enp3s0  ethernet  connected               enp3s0     
+	enp2s0  ethernet  connected               enp2s0     
 	lo      loopback  connected (externally)  lo      
 	[root@ol826ain2 ~]# nmcli connection show 
 	NAME  UUID                                  TYPE      DEVICE 
 	enp1s0  aa44fa64-eec9-39ef-a6e0-4afc475c1d3d  ethernet  enp1s0     
-	enp3s0  ab517c35-fa91-30c4-b092-9dc57355067b  ethernet  enp3s0   
+	enp2s0  ab517c35-fa91-30c4-b092-9dc57355067b  ethernet  enp2s0   
 	lo    248fd8c7-0102-4858-93a9-d38d2ea4fd05  loopback  lo
     [root@ol826ain2 ~]# nmcli con modify 'enp1s0' ifname enp1s0 ipv4.method manual ipv4.addresses 192.168.18.122/24 ipv4.gateway 192.168.18.1 autoconnect yes ipv6.method disabled
     [root@ol826ain2 ~]# nmcli con modify 'enp1s0' ipv4.dns 192.168.18.43 
@@ -103,22 +103,22 @@
     altname enp1s0
     inet 192.168.18.121/24 brd 192.168.18.255 scope global noprefixroute ens3
        valid_lft forever preferred_lft forever
-    [root@ol826ain2 ~]# nmcli con modify 'enp3s0' ifname enp3s0 ipv4.method manual ipv4.addresses 192.168.100.102/24 ipv4.gateway 192.168.100.1 autoconnect yes ipv6.method disabled
-    [root@ol826ain2 ~]# nmcli con down 'enp3s0'; nmcli con up 'enp3s0'
-	[root@ol826ain2 ~]# ip addr show enp3s0 
-	4: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    [root@ol826ain2 ~]# nmcli con modify 'enp2s0' ifname enp2s0 ipv4.method manual ipv4.addresses 192.168.100.102/24 ipv4.gateway 192.168.100.1 autoconnect yes ipv6.method disabled
+    [root@ol826ain2 ~]# nmcli con down 'enp2s0'; nmcli con up 'enp2s0'
+	[root@ol826ain2 ~]# ip addr show enp2s0 
+	4: enp2s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 52:54:00:21:27:af brd ff:ff:ff:ff:ff:ff
-    inet 192.168.100.102/24 brd 192.168.100.255 scope global noprefixroute enp3s0
+    inet 192.168.100.102/24 brd 192.168.100.255 scope global noprefixroute enp2s0
        valid_lft forever preferred_lft forever
 	[root@ol826ain2 ~]# nmcli device
 	DEVICE  TYPE      STATE                   CONNECTION 
 	enp1s0  ethernet  connected               enp1s0       
-	enp3s0  ethernet  connected               enp3s0     
+	enp2s0  ethernet  connected               enp2s0     
 	lo      loopback  connected (externally)  lo         
 	[root@ol826ain2 ~]# nmcli connection show 
 	NAME    UUID                                  TYPE      DEVICE 
 	enp1s0  6b189709-3f1d-3683-bb3d-694e82554e82  ethernet  enp1s0 
-	enp3s0  0c094cdd-0d7a-3cbb-a2a2-09e0eaf839e9  ethernet  enp3s0 
+	enp2s0  0c094cdd-0d7a-3cbb-a2a2-09e0eaf839e9  ethernet  enp2s0 
 	lo      2928747e-520a-4089-9fd3-9f6a56a91144  loopback  lo   
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( DISABLE AVAHI )
@@ -1304,7 +1304,7 @@
     enp1s0 192.168.18.185  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:28:86:AA 1500   
     enp1s0 192.168.18.184  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:28:86:AA 1500  
     enp1s0 192.168.18.187  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:28:86:AA 1500  
-    enp3s0 192.168.100.101 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:7F:44:40 1500  
+    enp2s0 192.168.100.101 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:7F:44:40 1500  
 
     Informações de interface para o nó "ol826ain2"
 
@@ -1312,14 +1312,14 @@
     ------ --------------- --------------- --------------- --------------- ----------------- ------
     enp1s0 192.168.18.122  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:6B:00:2D 1500  
     enp1s0 192.168.18.186  192.168.18.0    0.0.0.0         192.168.100.1   52:54:00:6B:00:2D 1500  
-    enp3s0 192.168.100.102 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:5D:35:1F 1500  
+    enp2s0 192.168.100.102 192.168.100.0   0.0.0.0         192.168.100.1   52:54:00:5D:35:1F 1500  
     
     Verificar: Consistência de MTU das interfaces privadas da sub-rede "192.168.100.0"
 
     Nó                Nome          Endereço IP   Sub-rede      MTU             
     ----------------  ------------  ------------  ------------  ----------------
-    ol826ain1             enp3s0        192.168.100.101  192.168.100.0  1500            
-    ol826ain2             enp3s0        192.168.100.102  192.168.100.0  1500            
+    ol826ain1             enp2s0        192.168.100.101  192.168.100.0  1500            
+    ol826ain2             enp2s0        192.168.100.102  192.168.100.0  1500            
 
     Verificar: Consistência de MTU da sub-rede "192.168.18.0".
 
@@ -1345,11 +1345,11 @@
 
     Origem                      Destino                     Conectado?                
     --------------------------  --------------------------  --------------------------
-    ol826ain1[enp3s0:192.168.100.101]  ol826ain2[enp3s0:192.168.100.102]  sim                       
+    ol826ain1[enp2s0:192.168.100.101]  ol826ain2[enp2s0:192.168.100.102]  sim                       
 
     Origem                      Destino                     Conectado?                
     --------------------------  --------------------------  --------------------------
-    ol826ain1[enp3s0:169.254.6.91]  ol826ain2[enp3s0:169.254.9.106]  sim                       
+    ol826ain1[enp2s0:169.254.6.91]  ol826ain2[enp2s0:169.254.9.106]  sim                       
     Verifique se o tamanho máximo (MTU) do pacote passa pela sub-rede ...APROVADO
     consistência de máscara para a sub-rede "192.168.18.0" ...APROVADO
     consistência de máscara para a sub-rede "192.168.100.0" ...APROVADO
