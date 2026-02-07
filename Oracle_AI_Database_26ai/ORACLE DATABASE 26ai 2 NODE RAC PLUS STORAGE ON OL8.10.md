@@ -675,6 +675,8 @@
 
 ![oracle database 26ai grid_018](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_018.png)
 
+![oracle database 26ai grid_018](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_019.png)
+
 ###### INSTALL GRID 26AI RUN CONFIGURATION SCRIPTS {orainstRoot.sh} NODE 1
 
 	[root@ol826ain1 ~]# /u01/app/oraInventory/orainstRoot.sh
