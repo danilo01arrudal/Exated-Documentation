@@ -798,7 +798,7 @@
 ###### POST INSTALL CHECK ENVIRONMENT ( RUNCLUVFY )
 
     [root@ol826ain1 ~]# su - grid
-    [grid@ol826ain1 ~]$ /u01/app/23.7.0/grid/runcluvfy.sh stage -post crsinst -n ol826ain1,ol826ain2 -verbose -method root
+    [grid@ol826ain1 ~]$ /u01/app/23.26.1/grid/runcluvfy.sh stage -post crsinst -n ol826ain1,ol826ain2 -verbose -method root
     Digite a senha de "ROOT":
 
     Initializing ...
