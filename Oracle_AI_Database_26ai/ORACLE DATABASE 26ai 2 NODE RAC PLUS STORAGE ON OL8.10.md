@@ -675,8 +675,6 @@
 
 ![oracle database 26ai grid_018](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_018.png)
 
-![oracle database 26ai grid_018](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_019.png)
-
 ###### INSTALL GRID 26AI RUN CONFIGURATION SCRIPTS {orainstRoot.sh} NODE 1
 
 	[root@ol826ain1 ~]# /u01/app/oraInventory/orainstRoot.sh
@@ -794,6 +792,8 @@
 	2026/02/05 20:17:58 CLSRSC-594: Executing installation step 18 of 18: 'PostConfig'.
 	2026/02/05 20:18:00 CLSRSC-325: Configure Oracle Grid Infrastructure for a Cluster ... succeeded
 	2026/02/05 20:19:00 CLSRSC-4002: Successfully installed Oracle Autonomous Health Framework (AHF).
+
+![oracle database 26ai grid_018](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_019.png)
 
 ###### POST INSTALL CHECK ENVIRONMENT ( RUNCLUVFY )
 
