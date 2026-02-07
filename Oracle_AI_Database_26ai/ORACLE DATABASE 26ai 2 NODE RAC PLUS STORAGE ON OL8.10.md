@@ -1063,7 +1063,48 @@
 	# oracle-ai-database-preinstall-26ai setting special parameters END
 
 	[root@ol826ain1 ~]# sysctl -p /etc/sysctl.d/99-oracle-ai-database-preinstall-26ai-sysctl.conf
+	fs.file-max = 6815744
+	kernel.sem = 250 32000 100 128
+	kernel.shmmni = 4096
+	kernel.shmall = 1073741824
+	kernel.shmmax = 4398046511104
+	kernel.panic_on_oops = 1
+	net.core.rmem_default = 262144
+	net.core.rmem_max = 4194304
+	net.core.wmem_default = 262144
+	net.core.wmem_max = 1048576
+	net.ipv4.conf.all.rp_filter = 2
+	net.ipv4.conf.default.rp_filter = 2
+	fs.aio-max-nr = 1048576
+	vm.hugetlb_shm_group = 54321
+	kernel.panic = 10
+	net.ipv4.ip_local_port_range = 9000 65535
+	vm.nr_hugepages = 2560
+	
+	[root@ol826ain1 ~]# grep HugePages_Total /proc/meminfo
+	HugePages_Total:    2229
+	
 	[root@ol826ain2 ~]# sysctl -p /etc/sysctl.d/99-oracle-ai-database-preinstall-26ai-sysctl.conf
+	fs.file-max = 6815744
+	kernel.sem = 250 32000 100 128
+	kernel.shmmni = 4096
+	kernel.shmall = 1073741824
+	kernel.shmmax = 4398046511104
+	kernel.panic_on_oops = 1
+	net.core.rmem_default = 262144
+	net.core.rmem_max = 4194304
+	net.core.wmem_default = 262144
+	net.core.wmem_max = 1048576
+	net.ipv4.conf.all.rp_filter = 2
+	net.ipv4.conf.default.rp_filter = 2
+	fs.aio-max-nr = 1048576
+	vm.hugetlb_shm_group = 54321
+	kernel.panic = 10
+	net.ipv4.ip_local_port_range = 9000 65535
+	vm.nr_hugepages = 2560
+
+	[root@ol826ain2 ~]# grep HugePages_Total /proc/meminfo
+	HugePages_Total:    2229
 
 ###### COPY GRID INFRASTRUCTURE SOFTWARE
 
