@@ -1052,14 +1052,14 @@
 
 ###### COPY GRID INFRASTRUCTURE SOFTWARE
 
-    [root@exated Downloads]# scp p37370465_230000_Linux-x86-64.zip oracle@192.168.18.121:/u01/app/oracle/product/23.7.0/dbhome_1/
+    [root@exated Downloads]# scp V1054592-01.zip oracle@192.168.18.121:/u01/app/oracle/product/23.26.1/dbhome_1/
 
 ###### UNZIP GRID INFRASTRUCTURE SOFTWARE
 
     [root@ol826ain1 ~]# su - oracle
-    [oracle@ol826ain1 ~]$ cd /u01/app/oracle/product/23.7.0/dbhome_1/
-    [oracle@ol826ain1 dbhome_1]$ unzip p37370465_230000_Linux-x86-64.zip
-    [oracle@ol826ain1 dbhome_1]$ rm -vf p37370465_230000_Linux-x86-64.zip
+    [oracle@ol826ain1 ~]$ cd /u01/app/oracle/product/23.26.1/dbhome_1/
+    [oracle@ol826ain1 dbhome_1]$ unzip V1054592-01.zip
+    [oracle@ol826ain1 dbhome_1]$ rm -vf V1054592-01.zip
 
 ###### INSTALL ORACLE DATABASE 26AI SOFTWARE 
 
