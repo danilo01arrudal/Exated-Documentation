@@ -814,88 +814,97 @@
 
 ###### CHECK CLUSTER STATUS ( CRSCTL )
 
-    [grid@ol826ain1 ~]$ /u01/app/23.7.0/grid/bin/crsctl check cluster -all
-    **************************************************************
-    ol826ain1:
-    CRS-4537: Cluster Ready Services is online
-    CRS-4529: Cluster Synchronization Services is online
-    CRS-4533: Event Manager is online
-    **************************************************************
-    ol826ain2:
-    CRS-4537: Cluster Ready Services is online
-    CRS-4529: Cluster Synchronization Services is online
-    CRS-4533: Event Manager is online
-    **************************************************************
+	[root@ol826ain1 ~]# /u01/app/23.26.1/grid/bin/crsctl check cluster -all
+	**************************************************************
+	ol826ain1:
+	CRS-4537: Cluster Ready Services is online
+	CRS-4529: Cluster Synchronization Services is online
+	CRS-4533: Event Manager is online
+	**************************************************************
+	ol826ain2:
+	CRS-4537: Cluster Ready Services is online
+	CRS-4529: Cluster Synchronization Services is online
+	CRS-4533: Event Manager is online
+	**************************************************************
 
-    [grid@ol826ain1 ~]$ /u01/app/23.7.0/grid/bin/crsctl stat res -t 
-    --------------------------------------------------------------------------------
-    Name           Target  State        Server                   State details       
-    --------------------------------------------------------------------------------
-    Local Resources
-    --------------------------------------------------------------------------------
-    ora.LISTENER.lsnr
-               ONLINE  ONLINE       ol826ain1                    STABLE
-               ONLINE  ONLINE       ol826ain2                    STABLE
-    ora.chad
-               ONLINE  ONLINE       ol826ain1                    STABLE
-               ONLINE  ONLINE       ol826ain2                    STABLE
-    ora.helper
-               OFFLINE OFFLINE      ol826ain1                    STABLE
-               OFFLINE OFFLINE      ol826ain2                    IDLE,STABLE
-    ora.net1.network
-               ONLINE  ONLINE       ol826ain1                    STABLE
-               ONLINE  ONLINE       ol826ain2                    STABLE
-    ora.ons
-               ONLINE  ONLINE       ol826ain1                    STABLE
-               ONLINE  ONLINE       ol826ain2                    STABLE
-    --------------------------------------------------------------------------------
-    Cluster Resources
-    --------------------------------------------------------------------------------
-    ora.ASMNET1LSNR_ASM.lsnr(ora.asmgroup)
-      1        ONLINE  ONLINE       ol826ain1                    STABLE
-      2        ONLINE  ONLINE       ol826ain2                    STABLE
-    ora.DATA.dg(ora.asmgroup)
-      1        ONLINE  ONLINE       ol826ain1                    STABLE
-      2        ONLINE  ONLINE       ol826ain2                    STABLE
-    ora.LISTENER_SCAN1.lsnr
-      1        ONLINE  ONLINE       ol826ain1                    STABLE
-    ora.LISTENER_SCAN2.lsnr
-      1        ONLINE  ONLINE       ol826ain1                    STABLE
-    ora.LISTENER_SCAN3.lsnr
-      1        ONLINE  ONLINE       ol826ain1                    STABLE
-    ora.LISTENER_SCAN4.lsnr
-      1        ONLINE  ONLINE       ol826ain2                    STABLE
-    ora.asm(ora.asmgroup)
-      1        ONLINE  ONLINE       ol826ain1                    Started,STABLE
-      2        ONLINE  ONLINE       ol826ain2                    Started,STABLE
-    ora.asmnet1.asmnetwork(ora.asmgroup)
-      1        ONLINE  ONLINE       ol826ain1                    STABLE
-      2        ONLINE  ONLINE       ol826ain2                    STABLE
-    ora.cdp1.cdp
-      1        ONLINE  ONLINE       ol826ain1                    STABLE
-    ora.cdp2.cdp
-      1        ONLINE  ONLINE       ol826ain1                    STABLE
-    ora.cdp3.cdp
-      1        ONLINE  ONLINE       ol826ain1                    STABLE
-    ora.cdp4.cdp
-      1        ONLINE  ONLINE       ol826ain2                    STABLE
-    ora.cvu
-      1        ONLINE  ONLINE       ol826ain1                    STABLE
-    ora.ol826ain1.vip
-      1        ONLINE  ONLINE       ol826ain1                    STABLE
-    ora.ol826ain2.vip
-      1        ONLINE  ONLINE       ol826ain2                    STABLE
-    ora.rhpserver
-      1        OFFLINE OFFLINE                               STABLE
-    ora.scan1.vip
-      1        ONLINE  ONLINE       ol826ain1                    STABLE
-    ora.scan2.vip
-      1        ONLINE  ONLINE       ol826ain1                    STABLE
-    ora.scan3.vip
-      1        ONLINE  ONLINE       ol826ain1                    STABLE
-    ora.scan4.vip
-      1        ONLINE  ONLINE       ol826ain2                    STABLE
-    --------------------------------------------------------------------------------
+	[root@ol826ain1 ~]# /u01/app/23.26.1/grid/bin/crsctl stat res -t 
+	--------------------------------------------------------------------------------
+	Name           Target  State        Server                   State details       
+	--------------------------------------------------------------------------------
+	Local Resources
+	--------------------------------------------------------------------------------
+	ora.LISTENER.lsnr
+	               ONLINE  ONLINE       ol826ain1                STABLE
+	               ONLINE  ONLINE       ol826ain2                STABLE
+	ora.chad
+	               ONLINE  ONLINE       ol826ain1                STABLE
+	               ONLINE  ONLINE       ol826ain2                STABLE
+	ora.cvuadmin
+	               OFFLINE OFFLINE      ol826ain1                STABLE
+	               OFFLINE OFFLINE      ol826ain2                STABLE
+	ora.helper
+	               OFFLINE OFFLINE      ol826ain1                STABLE
+	               OFFLINE OFFLINE      ol826ain2                IDLE,STABLE
+	ora.net1.network
+	               ONLINE  ONLINE       ol826ain1                STABLE
+	               ONLINE  ONLINE       ol826ain2                STABLE
+	ora.ons
+	               ONLINE  ONLINE       ol826ain1                STABLE
+	               ONLINE  ONLINE       ol826ain2                STABLE
+	--------------------------------------------------------------------------------
+	Cluster Resources
+	--------------------------------------------------------------------------------
+	ora.ASMNET1LSNR_ASM.lsnr(ora.asmgroup)
+	      1        ONLINE  ONLINE       ol826ain1                STABLE
+	      2        ONLINE  ONLINE       ol826ain2                STABLE
+	ora.DATA.dg(ora.asmgroup)
+	      1        ONLINE  ONLINE       ol826ain1                STABLE
+	      2        ONLINE  ONLINE       ol826ain2                STABLE
+	ora.LISTENER_SCAN1.lsnr
+	      1        ONLINE  ONLINE       ol826ain1                STABLE
+	ora.LISTENER_SCAN2.lsnr
+	      1        ONLINE  ONLINE       ol826ain1                STABLE
+	ora.LISTENER_SCAN3.lsnr
+	      1        ONLINE  ONLINE       ol826ain1                STABLE
+	ora.LISTENER_SCAN4.lsnr
+	      1        ONLINE  ONLINE       ol826ain2                STABLE
+	ora.RECO.dg(ora.asmgroup)
+	      1        ONLINE  ONLINE       ol826ain1                STABLE
+	      2        ONLINE  ONLINE       ol826ain2                STABLE
+	ora.asm(ora.asmgroup)
+	      1        ONLINE  ONLINE       ol826ain1                Started,STABLE
+	      2        ONLINE  ONLINE       ol826ain2                Started,STABLE
+	ora.asmnet1.asmnetwork(ora.asmgroup)
+	      1        ONLINE  ONLINE       ol826ain1                STABLE
+	      2        ONLINE  ONLINE       ol826ain2                STABLE
+	ora.cdp1.cdp
+	      1        OFFLINE OFFLINE                               STABLE
+	ora.cdp2.cdp
+	      1        OFFLINE OFFLINE                               STABLE
+	ora.cdp3.cdp
+	      1        OFFLINE OFFLINE                               STABLE
+	ora.cdp4.cdp
+	      1        OFFLINE OFFLINE                               STABLE
+	ora.cvu
+	      1        ONLINE  ONLINE       ol826ain1                STABLE
+	ora.cvuhelper
+	      1        OFFLINE OFFLINE                               STABLE
+	ora.ol826ain1.vip
+	      1        ONLINE  ONLINE       ol826ain1                STABLE
+	ora.ol826ain2.vip
+	      1        ONLINE  ONLINE       ol826ain2                STABLE
+	ora.rhpserver
+	      1        OFFLINE OFFLINE                               STABLE
+	ora.scan1.vip
+	      1        ONLINE  ONLINE       ol826ain1                STABLE
+	ora.scan2.vip
+	      1        ONLINE  ONLINE       ol826ain1                STABLE
+	ora.scan3.vip
+	      1        ONLINE  ONLINE       ol826ain1                STABLE
+	ora.scan4.vip
+	      1        ONLINE  ONLINE       ol826ain2                STABLE
+	--------------------------------------------------------------------------------
+	
     [grid@ol826ain1 ~]$ exit
 
     [root@ol826ain1 ~]# export ORACLE_HOME=/u01/app/23.7.0/grid
