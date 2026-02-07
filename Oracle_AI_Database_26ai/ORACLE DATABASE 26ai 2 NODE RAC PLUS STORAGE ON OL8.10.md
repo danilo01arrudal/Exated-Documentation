@@ -905,135 +905,146 @@
 	      1        ONLINE  ONLINE       ol826ain2                STABLE
 	--------------------------------------------------------------------------------
 	
-    [grid@ol826ain1 ~]$ exit
+	[root@ol826ain1 ~]# crsctl status resource
+	NAME=ora.ASMNET1LSNR_ASM.lsnr(ora.asmgroup)
+	TYPE=ora.asm_listener.type
+	TARGET=ONLINE             , ONLINE
+	STATE=ONLINE on ol826ain1, ONLINE on ol826ain2
 
-    [root@ol826ain1 ~]# export ORACLE_HOME=/u01/app/23.7.0/grid
-    [root@ol826ain1 ~]# export PATH=$PATH:$ORACLE_HOME/bin
-    [root@ol826ain1 ~]# crsctl status resource
-    NAME=ora.ASMNET1LSNR_ASM.lsnr(ora.asmgroup)
-    TYPE=ora.asm_listener.type
-    TARGET=ONLINE         , ONLINE
-    STATE=ONLINE on ol826ain1, ONLINE on ol826ain2
+	NAME=ora.DATA.dg(ora.asmgroup)
+	TYPE=ora.diskgroup.type
+	TARGET=ONLINE             , ONLINE
+	STATE=ONLINE on ol826ain1, ONLINE on ol826ain2
 
-    NAME=ora.DATA.dg(ora.asmgroup)
-    TYPE=ora.diskgroup.type
-    TARGET=ONLINE         , ONLINE
-    STATE=ONLINE on ol826ain1, ONLINE on ol826ain2
+	NAME=ora.LISTENER.lsnr
+	TYPE=ora.listener.type
+	TARGET=ONLINE             , ONLINE
+	STATE=ONLINE on ol826ain1, ONLINE on ol826ain2
 
-    NAME=ora.LISTENER.lsnr
-    TYPE=ora.listener.type
-    TARGET=ONLINE         , ONLINE
-    STATE=ONLINE on ol826ain1, ONLINE on ol826ain2
+	NAME=ora.LISTENER_SCAN1.lsnr
+	TYPE=ora.scan_listener.type
+	TARGET=ONLINE
+	STATE=ONLINE on ol826ain1
 
-    NAME=ora.LISTENER_SCAN1.lsnr
-    TYPE=ora.scan_listener.type
-    TARGET=ONLINE
-    STATE=ONLINE on ol826ain1
+	NAME=ora.LISTENER_SCAN2.lsnr
+	TYPE=ora.scan_listener.type
+	TARGET=ONLINE
+	STATE=ONLINE on ol826ain1
 
-    NAME=ora.LISTENER_SCAN2.lsnr
-    TYPE=ora.scan_listener.type
-    TARGET=ONLINE
-    STATE=ONLINE on ol826ain1
+	NAME=ora.LISTENER_SCAN3.lsnr
+	TYPE=ora.scan_listener.type
+	TARGET=ONLINE
+	STATE=ONLINE on ol826ain1
 
-    NAME=ora.LISTENER_SCAN3.lsnr
-    TYPE=ora.scan_listener.type
-    TARGET=ONLINE
-    STATE=ONLINE on ol826ain1
+	NAME=ora.LISTENER_SCAN4.lsnr
+	TYPE=ora.scan_listener.type
+	TARGET=ONLINE
+	STATE=ONLINE on ol826ain2
 
-    NAME=ora.LISTENER_SCAN4.lsnr
-    TYPE=ora.scan_listener.type
-    TARGET=ONLINE
-    STATE=ONLINE on ol826ain2
+	NAME=ora.RECO.dg(ora.asmgroup)
+	TYPE=ora.diskgroup.type
+	TARGET=ONLINE             , ONLINE
+	STATE=ONLINE on ol826ain1, ONLINE on ol826ain2
 
-    NAME=ora.asm(ora.asmgroup)
-    TYPE=ora.asm.type
-    TARGET=ONLINE         , ONLINE
-    STATE=ONLINE on ol826ain1, ONLINE on ol826ain2
+	NAME=ora.asm(ora.asmgroup)
+	TYPE=ora.asm.type
+	TARGET=ONLINE             , ONLINE
+	STATE=ONLINE on ol826ain1, ONLINE on ol826ain2
 
-    NAME=ora.asmnet1.asmnetwork(ora.asmgroup)
-    TYPE=ora.asm_network.type
-    TARGET=ONLINE         , ONLINE
-    STATE=ONLINE on ol826ain1, ONLINE on ol826ain2
+	NAME=ora.asmnet1.asmnetwork(ora.asmgroup)
+	TYPE=ora.asm_network.type
+	TARGET=ONLINE             , ONLINE
+	STATE=ONLINE on ol826ain1, ONLINE on ol826ain2
 
-    NAME=ora.cdp1.cdp
-    TYPE=ora.cdp.type
-    TARGET=ONLINE
-    STATE=ONLINE on ol826ain1
+	NAME=ora.cdp1.cdp
+	TYPE=ora.cdp.type
+	TARGET=OFFLINE
+	STATE=OFFLINE
 
-    NAME=ora.cdp2.cdp
-    TYPE=ora.cdp.type
-    TARGET=ONLINE
-    STATE=ONLINE on ol826ain1
+	NAME=ora.cdp2.cdp
+	TYPE=ora.cdp.type
+	TARGET=OFFLINE
+	STATE=OFFLINE
 
-    NAME=ora.cdp3.cdp
-    TYPE=ora.cdp.type
-    TARGET=ONLINE
-    STATE=ONLINE on ol826ain1
+	NAME=ora.cdp3.cdp
+	TYPE=ora.cdp.type
+	TARGET=OFFLINE
+	STATE=OFFLINE
 
-    NAME=ora.cdp4.cdp
-    TYPE=ora.cdp.type
-    TARGET=ONLINE
-    STATE=ONLINE on ol826ain2
+	NAME=ora.cdp4.cdp
+	TYPE=ora.cdp.type
+	TARGET=OFFLINE
+	STATE=OFFLINE
 
-    NAME=ora.chad
-    TYPE=ora.chad.type
-    TARGET=ONLINE         , ONLINE
-    STATE=ONLINE on ol826ain1, ONLINE on ol826ain2
+	NAME=ora.chad
+	TYPE=ora.chad.type
+	TARGET=ONLINE             , ONLINE
+	STATE=ONLINE on ol826ain1, ONLINE on ol826ain2
 
-    NAME=ora.cvu
-    TYPE=ora.cvu.type
-    TARGET=ONLINE
-    STATE=ONLINE on ol826ain1
+	NAME=ora.cvu
+	TYPE=ora.cvu.type
+	TARGET=ONLINE
+	STATE=ONLINE on ol826ain1
 
-    NAME=ora.helper
-    TYPE=ora.helper.type
-    TARGET=OFFLINE, OFFLINE
-    STATE=OFFLINE, OFFLINE
+	NAME=ora.cvuadmin
+	TYPE=ora.cvuadmin.type
+	TARGET=OFFLINE, OFFLINE
+	STATE=OFFLINE, OFFLINE
 
-    NAME=ora.net1.network
-    TYPE=ora.network.type
-    TARGET=ONLINE         , ONLINE
-    STATE=ONLINE on ol826ain1, ONLINE on ol826ain2
+	NAME=ora.cvuhelper
+	TYPE=ora.cvuhelper.type
+	TARGET=OFFLINE
+	STATE=OFFLINE
 
-    NAME=ora.ol826ain1.vip
-    TYPE=ora.cluster_vip_net1.type
-    TARGET=ONLINE
-    STATE=ONLINE on ol826ain1
+	NAME=ora.helper
+	TYPE=ora.helper.type
+	TARGET=OFFLINE, OFFLINE
+	STATE=OFFLINE, OFFLINE
 
-    NAME=ora.ol826ain2.vip
-    TYPE=ora.cluster_vip_net1.type
-    TARGET=ONLINE
-    STATE=ONLINE on ol826ain2
+	NAME=ora.net1.network
+	TYPE=ora.network.type
+	TARGET=ONLINE             , ONLINE
+	STATE=ONLINE on ol826ain1, ONLINE on ol826ain2
 
-    NAME=ora.ons
-    TYPE=ora.ons.type
-    TARGET=ONLINE         , ONLINE
-    STATE=ONLINE on ol826ain1, ONLINE on ol826ain2
+	NAME=ora.ol826ain1.vip
+	TYPE=ora.cluster_vip_net1.type
+	TARGET=ONLINE
+	STATE=ONLINE on ol826ain1
 
-    NAME=ora.rhpserver
-    TYPE=ora.rhpserver.type
-    TARGET=OFFLINE
-    STATE=OFFLINE
+	NAME=ora.ol826ain2.vip
+	TYPE=ora.cluster_vip_net1.type
+	TARGET=ONLINE
+	STATE=ONLINE on ol826ain2
+	
+	NAME=ora.ons
+	TYPE=ora.ons.type
+	TARGET=ONLINE             , ONLINE
+	STATE=ONLINE on ol826ain1, ONLINE on ol826ain2
+	
+	NAME=ora.rhpserver
+	TYPE=ora.rhpserver.type
+	TARGET=OFFLINE
+	STATE=OFFLINE
 
-    NAME=ora.scan1.vip
-    TYPE=ora.scan_vip.type
-    TARGET=ONLINE
-    STATE=ONLINE on ol826ain1
+	NAME=ora.scan1.vip
+	TYPE=ora.scan_vip.type
+	TARGET=ONLINE
+	STATE=ONLINE on ol826ain1
 
-    NAME=ora.scan2.vip
-    TYPE=ora.scan_vip.type
-    TARGET=ONLINE
-    STATE=ONLINE on ol826ain1
+	NAME=ora.scan2.vip
+	TYPE=ora.scan_vip.type
+	TARGET=ONLINE
+	STATE=ONLINE on ol826ain1
 
-    NAME=ora.scan3.vip
-    TYPE=ora.scan_vip.type
-    TARGET=ONLINE
-    STATE=ONLINE on ol826ain1
+	NAME=ora.scan3.vip
+	TYPE=ora.scan_vip.type
+	TARGET=ONLINE
+	STATE=ONLINE on ol826ain1
 
-    NAME=ora.scan4.vip
-    TYPE=ora.scan_vip.type
-    TARGET=ONLINE
-    STATE=ONLINE on ol826ain2
+	NAME=ora.scan4.vip
+	TYPE=ora.scan_vip.type
+	TARGET=ONLINE
+	STATE=ONLINE on ol826ain2
 
 ###### CREATE DISKGRUOP FRA ON ASM ( ASMCA )
 
