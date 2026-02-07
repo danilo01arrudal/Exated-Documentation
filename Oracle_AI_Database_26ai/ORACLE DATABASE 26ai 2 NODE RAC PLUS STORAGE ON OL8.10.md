@@ -1050,6 +1050,21 @@
 
     [grid@ol826ain1 ~]$ asmca -silent -createDiskGroup -diskGroupName FRA -disk '/dev/asm-disk5' -redundancy EXTERNAL -au_size 4 -compatible.asm 23.0.0 -compatible.rdbms 19.0.0
 
+###### CONFIGURE HUGEPAGES FOR ORACLE DATABASE
+
+    [root@ol826ain1 ~]# vi /etc/sysctl.d/99-oracle-ai-database-preinstall-26ai-sysctl.conf 
+	# oracle-ai-database-preinstall-26ai for vm.nr_hugepages is 2560
+	vm.nr_hugepages = 2560
+	# oracle-ai-database-preinstall-26ai setting special parameters END
+
+	[root@ol826ain2 ~]# vi /etc/sysctl.d/99-oracle-ai-database-preinstall-26ai-sysctl.conf 
+	# oracle-ai-database-preinstall-26ai for vm.nr_hugepages is 2560
+	vm.nr_hugepages = 2560
+	# oracle-ai-database-preinstall-26ai setting special parameters END
+
+	[root@ol826ain1 ~]# sysctl -p /etc/sysctl.d/99-oracle-ai-database-preinstall-26ai-sysctl.conf
+	[root@ol826ain2 ~]# sysctl -p /etc/sysctl.d/99-oracle-ai-database-preinstall-26ai-sysctl.conf
+
 ###### COPY GRID INFRASTRUCTURE SOFTWARE
 
     [root@exated Downloads]# scp V1054592-01.zip oracle@192.168.18.121:/u01/app/oracle/product/23.26.1/dbhome_1/
