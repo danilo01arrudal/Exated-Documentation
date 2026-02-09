@@ -1048,7 +1048,7 @@
 
 ###### CREATE DISKGRUOP FRA ON ASM ( ASMCA )
 
-    [grid@ol826ain1 ~]$ asmca -silent -createDiskGroup -diskGroupName FRA -disk '/dev/asm-disk5' -redundancy EXTERNAL -au_size 4 -compatible.asm 23.0.0 -compatible.rdbms 19.0.0
+	[grid@ol826ain1 ~]$ asmca -silent -createDiskGroup -diskGroupName FRA -disk '/dev/asm-disk5' -redundancy EXTERNAL -au_size 4 -attribute compatible.asm=23.0.0,compatible.rdbms=19.0.0
 
 ###### CONFIGURE HUGEPAGES FOR ORACLE DATABASE
 
