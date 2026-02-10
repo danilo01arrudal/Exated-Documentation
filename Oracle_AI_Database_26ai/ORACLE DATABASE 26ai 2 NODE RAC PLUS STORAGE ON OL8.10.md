@@ -1050,7 +1050,18 @@
 
 	[grid@ol826ain1 ~]$ asmca -silent -createDiskGroup -diskGroupName FRA -disk '/dev/asm-disk5' -redundancy EXTERNAL -au_size 4 -attribute compatible.asm=23.0.0,compatible.rdbms=19.0.0
 
-###### CONFIGURE HUGEPAGES FOR ORACLE DATABASE
+###### VALIDATE DISKGRUOP FRA ON ASM ( ASMCA )
+
+	[root@ol826ain1 ~]# xhost + 
+	[root@ol826ain1 ~]# su - grid
+	[grid@ol826ain1 ~]$ export DISPLAY=:0.0 
+	[grid@ol826ain1 ~]$ asmca
+
+![oracle database 26ai grid_020](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_020.png)
+
+![oracle database 26ai grid_021](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_021.png)
+
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE HUGEPAGES FOR ORACLE DATABASE INSTANCE ) 
 
     [root@ol826ain1 ~]# vi /etc/sysctl.d/99-oracle-ai-database-preinstall-26ai-sysctl.conf 
 	# oracle-ai-database-preinstall-26ai for vm.nr_hugepages is 2560
@@ -1117,142 +1128,66 @@
     [oracle@ol826ain1 dbhome_1]$ unzip V1054592-01.zip
     [oracle@ol826ain1 dbhome_1]$ rm -vf V1054592-01.zip
 
-###### INSTALL ORACLE DATABASE 26AI SOFTWARE 
+###### SET UP ORACLE DATABASE RAC 26AI SOFTWARE ONLY  
 
-     [root@ol826ain1 ~]# su - oracle 
+	[root@ol826ain1 ~]# xhost + 
+	[root@ol826ain1 ~]# su - oracle
+	[oracle@ol826ain1 ~]$ export DISPLAY=:0.0 
+	[oracle@ol826ain1 ~]$ cd $ORACLE_HOME
+	[oracle@ol826ain1 dbhome_1]$ ./runInstaller
+	
+![oracle database 26ai grid_022](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_022.png)
 
-###### CREATE A DATABASE RESPONSE FILE 
+![oracle database 26ai grid_023](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_023.png)
 
-    [oracle@ol826ain1 ~]$ vi /home/oracle/dbca.rsp
-    responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v23.0.0
-    gdbName=oradbc.appsdba.info
-    sid=oradbc
-    databaseConfigType=RAC
-    RACOneNodeServiceName=
-    sehaServiceName=
-    policyManaged=false
-    managementPolicy=AUTOMATIC
-    createServerPool=false
-    serverPoolName=
-    cardinality=
-    force=false
-    pqPoolName=
-    pqCardinality=
-    createAsContainerDatabase=true
-    numberOfPDBs=1
-    pdbName=pdboradbc
-    useLocalUndoForPDBs=true
-    pdbAdminPassword=
-    nodelist=ol826ain1,ol826ain2
-    sehaNodeList=
-    templateName=/u01/app/oracle/product/23.7.0/dbhome_1/assistants/dbca/templates/General_Purpose.dbc
-    sysPassword=
-    systemPassword= 
-    serviceUserPassword=
-    emConfiguration=
-    runCVUChecks=TRUE
-    dbsnmpPassword=
-    omsHost=
-    omsPort=0
-    emUser=
-    emPassword=
-    dvConfiguration=false
-    dvUserName=
-    dvUserPassword=
-    dvAccountManagerName=
-    dvAccountManagerPassword=
-    olsConfiguration=false
-    datafileJarLocation={ORACLE_HOME}/assistants/dbca/templates/
-    datafileDestination=+DATA/{DB_UNIQUE_NAME}/
-    recoveryAreaDestination=+FRA
-    recoveryAreaSize=20200MB
-	configureWithOID=
-    pdbOptions=SAMPLE_SCHEMA:false,ORACLE_TEXT:true,OMS:true,CWMLITE:true,JSERVER:true,IMEDIA:false,SPATIAL:true,DV:true
-    dbOptions=SAMPLE_SCHEMA:false,ORACLE_TEXT:true,OMS:true,CWMLITE:true,JSERVER:true,IMEDIA:false,SPATIAL:true,DV:true
-    storageType=ASM
-    diskGroupName=+DATA/{DB_UNIQUE_NAME}/
-    asmsnmpPassword=
-    recoveryGroupName=+FRA
-    characterSet=AL32UTF8
-    nationalCharacterSet=AL16UTF16
-    registerWithDirService=false
-    dirServiceUserName=
-    dirServicePassword=
-    walletPassword=
-    listeners=LISTENER
-    skipListenerRegistration=false
-    variablesFile=
-    variables=ORACLE_BASE_HOME=/u01/app/oracle/product/23.7.0/dbhome_1,DB_UNIQUE_NAME=oradbc,ORACLE_BASE=/u01/app/oracle,PDB_NAME=,DB_NAME=oradbc,ORACLE_HOME=/u01/app/oracle/product/23.7.0/dbhome_1,SID=oradbc
-    initParams=oradbc1.undo_tablespace=UNDOTBS1,oradbc2.undo_tablespace=UNDOTBS2,enable_pluggable_database=true,sga_target=1788MB,db_block_size=8192BYTES,cluster_database=true,family:dw_helper.instance_mode=read-only,nls_language=BRAZILIAN PORTUGUESE,dispatchers=(PROTOCOL=TCP) (SERVICE=oradbcXDB),diagnostic_dest={ORACLE_BASE},remote_login_passwordfile=exclusive,db_create_file_dest=+DATA/{DB_UNIQUE_NAME}/,processes=300,pga_aggregate_target=597MB,oradbc1.thread=1,oradbc2.thread=2,nls_territory=BRAZIL,local_listener=-oraagent-dummy-,db_recovery_file_dest_size=20200MB,open_cursors=300,log_archive_format=%t_%s_%r.dbf,db_domain=appsdba.info,compatible=23.6.0,db_name=oradbc,oradbc1.instance_number=1,oradbc2.instance_number=2,db_recovery_file_dest=+FRA,_exadata_feature_on=true
-    enableArchive=true
-    useOMF=true
-    memoryPercentage=40
-    databaseType=MULTIPURPOSE
-    automaticMemoryManagement=false
-    totalMemory=0
-    
-###### CREATE ORACLE DATABASE IN SILENT MODE ( DBCA )
+![oracle database 26ai grid_024](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_024.png)
 
-    [oracle@ol826ain1 ~]$ dbca -silent -createDatabase -responseFile /home/oracle/dbca.rsp
-    Informe a senha do usuário SYS: 
+![oracle database 26ai grid_025](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_025.png)
 
-    Informe a senha do usuário SYSTEM: 
+![oracle database 26ai grid_026](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_026.png)
 
-    Informe a senha do usuário DBSNMP: 
+![oracle database 26ai grid_027](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_027.png)
 
-    Informe a Senha do Usuário PDBADMIN: 
+![oracle database 26ai grid_028](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_028.png)
 
-    [WARNING] [DBT-06208] A senha 'SYS' informada não está de acordo com os padrões recomendados pela Oracle.
-    CAUSA: 
-    a. A Oracle recomenda que a senha informada deve ter, pelo menos, 8 caracteres, deve conter, no mínimo, 1 caractere maiúsculo, 1 caractere minúsculo e 1 dígito [0-9].
-    b. A senha informada é uma palavra-chave cuja utilização a Oracle não recomenda
-    AÇÃO: Especifique uma senha complexa. Se for necessário, consulte a documentação da Oracle para obter orientações.
-    [WARNING] [DBT-06208] A senha 'SYSTEM' informada não está de acordo com os padrões recomendados pela Oracle.
-    CAUSA: 
-    a. A Oracle recomenda que a senha informada deve ter, pelo menos, 8 caracteres, deve conter, no mínimo, 1 caractere maiúsculo, 1 caractere minúsculo e 1 dígito [0-9].
-    b. A senha informada é uma palavra-chave cuja utilização a Oracle não recomenda
-    AÇÃO: Especifique uma senha complexa. Se for necessário, consulte a documentação da Oracle para obter orientações.
-    [WARNING] [DBT-06208] A senha 'PDBADMIN' informada não está de acordo com os padrões recomendados pela Oracle.
-    CAUSA: 
-    a. A Oracle recomenda que a senha informada deve ter, pelo menos, 8 caracteres, deve conter, no mínimo, 1 caractere maiúsculo, 1 caractere minúsculo e 1 dígito [0-9].
-    b. A senha informada é uma palavra-chave cuja utilização a Oracle não recomenda
-    AÇÃO: Especifique uma senha complexa. Se for necessário, consulte a documentação da Oracle para obter orientações.
-    [WARNING] [DBT-06208] A senha 'DBSNMP' informada não está de acordo com os padrões recomendados pela Oracle.
-    CAUSA: 
-    a. A Oracle recomenda que a senha informada deve ter, pelo menos, 8 caracteres, deve conter, no mínimo, 1 caractere maiúsculo, 1 caractere minúsculo e 1 dígito [0-9].
-    b. A senha informada é uma palavra-chave cuja utilização a Oracle não recomenda
-    AÇÃO: Especifique uma senha complexa. Se for necessário, consulte a documentação da Oracle para obter orientações.   
-    [WARNING] [DBT-09102] O ambiente de destino não atende a alguns requisitos opcionais.
-    CAUSA: Alguns dos pré-requisitos opcionais não foram atendidos. Consulte os detalhes nos logs.
-    AÇÃO: Encontre a configuração apropriada no arquivo de log ou no guia de instalação para atender aos pré-requisitos e corrigir isso manualmente.
-    Preparar para operação de bd
-    7% concluído
-    Copiando arquivos de banco de dados
-    27% concluído
-    Criando e iniciando a instância Oracle
-    28% concluído
-    31% concluído
-    33% concluído
-    36% concluído
-    40% concluído
-    Criando views do banco de dados do cluster
-    41% concluído
-    53% concluído
-    Concluindo Criação de Banco de Dados
-    57% concluído
-    59% concluído
-    60% concluído
-    Criando Bancos de Dados Plugáveis
-    64% concluído
-    80% concluído
-    Executando Ações Pós-configuração
-    100% concluído
-    Criação do banco de dados concluída. Para obter detalhes, verifique os arquivos de log em:
-     /u01/app/oracle/cfgtoollogs/dbca/oradbc.
-    Informações sobre o Banco de Dados:
-    Nome do Banco de Dados Global:oradbc.appsdba.info
-    Prefixo do Identificador de Sistema (SID):oradbc
-    Verifique o arquivo de log "/u01/app/oracle/cfgtoollogs/dbca/oradbc/oradbc.log" para obter mais detalhes.
+![oracle database 26ai grid_029](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_029.png)
+
+###### SET UP ORACLE DATABASE RAC 26AI SOFTWARE ONLY  
+
+	[root@ol826ain1 ~]# xhost + 
+	[root@ol826ain1 ~]# su - oracle
+	[oracle@ol826ain1 ~]$ export DISPLAY=:0.0 
+	[oracle@ol826ain1 ~]$ dbca
+
+![oracle database 26ai grid_030](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_030.png)
+
+![oracle database 26ai grid_031](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_031.png)
+	
+![oracle database 26ai grid_032](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_032.png)
+
+![oracle database 26ai grid_033](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_033.png)
+
+![oracle database 26ai grid_034](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_034.png)
+
+![oracle database 26ai grid_035](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_035.png)
+
+![oracle database 26ai grid_036](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_036.png)
+
+![oracle database 26ai grid_037](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_037.png)
+
+![oracle database 26ai grid_038](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_038.png)
+
+![oracle database 26ai grid_039](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_039.png)
+
+![oracle database 26ai grid_040](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_040.png)
+
+![oracle database 26ai grid_041](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_041.png)
+
+![oracle database 26ai grid_042](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_042.png)
+
+![oracle database 26ai grid_043](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_043.png)
+
+![oracle database 26ai grid_044](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_044.png)
 
 ###### CHECK POST DATABASE CREATION
 
@@ -1263,6 +1198,10 @@
     [oracle@ol826ain2 ~]$ ps -ef | grep pmon
     grid       46177       1  0 mar01 ?        00:00:00 asm_pmon_+ASM2
     oracle    193366       1  0 00:48 ?        00:00:00 ora_pmon_oradbc2
+
+###### FINAL ENVIRONMENT OVERVIEWL 
+
+![oracle database 26ai grid_045](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/grid_045.png)
 
 ###### STOP CLUSTER AND DATABASE 
 
@@ -1409,5 +1348,4 @@
 	CRS-4133: Oracle High Availability Services has been stopped.
 
 ###### writed by: Danilo Arruda
-###### sat 03 mar 2025
 
