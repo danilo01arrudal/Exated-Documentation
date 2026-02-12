@@ -17,6 +17,11 @@
 
     [root@ol826ai ~]# yum install -y oracle-ai-database-preinstall-26ai.x86_64
 
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( DISABLE FIREWALL )
+
+    [root@ol826ai ~]# systemctl stop firewalld
+    [root@ol826ai ~]# systemctl disable firewalld
+
 ###### DISABLE SELINUX
 
     [root@ol826ai ~]# sed -i 's/SELINUX=.*/SELINUX=disabled/' /etc/selinux/config && setenforce 0
