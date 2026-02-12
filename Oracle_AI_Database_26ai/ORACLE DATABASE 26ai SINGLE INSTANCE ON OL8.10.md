@@ -15,7 +15,7 @@
 
 ###### INSTALL PRE-INSTALL PACKAGES
 
-    [root@ol826ai ~]# yum install oracle-database-preinstall-23ai
+    [root@ol826ai ~]# yum install -y oracle-ai-database-preinstall-26ai.x86_64
 
 ###### DISABLE SELINUX
 
