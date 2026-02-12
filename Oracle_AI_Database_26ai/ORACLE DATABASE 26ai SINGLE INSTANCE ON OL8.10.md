@@ -234,19 +234,10 @@
  	SQL> ALTER PLUGGABLE DATABASE APPSPDB1 SAVE STATE;
 
    	Pluggable database altered.
-
-	SQL> @state
-	SQL> col col_name for a30
-	SQL> select con_name, state from dba_pdb_saved_states
-	  2 / 
-
-	CON_NAME			STATE
-	------------------------------- -------------
-	APPSPDB
     
 	SQL> exit
-	Disconnected from Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
-	Version 23.5.0.24.07
+	Disconnected from Oracle AI Database 26ai Enterprise Edition Release 23.26.1.0.0 - Production
+	Version 23.26.1.0.0
 
 ###### CONFIGURE TNSNAMES.ORA
 
