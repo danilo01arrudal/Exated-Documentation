@@ -127,141 +127,48 @@
     [oracle@ol826ai dbhome_1]$ unzip V1054592-01.zip
 	[oracle@ol826ai dbhome_1]$ rm -vf V1054592-01.zip
 
-###### CREATE db_install.rsp INSTALL RESPONSE FILE
-
-    [oracle@ol826ai ~]$ vi db_install.rsp
-                            oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v23.0.0
-                            installOption=INSTALL_DB_SWONLY
-                            UNIX_GROUP_NAME=oinstall
-                            INVENTORY_LOCATION=/u01/app/oraInventory
-                            ORACLE_HOME=/u01/app/oracle/product/23.5.0/dbhome_1
-                            ORACLE_BASE=/u01/app/oracle
-                            installEdition=EE
-                            OSDBA=dba
-                            OSOPER=oinstall
-                            OSBACKUPDBA=backupdba
-                            OSDGDBA=dgdba
-                            OSKMDBA=kmdba
-                            OSRACDBA=racdba
-                            executeRootScript=false
-                            configMethod=
-                            sudoPath=
-                            sudoUserName=
-                            clusterNodes=
-                            dbType=GENERAL_PURPOSE
-                            gdbName=
-                            dbSID=
-                            pdbName=
-                            charSet=
-                            enableAutoMemoryManagement=
-                            memoryLimit=
-                            allSchemaPassword=
-                            sysPassword=
-                            systemPassword=
-                            dbsnmpPassword=
-                            pdbadminPassword=
-                            managementOption=DEFAULT
-                            omsHost=
-                            omsPort=
-                            emAdminUser=
-                            emAdminPassword=
-                            enableRecovery=
-                            storageType=
-                            dataLocation=
-                            recoveryLocation=
-                            diskGroup=
-                            asmsnmpPassword=
-
 ###### EXECUTE runInstaller 
+
+    [root@ol826ai ~]# xhost +
+    [oracle@ol826ai ~]$ export DISPLAY=:0.0	
     [oracle@ol826ai ~]$ cd $ORACLE_HOME
-    [oracle@ol826ai ~]$ ./runInstaller -silent -responseFile /home/oracle/db_install.rsp
-    [oracle@ol826ai ~]$ exit
-    [root@ol826ai ~]# /u01/app/oraInventory/orainstRoot.sh
-    [root@ol826ai ~]# /u01/app/oracle/product/23.5.0/dbhome_1/root.sh
+    [oracle@ol826ai ~]$ ./runInstaller
 
-###### CREATE dbca.rsp response file
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE HUGEPAGES FOR ORACLE DATABASE INSTANCE ) 
 
-	[oracle@ol826ai ~]$ vi dbca.rsp
-				responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v23.0.0
-				gdbName=appscdb
-				sid=appscdb1
-				databaseConfigType=SI
-				RACOneNodeServiceName=
-				policyManaged=false
-				managementPolicy=
-				createServerPool=false
-				serverPoolName=
-				cardinality=
-				force=
-				pqPoolName=
-				pqCardinality=
-				createAsContainerDatabase=true
-				numberOfPDBs=1
-				pdbName=appspdb
-				useLocalUndoForPDBs=true
-				pdbAdminPassword=
-				nodelist=
-				templateName=/u01/app/oracle/product/23.5.0/dbhome_1/assistants/dbca/templates/General_Purpose.dbc
-				sysPassword=
-				systemPassword= 
-				oracleHomeUserPassword=
-				emConfiguration=
-				runCVUChecks=FALSE
-				dbsnmpPassword=
-				omsHost=
-				omsPort=
-				emUser=
-				emPassword=
-				dvConfiguration=false
-				dvUserName=
-				dvUserPassword=
-				dvAccountManagerName=
-				dvAccountManagerPassword=
-				olsConfiguration=
-				datafileJarLocation={ORACLE_HOME}/assistants/dbca/templates/
-				datafileDestination={ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/
-				recoveryAreaDestination={ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME}
-				storageType=FS
-				diskGroupName=
-				asmsnmpPassword=
-				recoveryGroupName=
-				characterSet=AL32UTF8
-				nationalCharacterSet=AL16UTF16
-				registerWithDirService=false
-				dirServiceUserName=
-				dirServicePassword=
-				walletPassword=
-				listeners=
-				variablesFile=
-				variables=ORACLE_BASE_HOME=/u01/app/oracle/product/23.5.0/dbhome_1,DB_UNIQUE_NAME=appscdb,ORACLE_BASE=/u01/app/oracle,PDB_NAME=,DB_NAME=appscdb,ORACLE_HOME=/u01/app/oracle/product/23.5.0/dbhome_1,SID=appscdb1
-				initParams=_exadata_feature_on=true,undo_tablespace=UNDOTBS1,sga_target=2047MB,db_block_size=8192BYTES,log_archive_dest_1='LOCATION={ORACLE_BASE}/oradata/archivelog/',nls_language=AMERICAN,dispatchers=(PROTOCOL=TCP) (SERVICE=appscdb1XDB),diagnostic_dest={ORACLE_BASE},control_files=("{ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/control01.ctl", "{ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME}/control02.ctl"),remote_login_passwordfile=EXCLUSIVE,audit_file_dest={ORACLE_BASE}/admin/{DB_UNIQUE_NAME}/adump,processes=600,pga_aggregate_target=683MB,nls_territory=AMERICA,db_recovery_file_dest_size=12732MB,open_cursors=300,log_archive_format=%t_%s_%r.dbf,compatible=23.0.0,db_name=appscdb,db_recovery_file_dest={ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME},audit_trail=db,_exadata_feature_on=true
-				sampleSchema=false
-				memoryPercentage=40
-				databaseType=MULTIPURPOSE
-				automaticMemoryManagement=false
-				totalMemory=0
+    [root@ol826ai ~]# vi /etc/sysctl.d/99-oracle-ai-database-preinstall-26ai-sysctl.conf 
+	# oracle-ai-database-preinstall-26ai for vm.nr_hugepages is 2560
+	vm.nr_hugepages = 2560
+	# oracle-ai-database-preinstall-26ai setting special parameters END
 
-###### CREATE netca.rsp response file
-
-	[oracle@ol826ai ~]$ vi netca.rsp
-				[GENERAL]
-				RESPONSEFILE_VERSION="23.0"
-				CREATE_TYPE="CUSTOM"
-				INSTALLED_COMPONENTS={"server","net8","javavm"}
-				INSTALL_TYPE=""typical""
-				LISTENER_NUMBER=1
-				LISTENER_NAMES={"LISTENER"}
-				LISTENER_START=""LISTENER""
-				NAMING_METHODS={"TNSNAMES","ONAMES","HOSTNAME"}
-				NSN_NUMBER=1
-				NSN_NAMES={"EXTPROC_CONNECTION_DATA"}
-				NSN_SERVICE={"PLSExtProc"}
-    				NSN_SERVICE={"PLSExtProc"}
-				NSN_PROTOCOLS={"TCP;HOSTNAME;1521"}
+	[root@ol826ai ~]# sysctl -p /etc/sysctl.d/99-oracle-ai-database-preinstall-26ai-sysctl.conf
+	fs.file-max = 6815744
+	kernel.sem = 250 32000 100 128
+	kernel.shmmni = 4096
+	kernel.shmall = 1073741824
+	kernel.shmmax = 4398046511104
+	kernel.panic_on_oops = 1
+	net.core.rmem_default = 262144
+	net.core.rmem_max = 4194304
+	net.core.wmem_default = 262144
+	net.core.wmem_max = 1048576
+	net.ipv4.conf.all.rp_filter = 2
+	net.ipv4.conf.default.rp_filter = 2
+	fs.aio-max-nr = 1048576
+	vm.hugetlb_shm_group = 54321
+	kernel.panic = 10
+	net.ipv4.ip_local_port_range = 9000 65535
+	vm.nr_hugepages = 2560
+	
+	[root@ol826ain1 ~]# grep HugePages_Total /proc/meminfo
+	HugePages_Total:    2223
 
 ###### CREATE DATABASE 
 
-	[oracle@ol826ai ~]$ dbca -silent -createDatabase -responseFile /home/oracle/dbca.rsp
+    [root@ol826ai ~]# xhost +
+    [oracle@ol826ai ~]$ export DISPLAY=:0.0	
+    [oracle@ol826ai ~]$ cd $ORACLE_HOME
+    [oracle@ol826ai ~]$ dbca
 
 ###### CREATE LISTENER
 
