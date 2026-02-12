@@ -1,4 +1,4 @@
-**ORACLE DATABASE 23ai SI FS ONE CDB SILENT MODE OL9.5**
+**ORACLE DATABASE 26ai SINGLE INSTANCE ON OL8.10**
 
 
 > *Oracle Instant Client is a free software package from Oracle that contains the client libraries needed to connect applications to an Oracle database, either locally or remotely. It is designed to be lightweight and easy to install, eliminating the need for a full Oracle Client installation on client machines.*
