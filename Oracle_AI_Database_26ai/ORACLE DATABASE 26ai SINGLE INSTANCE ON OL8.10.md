@@ -17,6 +17,10 @@
 
     [root@ol826ai ~]# yum install -y oracle-ai-database-preinstall-26ai.x86_64
 
+###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( SET PASSWORD POSTGRES )
+
+[root@ol826ai ~]# passwd oracle
+
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( DISABLE FIREWALL )
 
     [root@ol826ai ~]# systemctl stop firewalld
