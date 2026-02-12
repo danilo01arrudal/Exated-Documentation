@@ -119,12 +119,13 @@
 
 ###### DOWNLOAD ORACLE DATABASE SOFTWARE
    
-    V1043785-01.zip
+    V1054592-01.zip
 
 ###### MOVE AND UNZIP DATABASE SOFTWARE
  
-    [oracle@ol826ai ~]$ mv V1043785-01.zip /u01/app/oracle/product/23.5.0/dbhome_1/
-    [oracle@ol826ai dbhome_1]$ gunzip V1043785-01.zip 
+    [oracle@ol826ai ~]$ mv V1054592-01.zip /u01/app/oracle/product/23.26.1/dbhome_1/
+    [oracle@ol826ai dbhome_1]$ unzip V1054592-01.zip
+	[oracle@ol826ai dbhome_1]$ rm -vf V1054592-01.zip
 
 ###### CREATE db_install.rsp INSTALL RESPONSE FILE
 
