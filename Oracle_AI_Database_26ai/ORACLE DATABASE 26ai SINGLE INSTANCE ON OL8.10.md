@@ -81,7 +81,7 @@
     export ORACLE_BASE=/u01/app/oracle
     export ORACLE_HOME=\$ORACLE_BASE/product/23.26.1/dbhome_1
     export ORA_INVENTORY=/u01/app/oraInventory
-    export ORACLE_SID=appscdb1
+    export ORACLE_SID=appscdb
 
     export PATH=/usr/sbin:/usr/local/bin:\$PATH
     export PATH=\$ORACLE_HOME/bin:\$PATH
@@ -170,59 +170,68 @@
     [oracle@ol826ai ~]$ cd $ORACLE_HOME
     [oracle@ol826ai ~]$ dbca
 
-###### CREATE LISTENER
-
-	[oracle@ol826ai ~]$ netca -silent -responsefile /home/oracle/netca.rsp
-
 ###### START LISTENER
 
 	[oracle@ol826ai ~]$ lsnrctl status
- 	LSNRCTL for Linux: Version 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on 15-FEB-2025 16:10:08
 
-	Copyright (c) 1991, 2024, Oracle.  All rights reserved.
+	LSNRCTL for Linux: Version 23.26.1.0.0 - Production on 12-FEB-2026 13:57:31
 
-	Connecting to (ADDRESS=(PROTOCOL=tcp)(HOST=)(PORT=1521))
+	Copyright (c) 1991, 2026, Oracle.  All rights reserved.
+
+	Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=ol826ai)(PORT=1521)))
 	STATUS of the LISTENER
 	------------------------
 	Alias                     LISTENER
-	Version                   TNSLSNR for Linux: Version 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
-	Start Date                15-FEB-2025 16:10:08
-	Uptime                    0 days 0 hr. 0 min. 6 sec
+	Version                   TNSLSNR for Linux: Version 23.26.1.0.0 - Production
+	Start Date                12-FEB-2026 13:50:10
+	Uptime                    0 days 0 hr. 7 min. 21 sec
 	Trace Level               off
 	Security                  ON: Local OS Authentication
 	SNMP                      OFF
+	Listener Parameter File   /u01/app/oracle/product/23.26.1/dbhome_1/network/admin/listener.ora
 	Listener Log File         /u01/app/oracle/diag/tnslsnr/ol826ai/listener/alert/log.xml
 	Listening Endpoints Summary...
-  	(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=ol826ai)(PORT=1521)))
-	The listener supports no services
+	  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=ol826ai.appsdba.info)(PORT=1521)))
+	  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+	Services Summary...
+	Service "48945b67d121c623e063399b5e6478e6.appsdba.info" has 1 instance(s).
+	  Instance "appscdb", status READY, has 1 handler(s) for this service...
+	Service "4aa4506a7e84d337e0632c12a8c06620.appsdba.info" has 1 instance(s).
+	  Instance "appscdb", status READY, has 1 handler(s) for this service...
+	Service "appscdb.appsdba.info" has 1 instance(s).
+	  Instance "appscdb", status READY, has 1 handler(s) for this service...
+	Service "appscdbXDB.appsdba.info" has 1 instance(s).
+	  Instance "appscdb", status READY, has 1 handler(s) for this service...
+	Service "appspdb1.appsdba.info" has 1 instance(s).
+	  Instance "appscdb", status READY, has 1 handler(s) for this service...
 	The command completed successfully
 
 ###### ENABLE AUTOMATIC START PDB
 
 	[oracle@ol826ai ~]$ sqlplus / as sysdba
 
-	SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Tue Feb 18 16:20:09 2025
-	Version 23.5.0.24.07
+	SQL*Plus: Release 23.26.1.0.0 - Production on Thu Feb 12 13:57:51 2026
+	Version 23.26.1.0.0
 
-	Copyright (c) 1982, 2024, Oracle.  All rights reserved.
+	Copyright (c) 1982, 2025, Oracle.  All rights reserved.
 
 
 	Connected to:
-	Oracle Database 23ai Enterprise Edition Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
-	Version 23.5.0.24.07
+	Oracle AI Database 26ai Enterprise Edition Release 23.26.1.0.0 - Production
+	Version 23.26.1.0.0
 
-	SQL> ALTER PLUGGABLE DATABASE APPSPDB OPEN;
+	SQL> show pdbs;                            
 
-	Pluggable database altered.
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+	---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 APPSPDB1			  READ WRITE NO
 
-	SQL> @state
-	SQL> col col_name for a30
-	SQL> select con_name, state from dba_pdb_saved_states
-	  2 / 
+	SQL> alter session set container=APPSPDB1;
 
-	no rows selected
+	Session altered.
 
- 	SQL> ALTER PLUGGABLE DATABASE APPSPDB SAVE STATE;
+ 	SQL> ALTER PLUGGABLE DATABASE APPSPDB1 SAVE STATE;
 
    	Pluggable database altered.
 
