@@ -6,13 +6,23 @@
 
 ![terraform logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Terraform/libvirt/images/terraform_logo.png)
 
+###### THE PREREQUERIMENTS FOR THIS PROJECT ARE: 
+
+    1 - Infrastructure provided by KVM
+    2 - Configuration of a storage pool in libvirt
+    3 - Configuration of a bridge interface
+    4 - Availability of CPU/memory and disk resources
+    5 - Configuration of a DNS server (bind)
+        5.1 - This should resolve the virtual machine names specified in the Terraform parameter files, variables, and install_vm.sh
+        
+
 ###### CLONE THE GIT REPOSITORY 
 
     [root@ ~]# git clone [https://github.com](https://github.com/danilo01arrudal/Exated-Documentation/tree/main/Terraform/libvirt/KVM%20No%20touch%20Deploy%20VM%20OL8)
 
 ###### RUN TERRAFORM INIT 
 
-    [root@ ~]# terraform init
+    [root@ terraform]# terraform init
       Initializing the backend...
       Initializing provider plugins...
       - Finding latest version of hashicorp/null...
@@ -38,3 +48,37 @@
       If you ever set or change modules or backend configuration for Terraform,
       rerun this command to reinitialize your working directory. If you forget, other
       commands will detect it and remind you to do so if necessary.
+
+###### RUN TERRAFORM VALIDATE 
+
+    [root@ terraform]# terraform validate
+      Success! The configuration is valid.
+      
+###### RUN TERRAFORM PLAN
+
+    [root@ terraform]# terraform plan
+      Plan: 3 to add, 0 to change, 0 to destroy.
+
+      ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+      Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply" now.
+
+###### RUN TERRAFORM APPLY
+
+    [root@ terraform]# ./install_vm.sh 
+      ----------------------------------------------------------
+      Starting Phase 1: OS Installation (Anaconda)
+      ----------------------------------------------------------
+
+      Plan: 3 to add, 0 to change, 0 to destroy.
+      libvirt_cloudinit_disk.commoninit: Creating...
+      libvirt_volume.ol8_disk: Creating...
+      libvirt_volume.ol8_disk: Creation complete after 0s [id=/var/lib/libvirt/images/ol8pg18sh01.qcow2]
+      libvirt_cloudinit_disk.commoninit: Creation complete after 0s [id=/var/lib/libvirt/images/commoninit.iso;80281ca3-500e-431d-829d-3de0df27a3e1]
+      libvirt_domain.ol8_vm: Creating...
+      libvirt_domain.ol8_vm: Creation complete after 1s [id=665c2ac1-65e6-4441-a823-bdc53e5be99b]
+      Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
+      Waiting for VM to power off (Installation in progress)...
+      Still installing... 15:35:14
+      Still installing... 15:35:29
+
