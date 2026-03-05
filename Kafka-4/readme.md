@@ -3,7 +3,7 @@
 
 > *Apache Kafka 4.2.0, released in February 2026, is an update focused on operational stability, performance, and improvements to KRaft, consolidating features such as Share Groups (traditional queue-style message queues) and enhancing resilience in Kafka Streams with native dead letter queues..*
 
-![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
+![apache_kafka_logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Kafka-4/images/kafka4.2.0.png)
 
 ###### INSTALL JAVA 17 OPEN JDK
 
