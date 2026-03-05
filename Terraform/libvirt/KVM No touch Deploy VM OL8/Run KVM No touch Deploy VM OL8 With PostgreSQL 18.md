@@ -14,7 +14,7 @@
     4 - Availability of CPU/memory and disk resources
     5 - Configuration of a DNS server (bind)
         5.1 - This should resolve the virtual machine names specified in the Terraform parameter files, variables, and install_vm.sh
-(https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Bind/INSTALL%20AND%20CONFIGURE%20DNS%20SERVER%20ON%20OL9.md)
+![bind_VM_Configuration](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Bind/INSTALL%20AND%20CONFIGURE%20DNS%20SERVER%20ON%20OL9.md)
 
         
 
