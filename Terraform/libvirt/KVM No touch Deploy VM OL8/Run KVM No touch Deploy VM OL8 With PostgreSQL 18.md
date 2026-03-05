@@ -17,8 +17,35 @@
 [5.1 bind_VM_Configuration](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Bind/INSTALL%20AND%20CONFIGURE%20DNS%20SERVER%20ON%20OL9.md)
 
         5.2 Add the necessary entries
+            
+            [root@ol9dns ~]# vi /var/named/data/appsdba.info.zone
+                $ttl 38400
+                @       IN      SOA     ol9dns.appsdba.info.    root.appsdba.info. (
+                        2020032701      ;
+                        3600    ;
+                        3600    ;
+                        604800  ;
+                        86400 ) ;
 
-        
+                @       IN      NS      ol9dns.appsdba.info.
+                ol9dns          IN      A       192.168.18.43
+                ol8pg18sh01     IN      A       192.168.18.51
+
+            [root@ol9dns ~]# vi /var/named/data/192.168.18.zone
+
+                $ttl 38400
+                @       IN      SOA     ol9dns.appsdba.info.     root.appsdba.info. (
+                        2020032701      ;
+                        3600    ;
+                        3600    ;
+                        604800  ;
+                        86400 ) ;
+
+                @       IN      NS      ol9dns.appsdba.info.
+                43      IN      PTR     ol9dns.appsdba.info.
+                51      IN      PTR     ol8pg18sh01.appsdba.info.
+
+            [root@ol9dns ~]# systemctl restart named                    
 
 ###### CLONE THE GIT REPOSITORY 
 
