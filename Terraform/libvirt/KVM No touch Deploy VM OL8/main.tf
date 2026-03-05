@@ -21,7 +21,7 @@ resource "libvirt_volume" "ol8_disk" {
 
 # 2. KICKSTART: Generate the ISO containing the user-data (Anaconda)
 resource "libvirt_cloudinit_disk" "commoninit" {
-  name      = "commoninit.iso"
+  name      = "commoninit_ol8pg18sh01.iso"
   pool      = "images"
   user_data = <<EOF
 # Use poweroff instead of reboot to signal the script that installation is done
