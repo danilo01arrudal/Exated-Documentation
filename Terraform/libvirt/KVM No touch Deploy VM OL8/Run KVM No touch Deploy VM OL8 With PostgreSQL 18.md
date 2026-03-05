@@ -14,6 +14,8 @@
     4 - Availability of CPU/memory and disk resources
     5 - Configuration of a DNS server (bind)
         5.1 - This should resolve the virtual machine names specified in the Terraform parameter files, variables, and install_vm.sh
+        https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Bind/INSTALL%20AND%20CONFIGURE%20DNS%20SERVER%20ON%20OL9.md
+
         
 
 ###### CLONE THE GIT REPOSITORY 
@@ -82,3 +84,24 @@
       Still installing... 15:35:14
       Still installing... 15:35:29
 
+      VM powered off. Installation complete.
+      ----------------------------------------------------------
+      Starting Phase 2: Adjusting boot and installing PostgreSQL
+      ----------------------------------------------------------
+      libvirt_volume.ol8_disk: Refreshing state... [id=/var/lib/libvirt/images/ol8pg18sh01.qcow2]
+      libvirt_cloudinit_disk.commoninit: Refreshing state... [id=/var/lib/libvirt/images/commoninit.iso;80281ca3-500e-431d-829d-3de0df27a3e1]
+      libvirt_domain.ol8_vm: Refreshing state... [id=665c2ac1-65e6-4441-a823-bdc53e5be99b]
+
+      Apply complete! Resources: 2 added, 0 changed, 1 destroyed.
+      Waiting for SSH to be ready on 192.168.18.51...
+      SSH is up! Terraform will now run the remote-exec provisioner.
+      Deployment finished successfully!
+
+###### ACCESS THE VM ENVIRONMENT
+
+    [root@ terraform]# ssh -i ~/.ssh/id_rsa_terraform root@192.168.18.51
+
+###### ACCESS THE VM ENVIRONMENT
+    
+    [root@ol8pg18sh01 ~]# cat /etc/redhat-release 
+    Red Hat Enterprise Linux release 8.10 (Ootpa)
