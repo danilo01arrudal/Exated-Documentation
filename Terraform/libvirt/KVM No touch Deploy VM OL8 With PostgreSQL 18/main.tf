@@ -150,6 +150,7 @@ resource "null_resource" "install_postgres" {
       "dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm",
       "dnf -qy module disable postgresql",
       "dnf install -y postgresql18-server",
+      "dnf install -y postgresql18-contrib",
       "/usr/pgsql-18/bin/postgresql-18-setup initdb",
       "systemctl enable postgresql-18",
       "systemctl start postgresql-18",
