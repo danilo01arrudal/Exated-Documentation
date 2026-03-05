@@ -188,3 +188,79 @@ STEP 15
 [root@localhost ~]# sed -e "/max_wal_senders = /s/'.'/10/" /var/lib/pgsql/18/data/postgresql.conf > /var/lib/pgsql/18/data/postgresql.conf-new; mv -vf /var/lib/pgsql/18/data/postgresql.conf-new /var/lib/pgsql/18/data/postgresql.conf; chown postgres:postgres /var/lib/pgsql/18/data/postgresql.conf;
 [root@localhost ~]# sed -e "/wal_keep_segments/d" /var/lib/pgsql/18/data/postgresql.conf > /var/lib/pgsql/18/data/postgresql.conf-new; echo "wal_keep_size = 1GB" >> /var/lib/pgsql/18/data/postgresql.conf-new; mv -vf /var/lib/pgsql/18/data/postgresql.conf-new /var/lib/pgsql/18/data/postgresql.conf; chown postgres:postgres /var/lib/pgsql/18/data/postgresql.conf;
 [root@localhost ~]# sed -e "s/#hot_standby/hot_standby/" /var/lib/pgsql/18/data/postgresql.conf > /var/lib/pgsql/18/data/postgresql.conf-new; mv -vf /var/lib/pgsql/18/data/postgresql.conf-new /var/lib/pgsql/18/data/postgresql.conf; chown postgres:postgres /var/lib/pgsql/18/data/postgresql.conf;
+
+STEP 16
+[root@localhost ~]# cat > /var/lib/pgsql/18/data/pg_hba.conf <<EOF
+
+TYPE  DATABASE        USER            ADDRESS                 METHOD
+local   all             all                                     trust
+host    all             all             127.0.0.1/32            trust
+host    all             all             192.168.1.0/24          md5
+host    replication     replication     192.168.1.0/24          md5
+EOF
+[root@localhost ~]# chown postgres:postgres /var/lib/pgsql/18/data/pg_hba.conf; systemctl restart postgresql-18.service;
+
+- create replication user
+STEP 17
+[root@localhost ~]# su - postgres -c "/usr/pgsql-18/bin/psql -c "CREATE USER replication WITH REPLICATION ENCRYPTED PASSWORD 'replication';""
+
+- configure pcp.conf (pgpool)
+STEP 18
+[root@localhost ~]# pg_md5 --md5 --user=pcp_user pcp_user > /etc/pgpool-II/pcp.conf
+[root@localhost ~]# echo "pcp_user:$(cat /etc/pgpool-II/pcp.conf)" > /etc/pgpool-II/pcp.conf; chown postgres:postgres /etc/pgpool-II/pcp.conf;
+
+- configure pool_passwd
+STEP 19
+[root@localhost ~]# su - postgres -c "pg_md5 --md5 --user=postgres postgres" > /etc/pgpool-II/pool_passwd; chown postgres:postgres /etc/pgpool-II/pool_passwd;
+
+- create failover.sh script
+STEP 20
+[root@localhost ~]# cat > /etc/pgpool-II/failover.sh <<EOF
+#!/bin/bash
+failed_node=$1
+new_primary=$6
+if [ $failed_node -eq $new_primary ]; then
+exit 0
+fi
+ssh -T postgres@pg2 -o StrictHostKeyChecking=no "/usr/pgsql-18/bin/repmgr standby promote"
+exit 0
+EOF
+[root@localhost ~]# chmod +x /etc/pgpool-II/failover.sh; chown postgres:postgres /etc/pgpool-II/failover.sh;
+
+- create recovery_1st_stage script
+STEP 21
+[root@localhost ~]# cat > /var/lib/pgsql/recovery_1st_stage <<EOF
+#!/bin/bash
+rsync -avz --exclude 'pg_wal' --exclude 'standby.signal' --exclude 'postmaster.pid' /var/lib/pgsql/18/data/ pg2:/var/lib/pgsql/18/data/
+EOF
+[root@localhost ~]# chmod +x /var/lib/pgsql/recovery_1st_stage; chown postgres:postgres /var/lib/pgsql/recovery_1st_stage;
+
+- start pgpool service
+STEP 22
+[root@localhost ~]# systemctl start pgpool.service
+
+####################################################
+
+RUN THE SCRIPT BELOW FOR THE SECONDARY ENVIRONMENT
+####################################################
+
+- base backup from primary
+STEP 23
+[root@pg2 ~]# systemctl stop postgresql-18.service; rm -Rvf /var/lib/pgsql/18/data/*;
+[root@pg2 ~]# su - postgres -c "/usr/pgsql-18/bin/pg_basebackup -h pg1 -p 5432 -U replication -Fp -Xs -Pv -R -D /var/lib/pgsql/18/data";
+[root@pg2 ~]# systemctl start postgresql-18.service;
+
+- register node to pgpool
+STEP 24
+[root@pg1 ~]# /usr/bin/pcp_attach_node -h localhost -p 9898 -U pcp_user -n 1
+
+- verify cluster status
+STEP 25
+[root@pg1 ~]# /usr/pgsql-18/bin/psql -h vip -p 9999 -U postgres -d postgres -c "show pool_nodes;"
+
+- failback simulation (if pg1 fails, pg2 becomes primary)
+STEP 26
+(Manual procedure: stop pg1, check pool_nodes, perform pg_basebackup on pg1 from pg2)
+[root@pg1 ~]# systemctl stop postgresql-18.service; rm -Rvf /var/lib/pgsql/18/data/*;
+[root@pg1 ~]# su - postgres -c "/usr/pgsql-18/bin/pg_basebackup -h pg2 -p 5432 -U replication -Fp -Xs -Pv -R -D /var/lib/pgsql/18/data";
+[root@pg1 ~]# systemctl start postgresql-18.service; /usr/bin/pcp_attach_node -h localhost -p 9898 -U pcp_user -n 0
