@@ -1,4 +1,10 @@
 
+**KAFKA 4.2.0 ON OL8.10**
+
+> *Apache Kafka 4.2.0, released in February 2026, is an update focused on operational stability, performance, and improvements to KRaft, consolidating features such as Share Groups (traditional queue-style message queues) and enhancing resilience in Kafka Streams with native dead letter queues..*
+
+![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
+
 ###### INSTALL JAVA 17 OPEN JDK
 
     [root@ol8kfk ~]# dnf install java-17-openjdk-devel -y
