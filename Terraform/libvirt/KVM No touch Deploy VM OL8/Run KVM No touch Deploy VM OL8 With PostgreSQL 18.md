@@ -14,7 +14,9 @@
     4 - Availability of CPU/memory and disk resources
     5 - Configuration of a DNS server (bind)
         5.1 - This should resolve the virtual machine names specified in the Terraform parameter files, variables, and install_vm.sh
-        [5.1 bind_VM_Configuration](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Bind/INSTALL%20AND%20CONFIGURE%20DNS%20SERVER%20ON%20OL9.md)
+[5.1 bind_VM_Configuration](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Bind/INSTALL%20AND%20CONFIGURE%20DNS%20SERVER%20ON%20OL9.md)
+
+        5.2 Add the necessary entries
 
         
 
@@ -105,3 +107,13 @@
     
     [root@ol8pg18sh01 ~]# cat /etc/redhat-release 
     Red Hat Enterprise Linux release 8.10 (Ootpa)
+
+    [root@ol8pg18sh01 ~]# ps -ef | grep pgsql
+    postgres    6392       1  0 15:43 ?        00:00:00 /usr/pgsql-18/bin/postgres -D /var/lib/pgsql/18/data/
+    root        6551    6460  0 15:51 pts/0    00:00:00 grep --color=auto pgsql
+
+    [root@ol8pg18sh01 ~]# su - postgres -c "psql -c 'SELECT version();'"
+                                                 version                                                 
+    ---------------------------------------------------------------------------------------------------------
+     PostgreSQL 18.3 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-28), 64-bit
+    (1 row)
