@@ -4,7 +4,7 @@
 > *Terraform is a widely used open-source Infrastructure as Code (IaC) tool created by HashiCorp (now part of IBM) that enables developers and operations teams to define, provision, and manage infrastructure using declarative code.*
 > *Terraform can manage libvirt virtualization resources through a third-party dmacvicar/libvirt provider. This integration allows users to use Infrastructure as Code (IaC) principles to define, deploy, and manage local virtual machines (VMs), networks, and storage pools, primarily on KVM/QEMU hypervisors.*
 
-![oracle database 26ai logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_ai_database_26ai_logo.png)
+![terraform logo.](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Terraform/libvirt/images/terraform_logo.png)
 
 ###### CLONE THE GIT REPOSITORY 
 
