@@ -70,13 +70,10 @@ Para um sistema de cartões, a ingestão precisa suportar baixa latência e alta
 
 #### Fase 1.1: Governança de Acesso e Identidade (Foco em Dados Sensíveis)
 
-Diferente do varejo comum, aqui a segregação de funções deve impedir que desenvolvedores de IA acessem dados brutos de cartões.
-
-Compartimentos Críticos:
-
-Crie Card_Network_Root > Compliance_Raw_Data (acesso restrito) e AI_Sandbox_Dev.
-
-Políticas de "Least Privilege" para AIDP:
+        Diferente do varejo comum, aqui a segregação de funções deve impedir que desenvolvedores de IA acessem dados brutos de cartões.
+        Compartimentos Críticos:
+        Crie Card_Network_Root > Compliance_Raw_Data (acesso restrito) e AI_Sandbox_Dev.
+        Políticas de "Least Privilege" para AIDP:
 
 SQL
 -- Permite que o Workbench gerencie recursos apenas no compartimento financeiro
