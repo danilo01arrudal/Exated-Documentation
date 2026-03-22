@@ -125,7 +125,7 @@
  
     [oracle@ol826ai ~]$ mv V1054592-01.zip /u01/app/oracle/product/23.26.1/dbhome_1/
     [oracle@ol826ai dbhome_1]$ unzip V1054592-01.zip
-	[oracle@ol826ai dbhome_1]$ rm -vf V1054592-01.zip
+	[oracle@ol826ai dbhome_1]$ rm -vf V1054592-01.zip 
 
 ###### EXECUTE runInstaller 
 
