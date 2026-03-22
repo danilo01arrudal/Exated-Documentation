@@ -63,7 +63,7 @@
 
 ###### CREATE ORACLE_BASE AND ORACLE_HOME DIRECTORIES
 
-    [root@ol826ai ~]# mkdir -p /u01/app/oracle/product/23.5.0/dbhome_1/
+    [root@ol826ai ~]# mkdir -p /u01/app/oracle/product/23.26.1/dbhome_1/
     [root@ol826ai ~]# chown -R oracle:oinstall /u01
     [root@ol826ai ~]# chmod -R 775 /u01
 
