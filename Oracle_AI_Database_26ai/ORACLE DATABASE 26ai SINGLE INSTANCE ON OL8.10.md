@@ -19,7 +19,7 @@
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( SET PASSWORD POSTGRES )
 
-[root@ol826ai ~]# passwd oracle
+	[root@ol826ai ~]# passwd oracle
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( DISABLE FIREWALL )
 
