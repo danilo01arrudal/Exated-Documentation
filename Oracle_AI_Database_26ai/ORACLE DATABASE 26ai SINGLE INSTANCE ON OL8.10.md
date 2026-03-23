@@ -375,4 +375,4 @@
 	[root@ol826ai ~]# systemctl daemon-reload
 	[root@ol826ai ~]# systemctl enable dbora.service
 
-###### writed by: Danilo Arruda
+###### writed by: Danilo L. Arruda
