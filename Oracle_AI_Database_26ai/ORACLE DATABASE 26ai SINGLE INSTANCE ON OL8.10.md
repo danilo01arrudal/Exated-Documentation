@@ -134,6 +134,28 @@
     [oracle@ol826ai ~]$ cd $ORACLE_HOME
     [oracle@ol826ai ~]$ ./runInstaller
 
+![oracle_database_so_si_001](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_001.png)
+
+![oracle_database_so_si_002](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_002.png)
+
+![oracle_database_so_si_003](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_003.png)
+
+![oracle_database_so_si_004](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_004.png)
+
+![oracle_database_so_si_005](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_005.png)
+
+![oracle_database_so_si_006](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_006.png)
+
+![oracle_database_so_si_007](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_007.png)
+
+![oracle_database_so_si_008](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_008.png)
+
+![oracle_database_so_si_009](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_009.png)
+
+![oracle_database_so_si_010](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_010.png)
+
+![oracle_database_so_si_011](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_011.png)
+
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE HUGEPAGES FOR ORACLE DATABASE INSTANCE ) 
 
     [root@ol826ai ~]# vi /etc/sysctl.d/99-oracle-ai-database-preinstall-26ai-sysctl.conf 
