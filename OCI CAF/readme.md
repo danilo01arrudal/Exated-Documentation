@@ -43,3 +43,45 @@ Security
 
 --- 
 
+Process
+
+    Governance
+
+    Risk and compliance
+
+    Enterprise Architecture
+
+    Platform attributes
+
+    Workload attributes
+
+--- 
+
+Technology
+
+    IaaS / PaaS / SaaS
+
+    Migration
+
+    Tech Stack
+
+    Workload deployment
+
+    CI, CD
+
+--- 
+
+Operations
+
+    Monitoring 
+
+    Support and incident management
+
+    Maintenance
+
+    Cost Management
+
+    Optimization
+
+--- 
+    
