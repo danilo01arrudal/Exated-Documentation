@@ -81,6 +81,22 @@
       e flashinfer emite uma implementação eficiente baseada em amostragem de rejeição fundida. 
       Nossa recente postagem no blog explica como funciona o algoritmo de amostragem de rejeição flashinfer.
 
+      import flashinfer
+      from flashinfer.logits_processor import LogitsPipe, Temperature, Softmax, TopP, Sample
+ 
+      # Create a pipeline
+      pipe = LogitsPipe([
+          Temperature(),      # Scale logits by temperature
+          Softmax(),          # Convert logits to probabilities
+          TopP(),             # Apply top-p filtering
+          Sample()            # Sample from the distribution
+      ])
+ 
+      # Apply the pipeline
+      logits = torch.randn(batch_size, vocab_size, device="cuda")
+      output_ids = pipe(logits, temperature=0.7, top_p=0.9)
+
+      Para começar a usar o FlashInfer, consulte o repositório e a documentação do GitHub.
       
 
 
