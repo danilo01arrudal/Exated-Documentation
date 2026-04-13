@@ -8,3 +8,12 @@
       A NVIDIA agora está lançando ativamente seus kernels de inferência LLM de melhor desempenho no FlashInfer, 
       incluindo os da NVIDIA TensorRT-LLM, para fácil integração em vLLM, SGLang e mecanismos de inferência personalizados.
 
+      Visão geral da arquitetura do FlashInfer
+      Como uma pilha de operadores de GPU NVIDIA construída especificamente para servir LLM, o FlashInfer visa velocidade e velocidade do desenvolvedor para os kernels mais recentes. 
+      As plataformas de inferência podem adotar novas ideias sem esperar por novas bibliotecas ou reescrever kernels no CUDA C++. 
+      Esses kernels estarão disponíveis para todas as estruturas por meio de uma API DLPack, bem como registrados como operadores PyTorch para fácil integração em muitos mecanismos de inferência. 
+      O recurso JIT permite que os usuários materializem os kernels usados pelo modelo de destino, o que significa que o FlashInfer também tem uma pegada mínima como dependência.
+
+      O FlashInfer divide as cargas de trabalho LLM em quatro famílias de operadores - Atenção, GEMM, Comunicação e Amostragem - e expõe 
+      cada família por meio de coletivos leves e de alto desempenho que caem em qualquer mecanismo de serviço com alterações mínimas de código.
+
