@@ -17,3 +17,11 @@
       O FlashInfer divide as cargas de trabalho LLM em quatro famílias de operadores - Atenção, GEMM, Comunicação e Amostragem - e expõe 
       cada família por meio de coletivos leves e de alto desempenho que caem em qualquer mecanismo de serviço com alterações mínimas de código.
 
+      **Atenção**
+
+      Solicitações de inferência modernas chegam com comprimentos de sequência extremamente diferentes, tamanhos de bloco de cache KV, regras de mascaramento e esquemas de codificação posicional. FlashInfer absorve esse dinamismo por:
+
+      - Armazenamento unificado: representando cada layout de cache como uma matriz esparsa de bloco/vetor.
+      - Kernels de Template & JIT: uma base de código CUDA/CUTLASS cujos botões de especialização, logits/key/query, agrupados, MLA e variantes futuras.
+      - Interface inspetor-executor: uma API amigável ao PyTorch que primeiro inspeciona formas de solicitação e padrões de compartilhamento de prefixos e, em seguida, inicia kernels ajustados por meio de um agendador leve para manter as GPUs saturadas.
+
