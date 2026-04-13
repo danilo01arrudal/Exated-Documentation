@@ -97,8 +97,7 @@
       output_ids = pipe(logits, temperature=0.7, top_p=0.9)
 
       Para começar a usar o FlashInfer, consulte o repositório e a documentação do GitHub.
-      
-
+      https://github.com/flashinfer-ai/flashinfer
 
 
 
