@@ -41,13 +41,62 @@ Você será conectado automaticamente ao Console de Gerenciamento da AWS em uma 
 
  Aviso: Não altere a região a menos que seja instruído a fazê-lo.
 
+### Erros comuns de login
+Erro: Selecionar Iniciar Laboratório não tem efeito.
+Em alguns casos, certas extensões de navegador que bloqueiam pop-ups ou scripts podem impedir que o botão " Iniciar Laboratório" funcione corretamente. Se você tiver problemas para iniciar o laboratório:
 
-[lab_diagram](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/AWS/Data%20Engineering/images/0001.png)
+Adicione o domínio do laboratório à lista de permissões do seu bloqueador de pop-ups ou scripts, ou desative-o.
+Atualize a página e tente novamente.
 
+### Ambiente de laboratório
+O diagrama a seguir mostra a arquitetura básica do ambiente de laboratório:
 
+![lab_diagram](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/AWS/Data%20Engineering/images/0001.png)
 
+Descrição da imagem: O diagrama anterior demonstra uma arquitetura simplificada de um data lake. Ele contém uma camada para dados brutos (zona de dados brutos), uma camada para dados consumíveis (zona de consumo) e três aplicações distintas que ingerem, processam e consomem os dados.
 
+A lista a seguir detalha os principais recursos no diagrama:
 
+* Esta solução demonstra uma arquitetura simplificada de data lake. Ela contém uma camada para dados brutos (zona de dados brutos), uma camada para dados consumíveis (zona de consumo) e três aplicações distintas que ingerem, processam e consomem os dados.
+* A aplicação de backend de comércio eletrônico é uma função AWS Lambda que ingere dados no bucket da zona raw do Amazon S3.
+Após a ingestão dos dados brutos no data lake, a camada de processamento está pronta para iniciar a transformação dos dados e enviá-los para o bucket S3 da zona de consumo. Este bucket contém os dados transformados, prontos para serem consumidos.
+* Um data lake normalmente possui pelo menos três camadas (ou zonas) de dados: brutos, de preparação e de consumo. Esses nomes podem variar, e você também pode adicionar camadas adicionais de acordo com suas necessidades.
+* Quando os dados estão prontos para serem utilizados, o aplicativo de promoções acessa os dados diretamente no data lake e os agrega para fornecer dados de abandono para cada cliente. Esses dados podem ser usados ​​para identificar quais descontos de produtos enviar aos clientes.
+
+### Serviços utilizados neste laboratório
+**AWS Lambda**
+O AWS Lambda é um serviço de computação que permite executar código sem provisionar ou gerenciar servidores. O Lambda executa seu código em uma infraestrutura de computação de alta disponibilidade e realiza toda a administração dos recursos de computação, incluindo manutenção de servidores e sistemas operacionais, provisionamento de capacidade e escalonamento automático, além de registro de logs. Com o Lambda, tudo o que você precisa fazer é fornecer seu código em um dos ambientes de execução de linguagem compatíveis com o Lambda.
+
+ Saiba mais: Consulte " O que é AWS Lambda?" na seção Recursos adicionais para obter mais informações.
+
+**Amazon Simple Storage Service (Amazon S3)**
+O Amazon Simple Storage Service (Amazon S3) é um serviço de armazenamento de objetos que oferece escalabilidade, disponibilidade de dados, segurança e desempenho líderes do setor. Clientes de todos os portes e segmentos podem usar o Amazon S3 para armazenar e proteger qualquer quantidade de dados para uma variedade de casos de uso, como data lakes, sites, aplicativos móveis, backup e restauração, arquivamento, aplicativos corporativos, dispositivos IoT e análise de big data. O Amazon S3 oferece recursos de gerenciamento para que você possa otimizar, organizar e configurar o acesso aos seus dados para atender às suas necessidades específicas de negócios, organização e conformidade.
+
+ Saiba mais: Consulte " O que é o Amazon S3?" na seção Recursos adicionais para obter mais informações.
+
+### Serviços da AWS não utilizados neste laboratório
+As funcionalidades dos serviços da AWS utilizadas neste laboratório estão limitadas ao que o laboratório exige. Podem ocorrer erros ao acessar outros serviços ou executar ações além das descritas neste guia do laboratório.
+
+---
+
+#### Tarefa 1: Analisar os buckets S3 para a zona de dados brutos e a zona de consumo.
+
+Nesta tarefa, você revisará os buckets do S3 que foram pré-criados para este laboratório.
+
+Na parte superior do Console de Gerenciamento da AWS, na barra de pesquisa, procure e selecioneS3.
+Na seção "Buckets de uso geral" , você deverá ver os dois buckets a seguir, que já foram criados para este laboratório:
+
+O primeiro bucket, cujo nome começa com raw-bucket-, é usado como uma camada para dados brutos (zona raw).
+O segundo bucket, cujo nome começa com consume-bucket-, é usado como uma camada para dados consumíveis (zona de consumo).
+A zona (ou camada) de dados brutos contém os dados ingeridos das fontes de dados no formato de dados brutos, que é a cópia imutável dos dados. Essa zona pode incluir objetos de dados estruturados, semiestruturados e não estruturados, como bancos de dados, backups, arquivos, imagens e arquivos (JSON, CSV, XML, texto etc.).
+
+Após obter os dados brutos, você deseja transformá-los. As transformações podem envolver a agregação de dados de diferentes fontes ou a alteração do formato do arquivo dos dados recebidos. Neste laboratório, o bucket S3 da zona de consumo representa a camada transformada.
+
+ Tarefa concluída: Você revisou com sucesso os buckets do S3 para a zona de dados brutos e a zona de consumo que foram pré-criados para este laboratório.
+
+ ---
+
+ 
 
 
 
