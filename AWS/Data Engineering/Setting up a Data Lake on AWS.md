@@ -182,21 +182,21 @@ Nesta tarefa, você revisará a camada de ingestão da sua solução de data lak
 
 **Resultado esperado**: As cinco primeiras linhas de dados do carrinho de compras, criadas por esta função, devem ser exibidas.
 
-************************
-**** EXAMPLE OUTPUT ****
-************************
+  ************************
+  **** EXAMPLE OUTPUT ****
+  ************************
 
-START RequestId: 85ed1153-2c0e-4464-b15e-bfb7fc9bd027 Version: $LATEST
-cart_id  customer_id  product_id  product_amount product_price
-0       10            3           5              15         $9.47
-1        5            0           6              13    $17,048.51
-2        0            8          10               9         $5.09
-3       10            2           2               1        $25.84
-4        0            5           8               9       $690.31
-END RequestId: 85ed1153-2c0e-4464-b15e-bfb7fc9bd027
-REPORT RequestId: 85ed1153-2c0e-4464-b15e-bfb7fc9bd027	Duration: 4266.55 ms	Billed Duration: 4267 ms	Memory Size: 128 MB	Max Memory Used: 124 MB	Init Duration: 1938.82 ms
+  START RequestId: 85ed1153-2c0e-4464-b15e-bfb7fc9bd027 Version: $LATEST
+  cart_id  customer_id  product_id  product_amount product_price
+  0       10            3           5              15         $9.47
+  1        5            0           6              13    $17,048.51
+  2        0            8          10               9         $5.09
+  3       10            2           2               1        $25.84
+  4        0            5           8               9       $690.31
+  END RequestId: 85ed1153-2c0e-4464-b15e-bfb7fc9bd027
+  REPORT RequestId: 85ed1153-2c0e-4464-b15e-bfb7fc9bd027	Duration: 4266.55 ms	Billed Duration: 4267 ms	Memory Size: 128 MB	Max Memory Used: 124 MB	Init Duration: 1938.82 ms
 
-Request ID: 85ed1153-2c0e-4464-b15e-bfb7fc9bd027
+  Request ID: 85ed1153-2c0e-4464-b15e-bfb7fc9bd027
 
 
 
