@@ -31,11 +31,11 @@ Ao longo deste laboratório, são utilizados diversos ícones para chamar a aten
 * **Tarefa concluída**: Um ponto de conclusão ou resumo do experimento.
 
 ### Iniciar laboratório
-Para iniciar o laboratório, na parte superior da página, selecione Iniciar Laboratório .
+1. Para iniciar o laboratório, na parte superior da página, selecione Iniciar Laboratório .
 
  Atenção: você deve aguardar até que os serviços da AWS provisionados estejam prontos antes de prosseguir.
 
-Para abrir o laboratório, selecione Abrir Console.
+2. Para abrir o laboratório, selecione Abrir Console.
 
 Você será conectado automaticamente ao Console de Gerenciamento da AWS em uma nova aba do navegador.
 
@@ -83,11 +83,11 @@ As funcionalidades dos serviços da AWS utilizadas neste laboratório estão lim
 
 Nesta tarefa, você revisará os buckets do S3 que foram pré-criados para este laboratório.
 
-Na parte superior do Console de Gerenciamento da AWS, na barra de pesquisa, procure e selecioneS3.
-Na seção "Buckets de uso geral" , você deverá ver os dois buckets a seguir, que já foram criados para este laboratório:
+3. Na parte superior do Console de Gerenciamento da AWS, na barra de pesquisa, procure e selecioneS3.
+Na seção **Buckets de uso geral** , você deverá ver os dois buckets a seguir, que já foram criados para este laboratório:
 
-O primeiro bucket, cujo nome começa com raw-bucket-, é usado como uma camada para dados brutos (zona raw).
-O segundo bucket, cujo nome começa com consume-bucket-, é usado como uma camada para dados consumíveis (zona de consumo).
+* O primeiro bucket, cujo nome começa com **raw-bucket**, é usado como uma camada para dados brutos (zona raw).
+* O segundo bucket, cujo nome começa com **consume-bucket**, é usado como uma camada para dados consumíveis (zona de consumo).
 A zona (ou camada) de dados brutos contém os dados ingeridos das fontes de dados no formato de dados brutos, que é a cópia imutável dos dados. Essa zona pode incluir objetos de dados estruturados, semiestruturados e não estruturados, como bancos de dados, backups, arquivos, imagens e arquivos (JSON, CSV, XML, texto etc.).
 
 Após obter os dados brutos, você deseja transformá-los. As transformações podem envolver a agregação de dados de diferentes fontes ou a alteração do formato do arquivo dos dados recebidos. Neste laboratório, o bucket S3 da zona de consumo representa a camada transformada.
@@ -96,7 +96,28 @@ Após obter os dados brutos, você deseja transformá-los. As transformações p
 
  ---
 
- 
+#### Tarefa 2: Criar notificação de evento no S3 e enviar eventos para o Amazon EventBridge.
+Nesta tarefa, você criará uma notificação de evento do S3 para o bucket da zona raw. Você usará o recurso de Notificações de Eventos do Amazon S3 para receber notificações quando determinados eventos ocorrerem no seu bucket do S3. Posteriormente, você também enviará esses eventos para o Amazon EventBridge.
+
+---
+
+#### Tarefa 2.1: Criar notificação de evento S3
+4. Na seção Buckets de uso geral , escolha o bucket S3 da zona raw (bucket que começa com o nome raw-bucket- ).
+
+5. Na página do bucket da zona bruta, selecione a guia Propriedades .
+
+6. Desça até a seção Notificações de eventos e selecione Criar notificação de evento .
+
+7. Na página Criar notificação de evento , na seção Configuração geral , configure o seguinte:
+
+* No campo Nome do evento , insiraEvento do processador.
+8. Na seção Tipos de evento , para Criação de objeto , escolha Inserir .
+
+9. Desça até a seção Destino e configure o seguinte:
+
+* Em Destino , escolha Função Lambda, caso ainda não esteja selecionada.
+* Em Especificar função Lambda , escolha Escolher uma das suas funções Lambda, caso ainda não esteja selecionada.
+* Para a função Lambda , use o menu suspenso e escolha labFunction-Data-Processor .
 
 
 
