@@ -154,33 +154,50 @@ Nesta tarefa, você revisará a camada de ingestão da sua solução de data lak
 
 **Observação**: Esta função cria dados aleatórios de abandono de carrinho de compras usando o pacote Faker do Python.
 
-Saiba mais: Faker é um pacote Python que gera dados falsos para você. Consulte a seção " Bem-vindo à documentação do Faker!" na seção "Recursos adicionais" para obter mais informações.
+**Saiba mais**: Faker é um pacote Python que gera dados falsos para você. Consulte a seção " Bem-vindo à documentação do Faker!" na seção **Recursos adicionais** para obter mais informações.
 
-18. Selecione a aba Configuração .
+18. Selecione a aba **Configuração**.
 
-Na guia Configuração , selecione Variáveis ​​de ambiente .
+19. Na guia **Configuração** , selecione **Variáveis ​​de ambiente**.
 
-Na seção Variáveis ​​de ambiente , escolha Editar .
+20. Na seção **Variáveis ​​de ambiente**, escolha **Editar**.
 
-Na seção Variáveis ​​de ambiente , para a chave input_bucket , em Valor , substitua o texto genérico REPLACE_WITH_INPUT_BUCKET pelo valor de RawBucketName fornecido à esquerda destas instruções.
+21. Na seção **Variáveis ​​de ambiente**, para a chave **input_bucket**, em **Valor**, substitua o texto genérico REPLACE_WITH_INPUT_BUCKET pelo valor de **RawBucketName** fornecido à esquerda destas instruções.
 
-Selecione Salvar .
+22. Selecione **Salvar**.
 
-É exibido um banner com a mensagem.A função labFunction-Data-Generator foi atualizada com sucesso.
+É exibido um banner com a mensagem. **A função labFunction-Data-Generator foi atualizada com sucesso.**
 
-Selecione a aba Teste .
+23. Selecione a aba **Teste** .
 
-No campo Nome do evento , insiraEvento de teste.
+24. No campo **Nome do evento** , insira **Evento de teste**.
 
-Selecione Salvar .
+25. Selecione **Salvar**.
 
-É exibido um banner com a mensagem.O evento de teste “TestEvent” foi salvo com sucesso.
+É exibido um banner com a mensagem. **O evento de teste “TestEvent” foi salvo com sucesso**.
 
-Para executar o evento de teste, selecione Testar .
+26. Para executar o evento de teste, selecione **Testar**.
 
-Quando o teste terminar de ser executado, em "Executando função: concluída com sucesso" , selecione "Detalhes" para visualizar a saída.
+27. Quando o teste terminar de ser executado, em **"Executando função: concluída com sucesso"** , selecione **"Detalhes"** para visualizar a saída.
 
- Resultado esperado: As cinco primeiras linhas de dados do carrinho de compras, criadas por esta função, devem ser exibidas.
+**Resultado esperado**: As cinco primeiras linhas de dados do carrinho de compras, criadas por esta função, devem ser exibidas.
+
+************************
+**** EXAMPLE OUTPUT ****
+************************
+
+START RequestId: 85ed1153-2c0e-4464-b15e-bfb7fc9bd027 Version: $LATEST
+cart_id  customer_id  product_id  product_amount product_price
+0       10            3           5              15         $9.47
+1        5            0           6              13    $17,048.51
+2        0            8          10               9         $5.09
+3       10            2           2               1        $25.84
+4        0            5           8               9       $690.31
+END RequestId: 85ed1153-2c0e-4464-b15e-bfb7fc9bd027
+REPORT RequestId: 85ed1153-2c0e-4464-b15e-bfb7fc9bd027	Duration: 4266.55 ms	Billed Duration: 4267 ms	Memory Size: 128 MB	Max Memory Used: 124 MB	Init Duration: 1938.82 ms
+
+Request ID: 85ed1153-2c0e-4464-b15e-bfb7fc9bd027
+
 
 
 
