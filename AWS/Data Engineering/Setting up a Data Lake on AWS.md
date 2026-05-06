@@ -42,6 +42,8 @@ Você será conectado automaticamente ao Console de Gerenciamento da AWS em uma 
  Aviso: Não altere a região a menos que seja instruído a fazê-lo.
 
 
+[lab_diagram](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/AWS/Data%20Engineering/images/0001.png)
+
 
 
 
