@@ -102,22 +102,22 @@ Nesta tarefa, você criará uma notificação de evento do S3 para o bucket da z
 ---
 
 #### Tarefa 2.1: Criar notificação de evento S3
-4. Na seção Buckets de uso geral , escolha o bucket S3 da zona raw (bucket que começa com o nome raw-bucket- ).
+4. Na seção **Buckets de uso geral** , escolha o bucket S3 da zona raw (bucket que começa com o nome **raw-bucket** ).
 
-5. Na página do bucket da zona bruta, selecione a guia Propriedades .
+5. Na página do bucket da zona bruta, selecione a guia **Propriedades** .
 
-6. Desça até a seção Notificações de eventos e selecione Criar notificação de evento .
+6. Desça até a seção **Notificações de eventos** e selecione **Criar notificação de evento** .
 
-7. Na página Criar notificação de evento , na seção Configuração geral , configure o seguinte:
+7. Na página **Criar notificação de evento** , na seção **Configuração geral** , configure o seguinte:
 
-* No campo Nome do evento , insiraEvento do processador.
-8. Na seção Tipos de evento , para Criação de objeto , escolha Inserir .
+* No campo **Nome do evento** , insira **Evento do processador**.
+8. Na seção **Tipos de evento** , para **Criação de objeto** , escolha **Inserir** .
 
-9. Desça até a seção Destino e configure o seguinte:
+9. Desça até a seção **Destino** e configure o seguinte:
 
-* Em Destino , escolha Função Lambda, caso ainda não esteja selecionada.
-* Em Especificar função Lambda , escolha Escolher uma das suas funções Lambda, caso ainda não esteja selecionada.
-* Para a função Lambda , use o menu suspenso e escolha labFunction-Data-Processor .
+* Em **Destino** , escolha **Função Lambda**, caso ainda não esteja selecionada.
+* Em **Especificar função Lambda** , escolha **Escolher uma das suas funções Lambda**, caso ainda não esteja selecionada.
+* Para a **função Lambda** , use o menu suspenso e escolha **labFunction-Data-Processor** .
 
 
 
