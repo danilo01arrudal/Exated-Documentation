@@ -128,9 +128,9 @@ Neste caso, a função Lambda **labFunction-Data-Processor** é selecionada como
 #### Tarefa 2.2: Enviar eventos para o Amazon EventBridge
 O Amazon S3 pode enviar eventos para o Amazon EventBridge sempre que determinados eventos ocorrerem no seu bucket. Ao contrário de outros destinos, você não precisa selecionar quais tipos de eventos deseja enviar.
 
-Desça até a seção Notificações de eventos e, para Amazon EventBridge , escolha Editar .
+Desça até a seção **Notificações de eventos** e, para **Amazon EventBridge** , escolha Editar .
 
-Na página Editar Amazon EventBridge , em Enviar notificações para o Amazon EventBridge para todos os eventos neste bucket , selecione Ativado .
+Na página **Editar Amazon EventBridge** , em **Enviar notificações para o Amazon EventBridge para todos os eventos neste bucket** , selecione **Ativado** .
 
 Selecione Salvar alterações .
 
