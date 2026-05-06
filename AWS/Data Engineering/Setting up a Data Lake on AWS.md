@@ -215,10 +215,12 @@ No seu dispositivo, abra o arquivo cart_abandonment_data.csv usando um editor de
 
  Tarefa concluída: Você revisou com sucesso a camada de ingestão da sua solução de data lake.
 
-Tarefa 4: Analise a camada de processamento da sua solução de data lake.
+---
+
+#### Tarefa 4: Analise a camada de processamento da sua solução de data lake.
 Nesta tarefa, você revisará a camada de processamento da sua solução de data lake. Após a ingestão dos dados brutos no data lake, a camada de processamento estará pronta para iniciar a transformação dos dados e enviá-los para o bucket S3 da zona de consumo. A função Lambda `labFunction-Data-Processor` atua como a aplicação que transforma os dados e os envia para o bucket S3 da zona de consumo.
 
-Tarefa 4.1: Configurar a função Lambda labFunction-Data-Processor
+#### Tarefa 4.1: Configurar a função Lambda labFunction-Data-Processor
 Na parte superior do Console de Gerenciamento da AWS, na barra de pesquisa, procure e selecioneLambda.
 
 Na seção Funções , selecione a função labFunction-Data-Processor .
@@ -283,6 +285,196 @@ Resultado esperado:
     REPORT RequestId: b6cfd7bf-8e13-4ac6-bc29-739cf4dcca8f	Duration: 1305.71 ms	Billed Duration: 1306 ms	Memory Size: 128 MB	Max Memory Used: 128 MB	Init Duration: 1938.82 ms
 
     Request ID: b6cfd7bf-8e13-4ac6-bc29-739cf4dcca8f
+
+Na aba Saída , revise os resultados para garantir que o evento de teste foi concluído com sucesso.
+
+#### Tarefa 4.2: Analisar os dados no bucket S3 da zona de consumo
+Na parte superior do Console de Gerenciamento da AWS, na barra de pesquisa, procure e selecioneS3.
+
+Na seção Buckets de uso geral , escolha o bucket S3 da zona de consumo (bucket que começa com o nome consume-bucket- ).
+
+Na aba Objetos , marque a caixa de seleção para selecionar o arquivo cart_aggregated_data.csv .
+
+ Atualizar: Se o arquivo .csv não for exibido, selecione o ícone de atualização.
+
+Selecione "Download" e salve o arquivo cart_aggregated_data.csv em seu dispositivo.
+
+No seu dispositivo, abra o arquivo cart_aggregated_data.csv usando um editor de sua preferência.
+
+ Nota: A função labFunction-Data-Processor agregou a quantidade total de produtos abandonados, classificados por ID do produto.
+
+ Tarefa concluída: Você revisou com sucesso a camada de processamento da sua solução de data lake.
+
+---
+
+#### Tarefa 5: Analise a camada de consumo da sua solução de data lake.
+Nesta tarefa, você analisará a camada de consumo da sua solução de data lake.
+
+Agora que os dados estão prontos para serem utilizados, a função Lambda labFunction-Promotion-App atua como o aplicativo de promoções que acessa os dados diretamente no data lake e os agrega para fornecer dados de abandono para cada cliente. Esses dados podem ser usados ​​para identificar quais descontos de produtos enviar aos clientes.
+
+#### Tarefa 5.1: Criar uma regra do Amazon EventBridge
+Na parte superior do Console de Gerenciamento da AWS, na barra de pesquisa, procure e selecioneAmazon EventBridge.
+ Saiba mais: o Amazon EventBridge é um serviço de barramento de eventos sem servidor que você pode usar para conectar seus aplicativos a dados de diversas fontes. Consulte " O que é o Amazon EventBridge?" na seção Recursos adicionais para obter mais informações.
+
+Na página inicial do console do Amazon EventBridge , selecione Criar regra .
+ Observação: Na parte superior da página, se você vir um banner para ativar o Construtor de Regras Visual , clique no botão de alternância para desativá-lo.
+
+Na etapa Definir detalhes da regra , na seção Detalhes da regra , configure o seguinte:
+No campo Nome , digiteAplicativo de promoção.
+Selecione Avançar .
+ Nota: Uma regra identifica eventos recebidos e os envia para destinos para processamento. Uma única regra pode enviar um evento para vários destinos, que então são executados em paralelo. As regras são baseadas em um padrão de evento ou em um agendamento. Um padrão de evento define a estrutura do evento e os campos que uma regra identifica.
+
+Na etapa "Criar padrão de evento" , role para baixo até a seção "Padrão de evento" e configure o seguinte:
+Em Origem do evento , escolha Serviços da AWS, caso ainda não esteja selecionado.
+Para o serviço AWS , use o menu suspenso e escolha Simple Storage Service (S3) .
+Em Tipo de evento , use o menu suspenso e escolha Notificação de evento do Amazon S3 .
+Na caixa de texto Padrão de evento , verifique se a estrutura JSON do tipo detalhe possui vários tipos de evento que devem acionar a regra para qualquer bucket.
+ Resultado esperado: A estrutura JSON deve ser semelhante à seguinte:
+
+
+    ************************
+    **** EXAMPLE OUTPUT ****
+    ************************
+
+    {
+      "source": ["aws.s3"],
+      "detail-type": ["Object Access Tier Changed", "Object ACL Updated", "Object Created", "Object Deleted", "Object Restore Completed", "Object Restore Expired", "Object Restore Initiated", "Object Storage Class Changed", "Object Tags Added", "Object Tags Deleted"]
+    }
+
+Para a Especificação do Tipo de Evento 1 , escolha Evento(s) específico(s) .
+Para evento(s) específico(s) , no menu suspenso, escolha Objeto Criado .
+Para a Especificação de Tipo de Evento 2 , escolha Bucket(s) específico(s) por nome .
+Para selecionar um ou mais buckets específicos por nome , insira o valor de RawBucketName fornecido à esquerda destas instruções.
+Selecione Avançar .
+
+Na etapa Selecionar alvo(s) , na seção Alvo 1 , configure o seguinte:
+
+Para Tipos de destino , escolha o serviço da AWS .
+Para selecionar um alvo , use o menu suspenso e escolha Função Lambda .
+Para Função , use o menu suspenso e escolha labFunction-Promotion-App .
+Em Permissões, desmarque Usar função de execução (recomendado)
+Selecione Avançar .
+
+Na etapa "Configurar tags - opcional" , escolha "Avançar" .
+
+Na etapa de revisão e criação , revise o padrão de evento e confirme se ele é semelhante ao exemplo a seguir:
+
+
+    ************************
+    **** EXAMPLE OUTPUT ****
+    ************************
+
+    {
+      "source": ["aws.s3"],
+      "detail-type": ["Object Created"],
+      "detail": {
+        "bucket": {
+          "name": ["rawbucket-29387"]
+        }
+      }
+    }
+
+Desça até o final da página e selecione Criar regra .
+
+É exibido um banner com a mensagem.O aplicativo Rule PromotionApp foi criado com sucesso.
+
+Tarefa 5.2: Configurar a função labFunction-Promotion-App
+Na parte superior do Console de Gerenciamento da AWS, na barra de pesquisa, procure e selecioneLambda.
+
+Na seção Funções , selecione a função labFunction-Promotion-App .
+
+Na seção Visão geral da função , verifique se o EventBridge (CloudWatch Events) está listado como o gatilho da função.
+
+ Observação: essa configuração foi adicionada automaticamente quando você configurou a regra EventBridge do PromotionsApp com o labFunction-Promotion-App como destino.
+
+Desça até a aba Código .
+
+ Conteúdo do arquivo: Na janela index.py , revise o código da função labFunction-Promotion-App .
+
+ Observação: Esta função agrega e classifica ainda mais os dados de abandono de carrinho por ID do cliente para obter os principais produtos abandonados para cada cliente.
+
+Selecione a aba Configuração .
+
+Na guia Configuração , selecione Variáveis ​​de ambiente .
+
+Na seção Variáveis ​​de ambiente , escolha Editar .
+
+Na seção Variáveis ​​de ambiente :
+
+Na chave input_bucket , em Valor , substitua o texto genérico REPLACE_WITH_INPUT_BUCKET pelo valor de RawBucketName fornecido à esquerda destas instruções.
+Na chave output_bucket , em Valor , substitua o texto genérico REPLACE_WITH_OUTPUT_BUCKET pelo valor de ConsumeBucketName fornecido à esquerda destas instruções.
+Selecione Salvar .
+
+É exibido um banner com a mensagem.A função labFunction-Promotion-App foi atualizada com sucesso.
+
+Na seção Funções , escolha a função labFunction-Data-Generator .
+
+Na seção Funções , escolha a função labFunction-Data-Generator .
+
+Desça até a aba Código .
+
+Para executar o evento de teste uma terceira vez, escolha Testar (Ctrl+Shift+I) .
+
+ Resultado esperado:
+
+    ************************
+    **** EXAMPLE OUTPUT ****
+    ************************
+
+    Status: Succeeded
+    Test Event Name: TestEvent
+
+    Response:
+    null
+
+    The area below shows the last 4 KB of the execution log.
+
+    Function Logs
+    START RequestId: 1a674776-37a2-4c61-bee3-4a6b3917fdfb Version: $LATEST
+    cart_id  customer_id  product_id  product_amount product_price
+    0        9            2           7              18       $845.86
+    1        5           10          10               7       $673.57
+    2        9            2           1              19        $27.18
+    3        3            3           3               4         $4.48
+    4        9            8           7              10    $85,998.01
+    END RequestId: 1a674776-37a2-4c61-bee3-4a6b3917fdfb
+    REPORT RequestId: 77eb838c-d774-4848-b9b9-d6cead19d653	Duration: 5070.66 ms	Billed Duration: 7168 ms	Memory Size: 128 MB	Max Memory Used: 128 MB	Init Duration: 2096.56 ms
+
+Request ID: 1a674776-37a2-4c61-bee3-4a6b3917fdfb
+Na aba Saída , revise os resultados para garantir que o evento de teste foi concluído com sucesso.
+Tarefa 5.3: Analisar os dados no bucket S3 da zona de consumo
+Na parte superior do Console de Gerenciamento da AWS, na barra de pesquisa, procure e selecioneS3.
+
+Na seção Buckets de uso geral , escolha o bucket S3 da zona de consumo (bucket que começa com o nome consume-bucket- ).
+
+Na aba Objetos , marque a caixa de seleção para selecionar o arquivo promotion_data.csv .
+
+ Atualizar: Se o arquivo .csv não for exibido, selecione o ícone de atualização.
+
+Selecione "Download" e salve o arquivo promotion_data.csv em seu dispositivo.
+
+No seu dispositivo, abra o arquivo promotion_data.csv usando um editor de sua preferência.
+
+ Observação: A função labFunction-Promotion-App agregou os dados de abandono de carrinho e os classificou por ID do cliente. A empresa pode usar esses dados para identificar os principais produtos que os clientes abandonam nos carrinhos de compras e, em seguida, oferecer descontos promocionais para esses produtos.
+
+ Tarefa concluída: Você revisou com sucesso a camada de consumo da sua solução de data lake.
+
+Conclusão
+Você realizou com sucesso o seguinte:
+
+Utilizei o Amazon S3 como camada de armazenamento de um data lake.
+Dados organizados em camadas (ou zonas) no Amazon S3.
+Configurei uma notificação de evento do S3 para invocar uma função do AWS Lambda.
+Criei uma regra no Amazon EventBridge para invocar a função Lambda.
+Fim do laboratório
+Siga estes passos para fechar o console e encerrar o seu laboratório.
+
+Retorne ao Console de Gerenciamento da AWS .
+
+No canto superior direito da página, selecione AWSLabsUser e, em seguida, selecione Sair .
+
+Selecione " Finalizar Laboratório" e confirme que deseja encerrar o laboratório.
+
 
 
 
