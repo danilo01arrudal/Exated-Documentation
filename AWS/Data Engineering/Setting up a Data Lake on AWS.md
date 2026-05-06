@@ -119,7 +119,68 @@ Nesta tarefa, você criará uma notificação de evento do S3 para o bucket da z
 * Em **Especificar função Lambda** , escolha **Escolher uma das suas funções Lambda**, caso ainda não esteja selecionada.
 * Para a **função Lambda** , use o menu suspenso e escolha **labFunction-Data-Processor** .
 
+Neste caso, a função Lambda **labFunction-Data-Processor** é selecionada como o destino para onde você deseja que o Amazon S3 envie as notificações. Você armazena essa configuração no sub-recurso de notificação associado a um bucket.
 
+10. Selecione **Salvar alterações** .
+
+É exibido um banner com a mensagem. **Notificação de evento "Evento do Processador" criada com sucesso. Operação concluída com êxito.**
+
+#### Tarefa 2.2: Enviar eventos para o Amazon EventBridge
+O Amazon S3 pode enviar eventos para o Amazon EventBridge sempre que determinados eventos ocorrerem no seu bucket. Ao contrário de outros destinos, você não precisa selecionar quais tipos de eventos deseja enviar.
+
+Desça até a seção Notificações de eventos e, para Amazon EventBridge , escolha Editar .
+
+Na página Editar Amazon EventBridge , em Enviar notificações para o Amazon EventBridge para todos os eventos neste bucket , selecione Ativado .
+
+Selecione Salvar alterações .
+
+É exibido um banner com a mensagem. Notificações de eventos editadas com sucesso. Operação concluída com êxito.
+
+ Tarefa concluída: você criou com êxito uma notificação de evento S3 para o bucket da zona raw e habilitou a opção de enviar eventos para o Amazon EventBridge.
+
+---
+
+#### Tarefa 3: Analise a camada de ingestão da sua solução de data lake.
+Nesta tarefa, você revisará a camada de ingestão da sua solução de data lake. A função Lambda labFunction-Data-Generator atua como o aplicativo de backend de e-commerce que ingere dados no bucket da zona raw do Amazon S3.
+
+#### Tarefa 3.1: Configurar e testar a função Lambda labFunction-Data-Generator
+Na parte superior do Console de Gerenciamento da AWS, na barra de pesquisa, procure e selecioneLambda.
+
+Na seção Funções , escolha a função labFunction-Data-Generator .
+
+Desça até a aba Código .
+
+ Conteúdo do arquivo: Na janela index.py , revise o código da função labFunction-Data-Generator .
+
+ Observação: Esta função cria dados aleatórios de abandono de carrinho de compras usando o pacote Faker do Python.
+
+ Saiba mais: Faker é um pacote Python que gera dados falsos para você. Consulte a seção " Bem-vindo à documentação do Faker!" na seção "Recursos adicionais" para obter mais informações.
+
+Selecione a aba Configuração .
+
+Na guia Configuração , selecione Variáveis ​​de ambiente .
+
+Na seção Variáveis ​​de ambiente , escolha Editar .
+
+Na seção Variáveis ​​de ambiente , para a chave input_bucket , em Valor , substitua o texto genérico REPLACE_WITH_INPUT_BUCKET pelo valor de RawBucketName fornecido à esquerda destas instruções.
+
+Selecione Salvar .
+
+É exibido um banner com a mensagem.A função labFunction-Data-Generator foi atualizada com sucesso.
+
+Selecione a aba Teste .
+
+No campo Nome do evento , insiraEvento de teste.
+
+Selecione Salvar .
+
+É exibido um banner com a mensagem.O evento de teste “TestEvent” foi salvo com sucesso.
+
+Para executar o evento de teste, selecione Testar .
+
+Quando o teste terminar de ser executado, em "Executando função: concluída com sucesso" , selecione "Detalhes" para visualizar a saída.
+
+ Resultado esperado: As cinco primeiras linhas de dados do carrinho de compras, criadas por esta função, devem ser exibidas.
 
 
 
