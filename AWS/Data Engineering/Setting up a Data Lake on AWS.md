@@ -128,15 +128,15 @@ Neste caso, a função Lambda **labFunction-Data-Processor** é selecionada como
 #### Tarefa 2.2: Enviar eventos para o Amazon EventBridge
 O Amazon S3 pode enviar eventos para o Amazon EventBridge sempre que determinados eventos ocorrerem no seu bucket. Ao contrário de outros destinos, você não precisa selecionar quais tipos de eventos deseja enviar.
 
-Desça até a seção **Notificações de eventos** e, para **Amazon EventBridge** , escolha Editar .
+11. Desça até a seção **Notificações de eventos** e, para **Amazon EventBridge** , escolha Editar .
 
-Na página **Editar Amazon EventBridge** , em **Enviar notificações para o Amazon EventBridge para todos os eventos neste bucket** , selecione **Ativado** .
+12. Na página **Editar Amazon EventBridge** , em **Enviar notificações para o Amazon EventBridge para todos os eventos neste bucket** , selecione **Ativado** .
 
-Selecione Salvar alterações .
+Selecione **Salvar alterações** .
 
-É exibido um banner com a mensagem. Notificações de eventos editadas com sucesso. Operação concluída com êxito.
+É exibido um banner com a mensagem. **Notificações de eventos editadas com sucesso. Operação concluída com êxito.**
 
- Tarefa concluída: você criou com êxito uma notificação de evento S3 para o bucket da zona raw e habilitou a opção de enviar eventos para o Amazon EventBridge.
+**Tarefa concluída**: você criou com êxito uma notificação de evento S3 para o bucket da zona raw e habilitou a opção de enviar eventos para o Amazon EventBridge.
 
 ---
 
@@ -144,19 +144,19 @@ Selecione Salvar alterações .
 Nesta tarefa, você revisará a camada de ingestão da sua solução de data lake. A função Lambda labFunction-Data-Generator atua como o aplicativo de backend de e-commerce que ingere dados no bucket da zona raw do Amazon S3.
 
 #### Tarefa 3.1: Configurar e testar a função Lambda labFunction-Data-Generator
-Na parte superior do Console de Gerenciamento da AWS, na barra de pesquisa, procure e selecioneLambda.
+14. Na parte superior do Console de Gerenciamento da AWS, na barra de pesquisa, procure e selecione **Lambda**.
 
-Na seção Funções , escolha a função labFunction-Data-Generator .
+15. Na seção **Funções** , escolha a função **labFunction-Data-Generator**.
 
-Desça até a aba Código .
+16. Desça até a aba **Código**.
 
- Conteúdo do arquivo: Na janela index.py , revise o código da função labFunction-Data-Generator .
+17. **Conteúdo do arquivo**: Na janela **index.py** , revise o código da função **labFunction-Data-Generator**.
 
- Observação: Esta função cria dados aleatórios de abandono de carrinho de compras usando o pacote Faker do Python.
+**Observação**: Esta função cria dados aleatórios de abandono de carrinho de compras usando o pacote Faker do Python.
 
- Saiba mais: Faker é um pacote Python que gera dados falsos para você. Consulte a seção " Bem-vindo à documentação do Faker!" na seção "Recursos adicionais" para obter mais informações.
+Saiba mais: Faker é um pacote Python que gera dados falsos para você. Consulte a seção " Bem-vindo à documentação do Faker!" na seção "Recursos adicionais" para obter mais informações.
 
-Selecione a aba Configuração .
+18. Selecione a aba Configuração .
 
 Na guia Configuração , selecione Variáveis ​​de ambiente .
 
