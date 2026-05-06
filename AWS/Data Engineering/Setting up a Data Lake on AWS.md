@@ -198,7 +198,91 @@ Nesta tarefa, você revisará a camada de ingestão da sua solução de data lak
 
     Request ID: 85ed1153-2c0e-4464-b15e-bfb7fc9bd027
 
+Tarefa 3.2: Analisar os dados no bucket S3 da zona bruta
+Na parte superior do Console de Gerenciamento da AWS, na barra de pesquisa, procure e selecioneS3.
 
+Na seção Buckets de uso geral , escolha o bucket S3 da zona raw (bucket que começa com o nome raw-bucket- ).
+
+Na aba Objetos , marque a caixa de seleção para selecionar o arquivo cart_abandonment_data.csv .
+
+ Atualizar: Se o arquivo .csv não for exibido, selecione o ícone de atualização.
+
+Selecione "Download" e salve o arquivo cart_abandonment_data.csv no seu dispositivo.
+
+No seu dispositivo, abra o arquivo cart_abandonment_data.csv usando um editor de sua preferência.
+
+ Resultado esperado: Observe que as primeiras entradas correspondem ao que foi exibido na saída do evento de teste da função labFunction-Data-Generator .
+
+ Tarefa concluída: Você revisou com sucesso a camada de ingestão da sua solução de data lake.
+
+Tarefa 4: Analise a camada de processamento da sua solução de data lake.
+Nesta tarefa, você revisará a camada de processamento da sua solução de data lake. Após a ingestão dos dados brutos no data lake, a camada de processamento estará pronta para iniciar a transformação dos dados e enviá-los para o bucket S3 da zona de consumo. A função Lambda `labFunction-Data-Processor` atua como a aplicação que transforma os dados e os envia para o bucket S3 da zona de consumo.
+
+Tarefa 4.1: Configurar a função Lambda labFunction-Data-Processor
+Na parte superior do Console de Gerenciamento da AWS, na barra de pesquisa, procure e selecioneLambda.
+
+Na seção Funções , selecione a função labFunction-Data-Processor .
+
+Na seção Visão geral da função , verifique se o S3 está listado como o gatilho da função.
+
+ Observação: esse gatilho foi adicionado quando você configurou as notificações de eventos no bucket S3 da zona raw.
+
+Desça até a aba Código .
+
+ Conteúdo do arquivo: Na janela index.py , revise o código da função labFunction-Data-Processor .
+
+ Observação: Esta função agrega os dados de abandono de carrinho de compras e os classifica por ID do produto, utilizando a biblioteca de análise de dados pandas do Python.
+
+ Saiba mais: Pandas é uma ferramenta de análise e manipulação de dados de código aberto, rápida, poderosa e flexível, construída sobre a linguagem de programação Python. Consulte a seção Recursos adicionais para obter mais informações sobre o pandas .
+
+Selecione a aba Configuração .
+
+Na guia Configuração , selecione Variáveis ​​de ambiente .
+
+Na seção Variáveis ​​de ambiente , escolha Editar .
+
+Na seção Variáveis ​​de ambiente :
+
+Na chave input_bucket , em Valor , substitua o texto genérico REPLACE_WITH_INPUT_BUCKET pelo valor de RawBucketName fornecido à esquerda destas instruções.
+Na chave output_bucket , em Valor , substitua o texto genérico REPLACE_WITH_OUTPUT_BUCKET pelo valor de ConsumeBucketName fornecido à esquerda destas instruções.
+Selecione Salvar .
+
+É exibido um banner com a mensagem.A função labFunction-Data-Processor foi atualizada com sucesso.
+
+No menu de navegação superior, escolha Funções .
+
+Na seção Funções , escolha a função labFunction-Data-Generator .
+
+Desça até a aba Código .
+
+Para executar o evento de teste uma segunda vez, escolha Testar (Ctrl+Shift+I) .
+
+Resultado esperado:
+
+    ************************
+    **** EXAMPLE OUTPUT ****
+    ************************
+
+    Status: Succeeded
+    Test Event Name: TestEvent
+
+    Response:
+    null
+
+    The area below shows the last 4 KB of the execution log.
+
+    Function Logs:
+    START RequestId: b6cfd7bf-8e13-4ac6-bc29-739cf4dcca8f Version: $LATEST
+    cart_id  customer_id  product_id  product_amount product_price
+    0       10            1           9               4     $8,295.85
+    1        8            3          10              17     $3,482.04
+    2       10            3           7              18       $788.59
+    3        4            6           9               6     $2,936.20
+    4        6            2           3               4         $9.76
+    END RequestId: b6cfd7bf-8e13-4ac6-bc29-739cf4dcca8f
+    REPORT RequestId: b6cfd7bf-8e13-4ac6-bc29-739cf4dcca8f	Duration: 1305.71 ms	Billed Duration: 1306 ms	Memory Size: 128 MB	Max Memory Used: 128 MB	Init Duration: 1938.82 ms
+
+    Request ID: b6cfd7bf-8e13-4ac6-bc29-739cf4dcca8f
 
 
 
