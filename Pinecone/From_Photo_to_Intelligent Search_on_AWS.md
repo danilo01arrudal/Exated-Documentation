@@ -48,9 +48,9 @@ Managing the data lifecycle is fundamental to controlling costs and maintaining 
 
 Here are the main levers to optimize your spending:
 
-1. Compute (AWS Lambda): Process images in batches to reduce the number of invocations.
+**1. Compute (AWS Lambda):** Process images in batches to reduce the number of invocations.
 
-2. AI Services (Prioritize Embeddings vs. Analysis):
+**2. AI Services (Prioritize Embeddings vs. Analysis):**
 
 * Amazon Rekognition: Costs approximately $1.00 per 1,000 images for label analysis. Use it for specific tasks and not for generating embeddings.
 
@@ -60,7 +60,7 @@ Here are the main levers to optimize your spending:
 
   OpenSearch: Costs can scale rapidly. A community benchmark showed an estimated cost of $150/month for a combination of Rekognition, Bedrock, and OpenSearch Serverless.
 
-3. Vector Database:
+**3. Vector Database:**
 
 Pinecone (Standard Plan): Pay-per-use starting at a minimum of $50/month. Billing is based on Read Units, Write Units, and storage. This is an excellent starting point for production.
 
