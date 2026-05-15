@@ -204,6 +204,52 @@ The SDK with gRPC extras offers better performance for data operations
 📌 Existing indexes: IndexList([])
 ```
 
+**Note: When you initialize Pinecone Local without specifying indexes in the Docker configuration, it acts as a full database emulator, allowing for the dynamic creation and management of indexes via API.**
+
+#### Index Management
+
+**Creating an Index for Dense Vectors (Semantic Search)**
+
+    #!/usr/bin/env python3
+    from pinecone.grpc import PineconeGRPC as Pinecone
+    from pinecone import ServerlessSpec
+    import time
+
+    # 🔁 Configure the host with the same port that you mapped in the container.
+    pc = Pinecone(
+        api_key="pclocal",
+        host="http://localhost:5081"        # Adjust the door to fit your container.
+    )
+
+    INDEX_DENSE = "dpe-dense-index"
+
+    # Check if the index already exists.
+    if not pc.has_index(INDEX_DENSE):
+        pc.create_index(
+            name=INDEX_DENSE,
+            vector_type="dense",              # ← Essential for dense indexes
+            dimension=384,                    # Dimensions of the all-MiniLM-L6-v2 model
+            metric="cosine",
+            spec=ServerlessSpec(cloud="aws", region="us-east-1")
+        )
+        print(f"✅ Índice denso '{INDEX_DENSE}' successfully created!")
+    else:
+        print(f"ℹ️ Índice denso '{INDEX_DENSE}' already exists.")
+
+    # Please wait a few seconds for the index creation to complete.
+    time.sleep(2)
+
+    # List the indexes to confirm.
+    print("📌 Existing indices:", pc.list_indexes())
+
+#### List the indexes
+
+    python3 -c "from pinecone.grpc import PineconeGRPC as Pinecone; pc = Pinecone(api_key='pclocal', host='http://localhost:5081'); print(pc.list_indexes())"
+
+---
+
+
+
 
 --- 
 
