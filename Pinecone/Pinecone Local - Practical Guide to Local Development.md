@@ -262,10 +262,3 @@ The SDK with gRPC extras offers better performance for data operations
 IndexList([<name='dpe-dense-index', dim=384, ready=True>])
 ```
 
----
-
-
-
-
---- 
-
