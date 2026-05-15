@@ -140,3 +140,70 @@ WARN[0000] /root/DPE/docker-compose.yaml: the attribute `version` is obsolete, i
 CONTAINER ID   IMAGE                                       COMMAND      CREATED              STATUS              PORTS                                                             NAMES
 2e64757814ba   ghcr.io/pinecone-io/pinecone-local:latest   "/control"   About a minute ago   Up About a minute   0.0.0.0:5081-6000->5081-6000/tcp, [::]:5081-6000->5081-6000/tcp   pinecone-local
 ```
+
+---
+
+### 4. Install the Pinecone Python SDK
+
+    pip install "pinecone[grpc]" sentence-transformers
+
+The SDK with gRPC extras offers better performance for data operations
+
+#### Connecting to Pinecone Local
+
+    #!/usr/bin/env python3
+    """
+    Script de conexão com Pinecone Local (emulador local)
+    Autor: Ajustado para resolver AttributeError: '_api_version'
+    """
+
+    from pinecone.grpc import PineconeGRPC as Pinecone
+    from pinecone import ServerlessSpec
+    import numpy as np
+    from sentence_transformers import SentenceTransformer
+    import json
+    import time
+    
+    # Initializes the client pointing to Pinecone Local
+    # The API key can be any string - Pinecone Local ignores authentication
+    pc = Pinecone(
+        api_key="pclocal",
+        host="http://localhost:5081"
+    )
+
+    print("✅ Pinecone Local Client initialized successfully!")
+
+    # Optional: Attempts to obtain the API version, if available, without causing an error.
+    try:
+        # Checks if the attribute exists (it doesn't exist on the local client).
+        if hasattr(pc, '_api_version'):
+            print(f"API Version: {pc._api_version}")
+        else:
+            print("ℹ️  API version attribute not available in local mode")
+    except Exception as e:
+        print(f"⚠️ Could not retrieve API version: {e}")
+
+    # Quick test: list existing indexes (if any)
+    try:
+        indexes = pc.list_indexes()
+        print(f"📌 Existing indexes: {indexes}")
+    except Exception as e:
+        print(f"⚠️ Could not list indexes: {e}")
+        print("   (Make sure Pinecone Local server is running on http://localhost:5081)")
+
+    # You can continue with the rest of your code here...
+    # Example: creating an index, inserting vectors, etc.
+
+#### Run a local connection test 
+
+    python3 Pinecone_Local_connection.py 
+
+```
+✅ Pinecone Local Client initialized successfully!
+ℹ️  API version attribute not available in local mode
+📌 Existing indexes: IndexList([])
+```
+
+
+--- 
+
