@@ -256,9 +256,20 @@ The SDK with gRPC extras offers better performance for data operations
     pc = Pinecone(api_key='pclocal', host='http://localhost:5081'); 
     print(pc.list_indexes())
 
+*Execute list index*
+
     python3 Pinecone_Local_List_Index.py    
 
 ```
 IndexList([<name='dpe-dense-index', dim=384, ready=True>])
 ```
+
+*The list_indexes() method returns all the indexes in the project, and describe_index() provides specific details for each one.*
+
+#### Creating an Index with Document Schema (for Full-Text Search)
+
+*For full-text search with BM25, we need to create an index with a document schema that defines the ranking fields:*
+
+
+
 
