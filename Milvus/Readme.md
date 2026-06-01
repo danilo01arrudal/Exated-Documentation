@@ -1,5 +1,3 @@
-A seguir, apresento um curso abrangente sobre o Milvus, projetado para que você possa aprender desde os conceitos fundamentais até a administração de um cluster em produção, sempre com exemplos práticos para o seu ambiente on-premise.
-
 ### 📖 Metodologia e Convenções
 
 Para aproveitar ao máximo este guia, é importante entender sua estrutura:
