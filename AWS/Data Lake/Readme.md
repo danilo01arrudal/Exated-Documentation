@@ -51,8 +51,19 @@ flowchart TD
 
 ---
 
-Tudo inicia com reuniões de levantamento de informações detalhadas com os consumidores de dados e partes interessadas relevantes, 
-a equipe de engenharia de dados sugeriu a criação de uma arquitetura de data lake na AWS com os seguintes componentes:
+Tudo inicia com reuniões de levantamento de informações detalhadas com os consumidores de dados e partes interessadas relevantes.
+
+#### 1. Alignment with Business Goals: Converting organizational aspirations into tangible technical implementations, ensuring that all cloud adoption has a clear purpose. This is the ignition point of Wave 1. The Business Architect Agent uses LLMs in OCI Generative AI to conduct interactive interviews with stakeholders. It captures these aspirations and automatically generates the Cloud Adoption Vision Statement, tying the strategy to the KPIs before provisioning any resources.
+
+| Theme | Subtopic | Module | Objective |
+|:---|:---|:---|:---|
+| Alignment with Business Goals	| Alignment with Business Goals	| Define Business Goals	| The conversion of business aspirations into tangible technical implementations within the context of cloud adoption and migration is a multifaceted effort based in business architecture | 
+| Alignment with Business Goals	| Alignment with Business Goals	| Systematic evaluation and transition | The process of translating business objectives into technical solutions during cloud adoption and migration involves detailed assessment of existing systems and applications. This assessment determines which elements can be migrated into the cloud and which demand the integration of novel cloud-centric solutions. During transition, consider security, performance, and harmonization with pre-existing systems. | 
+| Alignment with Business Goals	| Alignment with Business Goals	| Seamless integration | When suitable cloud-driven solutions are identified, their assimilation into your existing technological framework is the primary goal. Perform the integration in a way that reinforces the pursuit of your business goals. Achieving this integration might include the tailoring of cloud-based solutions to accommodate specific needs of your organization, combined with their seamless integration into established systems and applications. | 
+| Alignment with Business Goals	| Alignment with Business Goals	| Risk mitigation and compliance adherence | During cloud adoption, migration, and the process of transforming business objectives into technical realities, you must consider risk management and regulatory compliance. This involves identifying and assessing potential vulnerabilities linked with cloud-based solutions, and forming strategies to mitigate the vulnerabilities. Design cloud-based solutions thoroughly to align with required regulations and standards. Build a strong framework of controls to safeguard ongoing compliance. | 
+
+A equipe de engenharia de dados sugeriu a criação de uma arquitetura de data lake na AWS com os seguintes componentes:
+
 
   * O Amazon Simple Storage Service (Amazon S3)  serve como base e principal armazenamento do data lake. 
   * O AWS Database Migration Service (AWS DMS) serve para conectar-se aos bancos de dados locais e ingerir os dados no data lake.
