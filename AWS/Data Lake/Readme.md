@@ -144,8 +144,8 @@ flowchart TD
     Cleaned["Cleaned Zone<br>S3 Standard"]
     Curated["Curated Zone<br>S3 Intelligent-Tiering"]
 
-    Curated -->|"Lifecycle_policy (ex.:after 30d)"| StandardIA["Standard - Infrequent Access"]
-    StandardIA -->|"Lifecycle_policy (ex.:after 90d)"| Glacier["Glacier Deep Archive"]
+    Curated -->|"Lifecycle policy (after 30d)"| StandardIA["Standard - Infrequent Access"]
+    StandardIA -->|"Lifecycle policy (after 90d)"| Glacier["Glacier Deep Archive"]
 ```
 
 #### Passo 1
