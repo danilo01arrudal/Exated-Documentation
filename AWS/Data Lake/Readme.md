@@ -64,7 +64,7 @@ Após a catalogação dos dados, os trabalhos do AWS Glue podem ser usados ​�
   * O Amazon Athena para realizar consultas pontuais ou sob demanda diretamente no Amazon S3.
   * O Amazon QuickSight  para painéis de business intelligence e visualização de dados.
 
-Com um data lake na AWS, a Example Corp consegue maximizar o valor de seus dados, otimizando ao mesmo tempo a segurança, os custos e a eficiência operacional.
+Com um data lake na AWS, conseguimos maximizar o valor de seus dados, otimizando ao mesmo tempo a segurança, os custos e a eficiência operacional.
 
 ---
 
