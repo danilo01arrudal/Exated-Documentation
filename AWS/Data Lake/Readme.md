@@ -174,3 +174,91 @@ Após a curadoria dos dados nessas duas zonas, o acesso a eles é raro. Portanto
 Para a zona curada, eles escolheram a classe S3 Intelligent-Tiering em vez das regras de ciclo de vida do S3. 
 O S3 Intelligent-Tiering move automaticamente os dados para a camada de armazenamento mais econômica à medida que os dados esfriam. 
 Dessa forma, eles não precisam gerenciar várias regras para os diversos consumidores de dados e casos de uso que acessam a zona curada.
+
+---
+
+### Amazon S3 para data lakes
+
+O Amazon S3 oferece uma base ideal para um data lake devido à sua escalabilidade praticamente ilimitada e alta durabilidade. Ele também proporciona melhor desempenho, segurança e integração com um amplo portfólio de serviços de análise, visualização e aprendizado de máquina. 
+
+| Recurso | Descrição |
+|:---|:---|
+| Escalabilidade | O Amazon S3 é um armazenamento de objetos em escala de exabytes para armazenar qualquer tipo de dado. Você pode armazenar dados estruturados (como dados relacionais), dados semiestruturados (como arquivos JSON, XML e CSV) e dados não estruturados (como imagens ou arquivos de mídia). Você pode começar com um volume pequeno e expandir seu data lake conforme necessário, sem comprometer o desempenho ou a confiabilidade. | 
+| Durabilidade | O Amazon S3 foi projetado para oferecer 99,999999999% (11 noves) de durabilidade de dados. O Amazon S3 Standard cria automaticamente cópias de todos os objetos carregados e as armazena em pelo menos três Zonas de Disponibilidade. Isso significa que seus dados estão protegidos por um modelo de resiliência Multi-AZ e contra falhas no nível do site. O S3 One Zone - Acesso Infrequente (S3 One Zone-IA) cria cópias em uma única Zona de Disponibilidade. | 
+| Segurança | O Amazon S3 foi projetado para fornecer segurança e conformidade incomparáveis ​​no armazenamento em nuvem em todas as classes de armazenamento, incluindo gerenciamento de identidade e acesso, verificação de inventário, criptografia automática e muito mais. | 
+| Disponibilidade | As classes de armazenamento do Amazon S3 são projetadas para fornecer uma disponibilidade de objetos entre 99,5% e 99,99% em um determinado ano. Isso é garantido por alguns dos acordos de nível de serviço (SLAs) mais robustos da nuvem. | 
+| Custo | O armazenamento de ativos de dados geralmente representa uma parcela significativa dos custos associados a um data lake. Ao construir um data lake no Amazon S3, você paga apenas pelos serviços de armazenamento e processamento de dados que realmente utiliza, conforme os utiliza. | 
+
+---
+
+### Zonas ou camadas do data lake
+
+#### Zonas padroes
+
+```mermaid
+flowchart TD
+    subgraph  
+        Raw_Zone[("Raw Zone")]
+    end
+```
+
+*A zona de dados brutos armazena os dados brutos conforme são inseridos no data lake. Para preservar a integridade dos dados, recomenda-se manter o formato de arquivo original e ativar o versionamento neste bucket do S3.*
+
+```mermaid
+flowchart TD
+    subgraph  
+        Clean_Zone[("Clean Zone")]
+    end
+```
+
+*A zona limpa armazena dados processados ​​ou transformados. Por exemplo, filtragem de anomalias, padronização de formatos e correção de valores inválidos.*
+
+```mermaid
+flowchart TD
+    subgraph  
+        Curated_Zone[("Curated Zone")]
+    end
+```
+
+*As lojas Zone, com conteúdo selecionado, combinam, agregam e garantem a qualidade de dados para casos de uso específicos em um formato pronto para consumo.*
+
+#### Alem desses existem alguns zonas adicionais a serem considerados.
+
+```mermaid
+flowchart TD
+    subgraph  
+        Landing_Zone[("Landing Zone")]
+    end
+```
+
+*A zona de dados brutos armazena os dados brutos conforme são inseridos no data lake. Para preservar a integridade dos dados, recomenda-se manter o formato de arquivo original e ativar o versionamento neste bucket do S3.*
+
+```mermaid
+flowchart TD
+    subgraph  
+        Logs_Zone[("Logs Zone")]
+    end
+```
+
+*Esta zona é usada para registros do Amazon S3 e de outros serviços na arquitetura do data lake. Os registros podem incluir registros de acesso do S3, arquivos de registro do Amazon CloudWatch ou arquivos de registro do AWS CloudTrail.*
+
+```mermaid
+flowchart TD
+    subgraph  
+        Archived_Zone[("Archived Zone")]
+    end
+```
+
+*Esta zona é utilizada para armazenar dados históricos, de acesso pouco frequente ou relacionados com a conformidade.*
+
+```mermaid
+flowchart TD
+    subgraph  
+        Sandbox_Zone[("Sandbox Zone")]
+    end
+```
+
+*Esta zona é utilizada para análises exploratórias e experimentação.*
+
+---
+
