@@ -147,10 +147,10 @@ flowchart TD
     Raw -.-> Cleaned -.-> Curated
     Raw --> S3_Standard1["S3 Standard"]
     Cleaned --> S3_Standard2["S3 Standard"]
-    S3_Standard1 --> S3_StandardAI["Standard Infrequent Access"]
-    S3_Standard2 --> S3_StandardAI["Standard Infrequent Access"]
-    S3_StandardAI --> |"Lifecycle policy (after 90d)"| Glacier["Glacier Deep Archive"]
-    Glacier --> |"Lifecycle policy (after 365d)"| Destruction["❌ DELETE"]
+    S3_Standard1 --> |"Lifecycle policy (after 365d)"| S3_StandardAI["Standard Infrequent Access"]
+    S3_Standard2 --> |"Lifecycle policy (after 365d)"|S3_StandardAI["Standard Infrequent Access"]
+    S3_StandardAI --> |"Lifecycle policy (after 730d)"| Glacier["Glacier Deep Archive"]
+    Glacier --> |"Lifecycle policy (after 2555d)"| Destruction["❌ DELETE"]
     Curated --> S3["S3 Intelligent-Tiering"]
 ```
 
@@ -166,4 +166,15 @@ A zona limpa (clean zone) é onde os dados processados ​​ou transformados s�
 
 A área de dados selecionados (curated zone) é onde os dados processados ​​são mesclados ou combinados com outros conjuntos de dados e disponibilizados para análises específicas e casos de uso de aprendizado de máquina.
 
+Para cumprir as regulamentações do setor e otimizar custos, podemos utiliza diferentes classes de armazenamento S3 e políticas de ciclo de vida do Amazon S3. 
+Por exemplo, optaram pela classe de armazenamento Amazon  S3 Standard tanto para as zonas de dados brutos quanto para as zonas de dados limpos, por ser adequada para cargas de trabalho com alto volume de transações.
 
+Após a curadoria dos dados nessas duas zonas, o acesso a eles é raro. Portanto, para fins de arquivamento, foram criadas várias regras de ciclo de vida do S3 para migrar automaticamente os dados para diferentes classes de armazenamento.
+
+    * Primeira regra:  Após 1 ano, mova todos os arquivos para a classe de armazenamento S3 Standard-Infrequent Access (S3 Standard-IA)  . 
+    * Segunda regra:  Após 2 anos no S3 Standard-Infrequent Access, mova-os para a classe de armazenamento S3 Glacier Deep Archive .
+    * Terceira regra:  Após 7 anos na classe de armazenamento S3 Glacier Deep Archive, exclua ou deixe expirar os dados.
+
+Para a zona curada, eles escolheram a classe S3 Intelligent-Tiering em vez das regras de ciclo de vida do S3. 
+O S3 Intelligent-Tiering move automaticamente os dados para a camada de armazenamento mais econômica à medida que os dados esfriam. 
+Dessa forma, eles não precisam gerenciar várias regras para os diversos consumidores de dados e casos de uso que acessam a zona curada.
