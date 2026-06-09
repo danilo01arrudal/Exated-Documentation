@@ -1,5 +1,53 @@
 ## Visão geral do laboratório
 
+```mermaid
+flowchart TD
+    subgraph Ingestion
+        DMS[("AWS DMS")]
+        DataSync[("AWS DataSync")]
+    end
+
+    subgraph Storage
+        S3[("Amazon S3")]
+    end
+
+    subgraph Catalog & ETL
+        Crawlers["AWS Glue crawlers"]
+        Catalog["AWS Glue Data Catalog"]
+        GlueJobs["AWS Glue jobs"]
+    end
+
+    subgraph Query & Analytics
+        Athena["Amazon Athena"]
+        Redshift["Amazon Redshift"]
+    end
+
+    subgraph Visualization
+        QuickSight["Amazon QuickSight"]
+    end
+
+    subgraph Governance
+        LakeFormation["AWS Lake Formation"]
+    end
+
+    DMS --> S3
+    DataSync --> S3
+    S3 --> Crawlers
+    Crawlers --> Catalog
+    Catalog --> GlueJobs
+    GlueJobs --> S3
+    S3 --> Athena
+    S3 --> Redshift
+    Catalog --> Athena
+    Catalog --> Redshift
+    Athena --> QuickSight
+    Redshift --> QuickSight
+
+    LakeFormation -.-> Catalog
+    LakeFormation -.-> S3
+    LakeFormation -.-> GlueJobs
+```
+
 A loja virtual da Example Corp. apresenta um alto índice de abandono de carrinho diariamente, o que leva à exclusão desses registros do banco de dados para liberar espaço de armazenamento. Como especialista em Engenharia de Dados da empresa, você é responsável por encontrar uma solução de armazenamento de baixo custo na AWS para armazenar esses registros e permitir que a loja virtual realize processamento analítico diretamente nessa solução de armazenamento.
 
 Neste laboratório, você explorará os componentes de um data lake, organizará seus dados em camadas (ou zonas) e usará o Amazon S3 como camada de armazenamento do seu data lake.
