@@ -134,5 +134,30 @@ Com as opções sem servidor mais avançadas na nuvem, a AWS ajuda a reduzir o t
 
 ---
 
+### Configurar Armazenamento
+
+Vamos segmentar o data lake em três buckets distintos do S3. Além disso, para atender às regulamentações do setor e otimizar custos, optaram por usar diferentes classes de armazenamento e políticas de ciclo de vida do Amazon S3.
+
+```mermaid
+flowchart TD
+    Raw["Raw Zone<br>S3 Standard"]
+    Cleaned["Cleaned Zone<br>S3 Standard"]
+    Curated["Curated Zone<br>S3 Intelligent-Tiering"]
+
+    Curated -->|"Lifecycle policy (ex.: after 30 days)"| StandardIA["Standard - Infrequent Access"]
+    StandardIA -->|"Lifecycle policy (ex.: after 90 days)"| Glacier["Glacier Deep Archive"]
+```
+
+#### Passo 1
+
+A zona de dados brutos (raw zone) é onde os dados brutos são ingeridos a partir de seus bancos de dados de origem. Esse bucket garante a integridade dos dados, pois o formato original é preservado para futuras auditorias ou necessidades de reprocessamento. 
+
+#### Passo 2 
+
+A zona limpa (clean zone) é onde os dados processados ​​ou transformados são armazenados. As atividades comuns de processamento de dados incluem filtrar anomalias, padronizar formatos e corrigir valores inválidos.
+
+#### Passo 3 
+
+A área de dados selecionados (curated zone) é onde os dados processados ​​são mesclados ou combinados com outros conjuntos de dados e disponibilizados para análises específicas e casos de uso de aprendizado de máquina.
 
 
