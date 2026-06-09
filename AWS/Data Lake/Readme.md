@@ -147,10 +147,10 @@ flowchart TD
     Raw -.-> Cleaned -.-> Curated
     Raw --> S3_Standard1["S3 Standard"]
     Cleaned --> S3_Standard2["S3 Standard"]
-    S3_Standard1 --> |"Lifecycle policy (after 365d)"| S3_StandardAI["Standard Infrequent Access"]
-    S3_Standard2 --> |"Lifecycle policy (after 365d)"|S3_StandardAI["Standard Infrequent Access"]
-    S3_StandardAI --> |"Lifecycle policy (after 730d)"| Glacier["Glacier Deep Archive"]
-    Glacier --> |"Lifecycle policy (after 2555d)"| Destruction["❌ DELETE"]
+    S3_Standard1 --> |"Lifecycle policy (aft 365d)"| S3_StandardAI["Standard Infrequent Access"]
+    S3_Standard2 --> |"Lifecycle policy (aft 365d)"|S3_StandardAI["Standard Infrequent Access"]
+    S3_StandardAI --> |"Lifecycle policy (aft 730d)"| Glacier["Glacier Deep Archive"]
+    Glacier --> |"Lifecycle policy (aft 2555d)"| Destruction["❌ DELETE"]
     Curated --> S3["S3 Intelligent-Tiering"]
 ```
 
