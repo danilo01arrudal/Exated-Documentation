@@ -1,6 +1,54 @@
 
 ## Construindo uma Solucao de Data Lake
 
+```mermaid
+flowchart TD
+    subgraph Ingestion
+        DMS[("AWS DMS")]
+        DataSync[("AWS DataSync")]
+    end
+
+    subgraph Storage
+        S3[("Amazon S3")]
+    end
+
+    subgraph Catalog & ETL
+        Crawlers["AWS Glue crawlers"]
+        Catalog["AWS Glue Data Catalog"]
+        GlueJobs["AWS Glue jobs"]
+    end
+
+    subgraph Query & Analytics
+        Athena["Amazon Athena"]
+        Redshift["Amazon Redshift"]
+    end
+
+    subgraph Visualization
+        QuickSight["Amazon QuickSight"]
+    end
+
+    subgraph Governance
+        LakeFormation["AWS Lake Formation"]
+    end
+
+    DMS --> S3
+    DataSync --> S3
+    S3 --> Crawlers
+    Crawlers --> Catalog
+    Catalog --> GlueJobs
+    GlueJobs --> S3
+    S3 --> Athena
+    S3 --> Redshift
+    Catalog --> Athena
+    Catalog --> Redshift
+    Athena --> QuickSight
+    Redshift --> QuickSight
+
+    LakeFormation -.-> Catalog
+    LakeFormation -.-> S3
+    LakeFormation -.-> GlueJobs
+```
+
 Tudo inicia com reuniões de levantamento de informações detalhadas com os consumidores de dados e partes interessadas relevantes, 
 a equipe de engenharia de dados sugeriu a criação de uma arquitetura de data lake na AWS com os seguintes componentes:
 
