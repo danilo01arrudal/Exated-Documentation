@@ -140,12 +140,18 @@ Vamos segmentar o data lake em três buckets distintos do S3. Além disso, para 
 
 ```mermaid
 flowchart TD
-    Raw["Raw Zone<br>S3 Standard"]
-    Cleaned["Cleaned Zone<br>S3 Standard"]
-    Curated["Curated Zone<br>S3 Intelligent-Tiering"]
+    Raw["Raw Zone<br>"]
+    Cleaned["Cleaned Zone<br>"]
+    Curated["Curated Zone<br>"]
 
-    Curated -->|"Lifecycle policy (after 30d)"| StandardIA["Standard - Infrequent Access"]
-    StandardIA -->|"Lifecycle policy (after 90d)"| Glacier["Glacier Deep Archive"]
+    Raw -.-> Cleaned -.-> Curated
+    Raw --> S3_Standard1["S3 Standard"]
+    Cleaned --> S3_Standard2["S3 Standard"]
+    S3_Standard1 --> S3_StandardAI["Standard Infrequent Access"]
+    S3_Standard2 --> S3_StandardAI["Standard Infrequent Access"]
+    S3_StandardAI --> |"Lifecycle policy (after 90d)"| Glacier["Glacier Deep Archive"]
+    Glacier --> |"Lifecycle policy (after 365d)"| Destruction["❌ DELETE"]
+    Curated --> S3["S3 Intelligent-Tiering"]
 ```
 
 #### Passo 1
