@@ -486,5 +486,39 @@ O DataSync dimensiona e gerencia automaticamente o agendamento, o monitoramento,
 
 ## Criar catalogo de dados
 
+Concluimos com sucesso a ingestão de seus bancos de dados e arquivos existentes na zona de dados brutos de seu data lake na AWS. Além disso, implementamos a replicação contínua para manter seu data lake sincronizado com seu data center local. 
+Agora, desejamos acessar os dados como se fossem tabelas, por exemplo, de forma semelhante ao SQL. Também queremos garantir a consistência da qualidade dos dados e a existência de regras claras de propriedade e acesso.
+
+A solução é catalogar todos os dados recebidos usando um componente do AWS Glue. O AWS Glue consolida recursos de integração de dados em um único serviço. Isso inclui conectar-se a diferentes fontes de dados, descobrir dados, catalogá-los, garantir a qualidade dos dados e transformá-los.
+
+A ferramenta de catalogação é o AWS Glue Data Catalog, que é o repositório central de metadados para todos os ativos de dados no data lake. O catálogo consiste em uma coleção de tabelas organizadas em bancos de dados.
+
+Embora seja possível adicionar metadados ao catálogo manualmente, o AWS Glue oferece recursos chamados crawlers para preencher o Catálogo de Dados. Os crawlers adicionam automaticamente novas tabelas, novas partições a tabelas existentes e novas versões de definições de tabela. Eles podem examinar dados em todos os tipos de repositórios, classificar os dados, extrair informações de esquema e armazenar os metadados automaticamente no Catálogo de Dados do AWS Glue.
+
+Quando os rastreadores examinam seus dados, eles usam classificadores para determinar o esquema dos dados. Os classificadores comparam os dados a um conjunto conhecido de tipos de esquema ou a tipos personalizados que você especificou. Quando há uma correspondência, os dados são extraídos e gravados no Catálogo de Dados do AWS Glue.
+
+Precisamos criar três crawlers separados, um para cada pasta em seu bucket de zona bruta: a pasta de vendas, a pasta de campanhas de marketing e a pasta de cliques no site.
+
+Para cada rastreador, selecionamos os seguintes parâmetros:
+
+  * Para a fonte de dados, eles especificaram a pasta apropriada da zona raw do Amazon S3.
+  * Para o destino, eles selecionaram um banco de dados AWS Glue, que haviam criado previamente, chamado db_raw.
+  * Em seguida, eles selecionaram uma função do AWS Identity and Access Management (IAM) com permissões para acessar seu data lake na AWS.
+  * Por fim, eles configuraram um cronograma diferente para cada rastreador.
+
+Após a criação dos rastreadores, os agendadores os executaram. Eles inferiram automaticamente os esquemas iniciais e as estruturas de partição das tabelas da zona bruta. Em seguida, preencheram os metadados descobertos nas tabelas apropriadas do catálogo de dados, denominadas  **db_raw.sales**, **db_raw.marketing_campaigns** e **db_raw.website_clicks**.
+
+Após a catalogação, os dados brutos da Example Corp estão prontos para serem consultados e transformados de maneira consistente, utilizando uma variedade de serviços de dados da AWS desenvolvidos especificamente para essa finalidade.
+
+### Catálogo de Dados
+
+O AWS Glue Data Catalog é o repositório central de metadados para todos os seus ativos de dados armazenados nos locais do seu data lake.
+
+O Data Catalog integra-se perfeitamente com outras ferramentas de análise da AWS, como as seguintes: 
+
+O Amazon Athena  depende do Catálogo de Dados para armazenar e recuperar metadados sobre as fontes de dados (tabelas, colunas, tipos de dados etc.) que você deseja consultar. 
+O Amazon EMR  pode acessar diretamente os metadados armazenados no Catálogo de Dados, permitindo que ele compreenda a estrutura e a localização dos dados que precisa processar. 
+Você pode usar os metadados no catálogo para consultar e transformar esses dados de maneira consistente em uma ampla variedade de aplicações. Esses metadados são armazenados na forma de tabelas, que contêm informações como localização, esquema e métricas de tempo de execução dos dados.
+
 
 
