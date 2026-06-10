@@ -510,6 +510,8 @@ Após a criação dos rastreadores, os agendadores os executaram. Eles inferiram
 
 Após a catalogação, os dados brutos da Example Corp estão prontos para serem consultados e transformados de maneira consistente, utilizando uma variedade de serviços de dados da AWS desenvolvidos especificamente para essa finalidade.
 
+---
+
 ### Catálogo de Dados
 
 O AWS Glue Data Catalog é o repositório central de metadados para todos os seus ativos de dados armazenados nos locais do seu data lake.
@@ -535,6 +537,8 @@ ___
 | Chaves de Partição | Estas são as colunas usadas para particionar os dados, o que pode melhorar o desempenho das consultas.  O exemplo a seguir mostra dados particionados por dia, referentes a dois dias de ingestão: **Partição 1**: [ano=2024/mês=3/dia=13] => Localização = s3://doc-example-bucket/data/mytable/year=2024/month=3/day=13  **Partição 2**: [ano=2024/mês=3/dia=14/] => Localização = s3://doc-example-bucket/data/mytable/year=2024/month=3/day=14/
 | Parâmetros | São pares de chave-valor que armazenam metadados adicionais sobre a tabela, como a descrição da tabela, o criador e a data de criação. | 
 | Tipo de tabela | Isso indica o tipo de tabela, como EXTERNAL_TABLE, VIRTUAL_VIEW, e assim por diante. | 
+
+---
 
 ### Preenchendo o catálogo
 
@@ -611,4 +615,143 @@ A seguir, apresentamos alguns recursos e considerações para o uso do Catálogo
 ---
 
 ## Transformar dados
+
+Neste ponto, os dados foram descobertos, catalogados e podem ser pesquisados. Embora os cientistas de dados possam usar esses dados brutos para análises mais aprofundadas, ainda é necessário algum trabalho para torná-los utilizáveis ​​por outros públicos, como analistas de dados e de negócios. Agora, os dados precisam ser preparados, limpos e transformados.
+
+Temos cinco objetivos para esta etapa do seu fluxo de trabalho:
+
+  * Converter os dados brutos do formato CSV atual para o formato Apache Parquet, orientado a colunas.
+  * Lidar com valores ausentes ou nulos.
+  * Redija dados sensíveis.
+  * Padronize os nomes das colunas e os tipos de dados.
+  * E, por fim, agregue e combine tabelas para obter mais informações sobre o negócio.
+
+Nesta etapa, são possíveis diversas operações, como remover duplicados, preencher valores ausentes, renomear campos e unir tabelas, entre outras. A maioria dessas operações faz parte das funções de extração, transformação e carregamento (ETL).
+
+Existem diversas abordagens para criar trabalhos de ETL com o AWS Glue.
+
+  * Uma abordagem é escrever código em Python ou Scala usando o editor de scripts do AWS Glue. Isso envolve escrever código para definir a lógica de transformação de dados. Oferece flexibilidade e opções de personalização, sendo ideal para lidar com transformações complexas.
+  * Outra abordagem é usar notebooks do AWS Glue Studio. Ao criar um job, você pode executar seções de código uma de cada vez e obter feedback imediato. Quando estiver satisfeito, você pode promover o notebook como um job de ETL do AWS Glue.
+  * Uma terceira abordagem é o AWS Glue Studio Visual ETL, que fornece uma interface visual para criar fluxos de trabalho ETL sem escrever código.
+
+Optamos por usar o AWS Glue Studio, uma solução visual de ETL.
+
+As principais etapas para a criação de empregos utilizando essa abordagem são:
+
+  * Defina suas fontes de dados.
+  * Aplique transformações a essas fontes.
+  * Defina seus objetivos de dados.
+  * Eles configuraram e executaram duas tarefas para atingir seus objetivos.
+
+Na primeira, eles combinaram várias transformações em uma única tarefa.
+
+O processo preencheu valores ausentes e nulos e, em seguida, ocultou dados sensíveis. Depois, padronizou os nomes das colunas e converteu o formato dos dados brutos de CSV para Apache Parquet. Por fim, gravou os resultados nas tabelas limpas da zona do Amazon S3.
+
+Além disso, a tarefa criou bancos de dados correspondentes no AWS Glue Data Catalog.
+
+Com a segunda tarefa, eles queriam calcular o impacto de suas campanhas de marketing nas vendas e nos cliques no site, e gravar os resultados em seu bucket de zona selecionada no Amazon S3.
+
+Para calcular o impacto das campanhas de marketing nas vendas, eles reuniram e agregaram seus dados de marketing e vendas por categorias de produtos.
+
+Para analisar o impacto da campanha de marketing no tráfego do site, eles reuniram e agregaram os dados de suas campanhas de marketing e cliques no site.
+
+Cada uma dessas tarefas foi configurada com agendamentos repetitivos para mover dados brutos para limpos e, em seguida, de limpos para curados. Além disso, para evitar o reprocessamento de todo o conjunto de dados sempre que novos dados eram adicionados ou quando uma tarefa era interrompida, foi implementado o recurso de favoritos do AWS Glue Jobs.
+
+Neste ponto, os dados da Example Corp foram limpos e transformados, estando prontos para serem utilizados por analistas de dados, cientistas de dados e outras partes interessadas.
+
+---
+
+### Processamento dos dados 
+
+Os dados brutos recebidos geralmente estarão em formatos diferentes e com qualidade variável. Eles precisam ser processados ​​para se tornarem úteis nas etapas posteriores de análise do fluxo de trabalho.
+
+Os termos preparação, limpeza e transformação são frequentemente usados ​​para descrever ações na etapa de processamento. Essas ações são realizadas usando funções de extração, transformação e carregamento (ETL). 
+
+  * Trecho: Coletando dados de diversas fontes de dados
+  * Transformar: Converter sistematicamente dados brutos em formatos utilizáveis.
+  * Carregamento:  Movimentação dos dados transformados para o armazenamento do data lake ou outro local.
+  
+A AWS oferece diversas maneiras de transformar, limpar e preparar seus ativos de dados, além de criar fluxos de trabalho de transformação.
+
+| Caso de uso | Serviços da AWS	| Considerações | 
+|:---|:---|:---|
+| Processamento de Big Data | Amazon EMR [ **Amazon EMR em clusters EC2**, **Amazon EMR sem servidor**, **Amazon EMR em clusters EKS** ] | Confortável em escrever código Apache Spark | 
+| **Análise de log improvisada** **Geração de relatórios** **Inteligência de negócios** | Amazon Athena | [ **Sem servidor (reduz custos)** **Bom para transformações básicas** ] | 
+| Agendamento e orquestração | [ **Amazon EventBridge com AWS Step Functions** **Fluxos de trabalho gerenciados da Amazon para Apache Airflow (Amazon MWAA)** ] | [ Criar pipelines de transformação orientados a eventos,  Orquestrar fluxos de trabalho de transformação de pipelines]
+
+*Além dos serviços listados na tabela anterior, um dos principais serviços para criar e executar fluxos de trabalho ETL é o AWS Glue. Explore o próximo tópico para saber mais sobre o AWS Glue.*
+
+--- 
+
+### AWS Glue
+
+O AWS Glue é um serviço de integração de dados sem servidor que facilita a integração de dados de múltiplas fontes. Suas funcionalidades incluem a conexão com diferentes fontes de dados, descoberta de dados, catalogação de dados e transformação de dados.
+
+Como o AWS Glue é sem servidor, você não precisa provisionar ou gerenciar manualmente nenhuma infraestrutura. O AWS Glue cuida do provisionamento, configuração e escalonamento dos recursos necessários para executar seus trabalhos de ETL. Você paga apenas pelos recursos consumidos enquanto seus trabalhos estão em execução.
+
+O AWS Glue é um serviço multifacetado que oferece uma ampla gama de recursos e funções para processamento de dados.
+
+Você pode desenvolver seus trabalhos de ETL no AWS Glue Studio (ETL visual, notebooks, editor de scripts), com notebooks do Amazon SageMaker Studio ou com notebooks e IDEs locais. Em todos esses casos, você pode executar seu código no mecanismo Spark distribuído e sem servidor subjacente ao AWS Glue.
+
+A seguir, apresentamos uma visão geral de muitos dos componentes do AWS Glue. Esta não é uma lista exaustiva, nem detalha todas as opções disponíveis. Para obter informações mais detalhadas, consulte os links no final desta lição.
+
+```mermaid
+flowchart TD
+    Glue["AWS Glue"]
+
+    subgraph Connectors ["🔌 Connectors"]
+        direction LR
+        C0["Connectors"]
+        C1["Data warehouses"]
+        C2["Data lakes"]
+        C3["Databases"]
+        C4["Streams"]
+    end
+
+    subgraph Discovery ["📖 Discovery and cataloging"]
+        D1["AWS Glue Data Catalog"]
+        D2["Crawlers"]
+        D3["Classifiers"]
+    end
+
+    subgraph Prepare ["🛠️ Preparing, cleansing, and transforming"]
+        direction TB
+        P1["AWS Glue ETL Jobs"]
+        P2["AWS Glue ETL library"]
+        P3["AWS Glue interactive sessions"]
+        P4["AWS Glue Studio"]
+        P5["AWS Glue Studio notebook"]
+        P6["AWS Glue Studio script editor"]
+        P7["AWS Glue ETL job monitoring"]
+        P8["AWS Glue Studio visual ETL"]
+    end
+
+    subgraph Management ["⚙️ Data management"]
+        M1["AWS Glue Data Quality"]
+        M2["AWS Glue sensitive data detection"]
+    end
+
+    %% AWS Glue (domínio superior) conecta-se a cada subdomínio
+    Glue --> Connectors
+    Glue --> Discovery
+    Glue --> Prepare
+    Glue --> Management
+
+    %% Conectors 
+    C0 -.-> C1 
+    C0 -.-> C2
+    C0 -.-> C3
+    C0 -.-> C4
+
+    %% Discovery
+    D1 -.-> D2
+    D1 -.-> D3
+
+    %% Preparing, cleansing, and transforming
+    P1 -.-> P2
+    P4 -.-> P8
+    P4 -.-> P5
+    P4 -.-> P6
+    P4 -.-> P7
+```
 
