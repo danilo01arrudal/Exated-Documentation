@@ -755,3 +755,324 @@ flowchart TD
     P4 -.-> P7
 ```
 
+---
+
+### Conectores
+
+Um conector é um trecho de código que facilita a comunicação entre o AWS Glue e seu armazenamento de dados (origem ou destino). 
+
+Você pode usar conectores integrados, conectores oferecidos no AWS Marketplace ou criar conectores personalizados.
+
+Para saber mais, acesse Usando conectores e conexões com o AWS Glue Studio.(abre em uma nova aba).
+
+**Exemplos de conectores incluem os seguintes:**
+
+  * Data warehouses: Amazon Redshift
+  * Data lakes: Amazon S3
+  * Bancos de dados relacionais: JDBC, Amazon Aurora, MariaDB, MySQL, Microsoft SQL Server, Oracle Database, PostgreSQL
+  * Bancos de dados não relacionais: Amazon DocumentDB, MongoDB, Amazon OpenSearch
+  * Streams: Apache Kafka, Amazon Kinesis
+  * Outros provedores de nuvem
+
+---
+
+### Descoberta e catalogação
+
+Os dados provavelmente serão armazenados em diversos formatos, com diferentes níveis de qualidade e acessibilidade. Após serem inseridos no data lake, precisam ser catalogados para que possam ser pesquisados. 
+
+#### Catálogo de dados de cola
+
+O Catálogo de Dados do AWS Glue é o repositório central de metadados para todos os ativos de dados no data lake. O catálogo consiste em uma coleção de tabelas organizadas em bancos de dados.
+
+O objetivo do Catálogo de Dados é permitir o acesso aos dados do data lake como se fossem tabelas (por exemplo, de forma semelhante ao SQL).
+
+  * Os Crawlers são recursos do AWS Glue que examinam os dados e preenchem automaticamente o catálogo de dados com metadados sobre os ativos de dados.
+  * Os rastreadores usam classificadores para detectar o esquema dos dados. Os classificadores comparam os dados a um conjunto conhecido de tipos de esquema ou a tipos personalizados que você especificou. Quando há uma correspondência, os dados são extraídos e gravados no Catálogo de Dados do AWS Glue.
+
+### Preparar, limpar e transformar
+
+A maior parte da funcionalidade do AWS Glue está nesta etapa. É aqui que você configura e executa seus trabalhos de ETL. 
+
+#### Tarefas ETL de cola
+
+Os trabalhos de ETL do AWS Glue são adequados para transformações de dados complexas.
+
+São flexíveis e personalizáveis. Por exemplo, você pode:
+
+Escreva um código que defina a lógica de transformação usando linguagens de script como Python ou Scala.
+Encadeie programaticamente diferentes componentes do AWS Glue (por exemplo, crawlers, jobs, triggers) em fluxos de trabalho. 
+
+#### Biblioteca AWS Glue ETL
+
+Você pode usar o código da biblioteca AWS Glue ETL, que estende o Apache Spark com tipos de dados e operações adicionais para otimizar os fluxos de trabalho de ETL.
+
+A biblioteca utiliza o AWS Glue DynamicFrames. Isso é útil ao lidar com dados complexos, onde o mesmo campo pode ser inconsistente em todo o conjunto de dados.
+
+Para saber mais, acesse a  classe DynamicFrame.(abre em uma nova aba).
+
+#### Sessões interativas do AWS Glue
+
+As sessões interativas do AWS Glue fornecem acesso interativo sob demanda a um ambiente de execução Spark remoto.
+
+As sessões interativas do AWS Glue podem ser usadas com o seguinte:
+
+  * Notebooks Jupyter
+  * Cadernos do SageMaker Studio
+  * IDEs como Microsoft Visual Studio Code, IntelliJ, PyCharm
+
+#### AWS Glue Studio
+
+O AWS Glue Studio é uma interface gráfica que facilita a criação, execução e monitoramento de trabalhos de integração de dados no AWS Glue. A seguir, estão os componentes do AWS Glue Studio.
+
+#### ETL visual do AWS Glue Studio
+
+Com esta interface gráfica de arrastar e soltar, você pode:
+
+  * Criar pipelines ETL
+  * Analise seus dados para ver como eles são transformados nas diferentes etapas. 
+  * Obtenha inferência de esquemas em tempo real sem precisar catalogar seus dados.
+
+#### Notebook do AWS Glue Studio
+
+Fornece uma interface de notebook baseada em Jupyter Notebooks, que você pode usar para fazer o seguinte:
+
+  * Explore e visualize dados.
+  * Escreva o código e visualize o resultado sem precisar executar uma tarefa completa.
+  * Melhore a legibilidade e a organização do código com células Markdown.
+  * Execute código em um ambiente distribuído sem servidor.
+  * Execute o código do notebook como um trabalho ETL do AWS Glue.
+
+#### Editor de scripts do AWS Glue Studio
+
+Você pode usar o editor de scripts do AWS Glue Studio para editar um script de trabalho ou carregar seu próprio script.
+
+#### Monitoramento de tarefas ETL do AWS Glue
+
+O monitoramento de tarefas ETL do AWS Glue oferece os seguintes recursos:
+
+  * Monitore milhares de tarefas a partir de uma única tela.
+  * Veja as recomendações e os registros de depuração.
+  * Monitore o uso de recursos e identifique tarefas dispendiosas.
+  * Filtrar por detalhes da vaga e períodos de tempo.
+
+---
+
+### Gestão de dados
+
+Utilize serviços e funcionalidades especializadas para gerenciar dados. 
+
+#### Qualidade dos dados do AWS Glue
+
+Meça a qualidade dos dados durante todo o processo de ETL e tome as medidas necessárias, tais como:
+
+  * Avalie a qualidade no Catálogo de Dados do AWS Glue (qualidade dos dados em repouso).
+  * Verificar a qualidade dos dados em trabalhos ETL do AWS Glue para identificar e filtrar dados incorretos antes que sejam carregados no data lake (qualidade dos dados em trânsito).
+
+As regras de qualidade de dados são definidas com a Linguagem de Definição de Qualidade de Dados (DQDL). Você pode obter recomendações de regras ou criar suas próprias regras personalizadas.
+
+Para saber mais, consulte a referência da Linguagem de Definição de Qualidade de Dados.(abre em uma nova aba)
+
+#### Detecção de dados sensíveis do AWS Glue
+
+Use a transformação Detect PII para detectar, mascarar ou remover informações confidenciais dos seus dados durante o processamento.
+
+O AWS Glue agora consegue detectar 250 tipos de entidades confidenciais de mais de 50 países. Além disso, ele pode detectar identidades por meio de um padrão de expressão regular fornecido por você.
+
+Para saber mais, consulte Detectar e processar dados sensíveis.(abre em uma nova aba).
+
+---
+
+### Mecanismos de integração de dados
+
+Escolha o mecanismo apropriado para cada carga de trabalho, com base nas características da sua carga de trabalho e nas preferências dos seus desenvolvedores e analistas. 
+
+#### AWS Glue para Shell Python
+
+Execute código em um mecanismo Python sem servidor de nó único. Ideal para conjuntos de dados pequenos ou cargas de trabalho com baixa latência. 
+
+#### AWS Glue para Apache Spark
+
+Acelere a ingestão, o processamento e a integração de dados de cargas de trabalho em lote e de fluxo contínuo usando um ambiente de computação distribuída sem servidor. 
+
+---
+
+### Fornecer dados para consumo
+
+Neste ponto ja catalogamos, limpamos e transformamos os seus dados. Agora estamos prontos para serem disponibilizar esses dados para usuários como analistas de dados, cientistas de dados e outras partes interessadas.
+
+Um dos aspectos mais poderosos do sistema de análise de dados da AWS é a capacidade de analisar dados sem precisar movê-los entre diferentes locais de armazenamento.
+
+Com o Amazon Athena, você pode consultar dados diretamente no Amazon S3. Isso significa que você não precisa copiar os dados para outro local. O Athena usa sintaxe SQL padrão e permite consultar diversos formatos de dados, incluindo dados estruturados, semiestruturados e não estruturados. O Athena é serverless (sem servidor). Ele provisiona recursos automaticamente e escala para cima ou para baixo de acordo com a demanda.
+
+O Athena é ideal para consultas rápidas, exploração de dados e análise ágil de dados no Amazon S3. É particularmente útil para organizações com necessidades de consulta variáveis ​​ou pouco frequentes, pois você paga apenas pelas consultas executadas.
+
+O uso de gráficos para visualizar dados pode ajudar a obter insights que seriam difíceis de entender usando tabelas numéricas ou texto simples.
+
+O Amazon QuickSight é um serviço de Business Intelligence (BI) baseado na nuvem que permite criar dashboards interativos, visualizações e relatórios a partir de diversas fontes de dados.
+
+Utilizando dados do Amazon Redshift Spectrum, Athena e outras fontes, você pode criar gráficos, tabelas e mapas para visualizar os dados e, em seguida, combinar várias visualizações em um dashboard.
+
+É possível aplicar filtros e adicionar parâmetros para realizar análises interativas e instantâneas. Tudo isso pode ser compartilhado com as partes interessadas para aumentar a colaboração e obter novos insights a partir dos dados.
+
+O QuickSight também pode ser integrado a aplicativos, portais voltados para o cliente e sites da empresa.
+
+--- 
+
+#### Amazon Athena
+
+Athena é um serviço de consulta interativa fornecido pela AWS que você pode usar para analisar dados armazenados no Amazon S3 usando consultas SQL padrão.
+
+--- 
+
+### Características importantes de Atena
+
+O Athena pode usar comandos SQL padrão para realizar consultas de dados diretamente no Amazon S3, sem a necessidade de pipelines de dados complexos ou processos ETL.
+
+Explore as seções a seguir para saber mais sobre os principais recursos e funcionalidades.
+
+**Preços por consulta.** : Você paga apenas pelas consultas executadas, com base na quantidade de dados analisados. Não há custos iniciais nem cobranças por clusters ociosos.
+
+**Integração com os serviços de análise da AWS** : O Athena se integra perfeitamente a outros serviços de análise da AWS, como o AWS Glue (para catalogação de dados) e o QuickSight (para visualização de dados).
+
+**Particionamento e compressão de dados** : O Athena oferece suporte ao particionamento e à compressão de dados, o que pode reduzir significativamente os custos de consulta e melhorar o desempenho.
+
+**Consultas federadas** : O Athena suporta consultas federadas, permitindo que você consulte dados em diversas fontes, incluindo bancos de dados relacionais e outros armazenamentos de dados.
+
+---
+
+### Casos de uso comuns para Athena
+
+O Athena é amplamente utilizado em data lakes da AWS. A seguir, alguns casos de uso comuns.
+
+**Análise de logs** : O Athena é comumente usado para analisar dados de log armazenados no Amazon S3, como logs de servidores web, logs de aplicativos ou logs de dispositivos da Internet das Coisas (IoT).
+
+**Tarefas ETL** : O Athena pode ser usado como parte de um pipeline ETL para extrair dados do Amazon S3. O Athena pode transformar os dados usando consultas SQL e carregá-los em outros armazenamentos de dados ou ferramentas de análise.
+
+**consulta de data lake** : O Athena permite consultar e analisar dados armazenados em um data lake (Amazon S3) sem a necessidade de pipelines de dados complexos ou processos ETL.
+
+**Exploração de dados improvisada** : A Athena possui recursos de consulta instantânea que analistas e cientistas de dados podem usar para explorar e analisar com eficiência os dados armazenados no Amazon S3.
+
+**BI e relatórios** : O Athena pode ser usado em conjunto com ferramentas de visualização, como o QuickSight, para gerar relatórios e painéis com base em dados armazenados no Amazon S3.
+
+---
+
+### Utilizando o Athena para analisar dados do Amazon S3
+
+A seguir, uma descrição geral dos passos para configurar o Athena para consultar dados diretamente no Amazon S3:
+
+
+1. Crie um bucket S3
+
+       Athena trabalha com dados no Amazon S3.
+
+
+2. Crie um banco de dados e uma tabela no Athena.
+
+        No console do Athena, use a sintaxe SQL para criar um novo banco de dados para armazenar as definições das suas tabelas.
+        Em seguida, crie uma nova tabela que aponte para os seus dados armazenados no Amazon S3. O Athena usa o catálogo de dados do AWS Glue para armazenar os metadados do banco de dados e das tabelas. 
+
+
+4. Executar consultas SQL
+
+        Execute consultas SQL em seus dados diretamente no console do Athena.
+        O Athena oferece suporte a um subconjunto da sintaxe SQL, incluindo SELECT, JOIN, GROUP BY e muito mais.
+
+
+6. Analisar os resultados da consulta
+
+        Analise e explore os dados no console ou baixe os resultados como um arquivo .csv para análises posteriores.
+
+
+7. Otimizar o desempenho
+
+        Para conjuntos de dados grandes ou consultas complexas, otimize o desempenho particionando seus dados,
+        compactando-os ou convertendo-os para um formato colunar como o Apache Parquet.
+
+
+9. Monitorar e controlar os custos
+
+        Os custos de utilização do Athena baseiam-se na quantidade de dados analisados ​​pelas suas consultas.
+        Monitore a quantidade de dados analisados ​​no console do Athena e configure alertas de faturamento para controlar os custos.
+
+
+11. Agendar consultas recorrentes (opcional)
+
+        Agende consultas repetidas usando o Amazon EventBridge em combinação com funções AWS Lambda ou AWS Step Functions.
+
+---
+
+#### QuickSight
+
+O QuickSight é um serviço de BI baseado na nuvem usado para criar painéis interativos, visualizações e relatórios a partir de diversas fontes de dados. 
+
+### Principais características do QuickSight
+
+Para saber mais sobre os principais recursos e funcionalidades, explore as seguintes categorias. 
+
+**Integração de dados** :  O QuickSight suporta diversas fontes de dados, incluindo as seguintes:
+
+ * Fontes de dados da AWS, como as seguintes:
+    * Atena
+    * Amazon Redshift
+    * Amazon Relational Database Service (Amazon RDS)
+ * Fontes de dados baseadas na nuvem, como as seguintes:
+    * Google BigQuery
+    * MariaDB 10.0 ou posterior
+    * Microsoft SQL Server 2012 ou posterior
+ * Fontes de dados locais, como as seguintes:
+    * MySQL 5.1 ou posterior
+    * PostgreSQL 9.3.1 ou posterior
+
+*Para obter uma lista completa das fontes de dados suportadas, consulte Fontes de Dados Suportadas.(abre em uma nova aba).*
+
+**SPICE** : O mecanismo de cálculo paralelo e em memória super-rápido (SPICE) do QuickSight acelera o desempenho das consultas armazenando dados em cache na memória, proporcionando tempos de resposta rápidos para visualizações e análises.
+
+Ao configurar as fontes de dados, você pode escolher entre os modos de consulta direta ou consulta SPICE, conforme descrito a seguir:
+ * Consulta direta: Executar a instrução SELECT diretamente no banco de dados.
+ * SPICE: Para executar a instrução SELECT em dados que foram previamente armazenados na memória.
+
+**Preparação de dados** : O QuickSight oferece recursos de preparação de dados, como formatação, transformações e cálculos, que você pode usar para limpar e enriquecer seus dados antes da visualização.
+
+**Análises incorporadas** : O QuickSight pode ser incorporado em aplicativos ou sites, permitindo que as organizações forneçam painéis interativos e análises para seus clientes ou usuários finais.
+
+**Segurança e controle de acesso** : O QuickSight oferece suporte à segurança em nível de linha e de coluna, permitindo que os administradores controlem o acesso aos dados com base em funções e permissões de usuário.
+
+---
+
+### Visualizando dados com o QuickSight 
+
+Os passos a seguir fornecem uma visão geral do processo de criação de visualizações e dashboards no QuickSight. As opções e funcionalidades específicas podem variar dependendo do seu conjunto de dados, requisitos e da versão do QuickSight que você está utilizando. 
+
+
+1. Cadastre-se no QuickSight
+        
+        Inscreva-se no serviço QuickSight através do Console de Gerenciamento da AWS. 
+
+
+3. Conecte-se às suas fontes de dados.
+        
+        Conecte-se diretamente às suas fontes de dados ou use ferramentas de preparação de dados da AWS, como o AWS Glue, para preparar e carregar seus dados no QuickSight.
+
+
+4. Criar um conjunto de dados 
+        
+        Crie um conjunto de dados no QuickSight. Isso envolve selecionar as tabelas, visualizações ou arquivos que você deseja incluir no seu conjunto de dados e definir quaisquer transformações ou cálculos de dados necessários. 
+
+
+5. Crie visualizações e personalize-as.
+        
+        Crie visualizações usando o QuickSight, incluindo gráficos de barras, gráficos de linhas, gráficos de pizza, gráficos de dispersão e muito mais.
+        Personalize cores, fontes, rótulos e outras opções de formatação. Aplique filtros, adicione cálculos e crie hierarquias para analisar seus dados com mais detalhes.
+
+6. Crie painéis de controle e personalize-os.
+        
+        Combine várias visualizações e conjuntos de dados em um painel de controle único. Organize e redimensione as visualizações, adicione caixas de texto e aplique formatação condicional para destacar pontos de dados importantes.
+
+7. Compartilhar e colaborar 
+        
+        Compartilhe suas visualizações e painéis com outras pessoas em sua organização ou com partes interessadas externas. Controle as permissões de acesso e habilite recursos colaborativos, como comentários e anotações.
+
+8. Incorporar e integrar com outros serviços da AWS 
+        
+        Os painéis e visualizações do QuickSight podem ser incorporados em aplicativos ou portais da Web usando o SDK de incorporação do QuickSight ou as APIs do QuickSight.
+        Integre o QuickSight com outros serviços da AWS, como Athena, Amazon Redshift e Lambda, para criar pipelines de dados mais avançados e automatizar diversos processos. 
