@@ -222,16 +222,4 @@ Além disso, para a função `labFunction-Data-Processor` que é acionada direta
 
 ---
 
-## Sugestão de ordem para enriquecer seu documento
-
-1. **Pré‑requisitos** (conta AWS, CLI, permissões)
-2. **Criação dos buckets S3** (comandos ou console)
-3. **Criação das roles IAM** (políticas customizadas)
-4. **Criação das funções Lambda** com os códigos acima
-5. **Configuração de variáveis de ambiente** nas funções
-6. **Criação do trigger S3** para a função processadora
-7. **Criação da regra no EventBridge** para a função de promoção
-8. **Teste manual** (invocar a função geradora via console)
-9. **Verificação dos resultados** nos buckets S3
-
 
