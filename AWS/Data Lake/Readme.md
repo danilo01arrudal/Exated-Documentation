@@ -288,3 +288,139 @@ O **S3 Glacier Flexible Retrieval** é o armazenamento de baixo custo para dados
 
 O **S3 Glacier Deep Archive** é o armazenamento de menor custo para dados arquivados a longo prazo, acessados ​​raramente, com recuperação em horas.
 
+---
+
+### Políticas de ciclo de vida S3
+
+Você pode configurar regras de ciclo de vida do S3 para gerenciar os custos de armazenamento. Elas podem migrar automaticamente ativos de dados para um nível de armazenamento de custo inferior, como o S3 Standard-IA ou a classe de armazenamento Amazon S3 Glacier Flexible Retrieval. Também é possível configurar regras para expirar ativos quando eles não forem mais necessários.
+
+#### Considerações sobre a política de ciclo de vida
+
+Para ajudar você a decidir quando transferir os dados corretos para a classe de armazenamento adequada, use a Análise de Classe de Armazenamento do Amazon Analytics S3 . Após usar a análise de classe de armazenamento para monitorar os padrões de acesso, você pode usar as informações para configurar as políticas do ciclo de vida do S3 e realizar a transferência de dados para a classe de armazenamento apropriada.   
+
+  * Se o seu bucket for versionado, certifique-se de que exista uma regra de ação para que os objetos atuais e não atuais possam ser transferidos ou expirados.
+  * Se você estiver enviando objetos usando o método de upload multipart, pode haver situações em que os uploads falhem ou não sejam concluídos. Os uploads incompletos permanecem em seus buckets e são cobrados. Você pode configurar regras de ciclo de vida para limpar automaticamente os uploads multipart incompletos após um determinado período.
+
+Para ter uma política de ciclo de vida única para todos os conjuntos de dados de origem (em vez de uma para cada prefixo de origem), você pode manter todos os dados de origem sob um único prefixo.
+Os custos de transição do ciclo de vida do S3 são diretamente proporcionais ao número de objetos migrados. Reduza o número de objetos agregando-os ou compactando-os antes de movê-los para os níveis de arquivamento.
+
+---
+
+### Técnicas adicionais de otimização do Amazon S3
+
+#### Utilizando a marcação de objetos S3
+
+A marcação de objetos no S3 é usada para controlar o acesso de forma granular, analisar o uso, gerenciar políticas de ciclo de vida e replicar objetos. 
+
+#### Avaliar sua atividade de armazenamento e estimar seus custos.
+
+À medida que seu data lake cresce, pode se tornar cada vez mais complicado avaliar o uso dos dados em toda a sua organização, avaliar seu nível de segurança e otimizar custos. 
+
+O Amazon S3 Storage Lens oferece visibilidade do seu armazenamento de objetos em toda a sua organização, com métricas pontuais e insights acionáveis. Ele ajuda você a visualizar tendências, identificar anomalias e receber recomendações para otimização de custos de armazenamento. Você pode gerar insights nos níveis de organização, conta, região da AWS, bucket e prefixo. Para obter mais informações, consulte S3 Storage Lens.(abre em uma nova aba).
+
+A seguir, algumas das informações que você pode acessar no painel do S3 Storage Lens.
+
+  * Tamanho do balde, tamanho do objeto e contagem de objetos
+  * Distribuição de dados em diferentes classes de armazenamento
+  * Dados não criptografados
+  * Múltiplas versões de objetos
+  * Envios multipartes incompletos
+  * Baldes frios (que não foram acessados ​​por muito tempo)
+
+A Calculadora de Preços da AWS é uma ferramenta de planejamento online que você pode usar para criar estimativas de custos para o uso dos serviços da AWS. Para obter mais informações, consulte a Calculadora de Preços da AWS.(abre em uma nova aba).
+
+Você pode usar a Calculadora de Preços para os seguintes casos de uso:
+
+  * Modele suas soluções antes de construí-las.
+  * Explore os preços dos serviços da AWS.
+  * Revise os cálculos das suas estimativas.
+  * Planeje seus gastos com a AWS.
+  * Identifique oportunidades para reduzir custos.
+
+#### Considerando uma estratégia de conta única ou de múltiplas contas
+
+Os seguintes fatores devem ser considerados ao decidir se deve usar uma única conta da AWS ou uma estratégia com várias contas para sua iniciativa de data lake. 
+
+| Fator | Estratégia de conta |
+|:---|:---|
+| Você possui um departamento central de TI com equipes de integração de dados e segurança. |  Conta única |
+| Você é uma grande organização com várias linhas de negócios (LOBs) que operam de forma independente e possuem departamentos de TI separados. | Conta múltipla |
+| Você está começando com uma prova de conceito (POC) ou um produto mínimo viável (MVP) e deseja uma configuração simples. | Conta única |
+
+*Se você ainda não se decidiu, pode começar com uma única conta da AWS e depois migrar para uma estratégia com várias contas.*
+
+---
+
+## Ingerir dados
+
+Agora que configuramos os buckets do Amazon S3 (os buckets de dados brutos, limpos e curados), desejamos ingerir os dados no data lake. Então começando com três fontes de dados que desejam ingerir:
+
+  * Um banco de dados MySQL local
+  * Um banco de dados Amazon Aurora pré-existente
+  * Dados localizados em um dispositivo de armazenamento conectado à rede (NAS) local.
+
+Para importar os dois bancos de dados, será utilizado o AWS Database Migration Service (AWS DMS).
+
+Primeiro, criamos uma instância de replicação do AWS DMS. Essa instância funciona como o recurso computacional que será usado para executar as tarefas de replicação, configuradas nas etapas subsequentes.
+
+Em seguida, especificamos os endpoints de origem e destino. O endpoint de origem no AWS DMS refere-se ao armazenamento de dados do qual você deseja migrar os dados. O endpoint de destino refere-se ao armazenamento de dados para o qual você deseja migrar os dados.
+
+Criamos dois pontos de extremidade de origem para extrair dados de seus dois bancos de dados de origem:
+
+  * Uma tabela de campanhas de marketing de um banco de dados MySQL local.
+  * Uma tabela de vendas de um banco de dados Amazon Aurora.
+
+Em seguida, criamos dois endpoints de destino para carregar todos os dados no bucket da zona de dados brutos do data lake do Amazon S3: um endpoint para os dados das campanhas de marketing e outro para os dados de vendas.
+
+Em seguida, criamos tarefas de migração de banco de dados para cada uma das fontes configuradas e especificaram os destinos correspondentes.
+
+A primeira tarefa foi uma migração única dos dados existentes, também conhecida como migração de carga completa. 
+Após a conclusão desse processo, eles empregaram a replicação contínua, também conhecida como Captura de Dados de Alteração (CDC, na sigla em inglês), para manter os bancos de dados de origem e os bancos de dados de destino sincronizados.
+Para ingerir o conteúdo baseado em arquivos de seu NAS local, a Example Corp utilizou o AWS DataSync. O AWS DataSync simplifica e acelera as migrações de dados de e para armazenamento local, locais de borda e serviços de armazenamento da AWS.
+
+Implementamos um agente DataSync localmente e o registraram no serviço DataSync.
+
+Em seguida, eles configuramos uma tarefa de sincronização de dados com os seguintes parâmetros:
+
+O NAS local deles é a origem dos dados, especificamente a pasta que contém os dados de cliques no site.
+O bucket bruto do Amazon S3 como local de destino, usando o prefixo website_clicks.
+Carregamento incremental de dados em um cronograma de horas
+Como resultado, os agentes do DataSync copiarão arquivos do sistema NAS para o data lake do Amazon S3 de forma segura.
+
+A Example Corp queria garantir que seus dados estivessem seguros durante a transferência de seu data center local para a Nuvem AWS.
+
+Para isso, optaram por implementar uma VPN Site-to-Site da AWS.
+
+A VPN Site-to-Site da AWS cria um túnel seguro e criptografado pela internet pública, entre a rede local e a Nuvem AWS. Ela requer a configuração de um Gateway VPN da AWS no lado da AWS e um gateway do cliente no local da rede local.
+
+Essa solução proporcionou uma conexão segura, criptografada e de alta largura de banda entre os locais.
+
+---
+
+### AWS DMS
+
+O AWS DMS pode ingerir dados em seu data lake da AWS a partir de diversos armazenamentos de dados, como bancos de dados relacionais, bancos de dados NoSQL e data warehouses. 
+O AWS DMS pode migrar de um banco de dados para outro e de um banco de dados para outros armazenamentos, como o Amazon S3.
+
+Ao transferir tarefas analíticas e de transformação para o seu ambiente de data lake, você pode reduzir a carga computacional e a demanda sobre seus bancos de dados de origem e aplicativos de missão crítica.
+
+```mermaid
+flowchart LR
+    subgraph Domínio_Fonte ["Domínio de Origem"]
+        A[("1. Source database")]
+    end
+
+    subgraph Domínio_DMS ["AWS DMS"]
+        B["2. AWS DMS"]
+        C["3. Replication instance"]
+        D["4. Replication task"]
+    end
+
+    subgraph Domínio_Destino ["Domínio de Destino"]
+        E["5. Target endpoint"]
+        F[("6. Amazon S3")]
+    end
+
+    A --> B --> C --> D --> E --> F
+```
+
