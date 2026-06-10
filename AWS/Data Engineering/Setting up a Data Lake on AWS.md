@@ -4,6 +4,29 @@ A loja virtual da Example Corp. apresenta um alto índice de abandono de carrinh
 
 Neste laboratório, você explorará os componentes de um data lake, organizará seus dados em camadas (ou zonas) e usará o Amazon S3 como camada de armazenamento do seu data lake.
 
+### Recursos AWS Descritos e Utilizados
+
+O laboratório utiliza uma arquitetura serverless e orientada a eventos, composta pelos seguintes serviços principais:
+
+#### 📦 Amazon Simple Storage Service (S3)
+
+O Amazon S3 é um serviço de armazenamento de objetos altamente escalável, disponível e seguro, usado como a camada de armazenamento principal do data lake. No laboratório, ele é organizado em duas zonas (camadas):
+
+Zona de Dados Brutos (Raw Zone): Bucket S3 (raw-bucket) que armazena os dados ingeridos em seu formato original e imutável, ou seja, a cópia fiel dos dados de origem. Pode conter dados estruturados, semiestruturados ou não estruturados, como os arquivos CSV de exemplo. Este bucket serve como a fonte de dados para a função de processamento.
+Zona de Consumo (Consume Zone): Bucket S3 (consume-bucket) que armazena os dados após serem transformados e processados, prontos para serem consumidos por aplicações analíticas. É o destino final dos pipelines de ETL (Extract, Transform, Load) criados.
+
+#### ⚡ AWS Lambda
+
+O AWS Lambda é um serviço de computação serverless que permite executar código sem a necessidade de provisionar ou gerenciar servidores. Ele é ideal para arquiteturas orientadas a eventos, escalando automaticamente sob demanda. No laboratório, o Lambda executa três funções principais, cada uma com um propósito no pipeline de dados:
+
+labFunction-Data-Generator: Atua como o aplicativo de backend de e-commerce. É responsável por gerar dados sintéticos de abandono de carrinho de compras (usando a biblioteca Python Faker) e ingeri-los diretamente no bucket S3 da zona raw.
+labFunction-Data-Processor: Executa a lógica de processamento e transformação dos dados. É acionada automaticamente quando um novo arquivo chega no bucket raw, utilizando a biblioteca pandas para agregar os dados de abandono de carrinho (p. ex., por ID do produto) e salvar o resultado no bucket S3 da zona de consumo.
+labFunction-Promotion-App: Consome os dados já processados. É acionada pelo Amazon EventBridge sempre que novos dados são salvos na zona de consumo. Ela aplica uma agregação adicional, desta vez por ID do cliente, para identificar os principais produtos abandonados por cada cliente, auxiliando na criação de campanhas de desconto.
+
+#### 🔔 Amazon EventBridge
+
+O Amazon EventBridge é um barramento de eventos serverless que permite conectar aplicações usando eventos de diversas fontes. Ele atua como um roteador inteligente de eventos, recebendo notificações e encaminhando-as para os destinos corretos com base em regras definidas. No laboratório, ele é utilizado para criar uma regra que filtra apenas os eventos de criação de objetos no bucket S3 da zona raw e então dispara a função labFunction-Promotion-App para iniciar o processamento da camada de consumo.
+
 ### Objetivos
 Ao final deste laboratório, você deverá ser capaz de fazer o seguinte:
 
