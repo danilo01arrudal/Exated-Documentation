@@ -426,3 +426,65 @@ flowchart LR
     A --> B --> C --> D --> E --> F
 ```
 
+---
+
+### Tipos de tarefas de replicação
+
+Com o AWS DMS, você pode criar uma instância de replicação, que executa tarefas de replicação. Uma tarefa de replicação pode consistir em três fases principais:
+
+  * Migrar dados existentes (Carga completa)
+  * Aplicação de alterações em cache
+  * Replicar apenas as alterações de dados (captura de dados de alteração)
+
+#### Carga completa
+
+A migração completa consiste em uma única execução dos dados existentes. Quaisquer alterações feitas no banco de dados durante essa migração inicial são armazenadas em cache. 
+
+#### Aplicação de alterações em cache 
+
+A segunda fase consiste na aplicação das alterações em cache. Após a conclusão da carga completa, o AWS DMS começa a aplicar as alterações que ocorreram até aquele momento.
+
+Após a conclusão da tarefa de carga completa, o AWS DMS começa a coletar as alterações como transações para a fase de replicação contínua. Depois que o AWS DMS aplica todas as alterações em cache, as tabelas ficam transacionalmente consistentes. Nesse ponto, o AWS DMS passa para a fase de replicação contínua.
+
+#### Replicação em andamento 
+
+A terceira fase é a replicação contínua, também conhecida como captura de dados de alteração (CDC), que mantém os armazenamentos de dados de origem e destino sincronizados.
+
+Após o carregamento da tabela (Tarefa 1) e a aplicação das alterações em cache (Tarefa 2), o AWS DMS realiza a replicação contínua.
+
+O AWS DMS lê as alterações dos logs de transações do banco de dados de origem, extrai essas alterações, converte-as para o formato de destino e as aplica ao destino. Esse processo proporciona replicação quase em tempo real para o destino, reduzindo a complexidade do monitoramento da replicação.
+
+A seguir, apresentamos dois tipos de cargas de trabalho de CDC:
+
+  * Operações somente de inserção
+  * O CDC completo, que inclui operações de atualização e exclusão, também está disponível.
+
+| Aspecto	| CDC (somente encarte) | CDC completo (com atualizações e exclusões) | 
+|:---|:---|:---|
+| Casos de uso comuns | Adequado para dados somente de acréscimo, como registros de logs. | Aplica-se a conjuntos de dados dinâmicos onde os registros são modificados ou eliminados. | 
+| Operações de dados | Apenas inserções	| Envolve inserções, atualizações e exclusões, exigindo o gerenciamento de registros existentes. | 
+| Impacto no desempenho | Geralmente mais baixo, otimizado para inserções | Maior, devido às etapas adicionais necessárias para localizar, modificar ou excluir registros existentes. | 
+| Consistência dos dados | Fácil de manter, pois os dados são apenas adicionados. | Garantir consistência e integridade em todas as transações é um desafio maior. | 
+| Método do CDC	| Captura eficiente de novas inscrições. | Pode ser necessário utilizar métodos sofisticados para capturar e replicar as alterações com precisão, incluindo registros de transações ou gatilhos. | 
+
+---
+
+### AWS DataSync
+
+O AWS DataSync é um serviço de transferência de dados otimizado para mover grandes volumes de dados baseados em arquivos e objetos de, para e entre serviços de armazenamento da AWS.
+
+Exemplos de dados baseados em arquivos incluem o seguinte:
+
+  * Repositórios de conteúdo (diretórios pessoais de usuários, arquivos de projeto, arquivos digitais)
+  * Bibliotecas de mídia (coleções de arquivos de vídeo, áudio e imagem)
+  * Arquivos de pesquisa, engenharia e simulação
+  * Arquivos de log ou backups baseados em arquivos de dados críticos de aplicativos corporativos.
+
+O DataSync dimensiona e gerencia automaticamente o agendamento, o monitoramento, a criptografia e a verificação das suas transferências de arquivos e objetos. Com o DataSync, você paga apenas pela quantidade de dados copiados, sem compromissos mínimos ou taxas iniciais.
+
+---
+
+## Criar catalogo de dados
+
+
+
