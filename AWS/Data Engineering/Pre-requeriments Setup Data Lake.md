@@ -1,6 +1,6 @@
 ## Etapas iniciais não cobertas pelo procedimento
 
-O laboratório descrito parte do pressuposto de que os seguintes recursos já existem:
+O Data Lake descrito parte do pressuposto de que os seguintes recursos já existem:
 - Buckets S3 (`raw-bucket` e `consume-bucket`)
 - Três funções Lambda (`labFunction-Data-Generator`, `labFunction-Data-Processor`, `labFunction-Promotion-App`)
 
