@@ -1,4 +1,4 @@
-## Visão geral do laboratório
+## Visão geral do Ambiente Data Lake
 
 A loja virtual da Example Corp. apresenta um alto índice de abandono de carrinho diariamente, o que leva à exclusão desses registros do banco de dados para liberar espaço de armazenamento. Como especialista em Engenharia de Dados da empresa, você é responsável por encontrar uma solução de armazenamento de baixo custo na AWS para armazenar esses registros e permitir que a loja virtual realize processamento analítico diretamente nessa solução de armazenamento.
 
