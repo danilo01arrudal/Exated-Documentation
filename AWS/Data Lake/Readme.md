@@ -262,3 +262,25 @@ flowchart TD
 
 ---
 
+### Classes de armazenamento Amazon S3
+
+O Amazon S3 oferece uma variedade de classes de armazenamento projetadas para diferentes casos de uso e padrões de acesso. Escolher a classe adequada pode ajudar você a obter o melhor custo-benefício em armazenamento de objetos. 
+
+#### Classe de armazenamento para objetos em movimento automático 
+O **S3 Intelligent-Tiering** é uma classe de armazenamento que proporciona economia automática de custos para dados com padrões de acesso desconhecidos ou em constante mudança. Ele move automaticamente os dados para a camada de armazenamento mais econômica, sem impacto no desempenho ou sobrecarga operacional.
+
+#### Classes de armazenamento para objetos acessados ​​frequentemente 
+
+O **S3 Standard** é um armazenamento de uso geral para dados ativos e acessados ​​com frequência. 
+O **S3 Express One Zone** é uma classe de armazenamento de alto desempenho, com uma única zona de disponibilidade (Single AZ), criada especificamente para fornecer a menor latência possível para seus dados acessados ​​com mais frequência. Com essa classe de armazenamento, os dados são armazenados em um tipo de bucket diferente — um bucket de diretório S3 — que suporta centenas de milhares de solicitações por segundo.
+
+#### Classes de armazenamento para objetos acessados ​​com pouca frequência
+O **S3 Standard - Acesso Infrequente (S3 Standard-IA)** é um armazenamento de baixo custo para dados acessados ​​mensalmente e que requer recuperação em milissegundos. 
+O **S3 One Zone - Acesso Infrequente (S3 One Zone-IA)** é um armazenamento de baixo custo para dados acessados ​​com pouca frequência em uma Zona de Disponibilidade Única (Single-AZ). 
+
+#### Classes de armazenamento para arquivamento de objetos
+
+O **S3 Glacier Instant Retrieval** é o armazenamento de baixo custo para dados de longa duração, acessados ​​poucas vezes por ano e que requerem recuperação em milissegundos. 
+O **S3 Glacier Flexible Retrieval** é o armazenamento de baixo custo para dados de longa duração usados ​​para backups e arquivamento, com recuperação de dados em massa em minutos ou horas. 
+O **S3 Glacier Deep Archive** é o armazenamento de menor custo para dados arquivados a longo prazo, acessados ​​raramente, com recuperação em horas.
+
