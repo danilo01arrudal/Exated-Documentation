@@ -516,9 +516,23 @@ O AWS Glue Data Catalog é o repositório central de metadados para todos os seu
 
 O Data Catalog integra-se perfeitamente com outras ferramentas de análise da AWS, como as seguintes: 
 
-O Amazon Athena  depende do Catálogo de Dados para armazenar e recuperar metadados sobre as fontes de dados (tabelas, colunas, tipos de dados etc.) que você deseja consultar. 
-O Amazon EMR  pode acessar diretamente os metadados armazenados no Catálogo de Dados, permitindo que ele compreenda a estrutura e a localização dos dados que precisa processar. 
-Você pode usar os metadados no catálogo para consultar e transformar esses dados de maneira consistente em uma ampla variedade de aplicações. Esses metadados são armazenados na forma de tabelas, que contêm informações como localização, esquema e métricas de tempo de execução dos dados.
+  * O Amazon Athena  depende do Catálogo de Dados para armazenar e recuperar metadados sobre as fontes de dados (tabelas, colunas, tipos de dados etc.) que você deseja consultar. 
+  * O Amazon EMR  pode acessar diretamente os metadados armazenados no Catálogo de Dados, permitindo que ele compreenda a estrutura e a localização dos dados que precisa processar. 
 
+Você pode usar os metadados no catálogo para consultar e transformar esses dados de maneira consistente em uma ampla variedade de aplicações. 
+Esses metadados são armazenados na forma de tabelas, que contêm informações como localização, esquema e métricas de tempo de execução dos dados.
 
+___
+
+#### Exemplo de uma tabela de catálogo de dados
+
+| Entrada de tabela	| Descrição | 
+|:---|:---|
+| Nome | Este é o nome da tabela. |
+| Nome do banco de dados | Este é o banco de dados ao qual a tabela pertence. | 
+| Descritor de armazenamento | Isso define as propriedades de armazenamento físico dos dados da seguinte forma: Formato de dados (por exemplo, .csv, Parquet) Localização dos dados no Amazon S3 Bibliotecas de serialização e desserialização | 
+| Esquema | Isso inclui o esquema (nomes das colunas e tipos de dados), como o seguinte: **nome: string** , **ano: inteiro** , **Preço: dobro** | 
+| Chaves de Partição | Estas são as colunas usadas para particionar os dados, o que pode melhorar o desempenho das consultas.  O exemplo a seguir mostra dados particionados por dia, referentes a dois dias de ingestão: **Partição 1**: [ano=2024/mês=3/dia=13] => Localização = s3://doc-example-bucket/data/mytable/year=2024/month=3/day=13  **Partição 2**: [ano=2024/mês=3/dia=14/] => Localização = s3://doc-example-bucket/data/mytable/year=2024/month=3/day=14/
+| Parâmetros | São pares de chave-valor que armazenam metadados adicionais sobre a tabela, como a descrição da tabela, o criador e a data de criação. | 
+| Tipo de tabela | Isso indica o tipo de tabela, como EXTERNAL_TABLE, VIRTUAL_VIEW, e assim por diante. | 
 
