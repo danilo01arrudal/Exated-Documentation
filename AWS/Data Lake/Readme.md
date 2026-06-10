@@ -536,3 +536,79 @@ ___
 | Parâmetros | São pares de chave-valor que armazenam metadados adicionais sobre a tabela, como a descrição da tabela, o criador e a data de criação. | 
 | Tipo de tabela | Isso indica o tipo de tabela, como EXTERNAL_TABLE, VIRTUAL_VIEW, e assim por diante. | 
 
+### Preenchendo o catálogo
+
+Entidades de software chamadas crawlers  populam o Catálogo de Dados. Os crawlers descobrem os dados, reconhecem sua estrutura e, em seguida, adicionam metadados ao Catálogo de Dados. Os crawlers usam classificadores para detectar e inferir esquemas. 
+
+Para saber mais sobre outras maneiras de preencher o catálogo de dados, selecione as seguintes abas.
+
+#### Adicione metadados manualmente 
+
+Adicione e atualize manualmente os detalhes da tabela usando o console do AWS Glue ou chamando a API por meio da AWS Command Line Interface (AWS CLI). 
+Agora que você já aprendeu como adicionar metadados manualmente, vá para a próxima aba para aprender sobre como executar consultas em linguagem de definição de dados (DDL). 
+
+#### Executar consultas DDL
+
+Execute consultas DDL no Athena, em trabalhos do AWS Glue e em trabalhos do AWS EMR. 
+DDL é um subconjunto de SQL usado para definir e gerenciar a estrutura de um banco de dados. É responsável por criar, modificar e excluir objetos do banco de dados, como tabelas, índices, visualizações, procedimentos armazenados e outros componentes do banco de dados.
+
+---
+
+### Crawlers
+
+Os crawlers do AWS Glue podem analisar dados em todos os tipos de repositórios, classificá-los, extrair informações de esquema e armazenar os metadados automaticamente no Catálogo de Dados.
+
+Quando um crawler é executado, ele realiza automaticamente as seguintes ações.
+
+#### Utiliza um classificador para descobrir e inferir a estrutura dos dados.
+
+Os crawlers do AWS Glue podem usar classificadores integrados ou personalizados para examinar os dados no armazenamento de dados e reconhecer seu formato, esquema e propriedades associadas. 
+
+
+#### Agrupa dados em tabelas ou partições.
+
+Os crawlers do AWS Glue inferem tipos de arquivo e esquemas. Eles também identificam automaticamente a estrutura de partições do seu conjunto de dados ao preencher o Catálogo de Dados. Ao particionar seus dados, você pode restringir a quantidade de dados examinados por cada consulta, o que melhora o desempenho e reduz os custos.
+
+
+#### Preenche os metadados no Catálogo de Dados.
+
+Ao concluir, o rastreador do AWS Glue cria ou atualiza uma ou mais tabelas no Catálogo de Dados com as definições de tabela e partições correspondentes. Você pode configurar como o rastreador adiciona, atualiza e exclui tabelas e informações de partição. 
+
+#### Cria um esquema único para cada caminho do Amazon S3.
+
+Você pode configurar o rastreador para combinar esquemas compatíveis em uma definição de tabela comum. Se os esquemas comparados coincidirem, ou seja, se o limite de particionamento for superior a 70%, os esquemas serão considerados partições de uma tabela. Caso contrário, o rastreador criará uma tabela para cada caminho do Amazon S3, resultando em um número maior de tabelas. Você pode especificar o limite máximo de tabelas que um rastreador pode gerar.
+
+#### Opções de configuração
+
+A seguir, apresentamos algumas opções e recursos de configuração do rastreador AWS Glue que você deve considerar:
+
+  * Você pode configurar o rastreador para examinar vários armazenamentos de dados em uma única execução. 
+  * Você pode executar rastreadores de acordo com uma programação ou sob demanda, ou pode invocá-los com base em um evento para garantir que seus metadados estejam atualizados.
+  * Recomenda-se escolher a configuração padrão de atualização contínua das tabelas do Catálogo de Dados. Dessa forma, os metadados do Catálogo de Dados estarão sempre sincronizados com o data lake do Amazon S3.
+  * Você pode configurar o rastreador para verificar apenas novas subpastas e realizar rastreamentos incrementais para adicionar novas partições no AWS Glue.
+
+---
+
+### Classificadores
+
+Ao definir um rastreador, você pode usar classificadores integrados ou escolher um ou mais classificadores personalizados para ler os dados e determinar sua estrutura ou esquema. Quando o rastreador é executado, o primeiro classificador da sua lista que reconhecer com sucesso seu repositório de dados é usado para criar um esquema para sua tabela. As considerações para cada tipo de classificador são as seguintes:
+
+  * Classificadores integrados:  O AWS Glue fornece classificadores integrados para inferir esquemas a partir de arquivos comuns com formatos como JSON, .csv e Apache Avro. 
+  * Classificadores personalizados:  Para configurar os resultados de uma classificação, você pode criar um classificador personalizado. Você fornece o código para os classificadores personalizados, e eles são executados na ordem que você especificar. Você define seus classificadores personalizados em uma operação separada antes de definir os rastreadores. 
+
+---
+
+### Características e considerações do Catálogo de Dados
+
+A seguir, apresentamos alguns recursos e considerações para o uso do Catálogo de Dados:
+
+  * Cada conta da AWS possui um Catálogo de Dados em cada Região. 
+  * Você pode editar manualmente os esquemas no Catálogo de Dados. Por exemplo, você pode alterar os tipos de dados das colunas, adicionar novas colunas ou modificar as propriedades das tabelas.
+  * O Catálogo de Dados mantém um histórico completo das versões do esquema, permitindo comparar e analisar como seus dados mudaram ao longo do tempo.
+  * É possível calcular estatísticas em nível de coluna para tabelas do Catálogo de Dados, como valor mínimo, valor máximo, total de valores nulos e total de valores distintos. 
+  * Você pode medir e monitorar a qualidade dos seus dados usando o serviço AWS Glue Data Quality.
+
+---
+
+## Transformar dados
+
