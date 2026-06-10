@@ -136,9 +136,11 @@ Vamos segmentar o data lake em três buckets distintos do S3. Além disso, para 
 
 ```mermaid
 flowchart TD
-    Raw["Raw Zone<br>"]
-    Cleaned["Cleaned Zone<br>"]
-    Curated["Curated Zone<br>"]
+    subgraph Data_Lake ["Data Lake"]
+        Raw["Raw Zone<br>"]
+        Cleaned["Cleaned Zone<br>"]
+        Curated["Curated Zone<br>"]
+    end
 
     Raw -.-> Cleaned -.-> Curated
     Raw --> S3_Standard1["S3 Standard"]
