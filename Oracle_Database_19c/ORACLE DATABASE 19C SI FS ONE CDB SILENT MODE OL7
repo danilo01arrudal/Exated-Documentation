@@ -1,0 +1,504 @@
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++   	ORACLE DATABASE 19C SI FS ONE CDB SILENT MODE OL7   	+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#ORACLE DATABASE MACHINE
+IP 192.168.1.130
+Disk /dev/sda: 37.6 GB
+/dev/sda1 /boot 350 MB
+/dev/sda2 /		31  GB
+/dev/sda3 swap	4	GB	
+	
+Disk /dev/sdb: 107.4 GB
+Disk /dev/sdc: 107.4 GB
+Disk /dev/sdd: 107.4 GB
+LVM  /u01 		 300 GB		
+
+
+#INSTALL PRE-INSTALL PACKAGES
+yum install http://yum.oracle.com/repo/OracleLinux/OL7/latest/x86_64/getPackage/oracle-database-preinstall-19c-1.0-1.el7.x86_64.rpm
+
+#DISABLE SELINUX AND FIREWALLD
+sed -i 's/SELINUX=.*/SELINUX=disabled/' /etc/selinux/config && setenforce 0
+systemctl stop firewalld && systemctl disable firewalld
+
+#CONFIGURE STATIC NETWORK
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=none
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=no
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=enp0s3
+UUID=49c279da-7065-40f5-b914-176973db2a0a
+DEVICE=enp0s3
+ONBOOT=yes
+IPADDR=192.168.1.130
+PREFIX=24
+GATEWAY=192.168.1.1
+DNS1=8.8.8.8
+
+#CONFIGURE HOSTNAME
+hostnamectl 
+hostnamectl set-hostname ol7db1
+hostnamectl --static 
+
+#CONFIGURE /ETC/HOSTS
+192.168.1.131   ol7apps1
+192.168.1.130   ol7db1
+
+#CREATE LVM
+fdisk /dev/sdb
+fdisk /dev/sdc
+fdisk /dev/sdd
+
+Command (m for help): n
+Partition type:
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended
+Select (default p): p
+Partition number (1-4, default 1): 1
+First sector (2048-209715199, default 2048):
+Using default value 2048
+Last sector, +sectors or +size{K,M,G} (2048-209715199, default 209715199):
+Using default value 209715199
+Partition 1 of type Linux and of size 100 GiB is set
+Command (m for help): w
+The partition table has been altered!
+Calling ioctl() to re-read partition table.
+Syncing disks.
+
+pvcreate /dev/sdb1 /dev/sdc1 /dev/sdd1 
+  Physical volume "/dev/sdb1" successfully created.
+  Physical volume "/dev/sdc1" successfully created.
+  Physical volume "/dev/sdd1" successfully created.
+  
+vgcreate vg_database /dev/sdb1 /dev/sdc1 /dev/sdd1
+  Volume group "vg_database" successfully created
+  
+vgs
+  VG          #PV #LV #SN Attr   VSize    VFree
+  vg_database   3   0   0 wz--n- <299.99g <299.99g
+  
+lvcreate --name lv_database -l 100%FREE vg_database
+  Logical volume "lv_database" created.
+  
+lvs
+  LV          VG          Attr       LSize    Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  lv_database vg_database -wi-a----- <299.99g
+  
+lvdisplay
+  --- Logical volume ---
+  LV Path                /dev/vg_database/lv_database
+  LV Name                lv_database
+  VG Name                vg_database
+  LV UUID                SR7sv5-jUVO-Xbl8-kqvL-P2xf-Lvr7-z34xur
+  LV Write Access        read/write
+  LV Creation host, time ol7db1, 2019-12-28 18:15:15 -0300
+  LV Status              available
+  # open                 0
+  LV Size                <299.99 GiB
+  Current LE             76797
+  Segments               3
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           252:0
+
+vi /etc/fstab
+/dev/vg_database/lv_database              /u01                    ext4    defaults        1 1
+
+mkfs.ext4 /dev/vg_database/lv_database
+mkdir -p /u01
+mount /u01
+chown oracle:oinstall -R /u01
+
+df -h 
+/dev/mapper/vg_database-lv_database  296G   65M  281G   1% /u01
+
+tune2fs -m 0 /dev/mapper/vg_database-lv_database
+
+df -h
+/dev/mapper/vg_database-lv_database  296G   65M  296G   1% /u01
+
+#INSTALL ORACLE DATABASE 19C
+#THERE IS A DOCUMENT WITH ORACLE DATABASE 19C INSTALATION STEPS (ORACLE DATABASE 19C SI FS REDHATEL8)
+
+#CREATE ORACLE_BASE AND ORACLE_HOME DIRECTORIES
+mkdir -p /u01/app/oracle/product/19.3.0/dbhome_1
+chown -R oracle:oinstall /u01
+chmod -R 775 /u01
+
+#CONFIGURE VARIABLES
+su - oracle
+mkdir /home/oracle/scripts
+
+cat > /home/oracle/scripts/setEnv.sh <<EOF
+# Oracle Settings
+export TMP=/tmp
+export TMPDIR=\$TMP
+
+export ORACLE_HOSTNAME=ol7db1
+export ORACLE_UNQNAME=appscdb
+export ORACLE_BASE=/u01/app/oracle
+export ORACLE_HOME=\$ORACLE_BASE/product/19.3.0/dbhome_1
+export ORA_INVENTORY=/u01/app/oraInventory
+export ORACLE_SID=appscdb1
+
+export PATH=/usr/sbin:/usr/local/bin:\$PATH
+export PATH=\$ORACLE_HOME/bin:\$PATH
+
+export LD_LIBRARY_PATH=\$ORACLE_HOME/lib:/lib:/usr/lib
+export CLASSPATH=\$ORACLE_HOME/jlib:\$ORACLE_HOME/rdbms/jlib
+EOF
+
+echo ". /home/oracle/scripts/setEnv.sh" >> /home/oracle/.bash_profile
+
+cat > /home/oracle/scripts/start_all.sh <<EOF
+#!/bin/bash
+. /home/oracle/scripts/setEnv.sh
+
+export ORAENV_ASK=NO
+. oraenv
+export ORAENV_ASK=YES
+
+dbstart \$ORACLE_HOME
+EOF
+
+cat > /home/oracle/scripts/stop_all.sh <<EOF
+#!/bin/bash
+. /home/oracle/scripts/setEnv.sh
+
+export ORAENV_ASK=NO
+. oraenv
+export ORAENV_ASK=YES
+
+dbshut \$ORACLE_HOME
+EOF
+
+chown -R oracle:oinstall /home/oracle/scripts
+chmod u+x /home/oracle/scripts/*.sh
+
+#DOWNLOAD AND INSTALL ORACLE DATABASE 19.3C
+wget https://download.oracle.com/otn/linux/oracle19c/190000/LINUX.X64_193000_db_home.zip?AuthParam=1577574051_dcd3a71670cb8ddcb11b27e39a41738e
+
+#INSTALL VNC
+yum install tigervnc-server
+cp /lib/systemd/system/vncserver@.service /lib/systemd/system/vncserver@:2.service
+
+vi /lib/systemd/system/vncserver@:2.service
+User=oracle
+ExecStart=/usr/bin/vncserver %i -geometry 1440x1080
+PIDFile=/home/oracle/.vnc/%H%i.pid
+
+systemctl daemon-reload
+su - oracle
+vncpasswd
+Password:
+Verify:
+Would you like to enter a view-only password (y/n)? n
+exit
+systemctl start vncserver@:2.service
+systemctl enable vncserver@:2.service
+
+
+CONNECT VNC AND INSTALL SOFTWARE
+
+#CREATE db_install.rsp INSTALL RESPONSE FILE
+vi db_install.rsp
+oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v19.0.0
+oracle.install.option=INSTALL_DB_SWONLY
+UNIX_GROUP_NAME=oinstall
+INVENTORY_LOCATION=/u01/app/oraInventory
+ORACLE_BASE=/u01/app/oracle
+oracle.install.db.InstallEdition=EE
+oracle.install.db.OSDBA_GROUP=dba
+oracle.install.db.OSOPER_GROUP=oinstall
+oracle.install.db.OSBACKUPDBA_GROUP=backupdba
+oracle.install.db.OSDGDBA_GROUP=dgdba
+oracle.install.db.OSKMDBA_GROUP=kmdba
+oracle.install.db.OSRACDBA_GROUP=racdba
+oracle.install.db.rootconfig.executeRootScript=false
+oracle.install.db.rootconfig.configMethod=
+oracle.install.db.rootconfig.sudoPath=
+oracle.install.db.rootconfig.sudoUserName=
+oracle.install.db.CLUSTER_NODES=
+oracle.install.db.config.starterdb.type=GENERAL_PURPOSE
+oracle.install.db.config.starterdb.globalDBName=
+oracle.install.db.config.starterdb.SID=
+oracle.install.db.ConfigureAsContainerDB=false
+oracle.install.db.config.PDBName=
+oracle.install.db.config.starterdb.characterSet=
+oracle.install.db.config.starterdb.memoryOption=false
+oracle.install.db.config.starterdb.memoryLimit=
+oracle.install.db.config.starterdb.installExampleSchemas=false
+oracle.install.db.config.starterdb.password.ALL=
+oracle.install.db.config.starterdb.password.SYS=
+oracle.install.db.config.starterdb.password.SYSTEM=
+oracle.install.db.config.starterdb.password.DBSNMP=
+oracle.install.db.config.starterdb.password.PDBADMIN=
+oracle.install.db.config.starterdb.managementOption=DEFAULT
+oracle.install.db.config.starterdb.omsHost=
+oracle.install.db.config.starterdb.omsPort=0
+oracle.install.db.config.starterdb.emAdminUser=
+oracle.install.db.config.starterdb.emAdminPassword=
+oracle.install.db.config.starterdb.enableRecovery=false
+oracle.install.db.config.starterdb.storageType=
+oracle.install.db.config.starterdb.fileSystemStorage.dataLocation=
+oracle.install.db.config.starterdb.fileSystemStorage.recoveryLocation=
+oracle.install.db.config.asm.diskGroup=
+oracle.install.db.config.asm.ASMSNMPPassword=
+
+cd $ORACLE_HOME
+./runInstaller -silent -responseFile /home/oracle/db_install.rsp
+
+#RUN COMMAND AS ROOT
+        1. /u01/app/oraInventory/orainstRoot.sh
+        2. /u01/app/oracle/product/19.3.0/dbhome_1/root.sh
+
+#CREATE dbca.rsp response file
+vi dbca.rsp
+responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v12.2.0
+gdbName=appscdb
+sid=appscdb1
+databaseConfigType=SI
+RACOneNodeServiceName=
+policyManaged=false
+createServerPool=false
+serverPoolName=
+cardinality=
+force=false
+pqPoolName=
+pqCardinality=
+createAsContainerDatabase=true
+numberOfPDBs=1
+pdbName=appspdb
+useLocalUndoForPDBs=true
+pdbAdminPassword=
+nodelist=
+templateName=/u01/app/oracle/product/19.3.0/dbhome_1/assistants/dbca/templates/General_Purpose.dbc
+sysPassword=
+systemPassword= 
+serviceUserPassword=
+emConfiguration=
+emExpressPort=5500
+runCVUChecks=FALSE
+dbsnmpPassword=
+omsHost=
+omsPort=0
+emUser=
+emPassword=
+dvConfiguration=false
+dvUserName=
+dvUserPassword=
+dvAccountManagerName=
+dvAccountManagerPassword=
+olsConfiguration=false
+datafileJarLocation={ORACLE_HOME}/assistants/dbca/templates/
+datafileDestination={ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/
+recoveryAreaDestination={ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME}
+storageType=FS
+diskGroupName=
+asmsnmpPassword=
+recoveryGroupName=
+characterSet=AL32UTF8
+nationalCharacterSet=AL16UTF16
+registerWithDirService=false
+dirServiceUserName=
+dirServicePassword=
+walletPassword=
+listeners=
+variablesFile=
+variables=ORACLE_BASE_HOME=/u01/app/oracle/product/19.3.0/dbhome_1,DB_UNIQUE_NAME=appscdb,ORACLE_BASE=/u01/app/oracle,PDB_NAME=,DB_NAME=appscdb,ORACLE_HOME=/u01/app/oracle/product/19.3.0/dbhome_1,SID=appscdb1
+initParams=undo_tablespace=UNDOTBS1,sga_target=2047MB,db_block_size=8192BYTES,log_archive_dest_1='LOCATION={ORACLE_BASE}/oradata/archivelog/',nls_language=AMERICAN,dispatchers=(PROTOCOL=TCP) (SERVICE=appscdb1XDB),diagnostic_dest={ORACLE_BASE},control_files=("{ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/control01.ctl", "{ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME}/control02.ctl"),remote_login_passwordfile=EXCLUSIVE,audit_file_dest={ORACLE_BASE}/admin/{DB_UNIQUE_NAME}/adump,processes=600,pga_aggregate_target=683MB,nls_territory=AMERICA,db_recovery_file_dest_size=12732MB,open_cursors=300,log_archive_format=%t_%s_%r.dbf,compatible=19.0.0,db_name=appscdb,db_recovery_file_dest={ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME},audit_trail=db
+sampleSchema=false
+memoryPercentage=40
+databaseType=MULTIPURPOSE
+automaticMemoryManagement=false
+totalMemory=0
+
+#CREATE netca.rsp response file
+vi netca.rsp
+[GENERAL]
+RESPONSEFILE_VERSION="19.0"
+CREATE_TYPE="CUSTOM"
+INSTALLED_COMPONENTS={"server","net8","javavm"}
+INSTALL_TYPE=""typical""
+LISTENER_NUMBER=1
+LISTENER_NAMES={"LISTENER"}
+LISTENER_START=""LISTENER""
+NAMING_METHODS={"TNSNAMES","ONAMES","HOSTNAME"}
+NSN_NUMBER=1
+NSN_NAMES={"EXTPROC_CONNECTION_DATA"}
+NSN_SERVICE={"PLSExtProc"}
+NSN_SERVICE={"PLSExtProc"}
+NSN_PROTOCOLS={"TCP;HOSTNAME;1521"}
+
+#CREATE DATABASE 
+dbca -silent -createDatabase -responseFile /home/oracle/dbca.rsp
+
+#CREATE LISTENER
+netca -silent -responsefile /home/oracle/netca.rsp
+
+sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Wed Jan 1 16:58:32 2020
+Version 19.3.0.0.0
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> select name from v$pdbs;
+
+NAME
+--------------------------------------------------------------------------------
+PDB$SEED
+APPSPDB
+
+SQL> exit
+
+#PLUGGABLE DATABASE (PDB) AUTOMATIC STARTUP WITH SAVE STATE
+sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Tue Feb 2 18:16:16 2021
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> ALTER PLUGGABLE DATABASE APPSPDB OPEN;
+
+Pluggable database altered.
+
+SQL> @state
+SQL> col col_name for a30
+SQL> select con_name, state from dba_pdb_saved_states
+  2 / 
+
+no rows selected
+
+SQL> ALTER PLUGGABLE DATABASE APPSPDB SAVE STATE;
+
+Pluggable database altered.
+
+SQL> @state
+SQL> col col_name for a30
+SQL> select con_name, state from dba_pdb_saved_states
+  2 / 
+
+CON_NAME			STATE
+------------------------------- -------------
+APPSPDB
+
+SQL> exit
+
+lsnrctl status
+
+LSNRCTL for Linux: Version 19.0.0.0.0 - Production on 01-JAN-2020 17:12:00
+Copyright (c) 1991, 2019, Oracle.  All rights reserved.
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=ol7db1)(PORT=1521)))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 19.0.0.0.0 - Production
+Start Date                01-JAN-2020 17:10:08
+Uptime                    0 days 0 hr. 1 min. 52 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /u01/app/oracle/product/19.3.0/dbhome_1/network/admin/listener.ora
+Listener Log File         /u01/app/oracle/diag/tnslsnr/ol7db1/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=ol7db1)(PORT=1521)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+Services Summary...
+Service "86b637b62fdf7a65e053f706e80a27ca" has 1 instance(s).
+  Instance "appscdb1", status READY, has 1 handler(s) for this service...
+Service "9b1a741974f6335ee0538201a8c087cb" has 1 instance(s).
+  Instance "appscdb1", status READY, has 1 handler(s) for this service...
+Service "appscdb" has 1 instance(s).
+  Instance "appscdb1", status READY, has 1 handler(s) for this service...
+Service "appscdb1XDB" has 1 instance(s).
+  Instance "appscdb1", status READY, has 1 handler(s) for this service...
+Service "appspdb" has 1 instance(s).
+  Instance "appscdb1", status READY, has 1 handler(s) for this service...
+The command completed successfully
+
+#CONFIGURE TNSNAMES.ORA
+cat > /u01/app/oracle/product/19.3.0/dbhome_1/network/admin/tnsnames.ora <<EOF
+appspdb =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.1.130)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = appspdb)
+    )
+  )
+
+appscdb =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.1.130)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = appscdb)
+    )
+  )
+EOF  
+
+#AUTOMATIC START SERVICE ORACLE
+#AS ROOT
+vim /etc/oratab
+appscdb1:/u01/app/oracle/product/19.3.0/dbhome_1:Y
+
+vim /lib/systemd/system/dbora.service
+[Unit]
+Description=The Oracle Database Service
+After=syslog.target network.target
+
+[Service]
+# systemd ignores PAM limits, so set any necessary limits in the service.
+# Not really a bug, but a feature.
+# https://bugzilla.redhat.com/show_bug.cgi?id=754285
+LimitMEMLOCK=infinity
+LimitNOFILE=65535
+
+#Type=simple
+# idle: similar to simple, the actual execution of the service binary is delayed
+#       until all jobs are finished, which avoids mixing the status output with shell output of services.
+RemainAfterExit=yes
+User=oracle
+Group=oinstall
+Restart=no
+ExecStart=/bin/bash -c '/home/oracle/scripts/start_all.sh'
+ExecStop=/bin/bash -c '/home/oracle/scripts/stop_all.sh'
+
+[Install]
+WantedBy=multi-user.target
+
+systemctl daemon-reload
+systemctl enable dbora.service
+
+
+
+
+
+
+
+
+
+
+
+
+

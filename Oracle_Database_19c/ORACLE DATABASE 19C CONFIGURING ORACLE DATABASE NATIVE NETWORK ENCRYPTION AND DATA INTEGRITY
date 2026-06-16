@@ -1,0 +1,145 @@
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ ORACLE DATABASE 19C CONFIGURING ORACLE DATABASE NATIVE NETWORK ENCRYPTION AND DATA INTEGRITY +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+You can configure native Oracle Net Services data encryption and data integrity for both servers and clients.
+Oracle Database provides native data network encryption and integrity to ensure that data is secure as it travels across the network.
+The purpose of a secure cryptosystem is to convert plaintext data into unintelligible ciphertext based on a key, 
+in such a way that it is very hard (computationally infeasible) to convert ciphertext back into its corresponding plaintext without knowledge of the correct key.
+In a symmetric cryptosystem, the same key is used both for encryption and decryption of the same data. 
+Oracle Database provides the Advanced Encryption Standard (AES) symmetric cryptosystem for protecting the confidentiality of Oracle Net Services traffic.
+
+* Advanced Encryption Standard
+Oracle Database supports the Federal Information Processing Standard (FIPS) encryption algorithm, Advanced Encryption Standard (AES).
+
+AES can be used by all U.S. government organizations and businesses to protect sensitive data over a network. 
+This encryption algorithm defines three standard key lengths, which are 128-bit, 192-bit, and 256-bit. 
+All versions operate in outer Cipher Block Chaining (CBC) mode. 
+CBC mode is an encryption method that protects against block replay attacks by making the encryption of a cipher block dependent on all blocks that precede it; 
+it is designed to make unauthorized decryption incrementally more difficult. 
+Oracle Database employs outer cipher block chaining because it is more secure than inner cipher block chaining, with no material performance penalty.
+
+* Triple-DES Encryption
+Triple-DES encryption (3DES) encrypts message data with three passes of the DES algorithm.
+3DES provides a high degree of message security, but with a performance penalty. 
+The magnitude of the performance penalty depends on the speed of the processor performing the encryption. 
+3DES typically takes three times as long to encrypt a data block when compared to the standard DES algorithm.
+3DES is available in two-key and three-key versions, with effective key lengths of 112-bits and 168-bits, respectively. 
+Both versions operate in outer Cipher Block Chaining (CBC) mode.
+The DES40 algorithm, available with Oracle Database and Secure Network Services, is a variant of DES in which the secret key is preprocessed to provide 40 effective key bits. 
+It was designed to provide DES-based encryption to customers outside the U.S. and Canada at a time when the U.S. export laws were more restrictive. 
+Currently DES40, DES, and 3DES are all available for export. 
+DES40 is still supported to provide backward-compatibility for international customers.
+
+* Choosing Between Native Network Encryption and Transport Layer Security
+Oracle offers two ways to encrypt data over the network, native network encryption and Transport Layer Security (TLS).
+There are advantages and disadvantages to both methods.
+
+-			Native Network Encryption								Transport Layer Security
+
+Advantages		- It is configured with parameters in the sqlnet.ora configuration file.		- It is an industry standard for encrypting data in motion.
+			- In most cases, no client configuration changes are required.				- It provides non-repudiation for server connections to prevent third-party attacks.
+			- No certificates are required.								- It can be used for database user authentication.
+			- Clients that do not support native network encryption can fall back 
+			  to unencrypted connections while incompatibility is mitigated.
+
+Disadvantages		- It uses a non-standard, Oracle proprietary implementation.				- It requires client and server changes.		
+			- It provides no non-repudiation of the server connection				- Certificates are required for server and are optional for the client. 
+			  (that is, no protection against a third-party attack).				  However, the client must have the trusted root certificate 
+														  for the certificate authority that issued the server’s certificate. 
+														- Certificates eventually expire.
+
+* Oracle Database Native Network Encryption Data Integrity
+Encrypting network data provides data privacy so that unauthorized parties cannot view plaintext data as it passes over the network.
+Oracle Database also provides protection against two forms of active attacks.
+
+Type of Attack			Explanation
+Data modification attack	An unauthorized party intercepting data in transit, altering it, and retransmitting it is a data modification attack. 
+				For example, intercepting a $100 bank deposit, changing the amount to $10,000, and retransmitting the higher amount is a data modification attack.
+Replay attack			Repetitively retransmitting an entire set of valid data is a replay attack, such as intercepting a $100 bank withdrawal and retransmitting it ten times, thereby receiving $1,000.
+
+* Improving Native Network Encryption Security
+Oracle provides a patch that will strengthen native network encryption security for both Oracle Database servers and clients.
+
+About Improving Native Network Encryption Security
+The Oracle patch will update encryption and checksumming algorithms and deprecate weak encryption and checksumming algorithms.
+
+Applying Security Improvement Updates to Native Network Encryption
+In addition to applying a patch to the Oracle Database server and client, you must set the server and client sqlnet.ora parameters.
+
+# Step 1
+Back up the servers and clients to which you will install the patch.
+
+# Step 2
+Log in to My Oracle Support and then download patch described in My Oracle Support 
+
+# Step 3
+Patch the server.
+Follow the instructions in My Oracle Support to apply the patch to the server. You will apply the same patch to the client in a later step.
+
+# Step 4
+Patch the clients.
+Determine which clients you need to patch.
+Follow the instructions in My Oracle Support  to apply the patch to each client.
+
+# Step 5
+In each client sqlnet.ora file, remove all deprecated algorithms if they are defined.
+You can bypass this step if the following parameters are not defined or have no algorithms listed.
+SQLNET.ENCRYPTION_TYPES_CLIENT
+SQLNET.CRYPTO_CHECKSUM_TYPES_CLIENT
+
+# Step 6
+In the server sqlnet.ora file, remove all deprecated algorithms if they are defined.
+You can bypass this step if the following parameters are not defined or have no algorithms listed.
+SQLNET.ENCRYPTION_TYPES_SERVER
+SQLNET.CRYPTO_CHECKSUM_TYPES_SERVER
+
+# Extra Step
+For maximum security on the server, set the following sqlnet.ora parameters:
+
+vi /u01/app/oracle/product/19.3.0/dbhome_1/network/admin/sqlnet.ora
+
+SQLNET.ENCRYPTION_CLIENT = REQUIRED
+SQLNET.ENCRYPTION_TYPES_SERVER = (AES256)
+SQLNET.ENCRYPTION_TYPES_CLIENT = (AES256)
+SQLNET.CRYPTO_CHECKSUM_SERVER = REQUIRED
+SQLNET.CRYPTO_CHECKSUM_CLIENT = REQUIRED
+SQLNET.CRYPTO_CHECKSUM_TYPES_SERVER = (SHA512)
+SQLNET.CRYPTO_CHECKSUM_TYPES_CLIENT = (SHA512)
+SQLNET.ALLOW_WEAK_CRYPTO = FALSE
+
+For maximum security on the client, set the following sqlnet.ora parameters:
+
+vi /usr/lib/oracle/19/client64/lib/network/admin/ 
+
+SQLNET.ENCRYPTION_CLIENT = REQUIRED
+SQLNET.ENCRYPTION_TYPES_CLIENT = (AES256)
+SQLNET.CRYPTO_CHECKSUM_CLIENT = REQUIRED
+SQLNET.CRYPTO_CHECKSUM_TYPES_CLIENT = (SHA512)
+SQLNET.ALLOW_WEAK_CRYPTO = FALSE
+
+# Step 7
+In each client sqlnet.ora file, after you have removed all the deprecated algorithms from the server and the clients per steps 5 and 6, set the parameter SQLNET.ALLOW_WEAK_CRYPTO = FALSE so that the clients can be prevented from communicating with unpatched servers.
+If the SQLNET.ALLOW_WEAK_CRYPTO parameter is set to FALSE, then a client attempting to use a weak algorithm will produce an ORA-12269: client uses weak encryption/crypto-checksumming version error at the server. A client connecting to a server (or proxy) that is using weak algorithms will receive an ORA-12268: server uses weak encryption/crypto-checksumming version error.
+
+# Step 8
+In the server sqlnet.ora file, after you have updated all the clients with SQLNET.ALLOW_WEAK_CRYPTO = FALSE per step 9, set the parameter SQLNET.ALLOW_WEAK_CRYPTO_CLIENTS = FALSE. This parameter prevents a patched server from communicating with unpatched clients.
+If the SQLNET.ALLOW_WEAK_CRYPTO parameter is set to FALSE, then a client attempting to use a weak algorithm will produce an ORA-12269: client uses weak encryption/crypto-checksumming version error at the server. A client connecting to a server (or proxy) that is using weak algorithms will receive an ORA-12268: server uses weak encryption/crypto-checksumming version error.
+If you use the database links, then the first database server acts as a client and connects to the second server. Therefore, ensure that all servers are fully patched and unsupported algorithms are removed before you set SQLNET.ALLOW_WEAK_CRYPTO to FALSE
+
+#step 10
+Check session details: You can query the V$SESSION_CONNECT_INFO view to get detailed information about the connection.
+Look for lines in NETWORK_SERVICE_BANNER that indicate Oracle Advanced Security: AES256 encryption and Oracle Advanced Security: SHA512 crypto-checksumming. This confirms that the settings are in use.
+
+SQL> SELECT sid, serial#, network_service_banner FROM v$session_connect_info WHERE sid = (SELECT sid FROM v$session WHERE audsid = sys_context('USERENV', 'SESSIONID'));  2    3  
+
+       SID    SERIAL# NETWORK_SERVICE_BANNER
+---------- ---------- ------------------------------------------------------------------------------------------
+	27	30521 Oracle Bequeath NT Protocol Adapter for Linux: Version 19.0.0.0.0 - Production
+	27	30521 Authentication service for Linux: Version 19.0.1.0.0 - Production
+	27	30521 Encryption service for Linux: Version 19.0.1.0.0 - Production
+	27	30521 AES256 Encryption service adapter for Linux: Version 19.0.1.0.0 - Production
+	27	30521 Crypto-checksumming service for Linux: Version 19.0.1.0.0 - Production
+	27	30521 SHA512 Crypto-checksumming service adapter for Linux: Version 19.0.1.0.0 - Production
+
+

@@ -1,0 +1,160 @@
+++++++++++++++++++++++++++++++++++++++
++     POSTGRES SECURITY FEATURES     +
+++++++++++++++++++++++++++++++++++++++
+
+1. DO NOT USE TRUST SECURITY.
+#CONFIGURE PG_HBA TO MD5
+vi /etc/pg_hba.conf
+HOST      DATABASE      USER      IP/PORT       MD5
+
+/usr/local/pgsql-*version*/bin/pg_ctl reload -D *data_directory*/data
+
+2. USE HASH-BASED COLUMN ENCRYPTION FOR VALUES THAT DON'T NEED TO BE DECRYPTED.
+#USE EXTENSION pgcrypto
+postgres=# CREATE EXTENSION IF NOT EXISTS pgcrypto;
+CREATE EXTENSION
+
+postgres=# CREATE TABLE users (
+postgres(#   id SERIAL PRIMARY KEY,
+postgres(#   email TEXT NOT NULL UNIQUE,
+postgres(#   password TEXT NOT NULL
+postgres(# );
+CREATE TABLE
+
+postgres=# INSERT INTO users (email, password) VALUES ('admin@mail.com', crypt('admpasswd', gen_salt('bf')));
+INSERT 0 1
+
+postgres=# select * from users;
+ id |     email      |                           password                           
+----+----------------+--------------------------------------------------------------
+  1 | admin@mail.com | $2a$06$Hx.twNch9/IFTUMLEyIs7eDPhK/zMEWZHNb59J4I5MiEoUAPtnF5y
+(1 row)
+
+3. USE PHYSICAL SEPARATION TO ISOLATE DATASETS THAT NEED TO BE KEPT APART.
+By using pg_hba and RBAC (Role Based Access Control) to control access to physically disparate databases, 
+you ensure that data in two tables cannot be accessed/viewed simultaneously. 
+Of course, this will break SQL joins, 
+so only use in appropriate scenarios that require physical access separation during the life of a login session.
+
+4. LOCK DOWN PORT-LEVEL ACCESS TO THE POSTGRESQL DATABASE.
+A limited set of ports should have network access to the database: 
+the database port itself and any necessary management ports. 
+All other ports that allow network access to the database should be locked down.
+
+#CHANGE DEFAULT PORT OF POSTGRES CLUSTER ON *data_directory*/data/postgresql.conf
+sed -i 's/port = 5432/port = 5441/g' /dados/data/postgresql.conf
+
+5. USE PG_HBA.CONF TO SPECIFY WHICH HOSTS CAN USE SSL-ENCRYPTED AND UNENCRYPTED CONNECTIONS.
+* ON SERVER DATABASE
+su - postgres
+cd /dados/data/
+openssl genrsa -out rootCA.key 2048
+
+openssl req -x509 -new -key rootCA.key -days 365 -out rootCA.crt
+
+openssl genrsa -out server.key 2048
+
+openssl req -new -key server.key -out server.csr
+Common Name []: server-database-hostname
+
+openssl x509 -req -in server.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out server.crt -days 365
+
+openssl genrsa -out client.key 2048
+
+openssl req -new -key client.key -out client.csr
+Common Name []: client-machine-hostname
+
+openssl x509 -req -in client.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out client.crt -days 365
+
+chmod 600 server.key
+
+vi /dados/data/postgresql.conf
+ssl = on
+ssl_cert_file = 'server.crt'
+ssl_key_file = 'server.key'
+ssl_ca_file = 'rootCA.crt'
+
+vi /dados/data/pg_hba.conf
+#secure client
+hostssl   database   user   IP/PORTA    md5 clientcert=1
+
+/usr/local/pgsql-12.2/bin/pg_ctl reload -D /dados/data
+
+scp rootCA.crt client.crt client.key user@client-machine-hostname:/diretctory
+
+*ON CLIENT
+chmod 600 client.key
+psql port=5441 host=server-database-hostname user=user sslcert=client.crt sslkey=client.key sslrootcert=rootCA.crt sslmode=verify-ca
+
+6. PREVENT CONNECTIONS FROM NETWORKS THAT DON’T REQUIRE DATABASE ACCESS. 
+Setting listen_addresses to localhost will force the OS to reject connection attempts 
+from other servers before they reach PostgreSQL. 
+This will prevent unauthorized access to the database and underlying data structures.
+
+#CONFIGURE PARAMETRE listen_addresses TO LISTEN CONNECTION OF SPECIFICS HOSTS
+listen_addresses = 'localhost, HOSTNAME-APP1, HOSTNAME-APP2, HOSTNAME-APP3'
+
+/usr/local/pgsql-12.2/bin/pg_ctl reload -D /dados/data
+
+7. SET APPROPRIATE MONITORING AND LOGGING FOR DATABASE QUERIES.
+By turning on tracking for queries executed against your database, 
+you enhance the audit trail for identifying culprits in the event of a mishap or compromise. 
+This can be accomplished by installing the pg_stat_statements extension, 
+which effectively turns on monitoring for all query types (SELECT, INSERT, UPDATE, DELETE).
+
+vi /dados/data/postgresql.conf
+shared_preload_libraries = 'pg_stat_statements'
+pg_stat_statements.max = 10000
+pg_stat_statements.track = all
+pg_stat_statements.track_utility = on
+pg_stat_statements.save = off
+
+/usr/local/pgsql-12.2/bin/pg_ctl -D /dados/data stop -m fast
+/usr/local/pgsql-12.2/bin/pg_ctl -D /dados/data start -l logstart
+
+/usr/local/pgsql-12.2/bin/psql -U postgres
+postgres=# create extension pg_stat_statements;
+CREATE EXTENSION
+
+8. ASSIGN A DISTINCT ROLE FOR EACH APPLICATION.
+By doing this, you add an extra layer of security for separating users from data. 
+Generate a new user and assign appropriate permissions for each new application utilizing the PostgreSQL database. 
+The use of the postgres user by application users opens up a loophole for attacks, sabotages and flaws. 
+For better security, it is vital to identify the users and objects that need access
+
+9. DO NOT PROVIDE ACCESS CREDENTIALS TO UNAUTHORIZED USERS.
+Simple information and easy to control are access credentials, they cannot be shared freely. 
+Users such as development or analysts should not have access to the database or users who are administrators of the database. 
+The Database Administrator is responsible for maintaining the data and ensuring the security of the information. 
+For greater security, developers can work with development environments with vital information omitted or encrypted or 
+environments replicated when real-time data is required.
+
+10. STAY ON TOP OF CRITICAL SECURITY UPDATES AND PATCHES.
+This is not only a rule of thumb for all software systems in general, 
+but a PCI-DSS requirement if your PostgreSQL-based web application or 
+ecommerce store is storing sensitive credit card information. 
+Checking PostgreSQL's security information page regularly and frequently for critical security 
+updates and patches can effectively satisfy this requirement.
+Need to implement these security checks and more with a couple mouse clicks? 
+UpGuard's platform for continuous security monitoring can automatically scan your 
+PostgreSQL database for vulnerabilities with its policy-based integrity validation engine. 
+Try it today—it's free for up to 10 nodes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,381 @@
+++++++++++++++++++++++++++++++++++++++++++++++++++
++   INSTALL POWA TO MONITORING POSTGRES ON OL7   +
+++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#PRE-REQUIRES
+yum install -y python-pip python-devel python-psycopg2 git
+
+#INSTALL
+pip install --upgrade pip
+pip install powa-web
+pip install powa-collector
+
+#DOWNLOAD AND UPDATE POSTGRES EXTENSIONS
+wget https://github.com/powa-team/powa-archivist/archive/REL_4_0_1.tar.gz
+tar xvfz REL_4_0_1.tar.gz
+cd powa-archivist-REL_4_0_1
+vi Makefile
+PG_CONFIG ?= /usr/local/pgsql-$version/bin/pg_config
+make
+make install
+cp powa.so /usr/local/pgsql-<$version>/lib/
+cp powa.control powa.c powa--4.0.1.sql powa--4.0.0.sql powa--3.2.0.sql powa--3.1.2--3.2.0.sql powa--3.1.1--3.1.2.sql powa--3.1.0--3.1.1.sql /usr/local/pgsql-<$version>/share/extension/
+
+________________________________________________________________________________________________________________________________________________________________________________
+
+wget https://github.com/powa-team/pg_qualstats/archive/2.0.2.tar.gz
+tar xvfz 2.0.2.tar.gz
+cd pg_qualstats-2.0.2
+vi Makefile
+PG_CONFIG ?= /usr/local/pgsql-<$version>/bin/pg_config
+make
+make install
+cp pg_qualstats.so /usr/local/pgsql-<$version>/lib/
+cp pg_qualstats.control pg_qualstats.c pg_qualstats--2.0.2.sql /usr/local/pgsql-<$version>/share/extension/
+
+________________________________________________________________________________________________________________________________________________________________________________
+
+wget https://github.com/powa-team/pg_stat_kcache/archive/REL2_1_1.tar.gz
+tar xvfz REL2_1_1.tar.gz
+cd pg_stat_kcache-REL2_1_1
+vi Makefile
+PG_CONFIG ?= /usr/local/pgsql-<$version>/bin/pg_config
+make
+make install
+cp pg_stat_kcache.so /usr/local/pgsql-<$version>/lib/
+cp pg_stat_kcache.control pg_stat_kcache.c pg_stat_kcache--2.1.1.sql pg_stat_kcache--2.1.0.sql pg_stat_kcache--2.1.0--2.1.1.sql /usr/local/pgsql-<$version>/share/extension/
+
+________________________________________________________________________________________________________________________________________________________________________________
+
+#FOR REDHAT
+wget https://download.postgresql.org/pub/repos/yum/<$version>/<$DISTRIBUITION>/<$SO>/pg_wait_sampling_<$version>.1.1-1.<$SO>.x86_64.rpm
+#FOR DEBIAN
+wget https://download.postgresql.org/pub/repos/apt/pool/<$version>/p/postgresql-<$version>/postgresql-<$version>-pg-wait-sampling_1.1.1-1.pgdg+1_amd64.deb
+#FOR REDHAT
+rpm2cpio pg_wait_sampling_<$version>.1.1-1.<$SO>.x86_64.rpm | cpio -idmv
+#FOR DEBIAN
+ar vx postgresql-9.6-pg-wait-sampling_1.1.1-1.pgdg+1_amd64.deb
+tar -xf data.tar.xz
+
+cp usr/pgsql-<$version>/lib/pg_wait_sampling.so /usr/local/pgsql-<$version>/lib/
+cp usr/pgsql-<$version>/share/extension/pg_wait_sampling* /usr/local/pgsql-<$version>/share/extension/
+
+________________________________________________________________________________________________________________________________________________________________________________
+
+#FOR REDHAT
+wget https://download.postgresql.org/pub/repos/yum/<$version>/<$DISTRIBUITION>/<$SO>/hypopg_<$version>.1.1-1.<$SO>.x86_64.rpm
+rpm2cpio hypopg_<$version>.1.1-1.<$SO>.x86_64.rpm | cpio -idmv
+cp usr/pgsql-<$version>/lib/hypopg.so /usr/local/pgsql-<$version>/lib/
+cp usr/pgsql-<$version>/share/extension/hypopg* /usr/local/pgsql-<$version>/share/extension/
+
+#FOR DEBIAN
+wget https://codeload.github.com/HypoPG/hypopg/zip/master
+mv master hypopg-master.zip
+unzip hypopg-master.zip
+cd hypopg-master
+vi Makefile
+PG_CONFIG ?= /usr/local/pgsql-$version/bin/pg_config
+make
+make install
+
+________________________________________________________________________________________________________________________________________________________________________________
+
+#FOR REDHAT
+wget https://github.com/rjuju/pg_track_settings/archive/2.0.0.tar.gz -O pg_track_settings-2.0.0.tar.gz
+tar xvfz pg_track_settings-2.0.0.tar.gz
+cd pg_track_settings-2.0.0
+cp pg_track_settings.control pg_track_settings--2.0.0.sql pg_track_settings--1.1.0.sql pg_track_settings--1.0.1.sql pg_track_settings--1.0.1--1.1.0.sql pg_track_settings--1.0.0.sql pg_track_settings--1.0.0--1.0.1.sql /usr/local/pgsql-<$version>/share/extension/
+
+#FOR DEBIAN
+wget https://apt.postgresql.org/pub/repos/apt/pool/main/p/pg-track-settings/postgresql-<$version>-pg-track-settings_2.0.0-1.pgdg<$OS>%2B1_all.deb
+ar vx postgresql-9.6-pg-track-settings_2.0.0-1.pgdg18.04+1_all.deb
+tar -xf data.tar.xz
+cp usr/pgsql-<$version>/share/extension/pg_track-settings* /usr/local/pgsql-<$version>/share/extension/
+
+#DATABASE SETUP
+su - postgres
+vi /dados/data/postgresql.conf
+listen_addresses = '*'
+port = 5432
+shared_preload_libraries='pg_stat_statements,powa,pg_stat_kcache,pg_qualstats,pg_wait_sampling'
+track_io_timing = on
+pg_qualstats.sample_rate = 1
+#------------------------------------------------------------------------------
+# POWA MONITORING
+# -----------------------------------------------------------------------------
+powa.frequency = 2min
+powa.retention = 1d
+# -----------------------------------------------------------------------------
+
+#CREATE DATABASE POWA
+/usr/local/pgsql-<$version>/bin/psql -U postgres
+CREATE ROLE powa SUPERUSER LOGIN PASSWORD '************';
+CREATE DATABASE powa;
+\c powa
+CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
+CREATE EXTENSION IF NOT EXISTS btree_gist;
+CREATE EXTENSION IF NOT EXISTS powa;
+CREATE EXTENSION IF NOT EXISTS pg_qualstats;
+CREATE EXTENSION IF NOT EXISTS pg_stat_kcache;
+CREATE EXTENSION IF NOT EXISTS pg_wait_sampling;
+CREATE EXTENSION IF NOT EXISTS hypopg WITH SCHEMA public;
+CREATE EXTENSION IF NOT EXISTS pg_track_settings;
+\q
+exit
+
+#THE POWA-ARCHIVIST COLLECTS DATA FROM VARIOUS STATS EXTENSIONS
+    pg_stat_statements
+    pg_qualstats
+    pg_stat_kcache
+    pg_wait_sampling
+    pg_track_settings
+#ALL THOSE EXTENSIONS HAVE TO BE INSTALLED ON THE DEDICATED DATABASE OF THE MONITORED SERVER.
+
+#PG_STAT_KCACHE
+IS A POSTGRESQL EXTENSION GATHERING STATISTICS ON SYSTEM METRICS
+CPU (USER TIME AND SYSTEM TIME)
+PHYSICAL DISK ACCESS (READ AND WRITE)
+
+HIT RATIO
+SHARED BUFFER HIT RATIO: PERCENT OF BLOCKS READ FROM SHARED BUFFER (MEMORY)
+SYSTEM CACHE HIT RATIO: PERCENT OF BLOCKS READ FROM THE SYSTEM CACHE (MEMORY)
+DISK HIT RATIO: PERCENTAGE OF BLOCKS WHICH NEEDED A PHYSICAL DISK READ
+TO ENABLE THIS EXTENSION DO
+
+/usr/local/pgsql-<$version>/bin/psql -U postgres -d powa
+select powa_kcache_register();
+\q
+
+#PG_STAT_STATEMENTS
+THE PG_STAT_STATEMENTS EXTENSION RECORDS STATITSTICS OF ALL SQL QUERIES (AKA "statements”) EXECUTED ON A GIVEN PostgreSQL SERVER.
+
+#CONFIGURATION FILES
+vi /etc/powa-web.conf 
+servers={
+  'main': {
+    'host': '$HOSTNAME',
+    'port': '$PORT',
+    'database': 'powa'
+  }
+}
+cookie_secret="*********"
+
+vi /etc/powa-collector.conf
+{
+    "repository": {
+        "dsn": "postgresql://postgres@$HOSTNAME:$PORT/powa"
+    },
+    "debug": false
+}
+
+vi /dados/$path/data/pg_hba.conf
+host    powa            postgres        172.30.0.17/32          trust
+
+su - postgres -c "/usr/local/pgsql-$version/bin/pg_ctl reload -D /dados/$path/data"
+
+#RUN POWA
+nohup /usr/bin/powa-web > /var/log/powa-web.log 2>&1 & 
+OR
+nohup /usr/local/bin/powa-web > /var/log/powa-web.log 2>&1 & 
+
+nohup /usr/bin/powa-collector.py > /var/log/powa-collector 2>&1 & 
+OR
+nohup /usr/local/bin/powa-collector.py > /var/log/powa-collector 2>&1 & 
+
+#ACCESS WEB
+http://ip:8888
+
+********************************************************************************************************************************************************************************
+
+#HOW TO MONITORING ANOTHER PRIMARY HOST DATABASE
+
+#PRE-REQUIRES
+yum install -y python-pip python-devel python-psycopg2
+
+#INSTALL
+pip install --upgrade pip
+pip install powa-web
+pip install powa-collector
+
+#DOWNLOAD AND UPDATE POSTGRES EXTENSIONS
+
+#DATABASE SETUP
+su - postgres 
+vi /dados/data/postgresql.conf
+listen_addresses = '*'
+port = 5432
+shared_preload_libraries='pg_stat_statements,powa,pg_stat_kcache,pg_qualstats,pg_wait_sampling'
+track_io_timing = on
+pg_qualstats.sample_rate = 1
+#------------------------------------------------------------------------------
+# POWA MONITORING
+# -----------------------------------------------------------------------------
+powa.frequency = 2min
+powa.retention = 1d
+# -----------------------------------------------------------------------------
+
+/usr/local/<$version>/bin/psql -U postgres
+CREATE ROLE powa SUPERUSER LOGIN PASSWORD '************';
+CREATE DATABASE powa;	
+\c powa
+CREATE EXTENSION IF NOT EXISTS btree_gist;
+CREATE EXTENSION IF NOT EXISTS powa;
+CREATE EXTENSION IF NOT EXISTS hypopg WITH SCHEMA public;          
+CREATE EXTENSION IF NOT EXISTS pg_qualstats;      
+CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
+CREATE EXTENSION IF NOT EXISTS pg_stat_kcache;   
+CREATE EXTENSION IF NOT EXISTS pg_track_settings; 
+CREATE EXTENSION IF NOT EXISTS pg_wait_sampling; 
+CREATE EXTENSION IF NOT EXISTS plpgsql;           
+
+\c <other databases in same instance>
+CREATE EXTENSION IF NOT EXISTS hypopg WITH SCHEMA public;               
+CREATE EXTENSION IF NOT EXISTS pg_qualstats;      
+CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
+CREATE EXTENSION IF NOT EXISTS pg_stat_kcache;    
+CREATE EXTENSION IF NOT EXISTS pg_track_settings; 
+CREATE EXTENSION IF NOT EXISTS pg_wait_sampling; 
+\q
+exit
+
+#GRANT CONNECT NO SERVER COLLECTOR
+vi /dados/data/pg_hba.conf
+host    all      powa            <$remote_server>/32         md5
+
+/usr/local/<$version>/bin/pg_ctl reload -D /dados-prim/data/"
+
+#REGISTER DATABASE ON REMOTE SERVER COLLECTOR
+
+##PARAMETES##
+(hostname text, port integer DEFAULT 5432, alias text DEFAULT NULL::text, username text DEFAULT 'powa'::text, password text DEFAULT NULL::text, dbname text DEFAULT 'powa'::text, frequency integer DEFAULT 300, powa_coalesce integer DEFAULT 100, retention interval DEFAULT '1 day'::interval, allow_ui_connection boolean DEFAULT true, extensions text[] DEFAULT NULL::text[])
+
+/usr/local/<$version>/bin/psql -U postgres -d powa
+SELECT powa_register_server(hostname => '$hostaname', 
+port => $port, 
+alias => 'example-prim'::text, 
+username => 'powa'::text, 
+password => '************'::text, 
+dbname => 'powa'::text, 
+frequency => 120, 
+powa_coalesce => 100, 
+retention => '00:00:00'::interval, 
+allow_ui_connection => true, 
+extensions => '{pg_stat_kcache,pg_qualstats,pg_wait_sampling}');    
+
+select * from powa_servers;
+
+SELECT powa_wait_sampling_register(<$ID>);
+
+select public.powa_activate_extension(<$ID>, 'pg_track_settings');
+
+#ON MASTER COLLECTOR
+ps -ef | grep powa-collector.py
+kill -9 $PID
+nohup /usr/bin/powa-collector.py > /var/log/powa-collector 2>&1 & 
+OR
+nohup /usr/local/bin/powa-collector.py > /var/log/powa-collector 2>&1 & 
+
+#REMOVE REMOTE SERVER 	
+/usr/local/<$version>/bin/psql -U postgres -d powa
+select * from powa_servers;
+
+SELECT powa_delete_and_purge_server(<$ID>);
+
+#FORCE TAKE SNAPSHOT WAINT AND RUN AGAIN (THE TOOL NEEDS TWO SNAPSHOTS TO DISPLAY BREAK DATA)
+select * from powa_servers;
+
+select public.powa_take_snapshot(<$ID>);
+#WAIT ONE MINUTE AND TRY AGAIN
+select public.powa_take_snapshot(<$ID>);
+
+
+********************************************************************************************************************************************************************************
+
+#HOW TO MONITORING ANOTHER STANDBY HOST DATABASE
+
+#DATABASE SETUP
+su - postgres 
+vi /dados/data/postgresql.conf
+listen_addresses = '*'
+port = 5432
+hot_standby = on
+shared_preload_libraries='pg_stat_statements,powa,pg_stat_kcache,pg_qualstats,pg_wait_sampling'
+track_io_timing = on
+pg_qualstats.sample_rate = 1
+#------------------------------------------------------------------------------
+# POWA MONITORING
+# -----------------------------------------------------------------------------
+powa.frequency = 2min
+powa.retention = 1d
+# -----------------------------------------------------------------------------
+
+#GRANT CONNECT NO SERVER COLLECTOR
+vi /dados/data/pg_hba.conf
+host    all      powa            <$remote_server>/32         md5
+
+/usr/local/<$version>/bin/pg_ctl reload -D /dados-prim/data/"
+
+#REGISTER DATABASE ON REMOTE SERVER COLLECTOR
+
+##PARAMETES##
+(hostname text, port integer DEFAULT 5432, alias text DEFAULT NULL::text, username text DEFAULT 'powa'::text, password text DEFAULT NULL::text, dbname text DEFAULT 'powa'::text, frequency integer DEFAULT 300, powa_coalesce integer DEFAULT 100, retention interval DEFAULT '1 day'::interval, allow_ui_connection boolean DEFAULT true, extensions text[] DEFAULT NULL::text[])
+
+/usr/local/<$version>/bin/psql -U postgres -d powa
+SELECT powa_register_server(hostname => '$hostaname', 
+port => $port, 
+alias => 'example-prim'::text, 
+username => 'powa'::text, 
+password => '************'::text, 
+dbname => 'powa'::text, 
+frequency => 120, 
+powa_coalesce => 100, 
+retention => '00:00:00'::interval, 
+allow_ui_connection => true, 
+extensions => '{pg_stat_kcache,pg_qualstats,pg_wait_sampling}');    
+
+select * from powa_servers;
+
+SELECT powa_wait_sampling_register(<$ID>);
+
+select public.powa_activate_extension(<$ID>, 'pg_track_settings');
+
+#ON MASTER COLLECTOR
+ps -ef | grep powa-collector.py
+kill -9 $PID
+nohup /usr/bin/powa-collector.py > /var/log/powa-collector 2>&1 & 
+OR
+nohup /usr/local/bin/powa-collector.py > /var/log/powa-collector 2>&1 & 
+
+********************************************************************************************************************************************************************************
+
+#ON MASTER/CLIENT COLLECTOR 
+#ENABLE VACUUM DAILY 
+
+vi /postgres/backup/scripts/desfrag_banco_powa.sh
+#/bin/bash
+/usr/local/pgsql-11.3/bin/pg_isready
+export ISREADY=`echo $?`
+if [ $ISREADY -eq 0 ]; then
+for tablename in $(/usr/local/pgsql-11.3/bin/psql -U postgres -d powa -p 5433 -t -c "SELECT DISTINCT table_schema || '.' || table_name AS _table FROM information_schema.tables t, pg_class c WHERE pg_stat_get_dead_tuples(c.oid) >= 10 AND c.relname<>'t_exame_solic_log' AND table_type='BASE TABLE' AND table_schema<>'pg_catalog' ORDER BY 1 desc"); do
+echo $tablename
+/usr/local/pgsql-11.3/bin/psql -U postgres -d powa -p 5433 -c "vacuum full analyze ${tablename};"
+/usr/local/pgsql-11.3/bin/psql -U postgres -d powa -p 5433 -c "reindex table ${tablename};"
+done
+export RESVACUUM=`echo -e "OK"`
+export SAIDABOT=`echo -e "Desfrag DB POWA :" $RESVACUUM`
+curl -s -X POST https://api.telegram.org/bot$id/sendMessage -d chat_id=$chatid -d text="$SAIDABOT"
+else
+export RESVACUUM=`echo -e "FALHA"`
+export SAIDABOT=`echo -e "Desfrag DB POWA :" $RESVACUUM`
+curl -s -X POST https://api.telegram.org/bot$id/sendMessage -d chat_id=$chatid -d text="$SAIDABOT"
+fi
+
+crontab -e -u postgres
+30 04 * * * /postgres/backup/scripts/desfrag_banco_powa.sh >> /postgres/backup/scripts/desfrag_banco_powa.log 2>&1
+
+#END
+
+
+
+
+

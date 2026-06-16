@@ -1,0 +1,971 @@
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++   ORACLE DATABASE 11.2.0.4 G RAC PLUS STORAGE ON OL7   +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+#Software
+
+p13390677_112040_platform_1of7.zip (Oracle Database, including Oracle RAC components)
+p13390677_112040_platform_2of7.zip (Oracle Database, including Oracle RAC components)
+p13390677_112040_platform_3of7.zip (Oracle Grid Infrastructure, includes: Oracle ASM, Oracle Clusterware, Oracle Restart)
+
+Direct Download 
+http://app.beg.inf.br/pub/oracle/11/
+
+#create nodes of RAC
+New vm >
+2 networks interfaces
+BRIDGE
+INTERNAL NETWORK
+1 disk 30gb
+/boot 300m - swap 6gb - / 23gb
+6gb ram
+S.O Oracle Enterprise Linux 7 x86_64
+SERVER WITH GUI INSTALATION
+
+#install VirtualBox Guest Additions
+yum update kernel* -y
+init 6
+cd /run/media/root/VBox_GAs_6.0.8
+./VBoxLinuxAdditions.run
+init 6
+
+#install and configure oracle envoriments
+sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+systemctl stop firewalld
+systemctl disable firewalld
+systemctl stop chronyd.service
+systemctl disable chronyd.service
+mv /etc/chrony.conf /etc/chrony.conf.bak
+yum install -y oracle-rdbms-server-11gR2-preinstall.x86_64
+yum install -y kmod-oracleasm.x86_64 oracleasm-support.x86_64 
+yum install -y https://download.oracle.com/otn_software/asmlib/oracleasmlib-2.0.12-1.el7.x86_64.rpm
+yum install -y elfutils-libelf-devel.x86_64
+
+vi /etc/pam.d/su
+vi /etc/pam.d/system-auth
+vi /etc/pam.d/sshd
+vi /etc/pam.d/login
+session required        pam_limits.so
+session required        pam_unix.so
+vi /etc/security/limits.conf
+oracle   soft   nofile    1024
+oracle   hard   nofile    65536
+oracle   soft   nproc    16384
+oracle   hard   nproc    16384
+oracle   soft   stack    10240
+oracle   hard   stack    32768
+oracle   hard   memlock    134217728
+oracle   soft   memlock    134217728
+*     soft   nofile  1024
+*     hard   nofile  65535 
+grid hard nofile 65536
+
+#configure user 
+groupadd -g 54321 oinstall
+groupadd -g 54322 dba
+groupadd -g 54323 oper
+groupadd -g 54324 backupdba
+groupadd -g 54325 dgdba
+groupadd -g 54326 kmdba
+groupadd -g 54327 asmdba
+groupadd -g 54328 asmoper
+groupadd -g 54329 asmadmin
+groupadd -g 54330 racdba
+userdel oracle
+useradd -m -u 54331 -g oinstall -G dba,oper,backupdba,dgdba,kmdba,asmdba,asmadmin,racdba -d /home/oracle -s /bin/bash  oracle
+useradd -m -u 54332 -g oinstall -G dba,asmadmin,asmdba,asmoper -d /home/grid -s /bin/bash  grid
+id oracle
+id grid
+passwd oracle
+passwd grid
+mkdir -p /u01/app/grid
+mkdir -p /u01/app/11.2/grid
+mkdir -p /u01/app/oracle
+mkdir -p /u01/app/oracle/product/11.2/dbhome_1
+chmod -R 775 /u01
+chown -R grid:oinstall /u01
+chown -R oracle:oinstall /u01/app/oracle
+chown oracle:oinstall -R /home/oracle
+
+#configure static ip
+ls -ltr /etc/sysconfig/network-scripts/ifcfg-*
+-rw-r--r--. 1 root root 254 Mar 29  2019 /etc/sysconfig/network-scripts/ifcfg-lo
+-rw-r--r--. 1 root root 312 Jan 21 10:07 /etc/sysconfig/network-scripts/ifcfg-enp0s3
+-rw-r--r--. 1 root root 307 Apr 19 15:24 /etc/sysconfig/network-scripts/ifcfg-Wired_connection_1
+-rw-r--r--. 1 root root 307 Apr 19 15:24 /etc/sysconfig/network-scripts/ifcfg-Wired_connection_2
+
+cp /etc/sysconfig/network-scripts/ifcfg-enp0s3 /etc/sysconfig/network-scripts/ifcfg-enp0s3-bkp
+vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
+#####PUBLIC
+TYPE="Ethernet"
+PROXY_METHOD="none"
+BROWSER_ONLY="no"
+BOOTPROTO="none"
+DEFROUTE="yes"
+IPV4_FAILURE_FATAL="no"
+IPV6INIT="no"
+IPV6_AUTOCONF="no"
+IPV6_DEFROUTE="no"
+IPV6_FAILURE_FATAL="no"
+IPV6_ADDR_GEN_MODE="stable-privacy"
+NAME="enp0s3"
+UUID="e117208b-8a1b-4bdd-aa07-4a7aa9650a65"
+DEVICE="enp0s3"
+ONBOOT="yes"
+IPADDR=192.168.1.116
+PREFIX=24
+GATEWAY=192.168.1.1
+
+cp /etc/sysconfig/network-scripts/ifcfg-Wired_connection_2 /etc/sysconfig/network-scripts/ifcfg-Wired_connection_2-bkp
+vi /etc/sysconfig/network-scripts/ifcfg-Wired_connection_2
+#####PRIVATE
+HWADDR=08:00:27:AE:32:E6
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=none
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=no
+IPV6_AUTOCONF=no
+IPV6_DEFROUTE=no
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME="Wired connection 2"
+UUID=4c36d486-f66c-4c32-8582-af8f8b111568
+ONBOOT=yes
+IPADDR=192.168.0.100
+PREFIX=24
+
+#check network 
+ifconfig
+enp0s3: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.116  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::a00:27ff:fe5d:be9f  prefixlen 64  scopeid 0x20<link>
+        ether 08:00:27:5d:be:9f  txqueuelen 1000  (Ethernet)
+        RX packets 97  bytes 13224 (12.9 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 88  bytes 13824 (13.5 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+enp0s8: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.118  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::a00:27ff:feb4:9b9f  prefixlen 64  scopeid 0x20<link>
+        ether 08:00:27:b4:9b:9f  txqueuelen 1000  (Ethernet)
+        RX packets 2  bytes 1180 (1.1 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 44  bytes 6456 (6.3 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+enp0s9: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.0.100  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet6 fe80::a00:27ff:feae:32e6  prefixlen 64  scopeid 0x20<link>
+        ether 08:00:27:ae:32:e6  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 44  bytes 7273 (7.1 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+#set hostname
+hostnamectl 
+hostnamectl set-hostname oraclerac11gn1
+hostnamectl --static 
+
+#configure /etc/hosts
+vi /etc/hosts
+# bridge
+# Public Network - (enp0s3)
+192.168.1.116 oraclerac11gn1.appsdba.info oraclerac11gn1
+192.168.1.117 oraclerac11gn2.appsdba.info oraclerac11gn2
+
+# Internal Network
+# Private Interconnect - (enp0s9)
+192.168.0.100 oraclerac11gn1-priv.appsdba.info oraclerac11gn1-priv
+192.168.0.101 oraclerac11gn2-priv.appsdba.info oraclerac11gn2-priv
+
+# Public Virtual IP (VIP) addresses for - (enp0s8)
+192.168.1.118 oraclerac11gn1-vip.appsdba.info oraclerac11gn1-vip
+192.168.1.119 oraclerac11gn2-vip.appsdba.info oraclerac11gn2-vip
+
+#NOTE
+It is essential to provide 3 digitization ips or more to successfully install the grid and smooth operation of the round robin
+https://www.oracle.com/technetwork/database/options/clustering/overview/scan-129069.pdf. 
+In this example, 2 interfaces will be started on each node for scans
+
+#configure resolve name
+vi /etc/racdns
+192.168.1.120 oraclerac11g-scan oraclerac11g-scan.appsdba.info 
+192.168.1.121 oraclerac11g-scan oraclerac11g-scan.appsdba.info 
+192.168.1.122 oraclerac11g-scan oraclerac11g-scan.appsdba.info 
+192.168.1.123 oraclerac11g-scan oraclerac11g-scan.appsdba.info
+vi /etc/dnsmasq.conf | grep addn-hosts
+addn-hosts=/etc/racdns
+
+vi /etc/resolv.conf
+nameserver 127.0.0.1
+search appsdba.info
+nameserver 192.168.1.1
+
+chattr +i /etc/resolv.conf
+systemctl start dnsmasq
+systemctl enable dnsmasq
+
+#check resolve name
+
+nslookup oraclerac11g-scan
+Server:         127.0.0.1
+Address:        127.0.0.1#53
+
+Name:   oraclerac11g-scan.appsdba.info
+Address: 192.168.1.120
+Name:   oraclerac11g-scan.appsdba.info
+Address: 192.168.1.121
+Name:   oraclerac11g-scan.appsdba.info
+Address: 192.168.1.121
+Name:   oraclerac11g-scan.appsdba.info
+Address: 192.168.1.120
+
+nslookup oraclerac11gn1
+Server:         127.0.0.1
+Address:        127.0.0.1#53
+
+Name:   oraclerac11gn1.appsdba.info
+Address: 192.168.1.116
+
+nslookup oraclerac11gn1-priv
+Server:         127.0.0.1
+Address:        127.0.0.1#53
+
+Name:   oraclerac11gn1-priv.appsdba.info
+
+#add disks to create asm
+sdb     10GB    Shareable disk
+sdc     10GB    Shareable disk
+sdd     10GB    Shareable disk
+
+fdisk -l
+Disk /dev/sdd: 10.7 GB, 10737418240 bytes, 20971520 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+Disk /dev/sdb: 10.7 GB, 10737418240 bytes, 20971520 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+Disk /dev/sdc: 10.7 GB, 10737418240 bytes, 20971520 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+#partition the disks
+fdisk /dev/sdd
+Welcome to fdisk (util-linux 2.23.2).
+
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+Device does not contain a recognized partition table
+Building a new DOS disklabel with disk identifier 0x6db98611.
+
+Command (m for help): n
+Partition type:
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended
+Select (default p): p
+Partition number (1-4, default 1): 1
+First sector (2048-20971519, default 2048):
+Using default value 2048
+Last sector, +sectors or +size{K,M,G} (2048-20971519, default 20971519):
+Using default value 20971519
+Partition 1 of type Linux and of size 10 GiB is set
+
+Command (m for help): w
+The partition table has been altered!
+
+Calling ioctl() to re-read partition table.
+Syncing disks.
+
+#configure user envoriments
+vi /home/grid/.bash_profile
+PATH=$PATH:$HOME/.local/bin:$HOME/bin
+export ORACLE_SID=+ASM1
+export ORACLE_BASE=/u01/app/grid
+export ORACLE_HOME=/u01/app/11.2/grid
+export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch:$PATH
+umask 22
+
+vi /home/oracle/.bash_profile
+PATH=$PATH:$HOME/.local/bin:$HOME/bin
+export ORACLE_SID=oradbc1
+export ORACLE_BASE=/u01/app/oracle
+export ORACLE_HOME=$ORACLE_BASE/product/11.2/dbhome_1
+export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch:$PATH
+umask 22
+
+vi /root/.bash_profile
+PATH=$PATH:$HOME/bin
+export ORACLE_HOME=/u01/app/11.2/grid
+export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch:$PATH
+
+#configure asm disks
+source /root/.bash_profile
+oracleasm configure -i
+Configuring the Oracle ASM library driver.
+
+This will configure the on-boot properties of the Oracle ASM library
+driver.  The following questions will determine whether the driver is
+loaded on boot and what permissions it will have.  The current values
+will be shown in brackets ('[]').  Hitting <ENTER> without typing an
+answer will keep that current value.  Ctrl-C will abort.
+
+Default user to own the driver interface []: oracle
+Default group to own the driver interface []: oinstall
+Start Oracle ASM library driver on boot (y/n) [n]: y
+Scan for Oracle ASM disks on boot (y/n) [y]: y
+Writing Oracle ASM library driver configuration: done
+
+#identify uid disks
+/usr/lib/udev/scsi_id -g -u -d /dev/sdb1
+1ATA_VBOX_HARDDISK_VB40355d90-daab0c3a
+/usr/lib/udev/scsi_id -g -u -d /dev/sdc1
+1ATA_VBOX_HARDDISK_VBf8a04d01-017a7000
+/usr/lib/udev/scsi_id -g -u -d /dev/sdd1
+1ATA_VBOX_HARDDISK_VB17fcea21-810ea673
+
+#configure rules file for create symbolic link
+vi /etc/udev/rules.d/99-oracle-asmdevices.rules
+KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/$parent", RESULT=="1ATA_VBOX_HARDDISK_VB40355d90-daab0c3a", SYMLINK+="asm-disk1", OWNER="grid", GROUP="asmadmin", MODE="0660"
+KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/$parent", RESULT=="1ATA_VBOX_HARDDISK_VBf8a04d01-017a7000", SYMLINK+="asm-disk2", OWNER="grid", GROUP="asmadmin", MODE="0660"
+KERNEL=="sd?1", SUBSYSTEM=="block", PROGRAM=="/usr/lib/udev/scsi_id -g -u -d /dev/$parent", RESULT=="1ATA_VBOX_HARDDISK_VB17fcea21-810ea673", SYMLINK+="asm-disk3", OWNER="grid", GROUP="asmadmin", MODE="0660"
+
+#check configuration of device
+udevadm test /block/sdb/sdb1
+udevadm test /block/sdc/sdc1
+udevadm test /block/sdd/sdd1
+udevadm control --reload-rules
+/sbin/udevadm trigger
+
+#validade configuration
+ls -ltr /dev/asm-disk*
+lrwxrwxrwx 1 root root 4 Apr 19 17:56 /dev/asm-disk1 -> sdb1
+lrwxrwxrwx 1 root root 4 Apr 19 17:56 /dev/asm-disk2 -> sdc1
+lrwxrwxrwx 1 root root 4 Apr 19 17:56 /dev/asm-disk3 -> sdd1
+
+#shutdown node1 and clone to node2
+#up two node machines
+#change personal configuration like variables, hostname, ips and uid disks in rules file
+
+#ssh key exchange
+su - root -c "ssh-keygen -t rsa"
+su - oracle -c "ssh-keygen -t rsa"
+su - grid -c "ssh-keygen -t rsa"
+
+su - root -c "cat /root/.ssh/id_rsa.pub > /root/.ssh/authorized_keys"
+su - oracle -c "cat /home/oracle/.ssh/id_rsa.pub > /home/oracle/.ssh/authorized_keys"
+su - grid -c "cat /home/grid/.ssh/id_rsa.pub > /home/grid/.ssh/authorized_keys"
+chmod 600 /root/.ssh/authorized_keys
+chmod 600 /home/oracle/.ssh/authorized_keys
+chmod 600 /home/grid/.ssh/authorized_keys
+
+#Change redhat-release
+vi /etc/redhat-release
+Red Hat Enterprise Linux Server release 6.7
+#Red Hat Enterprise Linux Server release 7.7 (Maipo)
+
+* go to node 2 and copy the contents of the id_rsa.pub files from the respective root, grid, oracle users to authorized_keys on node 1
+
+#copy software
+
+#install cvuqdisk (install node 1 and node 2)
+cd /u01/app/11.2/grid/rpm/
+rpm -ivh cvuqdisk-1.0.9-1.rpm    
+
+#validate all configuration (run runcluvfy.sh)
+su - grid
+cd /u01/app/11.2/grid/
+./runcluvfy.sh stage -pre crsinst -n oraclerac11gn1,oraclerac11gn2 -fixup -verbose
+
+#change cvu_config
+vi /u01/app/11.2/grid/stage/cvu/cv/admin/cvu_config
+CV_ASSUME_DISTID=OEL6
+
+#run install grid
+su –
+xhost +
+su – grid
+export DISPLAY=:0.0
+cd /u01/app/11.2/grid/
+./runInstaller
+
+-- After starting or installing follow the steps below always advancing the screens
+
+# screen 1
+
+Select any of the following installation options
+
+(@) Install and Configure Oracle Grid Infrastructure for a Cluster
+( ) Configure Oracle Grid Infrastructure for a Standalone Server
+( ) Upgrade Oracle Grid Infrastructure or Oracle Automatic Storage Management
+( ) Install Oracle Grid Infrastructure Software Only
+
+# screen 2
+
+( ) Typical Installation 
+    Perform a full grid infrastructure installation with basic configuration
+(@) Advanced Installation 
+    Allows advanced configuration options such as alternative storage choices, additional networking flexibility, integration with IPMI,
+    and more role allocation of Oracle Automatic Storage Management system privilleges.
+
+# screen 3
+
+Single Client Access Name (SCAN) allows clients to use one name in connection strings to connect to the cluster as a whole. 
+Client connect request to the SCAN name can be handled by any cluster node.
+
+Cluster Name:   oraclerac11g
+SCAN Name:      oraclerac11g-scan
+SCAN Port:      1521
+
+[ ] Configure GNS
+    GNS Sub Domain:  _________________
+    GNS VIP Address: _________________
+    
+# screen 4
+
+Provide the list of nodes to be managed by Oracle Grid Infrastructure with their Public Hostname and Virtual Hostname.
+If Oracle Grid Naming Service (GNS) has been select and DHCP is enabled, 
+then the Virtual Hostname is automatically configured for each Public Node.
+
++-----------------------------------+---------------------------------------+
+| Public Hostname                   | Virtual Hostname                      |
++-----------------------------------+---------------------------------------+
+| oraclerac11gn1.appsdba.info       | oraclerac11gn1-vip.appsdba.info       |
++-----------------------------------+---------------------------------------+
+| oraclerac11gn2.appsdba.info       | oraclerac11gn2-vip.appsdba.info       |
++-----------------------------------+---------------------------------------+
+
+SSH connectivity...          Use Cluster Configuration File...       Add...  Edit... Remove
+
+# screen 4
+
+Identify the planned use for each global interfaces shown in the box bellow as Public, Private, or Do Not Use. 
+Private interfaces are used by Oracle Grid Infrastructure for internode traffic.
+
+If there is more than one subnet associated with an interface, 
+then change the interface´s attributes to associate the interface name with the additional subnets.
+
++---------------------+-----------------------+-----------------------------+
+| Interface Name      |       Subnet          |       Use for               |
++---------------------+-----------------------+-----------------------------+
+| enp0s3              |       192.168.1.0     |       Public                |
++---------------------+-----------------------+-----------------------------+
+| enp0s9              |       192.168.0.0     |       Private               | 
++---------------------+-----------------------+-----------------------------+
+| virb0               |       192.168.122.0   |       Do not Use            |
++---------------------+-----------------------+-----------------------------+
+
+# screen 5
+
+You can place Oracle Cluster Registry (OCR) files and voting disk files on Oracle ASM storage, or a file system.
+
+(@) Oracle Automatic Storage Management (Oracle ASM)
+    Choose this option to configure OCR and voting disk files on Oracle ASM storage.
+
+( ) Shared File System
+    Choose this option to configure OCR and voting disk files on an existing shared file system.
+    
+# screen 6
+
+Select Disk Group Characteristic and select disks:
+Disk Group Name         DATA
+Redundancy              ( ) High     ( ) Normal     (@) External
+AU Size                 1 MB
+
+  Add Disks
+  ( ) Candidate Disks   (@) All Disks
+  +----+----------------------------------------------------------------+---------------+------------+
+  |[ ] | Disk Path                                                      | Size (in MB)  | Status     |
+  +----+----------------------------------------------------------------+---------------+------------+
+  |[X] | /dev/asm-disk1                                                 | 10239         | Candidate  |
+  +----+----------------------------------------------------------------+---------------+------------+
+  |[X] | /dev/asm-disk2                                                 | 10239         | Candidate  |
+  +----+----------------------------------------------------------------+---------------+------------+
+  |[X] | /dev/asm-disk3                                                 | 10239         | Candidate  |
+  +----+----------------------------------------------------------------+---------------+------------+
+  
+Change Disk Discovery Path
+Changing the Diks Discovery Path will affect ALL Disk Groups
+Disk Discovey Path:     /dev/asm-disk*
+                                          > OK   CANCEL
+                                          
+# screen 7
+
+The new Oracle Automatic Storage Management (Oracle ASM) instance requires its own SYS user with SYSASM privileges for administration.
+Oracle recommends that you create a less privileged ASMSNMP user with SYSDBA privileges to monitor the ASM instance.
+
+Specify the password for these user accounts.
+
+( ) Use different password for these accounts.
+
+                Password                Confirm Password
+     SYS        _______________________ _______________________
+     ASMSNMP    _______________________ _______________________
+     
+(@) Use same passwords for these accounts
+        
+    Specify Password: ****************     Confirm Passowrd: ****************
+
+# screen 8
+    
+Choose one of the following Failure Isolation Support options.
+
+( ) Use Intelligent Platform Management Interface (IPM)
+
+    To ensure sucessful instalation with IPMI enabled, ensure your IPMI drivers are properly installed and enabled
+        User Name: ________________
+        Password:  ________________
+        
+(@) Do not use Intelligent Platform Management Interface (IPMI)
+
+# screen 9
+
+Select the name of the operating system group, of which the user you are running this installation is a 
+member, that you want to use for operating system authentication to Oracle Automatic Storage Management.
+
+Oracle ASM DBA (OSDBA FOR ASM) Group                            asmdba
+Oracle ASM Operator (OSOPER for ASM) Group (Optional)           asmoper
+Oracle ASM Administrator (OSASM) Group                          asmadmin
+
+# screen 10
+
+Specify the Oracle Grid infrastructure for a Cluster Oracle base. By default, Oracle Grid Infrastructure is installed in a path
+indicating the Oracle Grid Infrastructure release and grid infrastructure software owner.
+
+Oracle Base: /u01/app/grid                              Browse...
+
+Specify a location for string Oracle software files separate from configuration files in the Oracle base directory.
+This software directory is the Oracle Grid Infrastructure home directory.
+
+Software location: /u01/app/11.2/grid
+
+# screen 11
+
+You are starting your frist installation on this host. Specify a directory for installation files.
+This directory is called the "inventory directory". 
+The installer automatically sets up subdirectories for each product to contain inventory data.
+The subdirectory for each product typically requires 150 kilobytes of disk space.
+
+Inventory Directory: /u01/app/oraInventory              Browse...
+
+Members of the following operating system group (the primary group) will have write permission to the inventory directory (oraInventory).
+oraInventory Group Name: oinstall
+  
+# screen 12
+Verification Result
+Some of the minimun requirements for installation completed.
+
+Check Again     Fix & Check Again     Show Failed      All Nodes     [x] Ignore All
++--+--------------------------------------------+
+|  | Checks       | Status        | Fixable     |
++--+--------------------------------------------+
+
+# screen 13
+Save Response File...
+Install
+
+# scrren 14
+Execute Configuration scripts
+
+The following configuration scripts need to be executed as the "root" user in each new cluster node. 
+Each script in the list below is followed by a list of nodes.
+
+Script to be executed:
++--------+-------------------------------------------+---------------------------------+
+|NUMBER  | Script Location                           | Nodes                            
++--------+-------------------------------------------+---------------------------------+
+|1       | /U01/app/oraIventory/orainstRoot.sh       | oraclerac11gn1, oraclerac11gn2  |
++--------+-------------------------------------------+---------------------------------+
+|2       | /u01/app/11.2/grid/root.sh                | oraclerac11gn1, oraclerac11gn2  |
++--------+-------------------------------------------+---------------------------------+
+
+To execute the configuration scripts:
+        1. Open a terminal window
+        2. Log in as "root"
+        3. Run the script in each cluster node
+        4. Return to this window and click "OK" to continue
+        
+Run the script on the local node first. After sucessful completion, you can run the script in parallel on all other nodes.
+
+#execution scripts
+/u01/app/oraInventory/orainstRoot.sh
+Changing permissions of /u01/app/oraInventory.
+Adding read,write permissions for group.
+Removing read,write,execute permissions for world.
+
+Changing groupname of /u01/app/oraInventory to oinstall.
+The execution of the script is complete.
+
+/u01/app/11.2/grid/root.sh
+Performing root user operation for Oracle 11g
+
+The following environment variables are set as:
+    ORACLE_OWNER= grid
+    ORACLE_HOME=  /u01/app/11.2/grid
+
+Enter the full pathname of the local bin directory: [/usr/local/bin]:
+   Copying dbhome to /usr/local/bin ...
+   Copying oraenv to /usr/local/bin ...
+   Copying coraenv to /usr/local/bin ...
+
+Creating /etc/oratab file...
+Entries will be added to the /etc/oratab file as needed by
+Database Configuration Assistant when a database is created
+Finished running generic part of root script.
+Now product-specific root actions will be performed.
+Using configuration parameter file: /u01/app/11.2/grid/crs/install/crsconfig_params
+Creating trace directory
+User ignored Prerequisites during installation
+Installing Trace File Analyzer
+OLR initialization - successful
+  root wallet
+  root wallet cert
+  root cert export
+  peer wallet
+  profile reader wallet
+  pa wallet
+  peer wallet keys
+  pa wallet keys
+  peer cert request
+  pa cert request
+  peer cert
+  pa cert
+  peer root cert TP
+  profile reader root cert TP
+  pa root cert TP
+  peer pa cert TP
+  pa peer cert TP
+  profile reader pa cert TP
+  profile reader peer cert TP
+  peer user cert
+  pa user cert
+Adding Clusterware entries to inittab
+ohasd failed to start
+Failed to start the Clusterware. Last 20 lines of the alert log follow:
+2020-04-21 21:11:02.499:
+[client(13146)]CRS-2101:The OLR was formatted using version 3.
+
+###################### HOW TO RESOLVE THE PROBLEM #################################
+
+vi /etc/systemd/system/oracle-ohasd.service
+
+# Copyright (c) 2014, Oracle and/or its affiliates. All rights reserved.
+#
+# Oracle OHASD startup
+
+[Unit]
+Description=Oracle High Availability Services
+After=syslog.target network.target remote-fs.target
+
+[Service]
+ExecStart=/etc/init.d/init.ohasd run >/dev/null 2>&1 </dev/null
+Type=simple
+Restart=always
+
+[Install]
+WantedBy=multi-user.target graphical.target
+
+systemctl start oracle-ohasd
+systemctl status oracle-ohasd
+● oracle-ohasd.service - Oracle High Availability Services
+   Loaded: loaded (/etc/systemd/system/oracle-ohasd.service; disabled; vendor preset: disabled)
+   Active: active (running) since Tue 2020-04-21 21:23:53 -03; 6s ago
+ Main PID: 14924 (init.ohasd)
+    Tasks: 1
+   CGroup: /system.slice/oracle-ohasd.service
+           └─14924 /bin/sh /etc/init.d/init.ohasd run >/dev/null 2>&1 </dev/null
+
+Apr 21 21:23:53 oraclerac11gn1 systemd[1]: Started Oracle High Availability Services.
+systemctl enable oracle-ohasd
+Created symlink from /etc/systemd/system/multi-user.target.wants/oracle-ohasd.service to /etc/systemd/system/oracle-ohasd.service.
+Created symlink from /etc/systemd/system/graphical.target.wants/oracle-ohasd.service to /etc/systemd/system/oracle-ohasd.service.
+
+####################### THE PROBLEM WAS SOLVED ######################################
+
+CRS-2672: Attempting to start 'ora.mdnsd' on 'oraclerac11gn1'
+CRS-2676: Start of 'ora.mdnsd' on 'oraclerac11gn1' succeeded
+CRS-2672: Attempting to start 'ora.gpnpd' on 'oraclerac11gn1'
+CRS-2676: Start of 'ora.gpnpd' on 'oraclerac11gn1' succeeded
+CRS-2672: Attempting to start 'ora.cssdmonitor' on 'oraclerac11gn1'
+CRS-2672: Attempting to start 'ora.gipcd' on 'oraclerac11gn1'
+CRS-2676: Start of 'ora.cssdmonitor' on 'oraclerac11gn1' succeeded
+CRS-2676: Start of 'ora.gipcd' on 'oraclerac11gn1' succeeded
+CRS-2672: Attempting to start 'ora.cssd' on 'oraclerac11gn1'
+CRS-2672: Attempting to start 'ora.diskmon' on 'oraclerac11gn1'
+CRS-2676: Start of 'ora.diskmon' on 'oraclerac11gn1' succeeded
+CRS-2676: Start of 'ora.cssd' on 'oraclerac11gn1' succeeded
+
+ASM created and started successfully.
+
+Disk Group DATA created successfully.
+
+clscfg: -install mode specified
+Successfully accumulated necessary OCR keys.
+Creating OCR keys for user 'root', privgrp 'root'..
+Operation successful.
+CRS-4256: Updating the profile
+Successful addition of voting disk 7a600ec0e9334fc1bf14d33cce970fb7.
+Successfully replaced voting disk group with +DATA.
+CRS-4256: Updating the profile
+CRS-4266: Voting file(s) successfully replaced
+##  STATE    File Universal Id                File Name Disk group
+--  -----    -----------------                --------- ---------
+ 1. ONLINE   7a600ec0e9334fc1bf14d33cce970fb7 (/dev/asm-disk1) [DATA]
+Located 1 voting disk(s).
+CRS-2672: Attempting to start 'ora.asm' on 'oraclerac11gn1'
+CRS-2676: Start of 'ora.asm' on 'oraclerac11gn1' succeeded
+CRS-2672: Attempting to start 'ora.DATA.dg' on 'oraclerac11gn1'
+CRS-2676: Start of 'ora.DATA.dg' on 'oraclerac11gn1' succeeded
+Configure Oracle Grid Infrastructure for a Cluster ... succeeded
+
+# instaltion sucessfully
+
+#pos install check
+su - grid
+cluvfy stage -post crsinst -n oraclerac11gn1,oraclerac11gn2
+
+Performing post-checks for cluster services setup
+Checking node reachability...
+Node reachability check passed from node "oraclerac11gn2"
+Checking user equivalence...
+User equivalence check passed for user "grid"
+Checking node connectivity...
+Checking hosts config file...
+Verification of the hosts config file successful
+Check: Node connectivity for interface "enp0s3"
+Node connectivity passed for interface "enp0s3"
+TCP connectivity check passed for subnet "192.168.1.0"
+Check: Node connectivity for interface "enp0s8"
+Node connectivity passed for interface "enp0s8"
+TCP connectivity check passed for subnet "192.168.0.0"
+Checking subnet mask consistency...
+Subnet mask consistency check passed for subnet "192.168.1.0".
+Subnet mask consistency check passed for subnet "192.168.0.0".
+Subnet mask consistency check passed.
+Node connectivity check passed
+Checking multicast communication...
+Checking subnet "192.168.1.0" for multicast communication with multicast group "230.0.1.0"...
+Check of subnet "192.168.1.0" for multicast communication with multicast group "230.0.1.0" passed.
+Checking subnet "192.168.0.0" for multicast communication with multicast group "230.0.1.0"...
+Check of subnet "192.168.0.0" for multicast communication with multicast group "230.0.1.0" passed.
+Check of multicast communication passed.
+Time zone consistency check passed
+Checking Oracle Cluster Voting Disk configuration...
+ASM Running check passed. ASM is running on all specified nodes
+Oracle Cluster Voting Disk configuration check passed
+Checking Cluster manager integrity...
+Checking CSS daemon...
+Oracle Cluster Synchronization Services appear to be online.
+Cluster manager integrity check passed
+UDev attributes check for OCR locations started...
+UDev attributes check passed for OCR locations
+UDev attributes check for Voting Disk locations started...
+UDev attributes check passed for Voting Disk locations
+Default user file creation mask check passed
+Checking cluster integrity...
+Cluster integrity check passed
+Checking OCR integrity...
+Checking the absence of a non-clustered configuration...
+All nodes free of non-clustered, local-only configurations
+ASM Running check passed. ASM is running on all specified nodes
+Checking OCR config file "/etc/oracle/ocr.loc"...
+OCR config file "/etc/oracle/ocr.loc" check successful
+Disk group for ocr location "+DATA" available on all the nodes
+NOTE:
+This check does not verify the integrity of the OCR contents. Execute 'ocrcheck' as a privileged user to verify the contents of OCR.
+OCR integrity check passed
+Checking CRS integrity...
+Clusterware version consistency passed
+CRS integrity check passed
+Checking node application existence...
+Checking existence of VIP node application (required)
+VIP node application check passed
+Checking existence of NETWORK node application (required)
+NETWORK node application check passed
+Checking existence of GSD node application (optional)
+GSD node application is offline on nodes "oraclerac11gn2,oraclerac11gn1"
+Checking existence of ONS node application (optional)
+ONS node application check passed
+Checking Single Client Access Name (SCAN)...
+Checking TCP connectivity to SCAN Listeners...
+TCP connectivity to SCAN Listeners exists on all cluster nodes
+Checking name resolution setup for "oraclerac11g-scan"...
+Checking integrity of name service switch configuration file "/etc/nsswitch.conf" ...
+All nodes have same "hosts" entry defined in file "/etc/nsswitch.conf"
+Check for integrity of name service switch configuration file "/etc/nsswitch.conf" passed
+Verification of SCAN VIP and Listener setup passed
+Checking OLR integrity...
+Checking OLR config file...
+OLR config file check successful
+Checking OLR file attributes...
+OLR file check successful
+WARNING:
+This check does not verify the integrity of the OLR contents. Execute 'ocrcheck -local' as a privileged user to verify the contents of OLR.
+OLR integrity check passed
+User "grid" is not part of "root" group. Check passed
+Checking if Clusterware is installed on all nodes...
+Check of Clusterware install passed
+Checking if CTSS Resource is running on all nodes...
+CTSS resource check passed
+Querying CTSS for time offset on all nodes...
+Query of CTSS for time offset passed
+Check CTSS state started...
+CTSS is in Active state. Proceeding with check of clock time offsets on all nodes...
+Check of clock time offsets passed
+Oracle Cluster Time Synchronization Services check passed
+Checking VIP configuration.
+Checking VIP Subnet configuration.
+Check for VIP Subnet configuration passed.
+Checking VIP reachability
+Check for VIP reachability passed.
+
+Post-check for cluster services setup was successful.
+
+# Install Software database Oracle 11g
+xhost +
+su - oracle
+export DISPLAY=:0.0
+
+#descompress database software
+unzip p13390677_112040_Linux-x86-64_1of7_database.zip
+unzip p13390677_112040_Linux-x86-64_2of7_database.zip
+ls -ltr
+drwxr-xr-x 7 oracle oinstall       4096 Aug 27  2013 database
+vi /home/oracle/database/stage/cvu/cv/admin/cvu_config
+CV_ASSUME_DISTID=OEL6
+
+cd database
+./runInstaller
+
+# screen 1
+
+Dowload software updates for this installation. Software updates consist of recommended updates to the installer system checks,
+PatchSet Updates (PSUs), and other recommended patches.
+
+Select one of the following options:
+( ) Use My Oracle Support credentials for download
+    My Oracle Support user name: _______________________________
+    My Oracle Support password:  _______________________________
+                                                                        Proxy Settings...       Test Connection
+
+ ( ) Use pre-download software updates
+     Location: _______________________________________________________________________________  Browse ...
+
+ (@) Skip software updates
+ 
+# screen 2
+
+Select any of the following install options.
+
+Note: If you want to upgrade an existing Oracle Database 11g Release 2 instance select "Upgrade an existing database" option
+
+  (@) Create and configure a database
+  
+  ( ) Install database software only
+  
+  ( ) Upgrade an existing database
+
+# screen 3
+
+  ( ) Desktop Class
+      Choose this option if you are installing on a laptop or desktop class system. This option includes a starter database and allows
+      minimal configuration
+
+  (@) Server Class
+      Choose this option if you are installing on a server class system, which Oracle defines as a system used in a production data center.
+      This option allows for more advanced configuration options:
+
+# screen 4
+
+   Select the type of database installation you want to perform.
+   
+   ( ) Seçect instance database installation
+   
+   (@) Oracle Real Application Clusters database installation
+   
+   ( ) Oracle RAC One Node database installation
+   
+   Select nodes (in addition to the local node) in the cluster where the installer should install Oracle RAC or Oracle RAC One.
+   
+   +---+----+-------------------------------------------+
+   |   |    | Node Name                                 |
+   +---+----+-------------------------------------------+
+   |[x]| 1  | oraclerac11gn1                            |
+   +---+----+-------------------------------------------+
+   |[x]| 2  | oraclerac11gn2                            |
+   +---+----+-------------------------------------------+
+   SSH Connectivity...         Select All   Deselect All
+   
+# screen 5
+
+    (@) Typical install
+        Perform full Oracle Database installation with basic configuration
+        
+    ( ) Advanced install
+        Allows advanced selections such as different passwords for SYS,SYSMAN,SYSTEM and DBSNMP accounts, database character set,
+        products languages, automated backups, custom installation, and alternative storage options such as Oracle Automatic Storage Management.
+        
+ # screen 6
+     
+     Perform full Database installation with basic configuration.
+     
+     Oracle base: /u01/app/oracle                                                       Browse
+     Software location: /u01/app/oracle/product/11.2/dbhome_1                           Browse
+     Storage location: Oracle Automatic Storage Management
+     Database file location: DATA                                                       Browse
+     ASMSNMP Password: ***********
+     Database edition: Enterprise Edition (4,7GB)
+     OSDBA_Group: dba
+     Global database name: oradbc.appsdba.info
+     Administrative password: ***********
+     Confirm Password: ***********
+     Service Name:
+ 
+#FINISH
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

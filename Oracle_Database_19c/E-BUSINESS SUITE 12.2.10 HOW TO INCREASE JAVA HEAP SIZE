@@ -1,0 +1,150 @@
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++  E-BUSINESS SUITE 12.2.10 HOW TO INCREASE JAVA HEAP SIZE +
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+THE DEFAULT SIZE OF THE OACORE JVM HEAP IS 512 MB, SUPPORTS 50 TO 100 USERS. 
+WHEN AN INSTANCE IS REACHING MORE THAN 200 USERS, IT IS NECESSARY TO INCREASE THE SIZE OF JAVA HEAP AT OACORE.
+ORACLE RECOMMENDS A 2GB JAVA HEAP, THIS CAN SUPPORT 150 TO 200 USERS. 
+FOR GREATER WORK LOAD AND NUMBER OF USERS IT IS POSSIBLE TO ADD MORE OACORES MANAGED SERVERS. ORACLE RECOMMENDS TO HAVE A SERVER FOR TWO CPU´s
+THERE ARE TWO WAYS TO MODIFY THE SIZE OF JAVA HEAP. 
+WITH THE ENVIRONMENT IN OPERATION OR WAITING FOR A WINDOW TO PERFORM THE MODIFICATION OF A FILE AND APPLICATION BOUNCE.
+
+#LOGIN TO THE WEBLOGIC ADMINISTRATION CONSOLE
+http://hostname:port/console
+Enter Username and Password
+
+#GO TO THE BELOW SECTION.
+Home Page
+ -- Information and Resources -------------------------------------------------------------------------------------------------
+HELPFULL TOOLS                              GENERAL INFORMATION
+ 
+ -- Domain Configuration ------------------------------------------------------------------------------------------------------
+DOMAIN                                   SERVICES                                   INTEROPERABILITY
+   * Domain                                 * Messaging                                * WTC Servers
+ENVIRONMENT                                      * JMS Servers                         * Jolt Connection Pools
+>> * Servers                                     * Store and Forwad                 DIAGNOSTICS
+   * Clusters                                    * JMS Modules                         * Log Files
+   * Virtual Hosts                               * Path Services                       * Diagnostic Modules
+   * Migratable targets                          * Bridges                             * Diagnostic Images
+   * Coherence Servers                      * Data Sources                             * Request Performance
+   * Machines                               * Persistent Stores                        * Archives
+   * Work Managers                          * XML Registries                           * Context 
+   * Startup And Shutdown Classes           * XML Entity Caches                        * SNMP
+YOUR DEPLOYED RESOURCES                     * Foreing JNDI Providers                CHART AND GRAPHS
+   * Deployments                            * Work Contexts                            * Monitoring Dashboard
+YOUR APPLICATION´S SECURITY SETTINGS        * jCOM
+   * Security Realms                        * Mail Sessions
+                                            * FileT3
+                                            * JTA
+
+# SELECT OACORE_SERVER1
+SUMMARY OF SERVERS
+CONFIGURATION \ CONTROL
+  A server is an instance of Weblogic Server that runs in its own Java Virtual Machine (JVM) and has its own configuration.
+  This page summarizes each server that has been configured in the current WebLogic Server Domain.
+  
+  |> Customize this table
+     Servers(Filtered - More Columns Exist)
+     Click the Lock & Edit button in the Change Center to activate all the button on this page.
+  [NEW] [CLONE] [DELETE]
+  +----------------------------------------------------------------------------------------------------------------------+
+  | [] | Name                     | Cluster            | Machine        | State         | Health       | Listen Port     |
+  +----------------------------------------------------------------------------------------------------------------------+
+  | [] |  AdminServer(admin)      |                    | ol7apps1       | RUNNING       | OK           | 7002            |
+  +----------------------------------------------------------------------------------------------------------------------+
+  | [] |  forms-c4ws_server1      | forms-c4ws_server1 | ol7apps1       | RUNNING       | OK           | 7002            |
+  +----------------------------------------------------------------------------------------------------------------------+
+  | [] |  forms-server1           | forms-server1      | ol7apps1       | RUNNING       | OK           | 7002            |
+  +----------------------------------------------------------------------------------------------------------------------+
+  | [] |>> oacore_server1         | oacore_cluster1    | ol7apps1       | RUNNING       | OK           | 7002            |
+  +----------------------------------------------------------------------------------------------------------------------+
+  | [] |  oafm_server1            | oafm_cluster1      | ol7apps1       | RUNNING       | OK           | 7002            |
+  +----------------------------------------------------------------------------------------------------------------------+
+  [NEW] [CLONE] [DELETE]
+
+  
+# CLICK SERVER START ("Sub Tab")
+SETTINGS FOR AOACORE_SERVER1
+>> CONFIGURATION \ PROTOCOLS\ LOGGING \ DEBUG \ MONITORING \ CONTROL \ DEPLOYMENT \ SERVICES \ SECURITY \ NOTES
+>> GENERAL \ CLUSTER \ SERVICES \ KEYSTORES \ SSL \ FEDERATION SERVICES \ DEPLOYMENT \ MIGRATION \ TUNING \ OVERLOAD \ HEALTH MONITORING \ SERVER START \ WEB SERVICES 
+Click the Lock & Edit button in the Change Center to modify the settings on the page.
+[save]
+ Use this page to configure general features of the server such as default network communications.
+VIEW JNDI Tree
+
+Name:                         oacore_server1            An alphanumeric name for this server instance.
+Machine:                      ol7apps1                  The Weblogic Server host name 
+Cluster:                      oacore_cluster1           The cluster, or group of Weblogic Server instances, to which this server belongs.
+Listen Address:               ol7apps1.appsdba.info     The IP address or DNS name this server uses to listen for incoming connections.
+[v] Listen Port Enabled                                 Specifies whether this server can be reached through the default plain-text(non-SSL) listen port   
+Listen Port:                  7202                      The default TCP port this server uses to listen for regular(non-SSL) incoming connections.
+[] SSL Listen Port Enabled                              Indicates whether the server can be reached through the default SSL
+SSL Listen Port:              7002                      TCP/IP port at which this server listen for SSL connection requests
+[] Client Cert Proxy Enabled                            Specifies whether the HttpClusterServlet proxies the client certificate in a special header.
+Java Compiler:                javac                     The Java compiler to use for all applications hosted on this server that need to compile Java Code.
+Diagnostic Volume             Low                       Specifies the volume of diagnostic data that is automatically produced by WebLogic Server at run time.
+                                                        Note that the WLDF diagnostic volume setting does not affect explicity configured modules. For example,
+                                                        this controls the volume of events generated for JRockit Flight Recorder.
+
+-> Advanced ---------------------------------------------------------------------------------------------------------------------------------------------------
+[Save]
+Click the Lock & Edit button in the Change Center to modify the settings on this page.
+
+
+# CLICK SERVER START ("SUB TAB")
+SETTINGS FOR AOACORE_SERVER1
+>> CONFIGURATION \ PROTOCOLS\ LOGGING \ DEBUG \ MONITORING \ CONTROL \ DEPLOYMENT \ SERVICES \ SECURITY \ NOTES
+ GENERAL \ CLUSTER \ SERVICES \ KEYSTORES \ SSL \ FEDERATION SERVICES \ DEPLOYMENT \ MIGRATION \ TUNING \ OVERLOAD \ HEALTH MONITORING \ >> SERVER START \ WEB SERVICES 
+Click the Lock & Edit button in the Change Center to modify the settings on the page.
+[save]
+ Node Manager is a Weblogic Server utility that you can use to start, suspend, shut down, and restart servers in normal or unexpected conditions. Use this page to configure the startup settings that Node Manager will use to start this server on a remote machine.
+
+Java Home:                   /u01/oracle/PROD/fs1/EBSapps/comn/util/jdk64      The Java home directory (path on the machine running Node Manager) to use when starting this server.
+Java Vendor:                 Linux                                             The Java Vendor value to use when starting this server For example, BEA, Sun, HP etc ...
+BEA Home:                                                                      The BEA home directory (path on the machine running Node Manager) to use when starting server. 
+Root Directory:                                                                The directory that this server uses as its root directory. This directory must be on the computer that hosts the Node Manager. 
+                                                                               If you do not specify a Root Directory value, the domain directory is used by default.
+Class Path:
+/u01/oracle/PROD/fs1/FMW_Home/oracle_common/modules/oracle.jdbc_11.1.1/        The classpath (path on the machine running Node Manager) to use when starting this server.
+ojdbc6dms.jar:/u01/oracle/PROD/fs1/FMW_Home/patch_wls1036/profiles/default/
+sys_manifest_classpath/weblogic_path.jar:/u01/oracle/PROD/fs1/EBSapps/comn/
+util/jdk64/lib/tools.jar:/u01/oracle/PROD/fs1/FMW_Home/wlserver_10.3/server/
+lib/weblogic_sp.jar:/u01/oracle/PROD/fs1/FMW_Home/wl ...
+
+Arguments:                                                                     The arguments to use starting this server.
+-XX:PermSize=128m -XX:MaxPermSize=384m -Xms512m -Xmx512m -
+Djava.security.policy=/u01/oracle/PROD/fs1/FMW_Home/wlserver_10.3/server/
+lib/weblogic.policy - Djava.security.egd=file:/dev/./urandom - 
+Dweblogic.ProdictionModeEnabled=true -da -
+Dplatform.home=/u01/oracle/PROD/fs1/FMW_Home/wlserver_10.3
+
+Security Policy File:
+User Name:
+Password:
+Confirm Password:
+[Save]
+Click the Lock & Edit button in the Change Center to modify the settings on this page.
+
+# CLICK LOCK & EDIT
+
+Typical entries are like this:
+-XX:PermSize=128m -XX:MaxPermSize=384m -Xms512m -Xmx512m -Djava.security.policy=u01/oracle/PROD/fs1/FMW_Home/wlserver_10.3/server/lib/weblogic.policy
+Change To:
+-XX:PermSize=128m -XX:MaxPermSize=384m -Xms1024m -Xmx2048m -Djava.security.policy=-Djava.security.policy=u01/oracle/PROD/fs1/FMW_Home/wlserver_10.3/server/lib/weblogic.policy
+
+# CLICK THE 'SAVE' BUTTON TO SAVE THE CONFIGURATION CHANGES.
+
+Once the customizations are complete and saved
+
+# CLICK THE 'ACTIVATE CHANGES' BUTTON IN THE 'CHANGE CENTER' PAINEL TO ACTIVATE THE CHANGES.
+Messages
+V All changes have been activated. No restart are necessary.
+
+#NOTE
+No need for changing the values in the $CONTEXT_FILE of the application tier. No need to bring down any services.
+
+
+
+
+
+

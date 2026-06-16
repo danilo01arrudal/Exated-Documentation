@@ -1,0 +1,32 @@
+++++++++++++++++++++++++++++++++++++++++++++++++
++ ORACLE DATABASE 19C ORACLE ADVANCED SECURITY +
+++++++++++++++++++++++++++++++++++++++++++++++++
+
+Two features comprise Oracle Advanced Security: Transparent Data Encryption and Oracle Data Redaction.
+
+* Transparent Data Encryption
+Transparent Data Encryption (TDE) transparently encrypts data at rest and is transparent to database users and applications.
+
+Use TDE to protect sensitive data from attacks that bypass the database and attempt to directly read the underlying database files. 
+Examples of this type of attack might include ransomware (most ransomware also scrapes data from disk and infiltrates it for use in extortion attempts), 
+lost, or stolen backup files, or direct access to the stored data using operating system tools like strings or cat. 
+You can encrypt individual columns in a database table, or you can encrypt an entire tablespace. In almost all cases, tablespace encryption should be your first choice.
+To use Transparent Data Encryption, you do not need to modify your applications. 
+TDE enables your applications to continue working seamlessly as before. 
+It automatically encrypts data when it is written to disk, and then automatically decrypts the data when your applications access it. 
+Key management is built-in, eliminating the complex task of managing and securing encryption keys.
+
+* Oracle Data Redaction
+Data Redaction enables you to dynamically mask data as it is selected from the Oracle Database.
+
+Unlike the static data masking (see Oracle Data SafeOracle Data Safe or Oracle Data Masking and SubsettingOracle Data Masking and Subsetting for more information on this type of masking), 
+Oracle Data Redaction does not actually change the stored data. 
+It simply alters the presentation of that data at query time to prevent disclosure of sensitive information for those sessions that should not be able to view the actual data values, 
+while still making the data available to authorized users under acceptable session conditions.
+Data Redaction performs the redaction before the data is returned by the SQL query. 
+Redaction is suited for production systems when you want to selectively obfuscate selected sensitive data for certain database users. 
+While the data is being redacted, Oracle Database is able to process all of the data normally and to preserve the back-end referential integrity constraints. 
+Data redaction can help you to comply with industry regulations such as Payment Card Industry Data Security Standard (PCI DSS) 
+and the Sarbanes-Oxley Act by minimizing exposure of sensitive data such as PII to unauthorized persons.
+
+

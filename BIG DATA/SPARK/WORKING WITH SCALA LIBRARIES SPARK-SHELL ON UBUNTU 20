@@ -1,0 +1,404 @@
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++  WORKING WITH SCALA LIBRARIES SPARK-SHELL ON UBUNTU 20  +
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /___/ .__/\_,_/_/ /_/\_\   version 3.0.0
+      /_/
+         
+Using Scala version 2.12.10 (OpenJDK 64-Bit Server VM, Java 1.8.0_265)
+Type in expressions to have them evaluated.
+Type :help for more information.
+
+scala> import sys.process._
+import sys.process._
+
+scala> val lines = scala.io.Source.fromFile("LabData/nycweather.csv").mkString
+lines: String =
+""2013-01-01",1,0
+"2013-01-02",-2,0
+"2013-01-03",-2,0
+"2013-01-04",1,0
+"2013-01-05",3,0
+"2013-01-06",4,0
+"2013-01-07",5,0
+"2013-01-08",6,0
+"2013-01-09",7,0
+"2013-01-10",7,0
+"2013-01-11",6,13.97
+"2013-01-12",7,0.51
+"2013-01-13",8,0
+"2013-01-14",8,2.29
+"2013-01-15",3,3.05
+"2013-01-16",2,17.53
+"2013-01-17",4,0
+"2013-01-18",-1,0
+"2013-01-19",5,0
+"2013-01-20",6,0
+"2013-01-21",-2,0
+"2013-01-22",-7,0
+"2013-01-23",-9,0
+"2013-01-24",-8,0
+"2013-01-25",-7,1.78
+"2013-01-26",-6,0
+"2013-01-27",-3,0
+"2013-01-28",1,5.59
+"2013-01-29",6,1.52
+"2013-01-30",9,1.02
+"2013-01-31",8,22.86
+"2013-02-01",-2,0
+"2013-02-02",-4,0.51
+"2013-02-03",-3,0.51
+"2013-02-04",-3,0
+"2013-02-05",-1,0.51
+"2013-02-06",1,0
+"2013-02-07",-2,0
+"2013-02-08",-1,29.21
+"2013-02-09",-3,9.65
+"2013-0...
+
+scala> val sqlContext = new org.apache.spark.sql.SQLContext(sc)
+warning: there was one deprecation warning (since 2.0.0); for details, enable `:setting -deprecation' or `:replay -deprecation'
+sqlContext: org.apache.spark.sql.SQLContext = org.apache.spark.sql.SQLContext@773236a7
+
+scala> import sqlContext.implicits._
+import sqlContext.implicits._
+
+scala> case class Weather(date: String, temp: Int, precipitation: Double)
+defined class Weather
+
+scala> val weather = sc.textFile("LabData/nycweather.csv").map(_.split(",")). map(w => Weather(w(0), w(1).trim.toInt, w(2).trim.toDouble)).toDF()
+weather: org.apache.spark.sql.DataFrame = [date: string, temp: int ... 1 more field]
+
+scala> weather.registerTempTable("weather")
+warning: there was one deprecation warning (since 2.0.0); for details, enable `:setting -deprecation' or `:replay -deprecation'
+
+scala> val hottest_with_precip = sqlContext.sql("SELECT * FROM weather WHERE precipitation > 0.0 ORDER BY temp DESC")
+hottest_with_precip: org.apache.spark.sql.DataFrame = [date: string, temp: int ... 1 more field]
+
+scala> hottest_with_precip.collect()
+res1: Array[org.apache.spark.sql.Row] = Array(["2013-06-26",27,1.27], ["2013-06-27",27,6.1], ["2013-07-08",27,5.59], ["2013-07-09",27,5.84], ["2013-07-22",27,1.52], ["2013-07-23",27,7.87], ["2013-08-09",27,1.27], ["2013-06-02",26,21.59], ["2013-07-03",26,13.46], ["2013-08-27",26,0.25], ["2013-08-28",26,10.92], ["2013-09-02",26,1.27], ["2013-09-10",26,0.25], ["2013-09-12",26,40.64], ["2013-06-17",25,0.25], ["2013-07-02",25,2.03], ["2013-07-29",25,0.25], ["2013-07-01",24,21.34], ["2013-08-08",24,11.68], ["2013-08-12",24,1.27], ["2013-08-22",24,6.35], ["2013-08-26",24,1.02], ["2013-09-03",24,0.76], ["2013-06-18",23,4.83], ["2013-07-12",23,6.35], ["2013-07-13",23,1.52], ["2013-07-28",23,6.1], ["2013-08-03",23,1.52], ["2013-08-13",23,21.59], ["2013-05-23",22,45.97],...
+
+scala> :quit
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CREATING A SPARK APPLICATION USING MLLIB
+
+./spark-shell
+
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /___/ .__/\_,_/_/ /_/\_\   version 3.0.0
+      /_/
+         
+Using Scala version 2.12.10 (OpenJDK 64-Bit Server VM, Java 1.8.0_265)
+Type in expressions to have them evaluated.
+Type :help for more information.
+
+scala> import org.apache.spark.mllib.clustering.KMeans
+import org.apache.spark.mllib.clustering.KMeans
+
+scala> import org.apache.spark.mllib.linalg.Vectors
+import org.apache.spark.mllib.linalg.Vectors
+
+scala> val taxiFile = sc.textFile("LabData/nyctaxisub.csv")
+taxiFile: org.apache.spark.rdd.RDD[String] = LabData/nyctaxisub.csv MapPartitionsRDD[1] at textFile at <console>:26
+
+scala> taxiFile.count()
+res0: Long = 250000                                                             
+
+scala> val taxiData=taxiFile.filter(_.contains("2013")).filter(_.split(",")(3)!="" ).filter(_.split(",")(4)!="")
+taxiData: org.apache.spark.rdd.RDD[String] = MapPartitionsRDD[4] at filter at <console>:27
+
+scala> taxiData.count()
+res1: Long = 249999
+
+scala> val taxiFence=taxiData.filter(_.split(",")(3).toDouble>40.70).filter(_.split(",")(3).toDouble<40.86).filter(_.split(",")(4).toDouble>(-74.02)).filter(_.split(",")(4).toDouble<(-73.93))
+taxiFence: org.apache.spark.rdd.RDD[String] = MapPartitionsRDD[8] at filter at <console>:27
+
+scala> taxiFence.count()
+res2: Long = 206646                                                             
+
+scala> val taxi=taxiFence.
+     |     map{
+     |         line=>Vectors.dense(
+     |             line.split(',').slice(3,5).map(_ .toDouble)
+     |         )
+     |     }
+taxi: org.apache.spark.rdd.RDD[org.apache.spark.mllib.linalg.Vector] = MapPartitionsRDD[9] at map at <console>:28
+
+scala> val iterationCount=10
+iterationCount: Int = 10
+
+scala> val clusterCount=3
+clusterCount: Int = 3
+
+scala> val model=KMeans.train(taxi,clusterCount,iterationCount)
+20/09/09 16:50:33 WARN BLAS: Failed to load implementation from: com.github.fommil.netlib.NativeSystemBLAS
+20/09/09 16:50:33 WARN BLAS: Failed to load implementation from: com.github.fommil.netlib.NativeRefBLAS
+model: org.apache.spark.mllib.clustering.KMeansModel = org.apache.spark.mllib.clustering.KMeansModel@45c2fa2
+
+scala> val clusterCenters=model.clusterCenters.map(_.toArray)
+clusterCenters: Array[Array[Double]] = Array(Array(40.7870920457465, -73.95708700772364), Array(40.72481642093873, -73.99586622167347), Array(40.7570053759507, -73.98085806937306))
+
+scala> clusterCenters.foreach(lines=>println(lines(0),lines(1)))
+(40.7870920457465,-73.95708700772364)
+(40.72481642093873,-73.99586622167347)
+(40.7570053759507,-73.98085806937306)
+
+https://www.google.com/maps/place/40%C2%B047'13.5%22N+73%C2%B057'25.5%22W/@40.787092,-73.9592757,17z/data=!3m1!4b1!4m5!3m4!1s0x0:0x0!8m2!3d40.787092!4d-73.957087
+https://www.google.com/maps/place/40%C2%B043'29.3%22N+73%C2%B059'45.1%22W/@40.7248164,-73.9980549,17z/data=!3m1!4b1!4m5!3m4!1s0x0:0x0!8m2!3d40.7248164!4d-73.9958662
+https://www.google.com/maps/place/40%C2%B045'25.2%22N+73%C2%B058'51.1%22W/@40.7570054,-73.9830468,17z/data=!3m1!4b1!4m5!3m4!1s0x0:0x0!8m2!3d40.7570054!4d-73.9808581
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CREATING A SPARK APPLICATION USING SPARK STREAMING
+
+#ON TERMINAL 1
+
+./pyspark
+
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /__ / .__/\_,_/_/ /_/\_\   version 3.0.0
+      /_/
+
+Using Python version 3.8.2 (default, Jul 16 2020 14:00:26)
+SparkSession available as 'spark'.
+>>> import socket
+>>> import time
+>>> s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+>>> s.bind(("localhost", 7777))
+>>> s.listen(1)
+>>> print("Started...")
+>>> while(1):
+      c, address = s.accept()
+      for row in open("LabData/nyctaxi100.csv"):
+      print(row)
+      c.send(row.encode())
+      time.sleep(0.5)
+>>> c.close()
+
+Started...
+"29b3f4a30dea6688d4c289c9672cb996","1-ddfdec8050c7ef4dc694eeeda6c4625e","2013-01-11 22:03:00",+4.07033460000000E+001,-7.40144200000000E+001,"A93D1F7F8998FFB75EEF477EB6077516","68BC16A99E915E44ADA7E639B4DD5F59",2,"2013-01-11 21:48:00",+4.06760670000000E+001,-7.39810790000000E+001,1,,+4.08000000000000E+000,900,"VTS"
+
+"2a80cfaa425dcec0861e02ae44354500","1-b72234b58a7b0018a1ec5d2ea0797e32","2013-01-11 04:28:00",+4.08190960000000E+001,-7.39467470000000E+001,"64CE1B03FDE343BB8DFB512123A525A4","60150AA39B2F654ED6F0C3AF8174A48A",1,"2013-01-11 04:07:00",+4.07280540000000E+001,-7.40020370000000E+001,1,,+8.53000000000000E+000,1260,"CMT"
+
+"29b3f4a30dea6688d4c289c96758d87e","1-387ec30eac5abda89d2abefdf947b2c1","2013-01-11 22:02:00",+4.07277180000000E+001,-7.39942860000000E+001,"2D73B0C44F1699C67AB8AE322433BDB7","6F907BC9A85B7034C8418A24A0A75489",5,"2013-01-11 21:46:00",+4.07577480000000E+001,-7.39649810000000E+001,1,,+3.01000000000000E+000,960,"VTS"
+
+"2a80cfaa425dcec0861e02ae446226e4","1-aa8b16d6ae44ad906a46cc6581ffea50","2013-01-11 10:03:00",+4.07643050000000E+001,-7.39544600000000E+001,"E90018250F0A009433F03BD1E4A4CE53","1AFFD48CC07161DA651625B562FE4D06",5,"2013-01-11 09:44:00",+4.07308080000000E+001,-7.39928280000000E+001,1,,+3.64000000000000E+000,1140,"CMT"
+
+"29b3f4a30dea6688d4c289c9675a019c","1-dc8295eae03262a84370b8a6450eb38e","2013-01-11 22:02:00",+4.07294460000000E+001,-7.39777980000000E+001,"A4905117273C479965F469A85DE2363D","8BF138EA0CF6FF83587993BECA6D6D59",1,"2013-01-11 21:48:00",+4.07672460000000E+001,-7.39845350000000E+001,1,,+3.69000000000000E+000,840,"VTS"
+
+"0ba1d5e3cc0d075c6513a0a1a2d2d2c8","1-b004c36cb212e5a8399591ed9bf1ab16","2013-01-11 10:22:00",+4.08002430000000E+001,-7.39653780000000E+001,"3CEA0E36D984553348CA536F07CA7617","23A8ED0AAA1936A28C652B80903B42FB",2,"2013-01-11 10:01:00",+4.07487490000000E+001,-7.39966050000000E+001,1,,+4.38000000000000E+000,1260,"VTS"
+
+#ON TERMINAL 2
+
+./spark-shell
+
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /___/ .__/\_,_/_/ /_/\_\   version 3.0.0
+      /_/
+         
+Using Scala version 2.12.10 (OpenJDK 64-Bit Server VM, Java 1.8.0_265)
+Type in expressions to have them evaluated.
+Type :help for more information.
+
+scala> import org.apache.log4j.Logger
+import org.apache.log4j.Logger
+
+scala> import org.apache.log4j.Level
+import org.apache.log4j.Level
+
+scala> Logger.getLogger("org").setLevel(Level.OFF)
+
+scala> Logger.getLogger("akka").setLevel(Level.OFF)
+
+scala> import org.apache.spark._
+import org.apache.spark._
+
+scala> import org.apache.spark.streaming._
+import org.apache.spark.streaming._
+
+scala> import org.apache.spark.streaming.StreamingContext._
+import org.apache.spark.streaming.StreamingContext._
+
+scala> val ssc = new StreamingContext(sc, Seconds(1))
+ssc: org.apache.spark.streaming.StreamingContext = org.apache.spark.streaming.StreamingContext@4da86d09
+
+scala> val lines = ssc.socketTextStream("localhost", 7777)
+lines: org.apache.spark.streaming.dstream.ReceiverInputDStream[String] = org.apache.spark.streaming.dstream.SocketInputDStream@9be2619
+
+scala> val pass = lines.map(_.split(",")).map(pass=>(pass(15), pass(7).toInt)).reduceByKey(_+_)
+pass: org.apache.spark.streaming.dstream.DStream[(String, Int)] = org.apache.spark.streaming.dstream.ShuffledDStream@6788168c
+
+scala> pass.print()
+
+scala> ssc.start()
+
+-------------------------------------------                                     
+Time: 1599767922000 ms
+-------------------------------------------
+
+-------------------------------------------                                     
+Time: 1599767923000 ms
+-------------------------------------------
+("CMT",1)
+("VTS",2)
+
+-------------------------------------------                                     
+Time: 1599767924000 ms
+-------------------------------------------
+("CMT",5)
+("VTS",5)
+
+-------------------------------------------                                     
+Time: 1599767925000 ms
+-------------------------------------------
+("VTS",3)
+
+-------------------------------------------                                     
+Time: 1599767926000 ms
+-------------------------------------------
+("CMT",1)
+("VTS",3)
+
+-------------------------------------------                                     
+Time: 1599767927000 ms
+-------------------------------------------
+("CMT",2)
+("VTS",1)
+
+-------------------------------------------                                     
+Time: 1599767928000 ms
+-------------------------------------------
+("VTS",5)
+
+-------------------------------------------                                     
+Time: 1599767929000 ms
+-------------------------------------------
+
+scala> ssc.awaitTermination()
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CREATING A SPARK APPLICATION USING GRAPHX
+
+./spark-shell
+
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /___/ .__/\_,_/_/ /_/\_\   version 3.0.0
+      /_/
+         
+Using Scala version 2.12.10 (OpenJDK 64-Bit Server VM, Java 1.8.0_265)
+Type in expressions to have them evaluated.
+Type :help for more information.
+
+scala> println("Users: ")
+Users: 
+
+scala> println(scala.io.Source.fromFile("LabData/users.txt").mkString)
+1,BarackObama,Barack Obama
+2,ladygaga,Goddess of Love
+3,jeresig,John Resig
+4,justinbieber,Justin Bieber
+6,matei_zaharia,Matei Zaharia
+7,odersky,Martin Odersky
+8,anonsys
+
+
+scala> println("Followers: ")
+Followers: 
+
+scala> println(scala.io.Source.fromFile("LabData/followers.txt").mkString)
+2 1
+4 1
+1 2
+6 3
+7 3
+7 6
+6 7
+3 7
+
+
+scala> import org.apache.spark.graphx._
+import org.apache.spark.graphx._
+
+scala> val users = (sc.textFile("LabData/users.txt").map(line => line.split(",")).map(parts => (parts.head.toLong, parts.tail)))
+users: org.apache.spark.rdd.RDD[(Long, Array[String])] = MapPartitionsRDD[3] at map at <console>:27
+
+scala> users.take(5).foreach(println)
+(1,[Ljava.lang.String;@236a7f65)
+(2,[Ljava.lang.String;@66f73411)
+(3,[Ljava.lang.String;@4f0c396a)
+(4,[Ljava.lang.String;@26382141)
+(6,[Ljava.lang.String;@5659f3b4)
+
+scala> val followerGraph = GraphLoader.edgeListFile(sc, "LabData/followers.txt")
+followerGraph: org.apache.spark.graphx.Graph[Int,Int] = org.apache.spark.graphx.impl.GraphImpl@187f6ac7
+
+scala> val graph = followerGraph.outerJoinVertices(users) {
+     |     case (uid, deg, Some(attrList)) => attrList
+     |     case (uid, deg, None) => Array.empty[String]
+     | }
+graph: org.apache.spark.graphx.Graph[Array[String],Int] = org.apache.spark.graphx.impl.GraphImpl@187f107
+
+scala> val subgraph = graph.subgraph(vpred = (vid, attr) => attr.size == 2)
+subgraph: org.apache.spark.graphx.Graph[Array[String],Int] = org.apache.spark.graphx.impl.GraphImpl@39f9b4fc
+
+scala> val pagerankGraph = subgraph.pageRank(0.001)
+pagerankGraph: org.apache.spark.graphx.Graph[Double,Double] = org.apache.spark.graphx.impl.GraphImpl@363afb11
+
+scala> val userInfoWithPageRank = subgraph.outerJoinVertices(pagerankGraph.vertices) {
+     |     case (uid, attrList, Some(pr)) => (pr, attrList.toList)
+     |     case (uid, attrList, None) => (0.0, attrList.toList)
+     | }
+userInfoWithPageRank: org.apache.spark.graphx.Graph[(Double, List[String]),Int] = org.apache.spark.graphx.impl.GraphImpl@5761bd67
+
+scala> println(userInfoWithPageRank.vertices.top(5)(Ordering.by(_._2._1)).mkString("\n"))
+(1,(1.4610558475474507,List(BarackObama, Barack Obama)))
+(2,(1.3926425103962674,List(ladygaga, Goddess of Love)))
+(7,(1.2956193310217194,List(odersky, Martin Odersky)))
+(3,(0.9985540153884633,List(jeresig, John Resig)))
+(6,(0.7013832556651652,List(matei_zaharia, Matei Zaharia)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

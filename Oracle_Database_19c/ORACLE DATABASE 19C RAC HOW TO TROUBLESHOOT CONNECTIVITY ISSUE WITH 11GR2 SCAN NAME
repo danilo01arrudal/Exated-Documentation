@@ -1,0 +1,20 @@
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++   ORACLE DATABASE 19C RAC HOW TO TROUBLESHOOT CONNECTIVITY ISSUE WITH 19C SCAN NAME   +
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+This document is to provide checklist when connection through 11gR2 Grid Infrastructure (CRS) SCAN name to database fails.
+When client program connects to RAC database through SCAN name, SCAN listener will accept t he request and redirect the connection to local listener. 
+o identify connection issue, first try to connect to each local listener through node VIP, then try each SCAN listener through each SCAN VIP. 
+SCAN provides a single domain name via DNS), allowing and-users to address a RAC cluster as-if it were a single IP address. 
+SCAN works by replacing a hostname or IP list with virtual IP addresses (VIP).  
+Because SCAN determines the actual node and listener which accepts the connection, SCAN provides location independence for the databases.
+A SCAN database connection does not require any details about a particular node on instance.  SCAN is part of the 11g release 2 movement toward "RAC Virtualization".
+Virtualization is great for some RAC shops, not so good for others.
+SCAN is an automatic load balancing tool that uses a relatively primitive least-recently-loaded algorithm. 
+Most Fortune 50 mission critical RAC systems will not use an automated load balancer in favor of intelligent RAC load balancing, where you direct like-minded transactions to like-minded nodes. 
+This approach greatly reduces the load on the cache fusion payer because less blocks must be sent across the RAC interconnect.
+
+# THERE ARE TWO BENEFITS FOR SCAN:
+º Fast RAC failover == If a node fails, Oracle detects the loss of connection to the VIP and redirects new connects to the surviving VIP's.  This is an alternative to the transparent application failover. (TAF) for automatic load balancing.  
+º Easier maintenance for Grid RAC systems == For Grid systems that gen-in and gen-out blade servers frequently, SCAN offers easier change control for the RAC DBA.  As RAC nodes are added or deleted, the DBA does not have to change the configuration files to reflect the current list of RAC node IP addresses (or hostnames).  In a nutshell, SCAN allows a single cluster alias for all instances in the cluster.
+

@@ -1,0 +1,307 @@
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++   AUTOMATIC FOREIGN TABLE MANAGEMENT IN POSTGRESQL   +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#NOTE
+Foreign tables are external tables that usually have orgies in other instances of databases, 
+that have a different maintenance team and that often do not establish direct communication. 
+When the original table is modified, the foreign table may become unusable. 
+Needing to be recreated or modified to correct its characteristics. 
+The idea of the solution is to automate the process of updating foreign tables in postgres.
+
+#CREATE EXTENSION postgres_fdw;
+
+#CREATE SERVER fdw_pg11 FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host '$ip', port '$port', dbname '$foreigndatabase');
+
+#ALTER SERVER fdw_pg11 OWNER TO $user;
+
+#CREATE USER MAPPING FOR $user SERVER fdw_pg11 OPTIONS (user '$user', password '$password');
+
+#CREATE TABLE REGISTER FOREING TABLES
+
+DROP TABLE public.fdw_tables_list;
+CREATE TABLE public.fdw_tables_list (
+	table_schema varchar NOT NULL,
+	table_name varchar NOT NULL,
+	table_type varchar NULL DEFAULT 'BASE TABLE'::character varying,
+	foreign_server_name varchar NOT NULL,
+	foreign_server_catalog varchar NOT NULL,
+	dbname varchar NOT NULL,
+	usename varchar NOT NULL,
+	CONSTRAINT fdw_tables_list_pku UNIQUE (table_schema, table_name, table_type, foreign_server_name, foreign_server_catalog, dbname)
+);
+
+ALTER TABLE public.fdw_tables_list OWNER TO postgres;
+GRANT ALL ON TABLE public.fdw_tables_list TO postgres;
+
+#CREATE FOREIGN TABLES FOR MANAGE METADATA
+CREATE FOREIGN TABLE public.pg_attribute_f (
+ attrelid oid not null, 
+ attname name not null, 
+ atttypid oid not null, 
+ attstattarget integer not null, 
+ attlen smallint not null, 
+ attnum smallint not null, 
+ attndims integer not null, 
+ attcacheoff integer not null, 
+ atttypmod integer not null, 
+ attbyval boolean not null, 
+ attstorage "char" not null, 
+ attalign "char" not null, 
+ attnotnull boolean not null, 
+ atthasdef boolean not null, 
+ atthasmissing boolean not null, 
+ attidentity "char"  not null, 
+ attisdropped boolean not null, 
+ attislocal boolean not null, 
+ attinhcount integer not null, 
+ attcollation oid not null, 
+ attacl aclitem[],
+ attoptions text[], 
+ attfdwoptions text[], 
+ attmissingval varchar(100))
+SERVER fdw_pg11
+OPTIONS (schema_name 'pg_catalog', table_name 'pg_attribute');
+
+ALTER TABLE public.pg_attribute_f OWNER TO postgres;
+GRANT SELECT ON TABLE public.pg_attribute_f TO postgres;
+
+CREATE FOREIGN TABLE public.pg_type_f (
+	oid oid,
+	typname char[] NOT NULL,
+	typnamespace oid NOT NULL,
+	typowner oid NOT NULL,
+	typlen int2 NOT NULL,
+	typbyval bool NOT NULL,
+	typtype char(1) NOT NULL,
+	typcategory char(1) NOT NULL,
+	typispreferred bool NOT NULL,
+	typisdefined bool NOT NULL,
+	typdelim char(1) NOT NULL,
+	typrelid oid NOT NULL,
+	typelem oid NOT NULL,
+	typarray oid NOT NULL,
+	typinput regproc NOT NULL,
+	typoutput regproc NOT NULL,
+	typreceive regproc NOT NULL,
+	typsend regproc NOT NULL,
+	typmodin regproc NOT NULL,
+	typmodout regproc NOT NULL,
+	typanalyze regproc NOT NULL,
+	typalign char(1) NOT NULL,
+	typstorage char(1) NOT NULL,
+	typnotnull bool NOT NULL,
+	typbasetype oid NOT NULL,
+	typtypmod int4 NOT NULL,
+	typndims int4 NOT NULL,
+	typcollation oid NOT NULL,
+	typdefaultbin pg_node_tree NULL,
+	typdefault text NULL,
+	typacl varchar(100) NULL)
+SERVER fdw_pg11
+OPTIONS (schema_name 'pg_catalog', table_name 'pg_type');
+
+ALTER TABLE public.pg_type_f OWNER TO postgres;
+GRANT ALL ON TABLE public.pg_type_f TO postgres;
+
+CREATE FOREIGN TABLE public.pg_namespace_f (
+	oid oid NOT null,
+	nspname varchar(100) NOT NULL,
+	nspowner oid NOT NULL,
+	nspacl varchar(100) NULL)
+SERVER fdw_pg11
+OPTIONS (schema_name 'pg_catalog', table_name 'pg_namespace');
+
+ALTER TABLE public.pg_namespace_f OWNER TO postgres;
+GRANT ALL ON TABLE public.pg_namespace_f TO postgres;
+
+CREATE FOREIGN TABLE public.pg_class_f (
+	"oid" oid NOT NULL,
+	relname varchar(100) NOT NULL,
+	relnamespace oid NOT NULL,
+	reltype oid NOT NULL,
+	reloftype oid NOT NULL,
+	relowner oid NOT NULL,
+	relam oid NOT NULL,
+	relfilenode oid NOT NULL,
+	reltablespace oid NOT NULL,
+	relpages int4 NOT NULL,
+	reltuples float4 NOT NULL,
+	relallvisible int4 NOT NULL,
+	reltoastrelid oid NOT NULL,
+	relhasindex bool NOT NULL,
+	relisshared bool NOT NULL,
+	relpersistence bpchar(1) NOT NULL,
+	relkind bpchar(1) NOT NULL,
+	relnatts int2 NOT NULL,
+	relchecks int2 NOT NULL,
+	relhasoids bool NOT NULL,
+	relhasrules bool NOT NULL,
+	relhastriggers bool NOT NULL,
+	relhassubclass bool NOT NULL,
+	relrowsecurity bool NOT NULL,
+	relforcerowsecurity bool NOT NULL,
+	relispopulated bool NOT NULL,
+	relreplident bpchar(1) NOT NULL,
+	relispartition bool NOT NULL,
+	relrewrite oid NOT NULL,
+	relfrozenxid xid NOT NULL,
+	relminmxid xid NOT NULL,
+	relacl varchar(100) NULL,
+	reloptions text[] NULL,
+	relpartbound pg_node_tree NULL)
+SERVER fdw_pg11
+OPTIONS (schema_name 'pg_catalog', table_name 'pg_class');
+
+ALTER TABLE public.pg_class_f OWNER TO postgres;
+GRANT ALL ON TABLE public.pg_class_f TO postgres;
+
+CREATE FOREIGN TABLE public.pg_user_f (
+	usename name, 
+	usesysid oid,  
+	usecreatedb boolean, 
+	usesuper boolean, 
+	userepl boolean, 
+	usebypassrls boolean, 
+	passwd text, 
+	valuntil abstime, 
+	useconfig text[]) 
+SERVER fdw_pg11
+OPTIONS (schema_name 'pg_catalog', table_name 'pg_user');
+
+ALTER TABLE public.pg_user_f OWNER TO postgres;
+GRANT ALL ON TABLE public.pg_user_f TO postgres;
+
+#CREATE VIEW FOR LIST REMOTE SCHEMAS AND TABLES
+drop view public.information_schema_tables_v;
+CREATE OR REPLACE VIEW public.information_schema_tables_v
+AS SELECT  nc.oid as oid,
+			c.relowner as relowner,
+			(SELECT DISTINCT ftl.dbname
+           	 FROM information_schema.foreign_servers s
+             JOIN fdw_tables_list ftl ON ftl.foreign_server_catalog::text = s.foreign_server_catalog::text) AS table_catalog,
+    nc.nspname::information_schema.sql_identifier AS table_schema,
+    c.relname::information_schema.sql_identifier AS table_name,
+        CASE
+            WHEN nc.oid = pg_my_temp_schema() THEN 'LOCAL TEMPORARY'::text
+            WHEN c.relkind::text = ANY (ARRAY['r'::"char", 'p'::"char"]::text[]) THEN 'BASE TABLE'::text
+            WHEN c.relkind::text = 'v'::"char"::text THEN 'VIEW'::text
+            WHEN c.relkind::text = 'f'::"char"::text THEN 'FOREIGN'::text
+            ELSE NULL::text
+        END::information_schema.character_data AS table_type
+   FROM pg_namespace_f nc
+     JOIN pg_class_f c ON nc.oid = c.relnamespace
+     LEFT JOIN (pg_type_f t
+     JOIN pg_namespace_f nt ON t.typnamespace = nt.oid) ON c.reloftype = t.oid
+  WHERE (c.relkind::text = ANY (ARRAY['r'::"char", 'v'::"char", 'f'::"char", 'p'::"char"]::text[])) AND NOT pg_is_other_temp_schema(nc.oid) AND (pg_has_role(c.relowner, 'USAGE'::text) OR has_table_privilege(c.oid, 'SELECT, INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER'::text) OR has_any_column_privilege(c.oid, 'SELECT, INSERT, UPDATE, REFERENCES'::text));
+
+#VALIDATE VIEW ACCESS 
+select * from public.information_schema_tables_v;
+  
+#INSERT EXISTENT FOREIGN TABLES
+INSERT INTO public.fdw_tables_list(table_schema, table_name, foreign_server_catalog, foreign_server_name, dbname, usename)
+ SELECT n.nspname::information_schema.sql_identifier AS foreign_table_schema,
+    c.relname::information_schema.sql_identifier AS foreign_table_name,
+    current_database()::information_schema.sql_identifier AS foreign_server_catalog,
+    s.srvname::information_schema.sql_identifier AS foreign_server_name,
+    trim(split_part(s.srvoptions::varchar, 'dbname=', 2), '}') as dbname,
+    us.usename
+   FROM pg_foreign_table t,
+    pg_foreign_server s,
+    pg_foreign_data_wrapper w,
+    pg_authid u,
+    pg_namespace n,
+    pg_class c,
+    pg_user us
+  WHERE w.oid = s.srvfdw AND u.oid = c.relowner AND c.relowner = us.usesysid AND (pg_has_role(c.relowner, 'USAGE'::text) OR has_table_privilege(c.oid, 'SELECT, INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER'::text) OR has_any_column_privilege(c.oid, 'SELECT, INSERT, UPDATE, REFERENCES'::text)) AND n.oid = c.relnamespace AND c.oid = t.ftrelid AND c.relkind = 'f'::"char" AND s.oid = t.ftserver
+ and n.nspname not in ('information_schema', 'pg_catalog', 'public');
+  
+#GET OBJECT 
+select * from public.information_schema_tables_v;  
+  
+#INSERT NEW FOREING TABLES
+INSERT INTO public.fdw_tables_list (table_schema, table_name, table_type, foreign_server_name, foreign_server_catalog, dbname, usename) VALUES('test', 'tb1', 'BASE TABLE'::character varying, 'fdw_pg11', 'pg11', 'test', 'postgres');
+  
+#GENERATE FOREIGN TABLE METADATA POSTGRES ON REMOTE DATABASE MANUAL
+SELECT                                          
+	'CREATE SCHEMA IF NOT EXISTS ' || table_schema || ' AUTHORIZATION ' || usename || ';' || E'\n' ||
+	'DROP FOREIGN TABLE IF EXISTS ' || table_schema || '.' || relname || ';' || E'\n' ||
+	'CREATE FOREIGN TABLE ' || table_schema || '.' || relname || E'\n(\n' ||
+  array_to_string(
+    array_agg(
+      '    ' || column_name || ' ' ||  type || ' '|| not_null
+    )
+    , E',\n'
+  ) || E'\n)\n SERVER ' || foreign_server_name  || E'\n OPTIONS (schema_name ''' || table_schema || ''', table_name ''' || relname || ''');' || E'\n ALTER TABLE ' || table_schema || '.' || relname || ' OWNER TO ' || usename || ';' || E'\n GRANT SELECT ON TABLE ' || table_schema || '.' || relname || ' TO ' || usename || ';'
+from
+(SELECT ftl.table_schema,
+    c.relname, 
+    a.attname AS column_name,
+    pg_catalog.format_type(a.atttypid, a.atttypmod) as type,
+    case 
+      when a.attnotnull
+    then 'NOT NULL' 
+    else 'NULL' 
+    END as not_null,
+    ftl.foreign_server_name,
+    ftl.usename
+  FROM pg_class_f c,
+   pg_attribute_f a,
+   pg_type_f t,
+   pg_namespace_f pn,
+   fdw_tables_list ftl
+   where c.relnamespace = pn.oid
+   AND pn.nspname = ftl.table_schema
+   AND c.relname = ftl.table_name
+   AND ftl.table_schema='almox'
+   AND ftl.table_name='entrada'
+   AND a.attnum > 0
+   AND a.attrelid = c.oid
+   AND a.atttypid = t.oid
+ ORDER BY a.attnum
+) as tabledefinition
+group by table_schema, relname, foreign_server_name, usename;
+
+#GENERATE ALL FOREIGN TABLE METADATA POSTGRES ON REMOTE DATABASE MANUAL
+SELECT                                          
+	'CREATE SCHEMA IF NOT EXISTS ' || table_schema || ' AUTHORIZATION ' || usename || ';' || E'\n' ||
+	'DROP FOREIGN TABLE IF EXISTS ' || table_schema || '.' || relname || ';' || E'\n' ||
+	'CREATE FOREIGN TABLE ' || table_schema || '.' || relname || E'\n(\n' ||
+  array_to_string(
+    array_agg(
+      '    ' || column_name || ' ' ||  type || ' '|| not_null
+    )
+    , E',\n'
+  ) || E'\n)\n SERVER ' || foreign_server_name  || E'\n OPTIONS (schema_name ''' || table_schema || ''', table_name ''' || relname || ''');' || E'\n ALTER TABLE ' || table_schema || '.' || relname || ' OWNER TO ' || usename || ';' || E'\n GRANT SELECT ON TABLE ' || table_schema || '.' || relname || ' TO ' || usename || ';'
+from
+(SELECT ftl.table_schema,
+    c.relname, 
+    a.attname AS column_name,
+    pg_catalog.format_type(a.atttypid, a.atttypmod) as type,
+    case 
+      when a.attnotnull
+    then 'NOT NULL' 
+    else 'NULL' 
+    END as not_null,
+    ftl.foreign_server_name,
+    ftl.usename
+  FROM pg_class_f c,
+   pg_attribute_f a,
+   pg_type_f t,
+   pg_namespace_f pn,
+   fdw_tables_list ftl
+   where c.relnamespace = pn.oid
+   AND pn.nspname = ftl.table_schema
+   AND c.relname = ftl.table_name
+   AND a.attnum > 0
+   AND a.attrelid = c.oid
+   AND a.atttypid = t.oid
+ ORDER BY a.attnum
+) as tabledefinition
+group by table_schema, relname, foreign_server_name, usename;
+
+#END
+
+
+
+

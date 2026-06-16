@@ -1,0 +1,1459 @@
+++++++++++++++++++++++++++++++
++   HADOOP MULTI-NODE OL7    +
+++++++++++++++++++++++++++++++
+
+#model base
+https://d1jnx9ba8s6j9r.cloudfront.net/blog/wp-content/uploads/2016/10/HADOOP-ECOSYSTEM-Edureka-768x601.png
+
+THE APACHE HADOOP FRAMEWORK CONSISTS OF THE FOLLOWING MODULES:
+* HADOOP COMMON - CONTAINS THE COMMON LIBRARIES AND FILES NEEDED FOR ALL HADOOP MODULES.
+* HADOOP DISTRIBUTED FILE SYSTEM (HDFS) - DISTRIBUTED FILE SYSTEM THAT STORES DATA ON MACHINES WITHIN THE CLUSTER, ON DEMAND, ALLOWING VERY LARGE BANDWIDTH ACROSS THE CLUSTER.
+* HADOOP YARN - IT IS A RESOURCE MANAGEMENT PLATFORM RESPONSIBLE FOR THE MANAGEMENT OF COMPUTATIONAL RESOURCES IN THE CLUSTER, AS WELL AS RESOURCE SCHEDULING.
+* HADOOP MAPREDUCE - PROGRAMMING MODEL FOR LARGE-SCALE PROCESSING.
+
+#CREATE AND INSTALL MULTI-NODE HADOOP ON VIRTUALBOX (ORACLE LINUX 7)
+
+#CONFIGURE IN ALL HADOOP MACHINES
+#NETWORK 
+vi /etc/hosts
+192.168.56.124  hadoopmaster1
+192.168.56.125  hadoopslave1
+192.168.56.126  hadoopslave2
+
+#CONFIGURE MAXIMUM OPEN FILES ON ALL HOSTS
+ulimit -n 10000
+
+#CONFIGURE MAXIMUM OPEN FILES ON ALL HOSTS
+vi /etc/security/limits.conf
+hadoop        - nofile 64000
+
+ulimit -a
+core file size          (blocks, -c) 0
+data seg size           (kbytes, -d) unlimited
+scheduling priority             (-e) 0
+file size               (blocks, -f) unlimited
+pending signals                 (-i) 7502
+max locked memory       (kbytes, -l) 65536
+max memory size         (kbytes, -m) unlimited
+open files                      (-n) 10000
+pipe size            (512 bytes, -p) 8
+POSIX message queues     (bytes, -q) 819200
+real-time priority              (-r) 0
+stack size              (kbytes, -s) 8192
+cpu time               (seconds, -t) unlimited
+max user processes              (-u) 7502
+virtual memory          (kbytes, -v) unlimited
+file locks                      (-x) unlimited
+
+#VALIDATE MAXIMUM OPEN FILES ON ALL HOSTS
+ulimit -Sn 
+10000
+ulimit -Hn 
+10000
+
+#DISABLE SELINUX AND STOP FIREWALL IN ALL NODES 
+sed -i 's/SELINUX=.*/SELINUX=disabled/' /etc/selinux/config && setenforce 0
+systemctl stop firewalld && systemctl disable firewalld
+
+#ADD REPOSITORIES TO YUM 
+vi /etc/yum.repos.d/oracle-linux-ol7.repo
+
+[ol7_optional_developer]
+name=Developer Preview of Oracle Linux $releasever Optional ($basearch)
+baseurl=https://yum.oracle.com/repo/OracleLinux/OL7/optional/developer/$basearch/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
+gpgcheck=1
+enabled=1
+
+[ol7_developer_EPEL]
+name=Oracle Linux $releasever Development Packages ($basearch)
+baseurl=https://yum.oracle.com/repo/OracleLinux/OL7/developer_EPEL/$basearch/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
+gpgcheck=1
+enabled=1
+
+#LIST REPOSITORIES LIST
+yum repolist
+
+#INSTALL PRE-REQUIRES PACKAGES
+yum install pdsh.x86_64 -y
+yum install java-1.8.0-openjdk.x86_64 -y
+yum install java-1.8.0-openjdk-devel.x86_64
+yum install python3 -y
+yum install -y ntp 
+
+#ADD DEFAULT METHOD CONNECTION
+echo "ssh" > /etc/pdsh/rcmd_default
+
+#CONFIGURE NTPD SERVICE ON ALL NODES
+vi /etc/ntp.conf 
+server a.ntp.br
+server b.ntp.br
+server c.ntp.br
+
+systemctl start ntpd
+
+systemctl status ntpd
+● ntpd.service - Network Time Service
+   Loaded: loaded (/usr/lib/systemd/system/ntpd.service; disabled; vendor preset: disabled)
+   Active: active (running) since Seg 2020-09-21 16:05:02 -03; 1min 3s ago
+  Process: 963 ExecStart=/usr/sbin/ntpd -u ntp:ntp $OPTIONS (code=exited, status=0/SUCCESS)
+ Main PID: 965 (ntpd)
+    Tasks: 1
+   CGroup: /system.slice/ntpd.service
+           └─965 /usr/sbin/ntpd -u ntp:ntp -g
+
+systemctl enable ntpd
+Created symlink from /etc/systemd/system/multi-user.target.wants/ntpd.service to /usr/lib/systemd/system/ntpd.service.
+
+#CHECK JAVA VERSION
+java -version
+alternatives --config java
+There is 1 program that provides 'java'.
+Selection      Command
+--------------------------------------------------------------------------------------------------------------------
+*+ 1           java-1.8.0-openjdk.x86_64 (/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.242.b08-0.el7_7.x86_64/jre/bin/java)
+
+#CHANGE HOSTNAME
+#FOR SLAVE MACHINES, SET THE HOSTNAME
+hostnamectl 
+hostnamectl set-hostname hadoopmaster1
+hostnamectl --static 
+
+#ADD VARIABLES /ETC/ENVIRONMENT
+vi /etc/environment
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin"
+JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.242.b08-0.el7_7.x86_64/jre"
+
+#ADD USER HADOOPUSER
+groupadd hadoop
+useradd -m -s /bin/bash -d /home/hadoop hadoop -g hadoop
+passwd hadoop
+id hadoop
+uid=1001(hadoop) gid=1001(hadoop) groups=1001(hadoop)
+
+visudo
+hadoop  ALL=(ALL) ALL
+
+su - hadoop
+
+#GERENATE SSH KEY
+ssh-keygen -t rsa
+cat .ssh/id_rsa.pub >> .ssh/authorized_keys
+chmod 600 .ssh/authorized_keys
+
+#COPY SSH KEY AMONG THE THREE MACHINES
+COPY SSH KEY hadoop@hadoopmaster1:/home/hadoop/.ssh/id_rsa.pub TO FILE /home/hadoop/.ssh/authorized_keys
+COPY SSH KEY hadoop@hadoopslave1:/home/hadoop/.ssh/id_rsa.pub TO FILE /home/hadoop/.ssh/authorized_keys
+COPY SSH KEY hadoop@hadoopslave2:/home/hadoop/.ssh/id_rsa.pub TO FILE /home/hadoop/.ssh/authorized_keys
+
+#TEST CONNECTION SSH
+ssh hadoop@hadoopmaster1
+ssh hadoop@hadoopslave1
+ssh hadoop@hadoopslave2
+ssh hadoop@localhost
+
+#CONFIGURE /etc/pdsh/rcmd_default FILE
+echo "ssh" > /etc/pdsh/rcmd_default
+
+#DOWNLOAD HADOOP 3.2
+wget https://mirrors.sonic.net/apache/hadoop/common/hadoop-3.2.1/hadoop-3.2.1.tar.gz
+
+#EXTRACT SOFTWARE
+tar xzf hadoop-3.2.1.tar.gz
+
+#RENAME FOLDER
+mv hadoop-3.2.1 hadoop
+
+#CONFIGURE ENVORIMENTS VARIABLES
+vi /home/hadoop/.bashrc
+
+#JAVA
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.242.b08-0.el7_7.x86_64/jre
+
+#HADOOP
+export HADOOP_HOME=/home/hadoop/hadoop
+export HADOOP_INSTALL=$HADOOP_HOME
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
+
+#LOAD VARIABLES
+source /home/hadoop/.bashrc
+
+#CONFIGURE JAVA_HOME ON HADOOP-ENV.SH
+vi ~/hadoop/etc/hadoop/hadoop-env.sh
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.242.b08-0.el7_7.x86_64/jre
+export HADOOP_CONF_DIR=${HADOOP_HOME}/etc/hadoop
+export HADOOP_OPTS="$HADOOP_OPTS -Djava.library.path=$HADOOP_HOME/lib/native"
+
+#IN HADOOP-MASTER, OPEN THE FILE CORE-SITE.XML AND ADD THE CONTENT AT THE END OF THE FILE: (USE SAME NAME FOR ALL NODES AND MASTER)
+vi ~/hadoop/etc/hadoop/core-site.xml
+
+<configuration>
+<property>
+<name>fs.defaultFS</name>
+<value>hdfs://hadoopmaster1:9000</value>
+</property>
+</configuration>
+
+#IN HADOOP-MASTER, OPEN THE FILE HDFS-SITE.XML: (THE VALUE OF PARAMETER dfs.replication MUST BE UPDATED WITH EACH NEW IN THE ADDED, SO THAT ALL REPLICATIONS CAN BE SYNCHRONIZED)
+vi ~/hadoop/etc/hadoop/hdfs-site.xml
+
+<configuration>
+<property>
+<name>dfs.namenode.name.dir</name><value>/home/hadoop/data/nameNode</value>
+</property>
+<property>
+<name>dfs.datanode.data.dir</name><value>/home/hadoop/data/dataNode</value>
+</property>
+<property>
+<name>dfs.replication</name>
+<value>3</value>
+</property>
+<property>
+<name>dfs.permissions.enabled</name>
+<value>false</value>
+</property>
+</configuration>
+
+#SET YARN AS JOB SCHEDULER
+vi ~/hadoop/etc/hadoop/mapred-site.xml
+
+<configuration>
+ <property>
+     <name>yarn.acl.enable</name>
+     <value>0</value>
+ </property>
+
+ <property>
+     <name>yarn.resourcemanager.hostname</name>
+     <value>hadoopmaster1</value>
+ </property>
+
+ <property>
+     <name>yarn.nodemanager.aux-services</name>
+     <value>mapreduce_shuffle</value>
+</property>
+
+<property>
+  <name>yarn.application.classpath</name>
+  <value>$HADOOP_CONF_DIR,$HADOOP_COMMON_HOME/share/hadoop/common/*,$HADOOP_COMMON_HOME/share/hadoop/common/lib/*,$HADOOP_HDFS_HOME/share/hadoop/hdfs/*,$HADOOP_HDFS_HOME/share/hadoop/hdfs/lib/*,$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/*,$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/lib/*,$HADOOP_YARN_HOME/share/hadoop/yarn/*,$HADOOP_YARN_HOME/share/hadoop/yarn/lib/*</value>
+</property>
+
+<property>
+ <name>yarn.resourcemanager.resource-tracker.address</name>
+ <value>hadoopmaster1:8025</value>
+</property>
+
+<property>
+ <name>yarn.resourcemanager.scheduler.address</name>
+ <value>hadoopmaster1:8030</value>
+</property>
+
+<property>
+ <name>yarn.resourcemanager.address</name>
+ <value>hadoopmaster1:8050</value>
+</property>
+
+<property>
+  <name>yarn.nodemanager.resource.memory-mb</name>
+  <value>2536</value>
+</property>
+
+<property>
+   <name>yarn.scheduler.maximum-allocation-mb</name>
+    <value>2536</value>
+</property>
+
+<property>
+    <name>yarn.scheduler.minimum-allocation-mb</name>
+    <value>256</value>
+</property>
+
+<property>
+   <name>yarn.nodemanager.vmem-check-enabled</name>
+   <value>false</value>
+</property>
+</configuration>
+
+#ON ALL NODES, OPEN THE FILE YARN-SITE.XML TO CONFIGURE MEMORY OF YARN.
+vi ~/hadoop/etc/hadoop/yarn-site.xml
+<configuration>
+<name>yarn.scheduler.minimum-allocation-mb</name> 
+<value>3072</value>
+</configuration>
+
+#CONFIGURE SLAVES (hadoopslave1, hadoopslave2)
+
+#REGISTER SLAVES
+vi ~/hadoop/etc/hadoop/slaves
+
+hadoopslave1
+hadoopslave2
+
+#REGISTER WORKERS
+vi ~/hadoop/etc/hadoop/workers
+
+hadoopslave1
+hadoopslave2
+
+#COPY CONFIGURATION FILES TO SLAVES
+scp -r ~/hadoop/etc/hadoop/* hadoopslave1:/home/hadoop/hadoop/etc/hadoop/
+scp -r ~/hadoop/etc/hadoop/* hadoopslave2:/home/hadoop/hadoop/etc/hadoop/
+
+#FORMAT THE HDFS FILE SYSTEM, USING THE COMMANDS BELOW:
+hdfs namenode -format
+2020-01-29 15:06:16,374 INFO namenode.NameNode: STARTUP_MSG: 
+/************************************************************
+STARTUP_MSG: Starting NameNode
+STARTUP_MSG:   host = hadoopmaster1/192.168.56.124
+STARTUP_MSG:   args = [-format]
+STARTUP_MSG:   version = 3.2.1
+STARTUP_MSG:   classpath = /home/hadoop/hadoop/etc/hadoop:/home/hadoop/hadoop/share/hadoop/common/lib/commons-beanutils-1.9.3.jar:/home/hadoop/hadoop/share/hadoop/common/lib/curator-recipes-2.13.0.jar:/home/hadoop/hadoop/share/hadoop/common/lib/commons-math3-3.1.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jsr311-api-1.1.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/kerby-util-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/error_prone_annotations-2.2.0.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jsp-api-2.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jackson-databind-2.9.8.jar:/home/hadoop/hadoop/share/hadoop/common/lib/commons-configuration2-2.1.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jetty-webapp-9.3.24.v20180605.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jetty-util-9.3.24.v20180605.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jackson-core-2.9.8.jar:/home/hadoop/hadoop/share/hadoop/common/lib/kerby-asn1-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/home/hadoop/hadoop/share/hadoop/common/lib/commons-lang3-3.7.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jetty-io-9.3.24.v20180605.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jettison-1.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/kerb-crypto-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/kerb-core-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jetty-servlet-9.3.24.v20180605.jar:/home/hadoop/hadoop/share/hadoop/common/lib/kerb-identity-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/kerby-xdr-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/commons-io-2.5.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jcip-annotations-1.0-1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jersey-core-1.19.jar:/home/hadoop/hadoop/share/hadoop/common/lib/protobuf-java-2.5.0.jar:/home/hadoop/hadoop/share/hadoop/common/lib/kerby-config-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/paranamer-2.3.jar:/home/hadoop/hadoop/share/hadoop/common/lib/netty-3.10.5.Final.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jackson-xc-1.9.13.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jaxb-api-2.2.11.jar:/home/hadoop/hadoop/share/hadoop/common/lib/hadoop-annotations-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/kerb-simplekdc-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/woodstox-core-5.0.3.jar:/home/hadoop/hadoop/share/hadoop/common/lib/audience-annotations-0.5.0.jar:/home/hadoop/hadoop/share/hadoop/common/lib/dnsjava-2.1.7.jar:/home/hadoop/hadoop/share/hadoop/common/lib/httpclient-4.5.6.jar:/home/hadoop/hadoop/share/hadoop/common/lib/commons-compress-1.18.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jsch-0.1.54.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jackson-mapper-asl-1.9.13.jar:/home/hadoop/hadoop/share/hadoop/common/lib/curator-client-2.13.0.jar:/home/hadoop/hadoop/share/hadoop/common/lib/commons-collections-3.2.2.jar:/home/hadoop/hadoop/share/hadoop/common/lib/commons-codec-1.11.jar:/home/hadoop/hadoop/share/hadoop/common/lib/commons-text-1.4.jar:/home/hadoop/hadoop/share/hadoop/common/lib/token-provider-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/kerb-common-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jaxb-impl-2.2.3-1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/guava-27.0-jre.jar:/home/hadoop/hadoop/share/hadoop/common/lib/failureaccess-1.0.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jackson-jaxrs-1.9.13.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jetty-security-9.3.24.v20180605.jar:/home/hadoop/hadoop/share/hadoop/common/lib/json-smart-2.3.jar:/home/hadoop/hadoop/share/hadoop/common/lib/nimbus-jose-jwt-4.41.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jersey-server-1.19.jar:/home/hadoop/hadoop/share/hadoop/common/lib/commons-logging-1.1.3.jar:/home/hadoop/hadoop/share/hadoop/common/lib/htrace-core4-4.1.0-incubating.jar:/home/hadoop/hadoop/share/hadoop/common/lib/avro-1.7.7.jar:/home/hadoop/hadoop/share/hadoop/common/lib/slf4j-api-1.7.25.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jersey-json-1.19.jar:/home/hadoop/hadoop/share/hadoop/common/lib/asm-5.0.4.jar:/home/hadoop/hadoop/share/hadoop/common/lib/stax2-api-3.1.4.jar:/home/hadoop/hadoop/share/hadoop/common/lib/gson-2.2.4.jar:/home/hadoop/hadoop/share/hadoop/common/lib/kerb-server-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/kerb-util-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/kerb-admin-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar:/home/hadoop/hadoop/share/hadoop/common/lib/accessors-smart-1.2.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jul-to-slf4j-1.7.25.jar:/home/hadoop/hadoop/share/hadoop/common/lib/javax.servlet-api-3.1.0.jar:/home/hadoop/hadoop/share/hadoop/common/lib/snappy-java-1.0.5.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jetty-xml-9.3.24.v20180605.jar:/home/hadoop/hadoop/share/hadoop/common/lib/checker-qual-2.5.2.jar:/home/hadoop/hadoop/share/hadoop/common/lib/curator-framework-2.13.0.jar:/home/hadoop/hadoop/share/hadoop/common/lib/httpcore-4.4.10.jar:/home/hadoop/hadoop/share/hadoop/common/lib/metrics-core-3.2.4.jar:/home/hadoop/hadoop/share/hadoop/common/lib/commons-cli-1.2.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jersey-servlet-1.19.jar:/home/hadoop/hadoop/share/hadoop/common/lib/log4j-1.2.17.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jetty-http-9.3.24.v20180605.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jackson-core-asl-1.9.13.jar:/home/hadoop/hadoop/share/hadoop/common/lib/zookeeper-3.4.13.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jetty-server-9.3.24.v20180605.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jsr305-3.0.0.jar:/home/hadoop/hadoop/share/hadoop/common/lib/re2j-1.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/j2objc-annotations-1.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/kerb-client-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/jackson-annotations-2.9.8.jar:/home/hadoop/hadoop/share/hadoop/common/lib/commons-net-3.6.jar:/home/hadoop/hadoop/share/hadoop/common/lib/hadoop-auth-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/common/lib/animal-sniffer-annotations-1.17.jar:/home/hadoop/hadoop/share/hadoop/common/lib/kerby-pkix-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/common/hadoop-common-3.2.1-tests.jar:/home/hadoop/hadoop/share/hadoop/common/hadoop-nfs-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/common/hadoop-kms-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/common/hadoop-common-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs:/home/hadoop/hadoop/share/hadoop/hdfs/lib/commons-beanutils-1.9.3.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/curator-recipes-2.13.0.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/commons-math3-3.1.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jsr311-api-1.1.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/kerby-util-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/error_prone_annotations-2.2.0.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jackson-databind-2.9.8.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/commons-configuration2-2.1.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jetty-webapp-9.3.24.v20180605.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jetty-util-9.3.24.v20180605.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jackson-core-2.9.8.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/kerby-asn1-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/commons-lang3-3.7.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jetty-io-9.3.24.v20180605.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jettison-1.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/kerb-crypto-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/kerb-core-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jetty-servlet-9.3.24.v20180605.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/kerb-identity-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/kerby-xdr-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/commons-io-2.5.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jcip-annotations-1.0-1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jersey-core-1.19.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/protobuf-java-2.5.0.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/kerby-config-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/paranamer-2.3.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/netty-3.10.5.Final.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jackson-xc-1.9.13.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jaxb-api-2.2.11.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/hadoop-annotations-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/kerb-simplekdc-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/woodstox-core-5.0.3.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/audience-annotations-0.5.0.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/dnsjava-2.1.7.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/httpclient-4.5.6.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/commons-compress-1.18.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jsch-0.1.54.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jackson-mapper-asl-1.9.13.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/curator-client-2.13.0.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/commons-collections-3.2.2.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/commons-codec-1.11.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/commons-text-1.4.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/token-provider-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/kerb-common-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jaxb-impl-2.2.3-1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/guava-27.0-jre.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/failureaccess-1.0.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jackson-jaxrs-1.9.13.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jetty-security-9.3.24.v20180605.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/json-smart-2.3.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/nimbus-jose-jwt-4.41.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jersey-server-1.19.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/commons-logging-1.1.3.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/htrace-core4-4.1.0-incubating.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/avro-1.7.7.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jersey-json-1.19.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/asm-5.0.4.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/stax2-api-3.1.4.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/gson-2.2.4.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/kerb-server-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/json-simple-1.1.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/kerb-util-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/kerb-admin-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/okhttp-2.7.5.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/leveldbjni-all-1.8.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/commons-daemon-1.0.13.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/accessors-smart-1.2.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/javax.servlet-api-3.1.0.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/okio-1.6.0.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/snappy-java-1.0.5.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jetty-xml-9.3.24.v20180605.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/checker-qual-2.5.2.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/curator-framework-2.13.0.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/httpcore-4.4.10.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/commons-cli-1.2.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jersey-servlet-1.19.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/log4j-1.2.17.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jetty-http-9.3.24.v20180605.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jackson-core-asl-1.9.13.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/zookeeper-3.4.13.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jetty-server-9.3.24.v20180605.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jsr305-3.0.0.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/re2j-1.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/j2objc-annotations-1.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/kerb-client-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jackson-annotations-2.9.8.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/commons-net-3.6.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/jetty-util-ajax-9.3.24.v20180605.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/hadoop-auth-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/netty-all-4.0.52.Final.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/animal-sniffer-annotations-1.17.jar:/home/hadoop/hadoop/share/hadoop/hdfs/lib/kerby-pkix-1.0.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/hadoop-hdfs-rbf-3.2.1-tests.jar:/home/hadoop/hadoop/share/hadoop/hdfs/hadoop-hdfs-native-client-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/hadoop-hdfs-rbf-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/hadoop-hdfs-native-client-3.2.1-tests.jar:/home/hadoop/hadoop/share/hadoop/hdfs/hadoop-hdfs-client-3.2.1-tests.jar:/home/hadoop/hadoop/share/hadoop/hdfs/hadoop-hdfs-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/hadoop-hdfs-httpfs-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/hadoop-hdfs-client-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/hadoop-hdfs-nfs-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/hdfs/hadoop-hdfs-3.2.1-tests.jar:/home/hadoop/hadoop/share/hadoop/mapreduce/lib/hamcrest-core-1.3.jar:/home/hadoop/hadoop/share/hadoop/mapreduce/lib/junit-4.11.jar:/home/hadoop/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-common-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-3.2.1-tests.jar:/home/hadoop/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-shuffle-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-hs-plugins-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-uploader-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-hs-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-app-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-core-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-nativetask-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/yarn:/home/hadoop/hadoop/share/hadoop/yarn/lib/mssql-jdbc-6.2.1.jre7.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/HikariCP-java7-2.4.12.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/geronimo-jcache_1.0_spec-1.0-alpha-1.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/javax.inject-1.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/jackson-jaxrs-base-2.9.8.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/snakeyaml-1.16.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/ehcache-3.3.1.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/jersey-client-1.19.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/aopalliance-1.0.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/guice-4.0.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/guice-servlet-4.0.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/fst-2.50.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/bcprov-jdk15on-1.60.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/jersey-guice-1.19.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/bcpkix-jdk15on-1.60.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/java-util-1.9.0.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/json-io-2.5.1.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/jackson-module-jaxb-annotations-2.9.8.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/objenesis-1.0.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/jackson-jaxrs-json-provider-2.9.8.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/metrics-core-3.2.4.jar:/home/hadoop/hadoop/share/hadoop/yarn/lib/swagger-annotations-1.5.4.jar:/home/hadoop/hadoop/share/hadoop/yarn/hadoop-yarn-server-applicationhistoryservice-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/yarn/hadoop-yarn-server-web-proxy-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/yarn/hadoop-yarn-services-api-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/yarn/hadoop-yarn-server-nodemanager-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/yarn/hadoop-yarn-client-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/yarn/hadoop-yarn-server-router-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/yarn/hadoop-yarn-submarine-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/yarn/hadoop-yarn-api-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/yarn/hadoop-yarn-common-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/yarn/hadoop-yarn-applications-unmanaged-am-launcher-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/yarn/hadoop-yarn-server-common-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/yarn/hadoop-yarn-server-resourcemanager-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/yarn/hadoop-yarn-server-tests-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/yarn/hadoop-yarn-server-sharedcachemanager-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/yarn/hadoop-yarn-registry-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/yarn/hadoop-yarn-applications-distributedshell-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/yarn/hadoop-yarn-services-core-3.2.1.jar:/home/hadoop/hadoop/share/hadoop/yarn/hadoop-yarn-server-timeline-pluginstorage-3.2.1.jar
+STARTUP_MSG:   build = https://gitbox.apache.org/repos/asf/hadoop.git -r b3cbbb467e22ea829b3808f4b7b01d07e0bf3842; compiled by 'rohithsharmaks' on 2019-09-10T15:56Z
+STARTUP_MSG:   java = 1.8.0_242
+************************************************************/
+2020-01-29 15:06:16,381 INFO namenode.NameNode: registered UNIX signal handlers for [TERM, HUP, INT]
+2020-01-29 15:06:16,447 INFO namenode.NameNode: createNameNode [-format]
+2020-01-29 15:06:16,536 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+2020-01-29 15:06:16,718 INFO common.Util: Assuming 'file' scheme for path /home/hadoop/data/nameNode in configuration.
+2020-01-29 15:06:16,718 INFO common.Util: Assuming 'file' scheme for path /home/hadoop/data/nameNode in configuration.
+Formatting using clusterid: CID-2f67bff1-cdbc-4dc2-b7e9-2525bbcbdf23
+2020-01-29 15:06:16,746 INFO namenode.FSEditLog: Edit logging is async:true
+2020-01-29 15:06:16,756 INFO namenode.FSNamesystem: KeyProvider: null
+2020-01-29 15:06:16,757 INFO namenode.FSNamesystem: fsLock is fair: true
+2020-01-29 15:06:16,757 INFO namenode.FSNamesystem: Detailed lock hold time metrics enabled: false
+2020-01-29 15:06:16,761 INFO namenode.FSNamesystem: fsOwner             = hadoop (auth:SIMPLE)
+2020-01-29 15:06:16,761 INFO namenode.FSNamesystem: supergroup          = supergroup
+2020-01-29 15:06:16,761 INFO namenode.FSNamesystem: isPermissionEnabled = true
+2020-01-29 15:06:16,761 INFO namenode.FSNamesystem: HA Enabled: false
+2020-01-29 15:06:16,794 INFO common.Util: dfs.datanode.fileio.profiling.sampling.percentage set to 0. Disabling file IO profiling
+2020-01-29 15:06:16,804 INFO blockmanagement.DatanodeManager: dfs.block.invalidate.limit: configured=1000, counted=60, effected=1000
+2020-01-29 15:06:16,804 INFO blockmanagement.DatanodeManager: dfs.namenode.datanode.registration.ip-hostname-check=true
+2020-01-29 15:06:16,808 INFO blockmanagement.BlockManager: dfs.namenode.startup.delay.block.deletion.sec is set to 000:00:00:00.000
+2020-01-29 15:06:16,808 INFO blockmanagement.BlockManager: The block deletion will start around 2020 Jan 29 15:06:16
+2020-01-29 15:06:16,809 INFO util.GSet: Computing capacity for map BlocksMap
+2020-01-29 15:06:16,809 INFO util.GSet: VM type       = 64-bit
+2020-01-29 15:06:16,817 INFO util.GSet: 2.0% max memory 875 MB = 17.5 MB
+2020-01-29 15:06:16,817 INFO util.GSet: capacity      = 2^21 = 2097152 entries
+2020-01-29 15:06:16,822 INFO blockmanagement.BlockManager: Storage policy satisfier is disabled
+2020-01-29 15:06:16,822 INFO blockmanagement.BlockManager: dfs.block.access.token.enable = false
+2020-01-29 15:06:16,827 INFO Configuration.deprecation: No unit for dfs.namenode.safemode.extension(30000) assuming MILLISECONDS
+2020-01-29 15:06:16,827 INFO blockmanagement.BlockManagerSafeMode: dfs.namenode.safemode.threshold-pct = 0.9990000128746033
+2020-01-29 15:06:16,827 INFO blockmanagement.BlockManagerSafeMode: dfs.namenode.safemode.min.datanodes = 0
+2020-01-29 15:06:16,827 INFO blockmanagement.BlockManagerSafeMode: dfs.namenode.safemode.extension = 30000
+2020-01-29 15:06:16,827 INFO blockmanagement.BlockManager: defaultReplication         = 3
+2020-01-29 15:06:16,827 INFO blockmanagement.BlockManager: maxReplication             = 512
+2020-01-29 15:06:16,827 INFO blockmanagement.BlockManager: minReplication             = 1
+2020-01-29 15:06:16,827 INFO blockmanagement.BlockManager: maxReplicationStreams      = 2
+2020-01-29 15:06:16,827 INFO blockmanagement.BlockManager: redundancyRecheckInterval  = 3000ms
+2020-01-29 15:06:16,827 INFO blockmanagement.BlockManager: encryptDataTransfer        = false
+2020-01-29 15:06:16,827 INFO blockmanagement.BlockManager: maxNumBlocksToLog          = 1000
+2020-01-29 15:06:16,844 INFO namenode.FSDirectory: GLOBAL serial map: bits=29 maxEntries=536870911
+2020-01-29 15:06:16,844 INFO namenode.FSDirectory: USER serial map: bits=24 maxEntries=16777215
+2020-01-29 15:06:16,844 INFO namenode.FSDirectory: GROUP serial map: bits=24 maxEntries=16777215
+2020-01-29 15:06:16,844 INFO namenode.FSDirectory: XATTR serial map: bits=24 maxEntries=16777215
+2020-01-29 15:06:16,853 INFO util.GSet: Computing capacity for map INodeMap
+2020-01-29 15:06:16,853 INFO util.GSet: VM type       = 64-bit
+2020-01-29 15:06:16,853 INFO util.GSet: 1.0% max memory 875 MB = 8.8 MB
+2020-01-29 15:06:16,853 INFO util.GSet: capacity      = 2^20 = 1048576 entries
+2020-01-29 15:06:16,853 INFO namenode.FSDirectory: ACLs enabled? false
+2020-01-29 15:06:16,853 INFO namenode.FSDirectory: POSIX ACL inheritance enabled? true
+2020-01-29 15:06:16,853 INFO namenode.FSDirectory: XAttrs enabled? true
+2020-01-29 15:06:16,854 INFO namenode.NameNode: Caching file names occurring more than 10 times
+2020-01-29 15:06:16,857 INFO snapshot.SnapshotManager: Loaded config captureOpenFiles: false, skipCaptureAccessTimeOnlyChange: false, snapshotDiffAllowSnapRootDescendant: true, maxSnapshotLimit: 65536
+2020-01-29 15:06:16,858 INFO snapshot.SnapshotManager: SkipList is disabled
+2020-01-29 15:06:16,861 INFO util.GSet: Computing capacity for map cachedBlocks
+2020-01-29 15:06:16,861 INFO util.GSet: VM type       = 64-bit
+2020-01-29 15:06:16,861 INFO util.GSet: 0.25% max memory 875 MB = 2.2 MB
+2020-01-29 15:06:16,861 INFO util.GSet: capacity      = 2^18 = 262144 entries
+2020-01-29 15:06:16,865 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.window.num.buckets = 10
+2020-01-29 15:06:16,866 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.num.users = 10
+2020-01-29 15:06:16,866 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.windows.minutes = 1,5,25
+2020-01-29 15:06:16,868 INFO namenode.FSNamesystem: Retry cache on namenode is enabled
+2020-01-29 15:06:16,868 INFO namenode.FSNamesystem: Retry cache will use 0.03 of total heap and retry cache entry expiry time is 600000 millis
+2020-01-29 15:06:16,869 INFO util.GSet: Computing capacity for map NameNodeRetryCache
+2020-01-29 15:06:16,869 INFO util.GSet: VM type       = 64-bit
+2020-01-29 15:06:16,869 INFO util.GSet: 0.029999999329447746% max memory 875 MB = 268.8 KB
+2020-01-29 15:06:16,870 INFO util.GSet: capacity      = 2^15 = 32768 entries
+2020-01-29 15:06:16,888 INFO namenode.FSImage: Allocated new BlockPoolId: BP-243226917-192.168.56.124-1580321176881
+2020-01-29 15:06:17,138 INFO common.Storage: Storage directory /home/hadoop/data/nameNode has been successfully formatted.
+2020-01-29 15:06:17,164 INFO namenode.FSImageFormatProtobuf: Saving image file /home/hadoop/data/nameNode/current/fsimage.ckpt_0000000000000000000 using no compression
+2020-01-29 15:06:17,221 INFO namenode.FSImageFormatProtobuf: Image file /home/hadoop/data/nameNode/current/fsimage.ckpt_0000000000000000000 of size 398 bytes saved in 0 seconds .
+2020-01-29 15:06:17,335 INFO namenode.NNStorageRetentionManager: Going to retain 1 images with txid >= 0
+2020-01-29 15:06:17,338 INFO namenode.FSImage: FSImageSaver clean checkpoint: txid=0 when meet shutdown.
+2020-01-29 15:06:17,338 INFO namenode.NameNode: SHUTDOWN_MSG: 
+/************************************************************
+SHUTDOWN_MSG: Shutting down NameNode at hadoopmaster1/192.168.56.124
+************************************************************/
+
+#START HDFS (ALL NODES)
+start-dfs.sh
+Starting namenodes on [hadoopmaster1]
+Starting datanodes
+Starting secondary namenodes [hadoopmaster1]
+
+#CHECK HDFS STATUS
+hdfs dfsadmin -report
+Configured Capacity: 0 (0 B)
+Present Capacity: 0 (0 B)
+DFS Remaining: 0 (0 B)
+DFS Used: 0 (0 B)
+DFS Used%: 0.00%
+Replicated Blocks:
+	Under replicated blocks: 0
+	Blocks with corrupt replicas: 0
+	Missing blocks: 0
+	Missing blocks (with replication factor 1): 0
+	Low redundancy blocks with highest priority to recover: 0
+	Pending deletion blocks: 0
+Erasure Coded Block Groups: 
+	Low redundancy block groups: 0
+	Block groups with corrupt internal blocks: 0
+	Missing block groups: 0
+	Low redundancy blocks with highest priority to recover: 0
+	Pending deletion blocks: 0
+
+-------------------------------------------------
+
+#ONLY ON MASTER NODE JPS PROCESSES
+jps
+23970 Jps
+22442 NameNode
+23101 ResourceManager
+22671 SecondaryNameNode
+
+#ONLY IN SLAVES LIST JPS PROCESSES
+jps 
+22294 Jps
+21560 NodeManager
+21352 DataNode
+
+#LIST HELP HDFS
+hdfs dfsadmin -help
+
+#HDFS WEB OVERVIEW
+http://192.168.56.124:9870
+
+#SECONDARY NAMENODE WEB OVERVIEW
+http://192.168.56.124:9868/status.html
+
+#NODE MANAGER OVERVIEW
+http://192.168.56.124:8042/node
+
+#CREATE DIRECTORY HDFS 
+hdfs dfs -mkdir -p books
+
+#LIST DIRECTORIES HDFS 
+hdfs dfs -ls
+Found 1 items
+drwxr-xr-x   - hadoop supergroup          0 2020-01-29 17:02 books
+
+#REPORT CLUSTER STATUS
+hdfs dfsadmin -report
+
+#REMOVE FILE ON DIRECTORY HDFS
+hdfs dfs -rmdir <directory_path>
+hdfs dfs -rm -R <directory_path>
+hdfs dfs -rmdir <directory_path>/<file>
+
+#START YARN (ALL NODES)
+start-yarn.sh
+Starting resourcemanager
+Starting nodemanagers
+
+#YARN WEB OVERVIEW
+http://192.168.56.124:8088
+
+#UPDATE FILE TO DIRECTORY HDFS
+[hadoop@hadoopmaster1 ~]$ hdfs dfs -put OracleDatabaseNotesForProfessionals.pdf books
+2020-02-01 19:10:09,967 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+
+#CHECK FILE UPDATED
+[hadoop@hadoopmaster1 ~]$ hdfs dfs -ls books
+Found 1 items
+-rw-r--r--   3 hadoop supergroup    1211210 2020-02-01 19:10 books/OracleDatabaseNotesForProfessionals.pdf
+
+#CHECK NODES RUNNING YARN
+yarn node -list
+2020-02-01 19:25:03,952 INFO client.RMProxy: Connecting to ResourceManager at hadoopmaster1/192.168.56.124:8050
+Total Nodes:3
+         Node-Id             Node-State Node-Http-Address       Number-of-Running-Containers
+hadoopslave1:33939              RUNNING hadoopslave1:8042                                  0
+hadoopmaster1:38933             RUNNING hadoopmaster1:8042                                 0
+hadoopslave2:36729              RUNNING hadoopslave2:8042                                  0
+
+#YARN LIST APPLICATIONS
+yarn application -list
+2020-02-01 19:27:55,463 INFO client.RMProxy: Connecting to ResourceManager at hadoopmaster1/192.168.56.124:8050
+Total number of applications (application-types: [], states: [SUBMITTED, ACCEPTED, RUNNING] and tags: []):0
+                Application-Id      Application-Name        Application-Type          User           Queue                   State             Final-State             Progress                        Tracking-URL
+           Final-State             Progress                        Tracking-URL
+
+#EXAMPLE MAPREDUCE COUNT ALL WORDS IN FILE (THE LAST ARGUMENT IS WHERE THE OUTPUT OF THE JOB WILL BE SAVED - IN HDFS)
+yarn jar /home/hadoop/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.2.1.jar wordcount "books/*" output
+2020-02-01 20:32:03,191 INFO client.RMProxy: Connecting to ResourceManager at hadoopmaster1/192.168.56.124:8050
+2020-02-01 20:32:03,646 INFO mapreduce.JobResourceUploader: Disabling Erasure Coding for path: /tmp/hadoop-yarn/staging/hadoop/.staging/job_1580594646278_0001
+2020-02-01 20:32:03,944 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+2020-02-01 20:32:04,430 INFO input.FileInputFormat: Total input files to process : 1
+2020-02-01 20:32:04,688 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+2020-02-01 20:32:04,980 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+2020-02-01 20:32:05,046 INFO mapreduce.JobSubmitter: number of splits:1
+2020-02-01 20:32:05,305 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+2020-02-01 20:32:05,388 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1580594646278_0001
+2020-02-01 20:32:05,388 INFO mapreduce.JobSubmitter: Executing with tokens: []
+2020-02-01 20:32:05,499 INFO conf.Configuration: resource-types.xml not found
+2020-02-01 20:32:05,499 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.
+2020-02-01 20:32:05,830 INFO impl.YarnClientImpl: Submitted application application_1580594646278_0001
+2020-02-01 20:32:05,870 INFO mapreduce.Job: The url to track the job: http://hadoopmaster1:8088/proxy/application_1580594646278_0001/
+2020-02-01 20:32:05,871 INFO mapreduce.Job: Running job: job_1580594646278_0001
+2020-02-01 20:32:10,980 INFO mapreduce.Job: Job job_1580594646278_0001 running in uber mode : false
+2020-02-01 20:32:10,981 INFO mapreduce.Job:  map 0% reduce 0%
+2020-02-01 20:32:17,028 INFO mapreduce.Job:  map 100% reduce 0%
+2020-02-01 20:32:23,065 INFO mapreduce.Job:  map 100% reduce 100%
+2020-02-01 20:32:25,088 INFO mapreduce.Job: Job job_1580594646278_0001 completed successfully
+2020-02-01 20:32:25,143 INFO mapreduce.Job: Counters: 54
+        File System Counters
+                FILE: Number of bytes read=1727580
+                FILE: Number of bytes written=3908071
+                FILE: Number of read operations=0
+                FILE: Number of large read operations=0
+                FILE: Number of write operations=0
+                HDFS: Number of bytes read=1211358
+                HDFS: Number of bytes written=1632316
+                HDFS: Number of read operations=8
+                HDFS: Number of large read operations=0
+                HDFS: Number of write operations=2
+                HDFS: Number of bytes read erasure-coded=0
+        Job Counters
+                Launched map tasks=1
+                Launched reduce tasks=1
+                Data-local map tasks=1
+                Total time spent by all maps in occupied slots (ms)=3003
+                Total time spent by all reduces in occupied slots (ms)=3288
+                Total time spent by all map tasks (ms)=3003
+                Total time spent by all reduce tasks (ms)=3288
+                Total vcore-milliseconds taken by all map tasks=3003
+                Total vcore-milliseconds taken by all reduce tasks=3288
+                Total megabyte-milliseconds taken by all map tasks=768768
+                Total megabyte-milliseconds taken by all reduce tasks=841728
+        Map-Reduce Framework
+                Map input records=25028
+                Map output records=79550
+                Map output bytes=2192753
+                Map output materialized bytes=1727580
+                Input split bytes=148
+                Combine input records=79550
+                Combine output records=21161
+                Reduce input groups=21161
+                Reduce shuffle bytes=1727580
+                Reduce input records=21161
+                Reduce output records=21161
+                Spilled Records=42322
+                Shuffled Maps =1
+                Failed Shuffles=0
+                Merged Map outputs=1
+                GC time elapsed (ms)=77
+                CPU time spent (ms)=1830
+                Physical memory (bytes) snapshot=466522112
+                Virtual memory (bytes) snapshot=4250087424
+                Total committed heap usage (bytes)=308281344
+                Peak Map Physical memory (bytes)=290312192
+                Peak Map Virtual memory (bytes)=2126688256
+                Peak Reduce Physical memory (bytes)=176209920
+                Peak Reduce Virtual memory (bytes)=2123399168
+        Shuffle Errors
+                BAD_ID=0
+                CONNECTION=0
+                IO_ERROR=0
+                WRONG_LENGTH=0
+                WRONG_MAP=0
+                WRONG_REDUCE=0
+        File Input Format Counters
+                Bytes Read=1211210
+        File Output Format Counters
+                Bytes Written=1632316
+		
+#VERIFY OUTPUT FILE MAPREDUCE
+hdfs dfs -ls
+Found 2 items
+drwxr-xr-x   - hadoop supergroup          0 2020-02-01 19:10 books
+drwxr-xr-x   - hadoop supergroup          0 2020-02-01 20:32 output
+
+hdfs dfs -ls output
+Found 2 items
+-rw-r--r--   3 hadoop supergroup          0 2020-02-01 20:32 output/_SUCCESS
+-rw-r--r--   3 hadoop supergroup    1632316 2020-02-01 20:32 output/part-r-00000
+
+hdfs dfs -head output/part-r-00000
+
+#STOP ALL SERVICES HADOOP (RUN ON ALL NODES) (yarn daemons and hdfs daemons)
+stop-all.sh
+WARNING: Stopping all Apache Hadoop daemons as hadoop in 10 seconds.
+WARNING: Use CTRL-C to abort.
+Stopping namenodes on [hadoopmaster1]
+Stopping datanodes
+Stopping secondary namenodes [hadoopmaster1]
+Stopping nodemanagers
+Stopping resourcemanager
+
+#START ALL SERVICES HADOOP (RUN ON ALL NODES) (yarn daemons and hdfs daemons)
+start-all.sh
+WARNING: Attempting to start all Apache Hadoop daemons as hadoop in 10 seconds.
+WARNING: This is not a recommended production deployment configuration.
+WARNING: Use CTRL-C to abort.
+Starting namenodes on [hadoopmaster1]
+Starting datanodes
+Starting secondary namenodes [hadoopmaster1]
+Starting resourcemanager
+Starting nodemanagers
+
+#INSTALL HBASE IN FULLY DISTRIBUTED MODE ON ALL NODES
+wget http://ftp.unicamp.br/pub/apache/hbase/2.2.6/hbase-2.2.6-bin.tar.gz
+
+#UNCOMPRESS HBASE FILE ON ALL NODES
+tar xzf hbase-2.2.6-bin.tar.gz
+
+#MOVE TO NEW NAME ON ALL NODES
+mv hbase-2.2.6 hbase
+
+#EDIT PROFILE FILE TO ADD VARIABLE HBASE_HOME ON ALL NODES
+vi /home/hadoop/.bashrc
+
+#JAVA
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.262.b10-0.el7_8.x86_64/jre
+
+#HBASE
+export HBASE_HOME=/home/hadoop/hbase
+export PATH=$PATH:$HBASE_HOME/sbin:$HBASE_HOME/bin
+
+#HADOOP
+export HADOOP_HOME=/home/hadoop/hadoop
+export HADOOP_INSTALL=$HADOOP_HOME
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
+
+#RELOAD PROFILE FILE ON ALL NODES
+source /home/hadoop/.bashrc
+
+#CREATE PID DIRECTORY FOR HBASE ON ALL NODES
+mkdir -p /home/hadoop/hbase/pids
+
+#CONFIGURE HBASE-ENV.SH ON MASTER NODE
+vi /home/hadoop/hbase/conf/hbase-env.sh
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.262.b10-0.el7_8.x86_64/jre
+export HBASE_REGIONSERVERS=${HBASE_HOME}/conf/regionservers
+export HBASE_MANAGES_ZK=true
+export HBASE_PID_DIR=/home/hadoop/hbase/pids
+
+#CONFIGURE REGIONSERVERS ON MASTER NODE
+vi /home/hadoop/hbase/conf/regionservers
+hadoopslave1
+hadoopslave2
+
+#CONFIGURE BACKUP-MASTER ON MASTER NODE
+vi /home/hadoop/hbase/conf/backup-masters
+hadoopslave1
+hadoopslave2
+
+#ADD NEW DIRECTORY FOR HBASE ON MASTER NODE
+hdfs dfs -mkdir -p hbase
+hdfs dfs -mkdir -p zookeeper
+
+hdfs dfs -ls
+Found 2 items
+drwxr-xr-x   - hadoop supergroup          0 2020-09-21 11:52 hbase
+drwxr-xr-x   - hadoop supergroup          0 2020-09-21 11:53 zookeeper
+
+#CONFIGURE HBASE-SITE FILE ON MASTER NODE
+vi /home/hadoop/hbase/conf/hbase-site.xml
+<property>
+    <name>hbase.rootdir</name>
+    <value>hdfs://hadoopmaster1:9000/user/hadoop/hbase</value>
+  </property>
+  <property>
+    <name>hbase.cluster.distributed</name>
+    <value>true</value>
+  </property>
+  <property>
+  <name>hbase.zookeeper.quorum</name>
+    <value>hadoopmaster1,hadoopslave1,hadoopslave2</value>
+    </property>
+  <property>
+    <name>hbase.master</name>
+    <value>hadoopmaster1:60010</value>       
+  </property>
+  <property>
+    <name>hbase.zookeeper.property.clientPort</name>
+    <value>2181</value>
+  </property>
+#  <property>
+#    <name>hbase.zookeeper.property.dataDir</name>
+#    <value>hdfs://hadoopmaster1:9000/user/hadoop/zookeeper</value>
+#  </property>
+  <property>
+    <name>hbase.zookeeper.property.dataDir</name>
+    <value>/home/hadoop/zookeeper/data</value>
+  </property>
+  <property>
+    <name>hbase.tmp.dir</name>
+    <value>./tmp</value>
+  </property>
+  <property>
+    <name>hbase.unsafe.stream.capability.enforce</name>
+    <value>false</value>
+  </property>
+
+#COPY CONFIGURATION FILES TO SLAVES
+scp -r /home/hadoop/hbase/conf/* hadoopslave1:/home/hadoop/hbase/conf/
+scp -r /home/hadoop/hbase/conf/* hadoopslave2:/home/hadoop/hbase/conf/
+
+#START HBASE SERVICE ON MASTER NODE
+start-hbase.sh
+OpenJDK 64-Bit Server VM warning: If the number of processors is expected to increase from one, then you should configure the number of parallel GC threads appropriately using -XX:ParallelGCThreads=N
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/home/hadoop/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/home/hadoop/hbase/lib/client-facing-thirdparty/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+OpenJDK 64-Bit Server VM warning: If the number of processors is expected to increase from one, then you should configure the number of parallel GC threads appropriately using -XX:ParallelGCThreads=N
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/home/hadoop/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/home/hadoop/hbase/lib/client-facing-thirdparty/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+hadoopmaster1: running zookeeper, logging to /home/hadoop/hbase/logs/hbase-hadoop-zookeeper-hadoopmaster1.out
+hadoopslave1: running zookeeper, logging to /home/hadoop/hbase/logs/hbase-hadoop-zookeeper-hadoopslave1.out
+hadoopslave2: running zookeeper, logging to /home/hadoop/hbase/logs/hbase-hadoop-zookeeper-hadoopslave2.out
+hadoopmaster1: OpenJDK 64-Bit Server VM warning: If the number of processors is expected to increase from one, then you should configure the number of parallel GC threads appropriately using -XX:ParallelGCThreads=N
+hadoopmaster1: SLF4J: Class path contains multiple SLF4J bindings.
+hadoopmaster1: SLF4J: Found binding in [jar:file:/home/hadoop/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+hadoopmaster1: SLF4J: Found binding in [jar:file:/home/hadoop/hbase/lib/client-facing-thirdparty/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+hadoopmaster1: SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+hadoopmaster1: SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+hadoopslave1: OpenJDK 64-Bit Server VM warning: If the number of processors is expected to increase from one, then you should configure the number of parallel GC threads appropriately using -XX:ParallelGCThreads=N
+hadoopslave1: SLF4J: Class path contains multiple SLF4J bindings.
+hadoopslave1: SLF4J: Found binding in [jar:file:/home/hadoop/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+hadoopslave1: SLF4J: Found binding in [jar:file:/home/hadoop/hbase/lib/client-facing-thirdparty/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+hadoopslave1: SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+hadoopslave1: SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+hadoopslave2: OpenJDK 64-Bit Server VM warning: If the number of processors is expected to increase from one, then you should configure the number of parallel GC threads appropriately using -XX:ParallelGCThreads=N
+hadoopslave2: SLF4J: Class path contains multiple SLF4J bindings.
+hadoopslave2: SLF4J: Found binding in [jar:file:/home/hadoop/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+hadoopslave2: SLF4J: Found binding in [jar:file:/home/hadoop/hbase/lib/client-facing-thirdparty/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+hadoopslave2: SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+hadoopslave2: SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+running master, logging to /home/hadoop/hbase/logs/hbase-hadoop-master-hadoopmaster1.out
+OpenJDK 64-Bit Server VM warning: If the number of processors is expected to increase from one, then you should configure the number of parallel GC threads appropriately using -XX:ParallelGCThreads=N
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/home/hadoop/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/home/hadoop/hbase/lib/client-facing-thirdparty/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+hadoopslave1: running regionserver, logging to /home/hadoop/hbase/logs/hbase-hadoop-regionserver-hadoopslave1.out
+hadoopslave2: running regionserver, logging to /home/hadoop/hbase/logs/hbase-hadoop-regionserver-hadoopslave2.out
+hadoopslave1: OpenJDK 64-Bit Server VM warning: If the number of processors is expected to increase from one, then you should configure the number of parallel GC threads appropriately using -XX:ParallelGCThreads=N
+hadoopslave1: SLF4J: Class path contains multiple SLF4J bindings.
+hadoopslave1: SLF4J: Found binding in [jar:file:/home/hadoop/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+hadoopslave1: SLF4J: Found binding in [jar:file:/home/hadoop/hbase/lib/client-facing-thirdparty/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+hadoopslave1: SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+hadoopslave1: SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+hadoopslave2: OpenJDK 64-Bit Server VM warning: If the number of processors is expected to increase from one, then you should configure the number of parallel GC threads appropriately using -XX:ParallelGCThreads=N
+hadoopslave2: SLF4J: Class path contains multiple SLF4J bindings.
+hadoopslave2: SLF4J: Found binding in [jar:file:/home/hadoop/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+hadoopslave2: SLF4J: Found binding in [jar:file:/home/hadoop/hbase/lib/client-facing-thirdparty/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+hadoopslave2: SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+hadoopslave2: SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+hadoopslave2: running master, logging to /home/hadoop/hbase/logs/hbase-hadoop-master-hadoopslave2.out
+hadoopslave1: running master, logging to /home/hadoop/hbase/logs/hbase-hadoop-master-hadoopslave1.out
+
+#CHECK SERVICE HBASE ON MASTER
+jps
+25722 HQuorumPeer
+22442 NameNode
+25853 HMaster
+26141 Jps
+23101 ResourceManager
+22671 SecondaryNameNode
+
+#CHECK SERVICE HBASE ON SLAVE
+jps
+22784 NodeManager
+24435 HRegionServer
+24279 HQuorumPeer
+24583 HMaster
+24888 Jps
+22569 DataNode
+
+#CHECK HBASE MASTER
+http://192.168.56.124:16010/master-status
+
+#CHECK HBASE BACKUP MASTER
+http://192.168.56.125:16010/master-status
+http://192.168.56.126:16010/master-status
+
+#CHECK REGION SERVER 
+http://192.168.56.125:16030/rs-status
+http://192.168.56.126:16030/rs-status
+
+#RUN HBASE SHELL
+hbase shell
+OpenJDK 64-Bit Server VM warning: If the number of processors is expected to increase from one, then you should configure the number of parallel GC threads appropriately using -XX:ParallelGCThreads=N
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/home/hadoop/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/home/hadoop/hbase/lib/client-facing-thirdparty/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+HBase Shell
+Use "help" to get list of supported commands.
+Use "exit" to quit this interactive shell.
+For Reference, please visit: http://hbase.apache.org/2.0/book.html#shell
+Version 2.2.6, r88c9a386176e2c2b5fd9915d0e9d3ce17d0e456e, Tue Sep 15 17:36:14 CST 2020
+Took 0.0017 seconds                                                                                                                                                                                                                                                      
+hbase(main):001:0> 
+
+#STOP HBASE SERVICE
+stop-hbase.sh
+stopping hbase............
+OpenJDK 64-Bit Server VM warning: If the number of processors is expected to increase from one, then you should configure the number of parallel GC threads appropriately using -XX:ParallelGCThreads=N
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/home/hadoop/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/home/hadoop/hbase/lib/client-facing-thirdparty/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+OpenJDK 64-Bit Server VM warning: If the number of processors is expected to increase from one, then you should configure the number of parallel GC threads appropriately using -XX:ParallelGCThreads=N
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/home/hadoop/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/home/hadoop/hbase/lib/client-facing-thirdparty/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+hadoopslave2: running zookeeper, logging to /home/hadoop/hbase/logs/hbase-hadoop-zookeeper-hadoopslave2.out
+hadoopslave1: running zookeeper, logging to /home/hadoop/hbase/logs/hbase-hadoop-zookeeper-hadoopslave1.out
+hadoopmaster1: running zookeeper, logging to /home/hadoop/hbase/logs/hbase-hadoop-zookeeper-hadoopmaster1.out
+hadoopslave2: stopping zookeeper.
+hadoopslave1: stopping zookeeper.
+hadoopmaster1: stopping zookeeper.
+
+
+#DOWNLOAD ZOOKEEPER ON ALL NODES
+wget http://ftp.unicamp.br/pub/apache/zookeeper/zookeeper-3.6.2/apache-zookeeper-3.6.2-bin.tar.gz,
+
+#UNCOMPRESS ZOOKEEPER FILE ON ALL NODES
+tar xzf apache-zookeeper-3.6.2-bin.tar.gz
+
+#MOVE TO NEW NAME ON ALL NODES
+mv apache-zookeeper-3.6.2-bin zookeeper
+
+#EDIT PROFILE FILE TO ADD VARIABLE HBASE_HOME ON ALL NODES
+vi /home/hadoop/.bashrc
+
+#CREATE DIRECTORY ON ALL NODES 
+mkdir -p /home/hadoop/zookeeper/data
+mkdir -p /home/hadoop/zookeeper/log
+chmod -R 755 /home/hadoop/zookeeper/data
+chmod -R 755 /home/hadoop/zookeeper/log
+
+#CREATE ZOOKEEPER FILE CONFIGURATION
+cp /home/hadoop/zookeeper/conf/zoo_sample.cfg /home/hadoop/zookeeper/conf/zoo.cfg
+
+vi /home/hadoop/zookeeper/conf/zoo.cfg
+tickTime=2000
+initLimit=10
+syncLimit=5
+dataDir=/home/hadoop/zookeeper/data
+dataLogDir=/home/hadoop/zookeeper/log
+clientPort=2181
+server.1=hadoopmaster1:2888:3888
+server.2=hadoopslave1:2888:3888
+server.3=hadoopslave2:2888:3888
+
+#ON EACH NODE CREATE ONE FILE CALLED MYPID WITH THE RESPECTIVE NUMBER 
+#ON MASTER NODE
+vi /home/hadoop/zookeeper/data/myid
+1
+
+#COPY ZOOKEEPER CONFIGURATION FILES TO SLAVE NODES
+scp -r /home/hadoop/zookeeper/conf/* hadoopslave1:/home/hadoop/zookeeper/conf/
+scp -r /home/hadoop/zookeeper/conf/* hadoopslave2:/home/hadoop/zookeeper/conf/
+
+#CONFIGURE ENVIRONMENTS VARIABLES FOR ZOOKEEPER
+vi .bashrc
+#JAVA
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.262.b10-0.el7_8.x86_64/jre
+
+#ZOOKEEPER
+export ZOOKEEPER_HOME=/home/hadoop/zookeeper
+export PATH=$PATH:$ZOOKEEPER_HOME/sbin:$ZOOKEEPER_HOME/bin
+
+#HBASE
+export HBASE_HOME=/home/hadoop/hbase
+export PATH=$PATH:$HBASE_HOME/sbin:$HBASE_HOME/bin
+
+#HADOOP
+export HADOOP_HOME=/home/hadoop/hadoop
+export HADOOP_INSTALL=$HADOOP_HOME
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
+
+source .bashrc
+
+#START ZOOKEEPER ON ALL NODES
+zkServer.sh start
+ZooKeeper JMX enabled by default
+Using config: /home/hadoop/zookeeper/bin/../conf/zoo.cfg
+Starting zookeeper ... STARTED
+
+#STOP ZOOKEEPER ON ALL NODES
+zkServer.sh stop
+ZooKeeper JMX enabled by default
+Using config: /home/hadoop/zookeeper/bin/../conf/zoo.cfg
+Stopping zookeeper ... STOPPED
+
+#CONNECT TO ZOOKEEPER
+zkCli.sh
+Connecting to localhost:2181
+2020-09-21 14:29:03,618 [myid:] - INFO  [main:Environment@98] - Client environment:zookeeper.version=3.6.2--803c7f1a12f85978cb049af5e4ef23bd8b688715, built on 09/04/2020 12:44 GMT
+2020-09-21 14:29:03,620 [myid:] - INFO  [main:Environment@98] - Client environment:host.name=hadoopmaster1
+2020-09-21 14:29:03,620 [myid:] - INFO  [main:Environment@98] - Client environment:java.version=1.8.0_262
+2020-09-21 14:29:03,621 [myid:] - INFO  [main:Environment@98] - Client environment:java.vendor=Oracle Corporation
+2020-09-21 14:29:03,621 [myid:] - INFO  [main:Environment@98] - Client environment:java.home=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.262.b10-0.el7_8.x86_64/jre
+2020-09-21 14:29:03,621 [myid:] - INFO  [main:Environment@98] - Client environment:java.class.path=/home/hadoop/zookeeper/bin/../zookeeper-server/target/classes:/home/hadoop/zookeeper/bin/../build/classes:/home/hadoop/zookeeper/bin/../zookeeper-server/target/lib/*.jar:/home/hadoop/zookeeper/bin/../build/lib/*.jar:/home/hadoop/zookeeper/bin/../lib/zookeeper-prometheus-metrics-3.6.2.jar:/home/hadoop/zookeeper/bin/../lib/zookeeper-jute-3.6.2.jar:/home/hadoop/zookeeper/bin/../lib/zookeeper-3.6.2.jar:/home/hadoop/zookeeper/bin/../lib/snappy-java-1.1.7.jar:/home/hadoop/zookeeper/bin/../lib/slf4j-log4j12-1.7.25.jar:/home/hadoop/zookeeper/bin/../lib/slf4j-api-1.7.25.jar:/home/hadoop/zookeeper/bin/../lib/simpleclient_servlet-0.6.0.jar:/home/hadoop/zookeeper/bin/../lib/simpleclient_hotspot-0.6.0.jar:/home/hadoop/zookeeper/bin/../lib/simpleclient_common-0.6.0.jar:/home/hadoop/zookeeper/bin/../lib/simpleclient-0.6.0.jar:/home/hadoop/zookeeper/bin/../lib/netty-transport-native-unix-common-4.1.50.Final.jar:/home/hadoop/zookeeper/bin/../lib/netty-transport-native-epoll-4.1.50.Final.jar:/home/hadoop/zookeeper/bin/../lib/netty-transport-4.1.50.Final.jar:/home/hadoop/zookeeper/bin/../lib/netty-resolver-4.1.50.Final.jar:/home/hadoop/zookeeper/bin/../lib/netty-handler-4.1.50.Final.jar:/home/hadoop/zookeeper/bin/../lib/netty-common-4.1.50.Final.jar:/home/hadoop/zookeeper/bin/../lib/netty-codec-4.1.50.Final.jar:/home/hadoop/zookeeper/bin/../lib/netty-buffer-4.1.50.Final.jar:/home/hadoop/zookeeper/bin/../lib/metrics-core-3.2.5.jar:/home/hadoop/zookeeper/bin/../lib/log4j-1.2.17.jar:/home/hadoop/zookeeper/bin/../lib/json-simple-1.1.1.jar:/home/hadoop/zookeeper/bin/../lib/jline-2.14.6.jar:/home/hadoop/zookeeper/bin/../lib/jetty-util-9.4.24.v20191120.jar:/home/hadoop/zookeeper/bin/../lib/jetty-servlet-9.4.24.v20191120.jar:/home/hadoop/zookeeper/bin/../lib/jetty-server-9.4.24.v20191120.jar:/home/hadoop/zookeeper/bin/../lib/jetty-security-9.4.24.v20191120.jar:/home/hadoop/zookeeper/bin/../lib/jetty-io-9.4.24.v20191120.jar:/home/hadoop/zookeeper/bin/../lib/jetty-http-9.4.24.v20191120.jar:/home/hadoop/zookeeper/bin/../lib/javax.servlet-api-3.1.0.jar:/home/hadoop/zookeeper/bin/../lib/jackson-databind-2.10.3.jar:/home/hadoop/zookeeper/bin/../lib/jackson-core-2.10.3.jar:/home/hadoop/zookeeper/bin/../lib/jackson-annotations-2.10.3.jar:/home/hadoop/zookeeper/bin/../lib/commons-lang-2.6.jar:/home/hadoop/zookeeper/bin/../lib/commons-cli-1.2.jar:/home/hadoop/zookeeper/bin/../lib/audience-annotations-0.5.0.jar:/home/hadoop/zookeeper/bin/../zookeeper-*.jar:/home/hadoop/zookeeper/bin/../zookeeper-server/src/main/resources/lib/*.jar:/home/hadoop/zookeeper/bin/../conf:
+2020-09-21 14:29:03,621 [myid:] - INFO  [main:Environment@98] - Client environment:java.library.path=/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib
+2020-09-21 14:29:03,621 [myid:] - INFO  [main:Environment@98] - Client environment:java.io.tmpdir=/tmp
+2020-09-21 14:29:03,621 [myid:] - INFO  [main:Environment@98] - Client environment:java.compiler=<NA>
+2020-09-21 14:29:03,622 [myid:] - INFO  [main:Environment@98] - Client environment:os.name=Linux
+2020-09-21 14:29:03,622 [myid:] - INFO  [main:Environment@98] - Client environment:os.arch=amd64
+2020-09-21 14:29:03,622 [myid:] - INFO  [main:Environment@98] - Client environment:os.version=4.14.35-1902.300.11.el7uek.x86_64
+2020-09-21 14:29:03,622 [myid:] - INFO  [main:Environment@98] - Client environment:user.name=hadoop
+2020-09-21 14:29:03,622 [myid:] - INFO  [main:Environment@98] - Client environment:user.home=/home/hadoop
+2020-09-21 14:29:03,622 [myid:] - INFO  [main:Environment@98] - Client environment:user.dir=/home/hadoop
+2020-09-21 14:29:03,622 [myid:] - INFO  [main:Environment@98] - Client environment:os.memory.free=53MB
+2020-09-21 14:29:03,623 [myid:] - INFO  [main:Environment@98] - Client environment:os.memory.max=247MB
+2020-09-21 14:29:03,623 [myid:] - INFO  [main:Environment@98] - Client environment:os.memory.total=59MB
+2020-09-21 14:29:03,626 [myid:] - INFO  [main:ZooKeeper@1006] - Initiating client connection, connectString=localhost:2181 sessionTimeout=30000 watcher=org.apache.zookeeper.ZooKeeperMain$MyWatcher@379619aa
+2020-09-21 14:29:03,628 [myid:] - INFO  [main:X509Util@77] - Setting -D jdk.tls.rejectClientInitiatedRenegotiation=true to disable client-initiated TLS renegotiation
+2020-09-21 14:29:03,636 [myid:] - INFO  [main:ClientCnxnSocket@239] - jute.maxbuffer value is 1048575 Bytes
+2020-09-21 14:29:03,641 [myid:] - INFO  [main:ClientCnxn@1716] - zookeeper.request.timeout value is 0. feature enabled=false
+2020-09-21 14:29:03,654 [myid:localhost:2181] - INFO  [main-SendThread(localhost:2181):ClientCnxn$SendThread@1167] - Opening socket connection to server localhost/0:0:0:0:0:0:0:1:2181.
+2020-09-21 14:29:03,655 [myid:localhost:2181] - INFO  [main-SendThread(localhost:2181):ClientCnxn$SendThread@1169] - SASL config status: Will not attempt to authenticate using SASL (unknown error)
+Welcome to ZooKeeper!
+JLine support is enabled
+2020-09-21 14:29:03,738 [myid:localhost:2181] - INFO  [main-SendThread(localhost:2181):ClientCnxn$SendThread@999] - Socket connection established, initiating session, client: /0:0:0:0:0:0:0:1:36600, server: localhost/0:0:0:0:0:0:0:1:2181
+2020-09-21 14:29:03,762 [myid:localhost:2181] - INFO  [main-SendThread(localhost:2181):ClientCnxn$SendThread@1433] - Session establishment complete on server localhost/0:0:0:0:0:0:0:1:2181, session id = 0x10000f4ae7d0005, negotiated timeout = 30000
+
+WATCHER::
+
+WatchedEvent state:SyncConnected type:None path:null
+[zk: localhost:2181(CONNECTED) 0] 
+[zk: localhost:2181(CONNECTED) 1] quit
+2020-09-21 14:32:23,748 [myid:localhost:2181] - WARN  [main-SendThread(localhost:2181):ClientCnxn$SendThread@1279] - An exception was thrown while closing send thread for session 0x10000f4ae7d0005.
+EndOfStreamException: Unable to read additional data from server sessionid 0x10000f4ae7d0005, likely server has closed socket
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doIO(ClientCnxnSocketNIO.java:77)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:350)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1275)
+
+WATCHER::
+
+WatchedEvent state:Closed type:None path:null
+2020-09-21 14:32:23,859 [myid:] - INFO  [main:ZooKeeper@1619] - Session: 0x10000f4ae7d0005 closed
+2020-09-21 14:32:23,863 [myid:] - ERROR [main:ServiceUtils@42] - Exiting JVM with code 127
+2020-09-21 14:32:23,865 [myid:] - INFO  [main-EventThread:ClientCnxn$EventThread@577] - EventThread shut down for session: 0x10000f4ae7d0005
+
+#DOWNLOAD SPARK ON ALL NODES
+wget http://mirror.nbtelecom.com.br/apache/spark/spark-3.0.1/spark-3.0.1-bin-hadoop3.2.tgz
+
+#UNCOMPRESS SPARK ON ALL NODES
+tar -xzvf spark-3.0.1-bin-hadoop3.2.tgz
+
+#RENAME SPARK
+mv spark-3.0.1-bin-hadoop3.2 spark
+
+#CREATE SPARK-ENV ON MASTER NODE
+cp spark/conf/spark-env.sh.template spark/conf/spark-env.sh
+cp spark/conf/slaves.template spark/conf/slaves
+
+#CONFIGURE SPARK-ENV ON MASTER NODE
+vi spark/conf/spark-env.sh
+SPARK_MASTER_HOST='hadoopmaster1'
+SPARK_MASTER_PORT=7077
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.262.b10-0.el7_8.x86_64/jre
+
+vi spark/conf/slaves
+hadoopmaster1
+hadoopslave1
+hadoopslave2
+
+#CONFIGURE ENVIRONMENTS VARIABLES FOR SPARK
+vi .bashrc
+#JAVA
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.262.b10-0.el7_8.x86_64/jre
+
+#ZOOKEEPER
+export ZOOKEEPER_HOME=/home/hadoop/zookeeper
+export PATH=$PATH:$ZOOKEEPER_HOME/sbin:$ZOOKEEPER_HOME/bin
+
+#HBASE
+export HBASE_HOME=/home/hadoop/hbase
+export PATH=$PATH:$HBASE_HOME/sbin:$HBASE_HOME/bin
+
+#SPARK
+export SPARK_HOME=/home/hadoop/spark
+export PATH=$PATH:$SPARK_HOME/sbin:$SPARK_HOME/bin
+PYSPARK_PYTHON=python3
+
+#HADOOP
+export HADOOP_HOME=/home/hadoop/hadoop
+export HADOOP_INSTALL=$HADOOP_HOME
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
+
+#COPY CONFIGURATION FILES TO SLAVES
+scp -r /home/hadoop/spark/conf/* hadoopmaster1:/home/hadoop/spark/conf/
+scp -r /home/hadoop/spark/conf/* hadoopmaster2:/home/hadoop/spark/conf/
+
+#RUN SPARK ON MASTER
+home/hadoop/spark/sbin/start-all.sh
+starting org.apache.spark.deploy.master.Master, logging to /home/hadoop/spark/logs/spark-hadoop-org.apache.spark.deploy.master.Master-1-hadoopmaster1.out
+hadoopslave1: starting org.apache.spark.deploy.worker.Worker, logging to /home/hadoop/spark/logs/spark-hadoop-org.apache.spark.deploy.worker.Worker-1-hadoopslave1.out
+hadoopmaster1: starting org.apache.spark.deploy.worker.Worker, logging to /home/hadoop/spark/logs/spark-hadoop-org.apache.spark.deploy.worker.Worker-1-hadoopmaster1.out
+hadoopslave2: starting org.apache.spark.deploy.worker.Worker, logging to /home/hadoop/spark/logs/spark-hadoop-org.apache.spark.deploy.worker.Worker-1-hadoopslave2.out
+
+jps
+30465 QuorumPeerMain
+338 Worker
+32724 Master
+388 Jps
+30932 HMaster
+22442 NameNode
+23101 ResourceManager
+22671 SecondaryNameNode
+
+#ACCESS SPARK WEB
+http://hadoopmaster1:8081/
+
+spark-shell 
+20/09/21 15:47:58 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+Spark context Web UI available at http://hadoopmaster1:4040
+Spark context available as 'sc' (master = local[*], app id = local-1600714086128).
+Spark session available as 'spark'.
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /___/ .__/\_,_/_/ /_/\_\   version 3.0.1
+      /_/
+         
+Using Scala version 2.12.10 (OpenJDK 64-Bit Server VM, Java 1.8.0_262)
+Type in expressions to have them evaluated.
+Type :help for more information.
+
+scala> :quit
+
+#DOWNLOAD FLUME ON ALL NODES
+wget https://downloads.apache.org/flume/1.9.0/apache-flume-1.9.0-bin.tar.gz
+
+#UNCOMPRESS FLUME ON ALL NODES
+tar -xzvf apache-flume-1.9.0-bin.tar.gz
+
+#RENAME FLUME
+mv apache-flume-1.9.0-bin flume
+
+#CONFIGURE ENVIRONMENTS VARIABLES FOR FLUME
+vi .bashrc
+#JAVA
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.262.b10-0.el7_8.x86_64/jre
+
+#ZOOKEEPER
+export ZOOKEEPER_HOME=/home/hadoop/zookeeper
+export PATH=$PATH:$ZOOKEEPER_HOME/sbin:$ZOOKEEPER_HOME/bin
+
+#HBASE
+export HBASE_HOME=/home/hadoop/hbase
+export PATH=$PATH:$HBASE_HOME/sbin:$HBASE_HOME/bin
+
+#SPARK
+export SPARK_HOME=/home/hadoop/spark
+export PATH=$PATH:$SPARK_HOME/sbin:$SPARK_HOME/bin
+PYSPARK_PYTHON=python3
+
+#FLUME
+export FLUME_HOME=/home/hadoop/flume
+export PATH=$PATH:$FLUME_HOME/sbin:$FLUME_HOME/bin
+
+#HADOOP
+export HADOOP_HOME=/home/hadoop/hadoop
+export HADOOP_INSTALL=$HADOOP_HOME
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
+
+source .bashrc
+
+#TEST FLUME
+flume-ng version
+/home/hadoop/hadoop/libexec/hadoop-functions.sh: line 2366: HADOOP_ORG.APACHE.FLUME.TOOLS.GETJAVAPROPERTY_USER: invalid variable name
+/home/hadoop/hadoop/libexec/hadoop-functions.sh: line 2461: HADOOP_ORG.APACHE.FLUME.TOOLS.GETJAVAPROPERTY_OPTS: invalid variable name
+/home/hadoop/hadoop/libexec/hadoop-functions.sh: line 2366: HADOOP_ORG.APACHE.HADOOP.HBASE.UTIL.GETJAVAPROPERTY_USER: invalid variable name
+/home/hadoop/hadoop/libexec/hadoop-functions.sh: line 2461: HADOOP_ORG.APACHE.HADOOP.HBASE.UTIL.GETJAVAPROPERTY_OPTS: invalid variable name
+/home/hadoop/hadoop/libexec/hadoop-functions.sh: line 2366: HADOOP_ORG.APACHE.HADOOP.HBASE.UTIL.GETJAVAPROPERTY_USER: invalid variable name
+/home/hadoop/hadoop/libexec/hadoop-functions.sh: line 2461: HADOOP_ORG.APACHE.HADOOP.HBASE.UTIL.GETJAVAPROPERTY_OPTS: invalid variable name
+Flume 1.9.0
+Source code repository: https://git-wip-us.apache.org/repos/asf/flume.git
+Revision: d4fcab4f501d41597bc616921329a4339f73585e
+Compiled by fszabo on Mon Dec 17 20:45:25 CET 2018
+From source with checksum 35db629a3bda49d23e9b3690c80737f9
+
+#CREATE FLUME FILE CONFIGURATION
+cp flume/conf/flume-conf.properties.template flume/conf/flume.conf
+cp flume/conf/flume-env.sh.template flume/conf/flume-env.sh
+
+#START FLUME SERVICE
+service flume-agent start
+
+#DOWNLOAD HIVE ALL NODES
+wget https://downloads.apache.org/hive/hive-3.1.2/apache-hive-3.1.2-bin.tar.gz
+
+#UNCOMPRESS HIVE ON ALL NODES
+tar -xzvf apache-hive-3.1.2-bin.tar.gz
+
+#RENAME HIVE
+mv apache-hive-3.1.2-bin hive
+
+#CONFIGURE ENVIRONMENTS VARIABLES FOR FLUME
+vi .bashrc
+#JAVA
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.262.b10-0.el7_8.x86_64/jre
+
+#ZOOKEEPER
+export ZOOKEEPER_HOME=/home/hadoop/zookeeper
+export PATH=$PATH:$ZOOKEEPER_HOME/sbin:$ZOOKEEPER_HOME/bin
+
+#HBASE
+export HBASE_HOME=/home/hadoop/hbase
+export PATH=$PATH:$HBASE_HOME/sbin:$HBASE_HOME/bin
+
+#SPARK
+export SPARK_HOME=/home/hadoop/spark
+export PATH=$PATH:$SPARK_HOME/sbin:$SPARK_HOME/bin
+PYSPARK_PYTHON=python3
+
+#FLUME
+export FLUME_HOME=/home/hadoop/flume
+export PATH=$PATH:$FLUME_HOME/sbin:$FLUME_HOME/bin
+
+#HIVE
+export HIVE_HOME=/home/hadoop/hive
+export PATH=$PATH:$HIVE_HOME/sbin:$HIVE_HOME/bin
+
+#HADOOP
+export HADOOP_HOME=/home/hadoop/hadoop
+export HADOOP_INSTALL=$HADOOP_HOME
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
+
+source .bashrc
+
+#SET UP HIVE FILE CONFIGURATION
+vi hive/bin/hive-config.sh
+# HADOOP HOME environment
+export HADOOP_HOME=/home/hadoop/hadoop
+
+#CREATE DIRECTORY HDFS FOR HIVE
+hdfs dfs -mkdir /tmp
+hdfs dfs -chmod g+w /tmp
+hdfs dfs -ls /
+
+#CREATE DIRECTORY HDFS FOR WHAREHOUSE HIVE
+hdfs dfs -mkdir -p hive/warehouse
+hdfs dfs -chmod g+w hive/warehouse
+hdfs dfs -ls hive
+
+#CONFIGURE HIVE-SITE.XML
+cp hive/conf/hive-default.xml.template hive/conf/hive-site.xml
+vi hive/conf/hive-site.xml
+  <property>
+    <name>hive.metastore.warehouse.dir</name>
+    <value>/hive/warehouse</value>
+    <description>location of default database for the warehouse</description>
+  </property>
+
+#INITIATE DERBY DATABASE
+$HIVE_HOME/bin/schematool –initSchema –dbType derby
+
+#DOWNLOAD OOZIE ALL NODES
+wget https://downloads.apache.org/oozie/5.1.0/oozie-5.1.0.tar.gz
+
+#UNCOMPRESS OOZIE ON ALL NODES
+tar -xzvf oozie-5.1.0.tar.gz
+
+#RENAME OOZIE
+mv oozie-5.1.0 oozie
+
+#CONFIGURE ENVIRONMENTS VARIABLES FOR OOZIE
+vi .bashrc
+#JAVA
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.262.b10-0.el7_8.x86_64/jre
+
+#ZOOKEEPER
+export ZOOKEEPER_HOME=/home/hadoop/zookeeper
+export PATH=$PATH:$ZOOKEEPER_HOME/sbin:$ZOOKEEPER_HOME/bin
+
+#HBASE
+export HBASE_HOME=/home/hadoop/hbase
+export PATH=$PATH:$HBASE_HOME/sbin:$HBASE_HOME/bin
+
+#SPARK
+export SPARK_HOME=/home/hadoop/spark
+export PATH=$PATH:$SPARK_HOME/sbin:$SPARK_HOME/bin
+PYSPARK_PYTHON=python3
+
+#FLUME
+export FLUME_HOME=/home/hadoop/flume
+export PATH=$PATH:$FLUME_HOME/sbin:$FLUME_HOME/bin
+
+#HIVE
+export HIVE_HOME=/home/hadoop/hive
+export PATH=$PATH:$HIVE_HOME/sbin:$HIVE_HOME/bin
+
+#OOZIE
+export OOZIE_HOME=/home/hadoop/hive
+export PATH=$PATH:$OOZIE_HOME/sbin:$OOZIE_HOME/bin
+
+#HADOOP
+export HADOOP_HOME=/home/hadoop/hadoop
+export HADOOP_INSTALL=$HADOOP_HOME
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
+
+source .bashrc
+
+#DOWNLOAD PIG ALL NODES
+wget https://downloads.apache.org/pig/pig-0.17.0/pig-0.17.0.tar.gz
+
+#UNCOMPRESS PIG ON ALL NODES
+tar -xzvf pig-0.17.0.tar.gz
+
+#RENAME PIG
+mv pig-0.17.0 pig
+
+#CONFIGURE ENVIRONMENTS VARIABLES FOR PIG
+vi .bashrc
+#JAVA
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.262.b10-0.el7_8.x86_64/jre
+
+#ZOOKEEPER
+export ZOOKEEPER_HOME=/home/hadoop/zookeeper
+export PATH=$PATH:$ZOOKEEPER_HOME/sbin:$ZOOKEEPER_HOME/bin
+
+#HBASE
+export HBASE_HOME=/home/hadoop/hbase
+export PATH=$PATH:$HBASE_HOME/sbin:$HBASE_HOME/bin
+
+#SPARK
+export SPARK_HOME=/home/hadoop/spark
+export PATH=$PATH:$SPARK_HOME/sbin:$SPARK_HOME/bin
+PYSPARK_PYTHON=python3
+
+#FLUME
+export FLUME_HOME=/home/hadoop/flume
+export PATH=$PATH:$FLUME_HOME/sbin:$FLUME_HOME/bin
+
+#HIVE
+export HIVE_HOME=/home/hadoop/hive
+export PATH=$PATH:$HIVE_HOME/sbin:$HIVE_HOME/bin
+
+#OOZIE
+export OOZIE_HOME=/home/hadoop/hive
+export PATH=$PATH:$OOZIE_HOME/sbin:$OOZIE_HOME/bin
+
+#PIG
+export PIG_HOME=/home/hadoop/pig
+export PATH=$PATH:$PIG_HOME/sbin:$PIG_HOME/bin
+export PIG_CLASSPATH=$HADOOP_HOME/conf
+
+#HADOOP
+export HADOOP_HOME=/home/hadoop/hadoop
+export HADOOP_INSTALL=$HADOOP_HOME
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
+
+source .bashrc
+
+#TEST PIG
+pig –version 
+2020-12-21 13:45:58,321 INFO pig.ExecTypeProvider: Trying ExecType : LOCAL
+2020-12-21 13:45:58,323 INFO pig.ExecTypeProvider: Trying ExecType : MAPREDUCE
+2020-12-21 13:45:58,323 INFO pig.ExecTypeProvider: Picked MAPREDUCE as the ExecType
+2020-12-21 13:45:58,590 [main] INFO  org.apache.pig.Main - Apache Pig version 0.17.0 (r1797386) compiled Jun 02 2017, 15:41:58
+2020-12-21 13:45:58,590 [main] INFO  org.apache.pig.Main - Logging error messages to: /home/hadoop/pig_1608558358548.log
+2020-12-21 13:46:00,106 [main] ERROR org.apache.pig.Main - ERROR 2997: Encountered IOException. File –version does not exist
+Details at logfile: /home/hadoop/pig_1608558358548.log
+2020-12-21 13:46:00,135 [main] INFO  org.apache.pig.Main - Pig script completed in 1 second and 946 milliseconds (1946 ms)
+
+
+#DOWNLOAD OOZIE ALL NODES
+wget https://downloads.apache.org/sqoop/1.4.7/sqoop-1.4.7.tar.gz
+
+#UNCOMPRESS OOZIE ON ALL NODES
+tar -xzvf sqoop-1.4.7.tar.gz
+
+#RENAME OOZIE
+mv sqoop-1.4.7 sqoop
+
+#CONFIGURE ENVIRONMENTS VARIABLES FOR OOZIE
+vi .bashrc
+#JAVA
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.262.b10-0.el7_8.x86_64/jre
+
+#ZOOKEEPER
+export ZOOKEEPER_HOME=/home/hadoop/zookeeper
+export PATH=$PATH:$ZOOKEEPER_HOME/sbin:$ZOOKEEPER_HOME/bin
+
+#HBASE
+export HBASE_HOME=/home/hadoop/hbase
+export PATH=$PATH:$HBASE_HOME/sbin:$HBASE_HOME/bin
+
+#SPARK
+export SPARK_HOME=/home/hadoop/spark
+export PATH=$PATH:$SPARK_HOME/sbin:$SPARK_HOME/bin
+PYSPARK_PYTHON=python3
+
+#FLUME
+export FLUME_HOME=/home/hadoop/flume
+export PATH=$PATH:$FLUME_HOME/sbin:$FLUME_HOME/bin
+
+#HIVE
+export HIVE_HOME=/home/hadoop/hive
+export PATH=$PATH:$HIVE_HOME/sbin:$HIVE_HOME/bin
+
+#OOZIE
+export OOZIE_HOME=/home/hadoop/hive
+export PATH=$PATH:$OOZIE_HOME/sbin:$OOZIE_HOME/bin
+
+#PIG
+export PIG_HOME=/home/hadoop/pig
+export PATH=$PATH:$PIG_HOME/sbin:$PIG_HOME/bin
+export PIG_CLASSPATH=$HADOOP_HOME/conf
+
+#SQOOP
+export SQOOP_HOME=/home/hadoop/sqoop
+export PATH=$PATH:$SQOOP_HOME/sbin:$SQOOP_HOME/bin
+
+#HADOOP
+export HADOOP_HOME=/home/hadoop/hadoop
+export HADOOP_INSTALL=$HADOOP_HOME
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
+
+source .bashrc
+
+#CONFIGURE ENVIRONMENTS SQOOP
+cp sqoop/conf/sqoop-env-template.sh sqoop/conf/sqoop-env.sh
+vi sqoop/conf/sqoop-env.sh
+export HADOOP_COMMON_HOME=/home/hadoop/hadoop
+export HADOOP_MAPRED_HOME=/home/hadoop/hadoop
+export HBASE_HOME=/home/hadoop/hbase
+export HIVE_HOME=/home/hadoop/hive
+export ZOOCFGDIR=/home/hadoop/zookeeper/conf
+
+#DOWNLOAD OOZIE ALL NODES
+wget https://downloads.apache.org/kafka/2.7.0/kafka_2.12-2.7.0.tgz
+
+#UNCOMPRESS OOZIE ON ALL NODES
+tar -xzvf kafka_2.12-2.7.0.tgz
+
+#RENAME OOZIE
+mv kafka_2.12-2.7.0 kafka
+
+#CONFIGURE ENVIRONMENTS VARIABLES FOR OOZIE
+vi .bashrc
+#JAVA
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.262.b10-0.el7_8.x86_64/jre
+
+#ZOOKEEPER
+export ZOOKEEPER_HOME=/home/hadoop/zookeeper
+export PATH=$PATH:$ZOOKEEPER_HOME/sbin:$ZOOKEEPER_HOME/bin
+
+#HBASE
+export HBASE_HOME=/home/hadoop/hbase
+export PATH=$PATH:$HBASE_HOME/sbin:$HBASE_HOME/bin
+
+#SPARK
+export SPARK_HOME=/home/hadoop/spark
+export PATH=$PATH:$SPARK_HOME/sbin:$SPARK_HOME/bin
+PYSPARK_PYTHON=python3
+
+#FLUME
+export FLUME_HOME=/home/hadoop/flume
+export PATH=$PATH:$FLUME_HOME/sbin:$FLUME_HOME/bin
+
+#HIVE
+export HIVE_HOME=/home/hadoop/hive
+export PATH=$PATH:$HIVE_HOME/sbin:$HIVE_HOME/bin
+
+#OOZIE
+export OOZIE_HOME=/home/hadoop/hive
+export PATH=$PATH:$OOZIE_HOME/sbin:$OOZIE_HOME/bin
+
+#PIG
+export PIG_HOME=/home/hadoop/pig
+export PATH=$PATH:$PIG_HOME/sbin:$PIG_HOME/bin
+export PIG_CLASSPATH=$HADOOP_HOME/conf
+
+#SQOOP
+export SQOOP_HOME=/home/hadoop/sqoop
+export PATH=$PATH:$SQOOP_HOME/sbin:$SQOOP_HOME/bin
+
+#KAFKA
+export KAFKA_HOME=/home/hadoop/kafka
+export PATH=$PATH:$KAFKA_HOME/sbin:$KAFKA_HOME/bin
+
+#HADOOP
+export HADOOP_HOME=/home/hadoop/hadoop
+export HADOOP_INSTALL=$HADOOP_HOME
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
+
+source .bashrc

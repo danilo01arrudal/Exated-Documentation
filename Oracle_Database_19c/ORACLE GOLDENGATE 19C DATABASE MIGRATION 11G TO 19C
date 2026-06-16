@@ -1,0 +1,1270 @@
+#################################################################
+#	ORACLE GOLDENGATE 19C DATABASE MIGRATION 11G TO 19C	#
+#################################################################
+
+#ENVIRONMENT
+ORACLE DATABASE 11.2.0.4		ORACLE DATABASE 19.3				ORACLE GOLDENGATE 19.1
+CHARACTERSET = "AL32UTF8"		CHARACTERSET = "AL32UTF8"			
+NATIONALCHARACTERSET= "AL16UTF16"	NATIONALCHARACTERSET= "AL16UTF16"
+NO CONTAINER DATABASE			PLUGGABLE DATABASE 
+SID APPSCDB1				SID APPSCDB1
+					PDB APPSPDB
+IP 192.168.18.21			IP 192.168.18.22				IP 192.168.18.23
+4GB RAM					4GB RAM						4GB RAM
+1 CORE VM				1 CORE VM					1 CORE VM				
+
+#TO CREATE THE TWO DATABASE ENVIRONMENTS AND GOLDENGATE HUB, THE FOLLOWING TUTORIALS WERE USED
+#ORACLE 11G
+https://github.com/danilo19ee/zdatabase/blob/master/ORACLE/ORACLE%20DATABASE%2011G%20SI%20FS%20SILENT%20MODE%20OL7
+
+#ORACLE 19C
+https://github.com/danilo19ee/zdatabase/blob/master/ORACLE/ORACLE%20DATABASE%2019C%20SI%20FS%20ONE%20CDB%20SILENT%20MODE%20OL7
+
+#ORACLE GOLDENGATE 19C HUB
+https://github.com/danilo19ee/zdatabase/blob/master/ORACLE/ORACLE%20GOLDENGATE%2019C%20HUB%20MACHINE
+
+#TO ACTIVATE ORACLE ARCHIVELOG IN THE DATABASE, THE FOLLOWING TUTORIAL MUST BE USED
+#IT IS MANDATORY THAT BOTH DATABASES ARE IN ARCHIVELOG MODE
+ORACLE 11G AND ORACLE 19C
+https://github.com/danilo19ee/zdatabase/blob/master/ORACLE/ORACLE%20DATABASE%2019C%20ENABLE%20ARCHIVE%20LOG%20MODE%20IN%20CDB
+
+#NOTE
+With a goldengate hub, it is possible to configure the capture and replication of many databases of different versions. 
+Failing to install and configure a goldengate in each environment involved in the data replication process.
+The objective of the document is to record the migration of the HR schema from an 11g database 
+in the container database to a pluggable database in version 19c, with zero down time
+
+#PREVIOUS ERROR CORRECTION
+2021-03-07T09:47:51.521-0300  WARNING OGG-02901  Oracle GoldenGate Capture for Oracle, ext01.prm:  Replication of UDT and ANYDATA from redo logs is not supported with the Oracle compatible parameter setting. Using fetch instead.
+2021-03-07T09:47:51.521-0300  INFO    OGG-02776  Oracle GoldenGate Capture for Oracle, ext01.prm:  Native data capture is enabled for Oracle NUMBER data type.
+2021-03-07T09:47:51.521-0300  INFO    OGG-01971  Oracle GoldenGate Capture for Oracle, ext01.prm:  The previous message, 'INFO OGG-02776', repeated 1 times.
+2021-03-07T09:47:51.521-0300  ERROR   OGG-02912  Oracle GoldenGate Capture for Oracle, ext01.prm:  Patch 17030189 is required on your Oracle mining database for trail format RELEASE 12.2 or later.
+2021-03-07T09:47:51.532-0300  ERROR   OGG-01668  Oracle GoldenGate Capture for Oracle, ext01.prm:  PROCESS ABENDING.
+
+#THERE IS A NEED FOR A PATCH TO BE APPLIED FOR DATA EXTRACTION IN THE 11G DATABASE TO SUCCESSFULLY. FOLLOW THE TROUBLESHOOT BELOW
+https://github.com/danilo19ee/zdatabase/blob/master/ORACLE/ORACLE%20DATABASE%2011G%20APPLY%20PATCH%20UPDATE%2011.2.0.4.200114
+
+############################################################################################################################################################
+# ON ORACLE DATABASE 11G MACHINE #
+##################################
+
+#CONFIRMATION OF REPLICATION TARGET
+
+#NOTE 
+Before replicating data with GG, it is necessary to confirm the following points.
+* Are unsupported data types / objects used?
+* Does it include processing that requires individual settings?
+* Is it necessary to convert data with GoldenGate for migration?
+* You can see the objects that GG supports in the DBA_GOLDENGATE_SUPPORT_MODE table.
+https://docs.oracle.com/cd/F22974_01/oracle-db/1-understanding-whats-supported.html
+
+[oracle@ol711g ~]$ sqlplus / as sysdba
+
+SQL*Plus: Release 11.2.0.4.0 Production on Sun Feb 28 21:33:02 2021
+
+Copyright (c) 1982, 2013, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+SQL> select * from dba_goldengate_support_mode where owner='HR';
+
+OWNER                          OBJECT_NAME                    SUPPOR
+------------------------------ ------------------------------ ------
+HR                             COUNTRIES                      FULL
+HR                             DEPARTMENTS                    FULL
+HR                             EMPLOYEES                      FULL
+HR                             JOBS                           FULL
+HR                             JOB_HISTORY                    FULL
+HR                             LOCATIONS                      FULL
+HR                             REGIONS                        FULL
+
+7 rows selected.
+
+#SETTING THE ENABLE_GOLDENGATE_REPLICATION PARAMETER
+
+SQL> show parameter enable_goldengate_replication;
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+enable_goldengate_replication        boolean     FALSE
+
+SQL> alter system set enable_goldengate_replication=true;
+
+System altered.
+
+#SETTING THE STREAMS_POOL_SIZE PARAMETER
+
+#NOTE
+Set the STREAMS_POOL_SIZE parameter required to start the LogMining Server for the source database. 
+As the laboratory is being made in a vm with little resource, it is necessary to increase the space in the sga_target. 
+If you followed the oracle database 11g installation guide, your sga_targer will have 1536M, which is insufficient
+A reboot is required for the settings to take effect.
+
+SQL> show parameter streams_pool_size
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+streams_pool_size                    big integer 0
+
+SQL> alter system set sga_target=1552M scope=spfile;
+
+System altered.
+
+SQL> alter system set streams_pool_size=1250M scope=spfile;
+
+System altered.
+
+SQL> shu immediate;
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+
+SQL> startup;
+ORACLE instance started.
+
+Total System Global Area 1620115456 bytes
+Fixed Size                  2253704 bytes
+Variable Size            1560284280 bytes
+Database Buffers           50331648 bytes
+Redo Buffers                7245824 bytes
+Database mounted.
+Database opened.
+
+SQL> show parameter streams_pool_size;
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+streams_pool_size                    big integer 1264M
+SQL> show parameter sga_target;
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+sga_target                           big integer 1552M
+
+#CREATING A GOLDENGATE ADMINISTRATOR USER
+
+#NOTE
+Create a GG admin user in the source database and grant the required privileges. GG related objects are created in this schema.
+
+SQL> create user ggadmin identified by oracle default tablespace users temporary tablespace temp quota unlimited on users;
+
+User created.
+
+SQL> grant dba to ggadmin;
+
+Grant succeeded.
+
+SQL> exec dbms_goldengate_auth.grant_admin_privilege('ggadmin');
+
+PL/SQL procedure successfully completed.
+
+#CHECK ARCHIVE LOG MODE
+
+SQL> archive log list
+Database log mode              Archive Mode
+Automatic archival             Enabled
+Archive destination            /u01/app/oracle/oradata/appscdb/archivelog
+Oldest online log sequence     3
+Next log sequence to archive   5
+Current log sequence           5
+
+#SUPPLEMENTAL LOGGING SETTINGS
+
+#NOTE
+Configure supplemental logging for the source database so that the GG logs the information it needs in the redo log.
+The data required for these operations is automatically recorded in the redo log file. 
+GoldenGate gets the change data from the redo log, but the information in the regular redo log is not enough, 
+so you need to record additional information in the redo log file. 
+The database function for recording additional columns in the redo log is called supplemental logging.
+Use the following command to check whether the source database is in supplemental logging mode or forced logging mode.
+
+SQL> select supplemental_log_data_min, force_logging from v$database;
+
+SUPPLEME FOR
+-------- ---
+NO       NO
+
+SQL> alter database add supplemental log data;
+
+Database altered.
+
+SQL> alter database force logging;
+
+Database altered.
+
+SQL> select supplemental_log_data_min, force_logging from v$database;
+
+SUPPLEME FOR
+-------- ---
+YES      YES
+
+SQL> alter system switch logfile;
+
+System altered.
+
+#CREATING A DIRECTORY FOR DATA OUTPUT
+
+#NOTE
+Create a directory object in the database where you want the expdp utility to extract the data during the initial data migration. 
+It then grants the required permissions to users who have permission to access the source schema.
+
+SQL> exit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+[oracle@ol711g ~]$ mkdir -p /home/oracle/dp_dir/
+
+[oracle@ol711g ~]$ sqlplus / as sysdba
+
+SQL*Plus: Release 11.2.0.4.0 Production on Sun Feb 28 22:04:21 2021
+
+Copyright (c) 1982, 2013, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+SQL> create or replace directory DP_DIR as '/home/oracle/dp_dir';
+
+Directory created.
+
+SQL> grant read, write on directory DP_DIR to hr;
+
+Grant succeeded.
+
+SQL> exit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+############################################################################################################################################################
+# ON ORACLE DATABASE 19C MACHINE #
+##################################
+
+#SETTING THE ENABLE_GOLDENGATE_REPLICATION PARAMETER
+
+[oracle@ol7db1 ~]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Mar 1 10:08:04 2021
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> alter system set enable_goldengate_replication=true;
+
+System altered.
+
+#SETTING THE STREAMS_POOL_SIZE PARAMETER
+
+#NOTE
+Set the STREAMS_POOL_SIZE parameter required to start the LogMining Server for the source database. 
+As the laboratory is being made in a vm with little resource, it is necessary to increase the space in the sga_target. 
+If you followed the oracle database 11g installation guide, your sga_targer will have 1536M, which is insufficient
+A reboot is required for the settings to take effect.
+
+SQL> show parameter streams_pool_size;
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+streams_pool_size                    big integer 0
+
+SQL> alter system set sga_target=1632M scope=spfile;
+
+System altered.
+
+SQL> alter system set streams_pool_size=1250M scope=spfile;
+
+System altered.
+
+SQL> shu immediate;
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+
+SQL> startup;
+ORACLE instance started.
+
+Total System Global Area 1711274072 bytes
+Fixed Size                  9136216 bytes
+Variable Size            1593835520 bytes
+Database Buffers          100663296 bytes
+Redo Buffers                7639040 bytes
+Database mounted.
+Database opened.
+SQL> sho parameter sga_target;
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+sga_target                           big integer 1632M
+
+SQL> sho parameter streams_pool_size;
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+streams_pool_size                    big integer 1264M
+
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+#CREATING A SCHEMA AND DIRECTORY TO STORE THE TARGET TABLE
+#NOTE
+Create an HR schema with the EMPLOYEES tables that you plan to replicate in this article in the target database, 
+and a directory to store the data you want to import. 
+Specify the location to put the file to be read by impdp at the time of initial data migration.
+
+[oracle@ol7db1 ~]$ mkdir /home/oracle/dp_dir
+[oracle@ol7db1 ~]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Mar 1 12:00:42 2021
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> select name from v$pdbs;
+
+NAME
+--------------------------------------------------------------------------------
+PDB$SEED
+APPSPDB
+
+SQL> alter session set container=APPSPDB;
+
+Session altered.
+
+SQL> create user hr identified by oracle default tablespace users temporary tablespace temp quota unlimited on users;
+
+User created.
+
+SQL> grant connect, resource to hr;
+
+Grant succeeded.
+
+SQL> create or replace directory DP_DIR as '/home/oracle/dp_dir';
+
+Directory created.
+
+SQL> grant read, write on directory DP_DIR to hr;
+
+Grant succeeded.
+
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+#CREATING A GOLDENGATE ADMINISTRATOR USER
+
+#NOTE
+Create a GG admin user in the target database and grant the required privileges. 
+GG related objects are created in this schema. Since the target database is a CDB configuration, 
+create a common user prefixed with C ##.
+
+[oracle@ol7db1 ~]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Mar 1 12:06:28 2021
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> create user c##ggadmin identified by oracle;
+
+User created.
+
+SQL> grant dba to c##ggadmin container=all;
+
+Grant succeeded.
+
+SQL> exec dbms_goldengate_auth.grant_admin_privilege('c##ggadmin',container=>'ALL');
+
+PL/SQL procedure successfully completed.
+
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+#CREATE TRIGGER TO GRANT AUTOMATIC PRIVILEGES TO USER C##GGADMIN
+
+#NOTE
+When it is necessary to migrate a schema with its objects, it is necessary to grant some permissions to the objects such as tables. 
+There is a possibility to create a trigger to automate this process in the pluggable database 19c
+
+[oracle@ol7db1 ~]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Mar 1 13:10:48 2021
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> select name from v$pdbs;
+
+NAME
+--------------------------------------------------------------------------------
+PDB$SEED
+APPSPDB
+
+SQL> alter session set container=APPSPDB;
+
+Session altered.
+
+SQL> CREATE OR REPLACE TRIGGER GRANT_TABLE_HR_GGADMIN
+AFTER CREATE ON DATABASE
+DECLARE
+V_JOB NUMBER;
+L_SQL VARCHAR2(4000);
+BEGIN
+IF ORA_SYSEVENT = 'CREATE' AND ORA_DICT_OBJ_TYPE = 'TABLE' AND SYS.DICTIONARY_OBJ_OWNER = 'HR' THEN
+  FOR CUR IN (
+    SELECT * FROM ALL_TABLES WHERE OWNER = 'HR')
+  LOOP
+    L_SQL := 'EXECUTE IMMEDIATE ''GRANT INSERT,UPDATE,DELETE ON ' || CUR.OWNER || '.' || CUR.TABLE_NAME || ' TO C##GGADMIN'';';
+  DBMS_JOB.SUBMIT(JOB=>V_JOB, WHAT=>L_SQL);
+  END LOOP;
+    END IF;
+EXCEPTION
+  WHEN OTHERS THEN
+  NULL;
+END;
+/
+
+Trigger created.
+
+#USE THE FOLLOWING CONSULTATION TO VALIDATE THE TABLES THAT RECEIVED GRANT
+SQL> COL GRANTEE FOR A35
+COL TABLE_NAME FOR A45
+COL OWNER FOR A35
+COL GRANTOR FOR A35
+SET LINES 300 PAGES 100SQL> SQL> SQL> SQL>
+SQL> SELECT GRANTEE, OWNER, TABLE_NAME, GRANTOR, PRIVILEGE FROM DBA_TAB_PRIVS WHERE OWNER='HR' AND TABLE_NAME='TESTE';
+
+GRANTEE                             OWNER                               TABLE_NAME                                    GRANTOR                             PRIVILEGE
+----------------------------------- ----------------------------------- --------------------------------------------- ----------------------------------- ----------------------------------------
+C##GGADMIN                          HR                                  TESTE                                         HR                                  DELETE
+C##GGADMIN                          HR                                  TESTE                                         HR                                  INSERT
+C##GGADMIN                          HR                                  TESTE                                         HR                                  UPDATE
+
+#IF YOU CREATE TABLE METADATA BEFORE CONNECTING REPLICATION WITH GOLDENGATE USE THE FOLLOWING COMMAND
+
+#NOTE
+Capture the command output and execute to grant the grants
+
+SQL> select 'GRANT INSERT, UPDATE, DELETE ON ' || OWNER || '.' || TABLE_NAME || ' TO C##GGADMIN;' from all_tables where owner='HR';
+
+'GRANTINSERT,UPDATE,DELETEON'||OWNER||'.'||TABLE_NAME||'TOC##GGADMIN;'
+--------------------------------------------------------------------------------
+GRANT INSERT, UPDATE, DELETE ON HR.EMPLOYEES TO C##GGADMIN;
+
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+############################################################################################################################################################
+# ON ORACLE GOLDENGATE 19 HUB MACHINE #
+#######################################
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+GOLDENGATE SETTINGS (ORACLE DATABASE 11G SIDE)
+
+#NOTE
+Create a credential store to encrypt and manage the database ID and password instead of writing them directly in the parameter file.
+Store the source database ID / password in the credential store. After that, 
+you can use the dblogin command to log in with only the specified alias name without specifying an ID/password.
+º Enter the database GG administrator name and SQL * Net connection string in User.
+º Enter the password of the database GG administrator in Password.
+Check the contents of the credential store with the INFO CREDENTIAL STORE command.
+
+[root@ol7gghub ~]# su - oracle
+[oracle@ol7gghub ~]$ export ORACLE_HOME=/u01/app/oracle/product/11.2.0.4/dbhome_1/
+[oracle@ol7gghub ~]$ export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib
+[oracle@ol7gghub ~]$ cd $OGG_HOME11G
+[oracle@ol7gghub 11.2]$ ./ggsci
+
+Oracle GoldenGate Command Interpreter for Oracle
+Version 19.1.0.0.4 OGGCORE_19.1.0.0.0_PLATFORMS_191017.1054_FBO
+Linux, x64, 64bit (optimized), Oracle 11g on Oct 17 2019 23:13:12
+Operating system character set identified as UTF-8.
+
+Copyright (C) 1995, 2019, Oracle and/or its affiliates. All rights reserved.
+
+
+
+GGSCI (ol7gghub) 1> add credentialstore
+
+Credential store created.
+
+GGSCI (ol7gghub) 2> alter credentialstore add user ggadmin@APPSCDB_11G, password oracle, alias src_db
+
+Credential store altered.
+
+GGSCI (ol7gghub) 3> dblogin useridalias src_db
+Successfully logged into database.
+
+GGSCI (ol7gghub as ggadmin@appscdb1) 4> info credentialstore
+
+Reading from credential store:
+
+Default domain: OracleGoldenGate
+
+  Alias: src_db
+  Userid: ggadmin@APPSCDB_11G
+
+#SETTINGS FOR THE SOURCE DATABASE SCHEMA
+
+#NOTE
+If you execute the ADD SCHEMATRANDATA command on the GG side, 
+you can enable supplemental logging for newly created tables in the specified schema, 
+or use the Oracle Data Pump export dump file for data migration. 
+Settings such as recording the SCN at the time of acquisition are automatically made.
+
+GGSCI (ol7gghub as ggadmin@appscdb1) 5> add schematrandata hr
+
+2021-03-02 15:15:34  INFO    OGG-01788  SCHEMATRANDATA has been added on schema "hr".
+
+2021-03-02 15:15:34  INFO    OGG-01976  SCHEMATRANDATA for scheduling columns has been added on schema "hr".
+
+2021-03-02 15:15:34  INFO    OGG-10154  Schema level PREPARECSN set to mode NOWAIT on schema "hr".
+
+#EXTRACT PROCESS CONFIGURATION
+
+#NOTE
+This chapter configures the Extract process for retrieving updates from the source database's online redo/archive logs. 
+It also defines an internal file called the Trail file to write the retrieved information
+
+#CREATING A PARAMETER FILE FOR THE EXTRACT PROCESS
+
+#NOTE
+The behavior of the Extract process is controlled by parameters. 
+Before you create the Extract process, define the parameters for the Extract process.
+
+GGSCI (ol7gghub as ggadmin@appscdb1) 6> edit params EXT01
+
+EXTRACT EXT01
+SETENV (ORACLE_HOME='/u01/app/oracle/product/11.2.0.4/dbhome_1/')
+SETENV (TNS_ADMIN='/usr/lib/oracle/19.9/client64/lib/network/admin')
+SETENV (LD_LIBRARY_PATH='/u01/app/oracle/product/11.2.0.4/dbhome_1/lib')
+USERIDALIAS src_db
+EXTTRAIL ./dirdat/lt
+TABLE hr.employees;
+
+#REGISTRATION OF EXTRACT PROCESS
+
+#NOTE
+Register the Extract process with the source database. This enables the Integrated Extract feature of the database.
+
+GGSCI (ol7gghub as ggadmin@appscdb1) 7> register extract ext01 database
+
+2021-03-02 15:27:59  INFO    OGG-02003  Extract EXT01 successfully registered with database at SCN 1084969.
+
+GGSCI (ol7gghub as ggadmin@appscdb1) 10> exit
+
+#VALIDATE EXTRACTION
+
+#NOTE
+You can confirm that the following information is registered on the source database side.
+
+[oracle@ol7gghub 11.2]$ sqlplus system/oracle@APPSCDB_11G
+
+SQL*Plus: Release 11.2.0.4.0 Production on Tue Mar 2 15:29:37 2021
+
+Copyright (c) 1982, 2013, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+SQL> set lines 300 pages 100
+SQL> col CLIENT_NAME for a45
+SQL> select capture_name,client_name,purpose from dba_capture;
+
+CAPTURE_NAME                   CLIENT_NAME                                   PURPOSE
+------------------------------ --------------------------------------------- -------------------
+OGG$CAP_EXT01                  EXT01                                         GoldenGate Capture
+
+SQL> exit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+#CREATING AN EXTRACT PROCESS
+
+[oracle@ol7gghub ~]$ export ORACLE_HOME=/u01/app/oracle/product/11.2.0.4/dbhome_1/
+[oracle@ol7gghub ~]$ export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib
+[oracle@ol7gghub ~]$ cd $OGG_HOME11G
+[oracle@ol7gghub 11.2]$ ./ggsci
+
+Oracle GoldenGate Command Interpreter for Oracle
+Version 19.1.0.0.4 OGGCORE_19.1.0.0.0_PLATFORMS_191017.1054_FBO
+Linux, x64, 64bit (optimized), Oracle 11g on Oct 17 2019 23:13:12
+Operating system character set identified as UTF-8.
+
+Copyright (C) 1995, 2019, Oracle and/or its affiliates. All rights reserved.
+
+
+
+GGSCI (ol7gghub) 1> dblogin useridalias src_db
+Successfully logged into database.
+
+GGSCI (ol7gghub as ggadmin@appscdb1) 2> add extract ext01, integrated tranlog, begin now
+EXTRACT (Integrated) added.
+
+#CREATING A TRAIL FILE
+
+#NOTE
+Creates a Trail file that the Extract process writes.
+Check the creation status of the Trail file.
+
+GGSCI (ol7gghub as ggadmin@appscdb1) 3> add exttrail ./dirdat/lt, extract ext01
+EXTTRAIL added.
+
+GGSCI (ol7gghub as ggadmin@appscdb1) 4> info exttrail ./dirdat/lt
+
+       Extract Trail: ./dirdat/lt
+        Seqno Length: 6
+   Flip Seqno Length: yes
+             Extract: EXT01
+               Seqno: 0
+                 RBA: 0
+           File Size: 500M
+
+#STARTING THE EXTRACT PROCESS
+
+#NOTE
+Start the Extract process. Check the status of the process with the INFO command to make sure it is RUNNING. 
+However, please note that RUNNING may change to STOPPED after a while if the Inbound Server does not start normally.
+
+GGSCI (ol7gghub as ggadmin@appscdb1) 5> start extract ext01
+
+Sending START request to MANAGER ...
+EXTRACT EXT01 starting
+
+
+GGSCI (ol7gghub as ggadmin@appscdb1) 6> info all
+
+Program     Status      Group       Lag at Chkpt  Time Since Chkpt
+
+MANAGER     RUNNING
+EXTRACT     STOPPED     EXT01       00:00:00      00:03:39
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+GOLDENGATE SETTINGS (ORACLE DATABASE 19c SIDE)
+
+#NOTE
+Create a credential store to encrypt and manage the database ID and password instead of writing them directly in the parameter file.
+Store the source database ID / password in the credential store. After that, 
+you can use the dblogin command to log in with only the specified alias name without specifying an ID/password.
+º Enter the database GG administrator name and SQL * Net connection string in User.
+º Enter the password of the database GG administrator in Password.
+Check the contents of the credential store with the INFO CREDENTIAL STORE command.
+
+[oracle@ol7gghub ~]$ export ORACLE_HOME=/u01/app/oracle/product/19.3.0/dbhome_1
+[oracle@ol7gghub ~]$ export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib
+[oracle@ol7gghub ~]$ cd $OGG_HOME19C
+[oracle@ol7gghub 19.3]$ ./ggsci
+
+Oracle GoldenGate Command Interpreter for Oracle
+Version 19.1.0.0.4 OGGCORE_19.1.0.0.0_PLATFORMS_191017.1054_FBO
+Linux, x64, 64bit (optimized), Oracle 19c on Oct 17 2019 21:16:29
+Operating system character set identified as UTF-8.
+
+Copyright (C) 1995, 2019, Oracle and/or its affiliates. All rights reserved.
+
+
+
+GGSCI (ol7gghub) 1> add credentialstore
+
+Credential store created.
+
+GGSCI (ol7gghub) 2> alter credentialstore add user c##ggadmin@APPSCDB_19C, password oracle, alias trg_cdb
+
+Credential store altered.
+
+GGSCI (ol7gghub) 3> alter credentialstore add user c##ggadmin@APPSPDB_19C, password oracle, alias trg_pdb
+
+Credential store altered.
+
+GGSCI (ol7gghub) 4> info credentialstore
+
+Reading from credential store:
+
+Default domain: OracleGoldenGate
+
+  Alias: trg_cdb
+  Userid: c##ggadmin@APPSCDB_19C
+
+  Alias: trg_pdb
+  Userid: c##ggadmin@APPSPDB_19C
+
+#REPLICAT PROCESS CONFIGURATION
+Configure the Replicat process to retrieve change information from the Trail file and reflect the update information in the target database.
+
+#SETTING THE CHECKPOINT TABLE TO BE CREATED IN THE TARGET DATABASE
+Create a checkpoint table in the target database to manage the progress of Replicat's application. 
+Before you create a checkpoint table, you need to define the name of the checkpoint table in the GLOBALS parameter file. (GLOBALS is uppercase)
+GGSCI must be closed once to reflect the contents of the GLOBALS file.
+
+GGSCI (ol7gghub) 5> edit params ./GLOBALS
+
+ENABLEMONITORING
+CHECKPOINTTABLE appspdb.c##ggadmin.repco_chkpt
+
+#CHECKPOINT TABLE SETTINGS
+
+#NOTE
+Create a checkpoint table in the target database with the names defined in 4.5.1.
+
+GGSCI (ol7gghub) 6> dblogin useridalias trg_pdb
+Successfully logged into database APPSPDB.
+
+GGSCI (ol7gghub as c##ggadmin@appscdb1/APPSPDB) 7> add checkpointtable appspdb.c##ggadmin.repco_chkpt
+
+Successfully created checkpoint table appspdb.c##ggadmin.repco_chkpt.
+
+#CREATING A PARAMETER FILE FOR THE REPLICAT PROCESS
+
+#NOTE
+The behavior of the Replicat process is controlled by parameters. 
+Define the parameters of the Replicat process before creating the Replicat process. 
+Since Parallel Integrated Replicat is configured here, specify the number of threads of LogMining Server of the target database.
+
+GGSCI (ol7gghub as c##ggadmin@appscdb1/APPSPDB) 8> edit params rep01
+
+REPLICAT REP01
+SETENV (ORACLE_HOME='/u01/app/oracle/product/19.3.0/dbhome_1')
+SETENV (TNS_ADMIN='/usr/lib/oracle/19.9/client64/lib/network/admin')
+SETENV (LD_LIBRARY_PATH='/u01/app/oracle/product/19.3.0/dbhome_1/lib')
+USERIDALIAS trg_pdb
+MAP_PARALLELISM 3
+MIN_APPLY_PARALLELISM 2
+MAX_APPLY_PARALLELISM 10
+SPLIT_TRANS_RECS 1000
+DBOPTIONS ENABLE_INSTANTIATION_FILTERING
+MAP hr.employees, TARGET appspdb.hr.employees;
+
+#CREATING A REPLICAT PROCESS
+
+#NOTE
+The behavior of the Replicat process is controlled by parameters. 
+Define the parameters of the Replicat process before creating the Replicat process.
+
+GGSCI (ol7gghub as c##ggadmin@appscdb1/APPSPDB) 9> add replicat rep01, integrated, parallel, exttrail /u01/app/oracle/product/gg/11.2/dirdat/lt, checkpointtable c##ggadmin.repco_chkpt
+REPLICAT (Parallel) added.
+
+GGSCI (ol7gghub as c##ggadmin@appscdb1/APPSPDB) 10> exit
+
+############################################################################################################################################################
+# ON ORACLE DATABASE 11G MACHINE #
+##################################
+
+#INITIAL LOAD
+
+#NOTE
+Import the same data into the target database as the EMPLOYEES table in the source database to create the initial state of synchronization.
+
+#EXPORT DATA FROM SOURCE DATABASE
+
+#NOTE
+Migrate data using the Oracle Data Pump utility for exporting and importing data in Oracle Database. 
+First, create a directory, grant permissions, and then export with the expdp command.
+
+[oracle@ol711g ~]$ expdp system/oracle directory=dp_dir dumpfile=hr.dmp logfile=hr.log schemas=hr
+
+Export: Release 11.2.0.4.0 - Production on Sun Mar 7 09:23:55 2021
+
+Copyright (c) 1982, 2011, Oracle and/or its affiliates.  All rights reserved.
+
+Connected to: Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+FLASHBACK automatically enabled to preserve database integrity.
+Starting "SYSTEM"."SYS_EXPORT_SCHEMA_01":  system/******** directory=dp_dir dumpfile=hr.dmp logfile=hr.log schemas=hr
+Estimate in progress using BLOCKS method...
+Processing object type SCHEMA_EXPORT/TABLE/TABLE_DATA
+Total estimation using BLOCKS method: 448 KB
+Processing object type SCHEMA_EXPORT/USER
+Processing object type SCHEMA_EXPORT/SYSTEM_GRANT
+Processing object type SCHEMA_EXPORT/ROLE_GRANT
+Processing object type SCHEMA_EXPORT/DEFAULT_ROLE
+Processing object type SCHEMA_EXPORT/PRE_SCHEMA/PROCACT_SCHEMA
+Processing object type SCHEMA_EXPORT/SEQUENCE/SEQUENCE
+Processing object type SCHEMA_EXPORT/TABLE/PROCACT_INSTANCE
+Processing object type SCHEMA_EXPORT/TABLE/TABLE
+Processing object type SCHEMA_EXPORT/TABLE/GRANT/OWNER_GRANT/OBJECT_GRANT
+Processing object type SCHEMA_EXPORT/TABLE/COMMENT
+Processing object type SCHEMA_EXPORT/PROCEDURE/PROCEDURE
+Processing object type SCHEMA_EXPORT/PROCEDURE/ALTER_PROCEDURE
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/VIEW/VIEW
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/TRIGGER
+Processing object type SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+. . exported "HR"."COUNTRIES"                            6.367 KB      25 rows
+. . exported "HR"."DEPARTMENTS"                          7.007 KB      27 rows
+. . exported "HR"."EMPLOYEES"                            16.87 KB     108 rows
+. . exported "HR"."JOBS"                                 6.992 KB      19 rows
+. . exported "HR"."JOB_HISTORY"                          7.054 KB      10 rows
+. . exported "HR"."LOCATIONS"                            8.273 KB      23 rows
+. . exported "HR"."REGIONS"                              5.476 KB       4 rows
+Master table "SYSTEM"."SYS_EXPORT_SCHEMA_01" successfully loaded/unloaded
+******************************************************************************
+Dump file set for SYSTEM.SYS_EXPORT_SCHEMA_01 is:
+  /home/oracle/dp_dir/hr.dmp
+
+Job "SYSTEM"."SYS_EXPORT_SCHEMA_01" successfully completed at Sun Mar 7 09:24:27 2021 elapsed 0 00:00:31
+
+############################################################################################################################################################
+# ON ORACLE DATABASE 19C MACHINE #
+##################################
+
+#TRANSFER THE OUTPUT FILE TO THE TARGET DATABASE SERVER.
+
+[oracle@ol7db1 ~]$ scp root@192.168.18.21:/home/oracle/dp_dir/hr.dmp /home/oracle/dp_dir/
+hr.dmp                                                                       100%  168KB  39.5MB/s   00:00
+
+#IMPORT DATA INTO TARGET DATABASE
+
+#NOTE
+Import with the impdp command.
+
+[oracle@ol7db1 ~]$ impdp system/oracle@appspdb directory=dp_dir dumpfile=hr.dmp REMAP_TABLESPACE=example:users schemas=hr
+
+Import: Release 19.0.0.0.0 - Production on Sun Mar 7 09:35:09 2021
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Master table "SYSTEM"."SYS_IMPORT_SCHEMA_01" successfully loaded/unloaded
+Starting "SYSTEM"."SYS_IMPORT_SCHEMA_01":  system/********@appspdb directory=dp_dir dumpfile=hr.dmp REMAP_TABLESPACE=example:users schemas=hr
+Processing object type SCHEMA_EXPORT/USER
+Processing object type SCHEMA_EXPORT/SYSTEM_GRANT
+Processing object type SCHEMA_EXPORT/ROLE_GRANT
+Processing object type SCHEMA_EXPORT/DEFAULT_ROLE
+Processing object type SCHEMA_EXPORT/PRE_SCHEMA/PROCACT_SCHEMA
+Processing object type SCHEMA_EXPORT/SEQUENCE/SEQUENCE
+Processing object type SCHEMA_EXPORT/TABLE/PROCACT_INSTANCE
+Processing object type SCHEMA_EXPORT/TABLE/TABLE
+Processing object type SCHEMA_EXPORT/TABLE/TABLE_DATA
+. . imported "HR"."COUNTRIES"                            6.367 KB      25 rows
+. . imported "HR"."DEPARTMENTS"                          7.007 KB      27 rows
+. . imported "HR"."EMPLOYEES"                            16.87 KB     108 rows
+. . imported "HR"."JOBS"                                 6.992 KB      19 rows
+. . imported "HR"."JOB_HISTORY"                          7.054 KB      10 rows
+. . imported "HR"."LOCATIONS"                            8.273 KB      23 rows
+. . imported "HR"."REGIONS"                              5.476 KB       4 rows
+Processing object type SCHEMA_EXPORT/TABLE/GRANT/OWNER_GRANT/OBJECT_GRANT
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'OE' does not exist
+
+Failing sql is:
+GRANT REFERENCES ON "HR"."COUNTRIES" TO "OE"
+
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'OE' does not exist
+
+Failing sql is:
+GRANT SELECT ON "HR"."COUNTRIES" TO "OE"
+
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'OE' does not exist
+
+Failing sql is:
+GRANT SELECT ON "HR"."JOB_HISTORY" TO "OE"
+
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'OE' does not exist
+
+Failing sql is:
+GRANT REFERENCES ON "HR"."EMPLOYEES" TO "OE"
+
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'OE' does not exist
+
+Failing sql is:
+GRANT SELECT ON "HR"."EMPLOYEES" TO "OE"
+
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'OE' does not exist
+
+Failing sql is:
+GRANT SELECT ON "HR"."JOBS" TO "OE"
+
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'OE' does not exist
+
+Failing sql is:
+GRANT SELECT ON "HR"."LOCATIONS" TO "OE"
+
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'OE' does not exist
+
+Failing sql is:
+GRANT REFERENCES ON "HR"."LOCATIONS" TO "OE"
+
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'OE' does not exist
+
+Failing sql is:
+GRANT SELECT ON "HR"."DEPARTMENTS" TO "OE"
+
+Processing object type SCHEMA_EXPORT/TABLE/COMMENT
+Processing object type SCHEMA_EXPORT/PROCEDURE/PROCEDURE
+Processing object type SCHEMA_EXPORT/PROCEDURE/ALTER_PROCEDURE
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/VIEW/VIEW
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/TRIGGER
+Processing object type SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Job "SYSTEM"."SYS_IMPORT_SCHEMA_01" completed with 10 error(s) at Sun Mar 7 09:35:38 2021 elapsed 0 00:00:22
+
+#GRANT ACCESS TO TARGET TABLE $
+
+[oracle@ol7db1 ~]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Sat Mar 6 10:33:46 2021
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> select name from v$pdbs;
+
+NAME
+--------------------------------------------------------------------------------
+PDB$SEED
+APPSPDB
+
+SQL> alter session set container=APPSPDB;
+
+Session altered.
+
+SQL> COL GRANTEE FOR A35
+SQL> COL TABLE_NAME FOR A45
+SQL> COL OWNER FOR A35
+SQL> COL GRANTOR FOR A35
+SQL> SET LINES 300 PAGES 100
+SQL> SELECT GRANTEE, OWNER, TABLE_NAME, GRANTOR, PRIVILEGE FROM DBA_TAB_PRIVS WHERE OWNER='HR' AND TABLE_NAME='EMPLOYEES';
+
+GRANTEE                             OWNER                               TABLE_NAME                                    GRANTOR                             PRIVILEGE
+----------------------------------- ----------------------------------- --------------------------------------------- ----------------------------------- ----------------------------------------
+C##GGADMIN                          HR                                  EMPLOYEES                                     HR                                  DELETE
+C##GGADMIN                          HR                                  EMPLOYEES                                     HR                                  INSERT
+C##GGADMIN                          HR                                  EMPLOYEES                                     HR                                  UPDATE
+
+SQL> EXIT
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+############################################################################################################################################################
+# ON ORACLE GOLDENGATE 19 HUB MACHINE #
+#######################################
+
+#STARTING REPLICAT PROCESS
+
+#NOTE
+Start the Replicat process. You have now replicated from the source database to the target database.
+
+[oracle@ol7gghub ~]$ export ORACLE_HOME=/u01/app/oracle/product/19.3.0/dbhome_1
+[oracle@ol7gghub ~]$ export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib
+[oracle@ol7gghub ~]$ cd $OGG_HOME19C
+[oracle@ol7gghub 19.3]$ ./ggsci
+
+Oracle GoldenGate Command Interpreter for Oracle
+Version 19.1.0.0.4 OGGCORE_19.1.0.0.0_PLATFORMS_191017.1054_FBO
+Linux, x64, 64bit (optimized), Oracle 19c on Oct 17 2019 21:16:29
+Operating system character set identified as UTF-8.
+
+Copyright (C) 1995, 2019, Oracle and/or its affiliates. All rights reserved.
+
+
+
+GGSCI (ol7gghub) 1>  start replicat rep01
+Sending START request to MANAGER ...
+REPLICAT REP01 starting
+
+GGSCI (ol7gghub) 2> info all
+
+Program     Status      Group       Lag at Chkpt  Time Since Chkpt
+MANAGER     RUNNING
+JAGENT      STOPPED
+PMSRVR      STOPPED
+EXTRACT     RUNNING     EXT01       00:00:04      00:00:03
+REPLICAT    RUNNING     REP01       00:00:00      00:00:09
+
+GGSCI (ol7gghub) 3> exit
+
+#CONFIRMATION OF REPLICATION
+
+#NOTE
+Insert a row into her Employees table in the source database HR schema
+
+[oracle@ol7gghub 11.2]$ sqlplus system/oracle@APPSCDB_11G
+
+SQL*Plus: Release 11.2.0.4.0 Production on Tue Mar 2 15:29:37 2021
+
+Copyright (c) 1982, 2013, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+SQL> INSERT INTO HR.EMPLOYEES VALUES ( 211, 'Lawrence', 'Ellison', 'LELRISON', '515.123.8181',  TO_DATE('07-06-2002', 'dd-MM-yyyy'), 'AC_ACCOUNT', 8300, NULL, 205, 110);
+
+SQL> commit;
+
+SQL> exit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+[oracle@ol7gghub 19.3]$ sqlplus system/oracle@APPSPDB_19C
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Sat Mar 6 10:33:46 2021
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> select * from HR.EMPLOYEES where employee_id=211;
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME EMAIL     PHONE_NUMBER HIRE_DATE JOB_ID      SALARY  COMMISSION_PCT MANAGER_ID DEPARTMENT_ID
+----------- ---------- --------- --------- ------------ --------- ----------- ------- -------------- ---------- ------------------
+207         Lawrence   Ellison   LELLISON  515.123.8181 07-JUN-02 AC_ACCOUNT  8300                   205        110
+
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+############################################################################################################################################################
+# OPERATION, MONITORING, MANAGEMENT GOLDENGATE PROCESS #
+########################################################
+
+#NOTE
+Below some examples of main commands used when using GG.
+
+#MAIN MANAGEMENT COMMANDS FOR THE MANAGER PROCESS
+
+START MANAGER	  | Start the Manager process
+STOP MANAGER	  | Stop the Manager process
+INFO MANAGER	  | Check information about Manager ports and child processes
+
+#MAIN MANAGEMENT COMMANDS FOR THE EXTRACT PROCESS
+
+ADD EXTRACT	  | Create Extract group
+ALTER EXTRACT	  | Change Extract group
+DELETE EXTRACT	  | Delete Extract group
+INFO EXTRACT 	  | Check information about Extract group
+LAG EXTRACT 	  | Check information about Extract lag
+REGISTER EXTRACT  | Register Extract group with Oracle database
+START EXTRACT	  | Start Extract group
+STOP EXTRACT 	  | Stop Extract group
+
+#MAIN MANAGEMENT COMMANDS FOR THE REPLICAT PROCESS
+
+ADD REPLICAT	  | Create Replicat group
+ALTER REPLICAT	  | Change Replicat group
+DELETE REPLICAT	  | Delete the Replicat group
+INFO REPLICAT	  | Check information about the Replicat group
+LAG REPLICAT 	  | Check information about lag in Replicat
+REGISTER REPLICAT | Register the Replicat group with the Oracle database
+START REPLICAT 	  | Start Replicat group
+STOP REPLICAT 	  | Stop the Replicat group
+
+#GOLDENGATE MONITORING
+
+#NOTE
+Checking the operating status of the GG process
+You can check the operating status of the GG process with the Info all command. If it is RUNNING, it is running.
+
+[oracle@ol7gghub ~]$ export ORACLE_HOME=/u01/app/oracle/product/19.3.0/dbhome_1
+[oracle@ol7gghub ~]$ export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib
+[oracle@ol7gghub ~]$ cd $OGG_HOME19C
+[oracle@ol7gghub 19.3]$ ./ggsci
+
+Oracle GoldenGate Command Interpreter for Oracle
+Version 19.1.0.0.4 OGGCORE_19.1.0.0.0_PLATFORMS_191017.1054_FBO
+Linux, x64, 64bit (optimized), Oracle 19c on Oct 17 2019 21:16:29
+Operating system character set identified as UTF-8.
+
+Copyright (C) 1995, 2019, Oracle and/or its affiliates. All rights reserved.
+
+
+
+GGSCI (ol7gghub) 1> info all
+
+Program     Status      Group       Lag at Chkpt  Time Since Chkpt
+MANAGER     RUNNING
+JAGENT      STOPPED
+PMSRVR      STOPPED
+EXTRACT     RUNNING     EXT01       00:00:02      00:00:05
+REPLICAT    RUNNING     REP01       00:00:00      50:06:30
+
+GGSCI (ol7gghub) 2> exit
+
+#CHECKING THE ERROR LOG
+
+#NOTE
+The error log is output directly under $ OGG_HOME. ($OGG_HOME/gsserr.log)
+
+⬧ GGSCI command history
+⬧ Oracle GoldenGate process started and stopped
+⬧ Process executed
+⬧ Error that occurred (ERROR)
+⬧ Informational and warning messages (INFO / WARNING)
+
+#REVIEW PROCESS REPORT
+
+#NOTE
+
+A report is output for each process in the dirrpt directory of $OGG_HOME. 
+All Extract, Replicat and Manager programs
+Rothes will generate a report file. 
+This report describes problems that occurred during execution (invalid mapping syntax, SQL errors, connection errors, etc.)
+Useful for diagnosing.
+
+⬧ Parameters in use
+⬧ Table and column mapping
+⬧ Database information
+⬧ Runtime messages and errors
+⬧ Runtime statistics on the number of operations processed
+
+#CONFIGURATION OF DISCARDED FILES
+
+#NOTE
+A discard file is output to the dirrpt directory of $OGG_HOME. 
+The discard file is for a failed Oracle GoldenGate operation
+Get information. This information is useful for resolving data errors, such as errors related to invalid column mappings.
+
+⬧ Database error message
+⬧ Data source or trail file sequence number
+⬧ Relative byte address of a record in a data source or trail file
+⬧ Discarded operation details (such as column values in DML statements and text in DDL statements)
+
+#LAG MONITORING
+You can see if the GG process is working properly to keep up with the amount of data updated in the source database. Table of lag statistics
+To indicate, use the LAG or SEND command with GGSCI. It can be run against Extract and Replicat processes.
+
+[oracle@ol7gghub ~]$ export ORACLE_HOME=/u01/app/oracle/product/11.2.0.4/dbhome_1/
+[oracle@ol7gghub ~]$ export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib
+[oracle@ol7gghub ~]$ cd $OGG_HOME11G
+[oracle@ol7gghub 11.2]$ ./ggsci
+
+Oracle GoldenGate Command Interpreter for Oracle
+Version 19.1.0.0.4 OGGCORE_19.1.0.0.0_PLATFORMS_191017.1054_FBO
+Linux, x64, 64bit (optimized), Oracle 11g on Oct 17 2019 23:13:12
+Operating system character set identified as UTF-8.
+
+Copyright (C) 1995, 2019, Oracle and/or its affiliates. All rights reserved.
+
+
+
+GGSCI (ol7gghub) 1> dblogin useridalias src_db
+Successfully logged into database.
+
+GGSCI (ol7gghub as ggadmin@appscdb1) 2> lag ext01
+
+Sending GETLAG request to EXTRACT EXT01 ...
+Last record lag 4 seconds.
+
+GGSCI (ol7gghub as ggadmin@appscdb1) 3> exit
+
+Another option is to use an automatic heartbeat table to see a consistent lag from source to target. Please refer to the following manual for details.
+https://docs.oracle.com/cd/F22974_01/admin/monitoring-oracle-goldengate-processing.html
+
+#TROUBLESHOOTING
+
+#NOTE
+
+➢ It becomes STOPPED after a while after the process starts.
+Corrective action: Check the commands and reports introduced in Chapter 5.2 to investigate the cause.
+
+➢ Extract does not start on OGG-02028, ORA-03113.
+Corrective action: Execute postinstall.sql of the patch applied to Oracle Database at the end.
+Reference: https://support.oracle.com/epmos/faces/DocContentDisplay? id = 2148602.1
+
+#APPENDIX: INSTANTIATION CSN FUNCTION
+
+#NOTE
+The biggest advantage of using GG during migration is that the migration can be achieved without system interruption. 
+In the process, initialize the data in the target database
+When migrating, the user had to be aware of the system cross section. 
+However, his GG instantiation CSN machine used in this document
+The function makes it easy for the user to make an initial transition with little awareness of the system cross section.
+Note: CSN: Commit Sequence Number (GoldenGate terminology) SCN: System Change Number (Oracle terminology)
+
+#THINGS TO CONSIDER WHEN MAKING AN INITIAL TRANSACTION WITHOUT INTERRUPTION
+
+#NOTE
+When making an initial transition without interruption, the following should be considered for the system cross section.
+
+-When extracting data from the source database where transactions are always occurring, at what point does the file hold the data?
+· At what point in time should the GG Replicat process start updating after putting the extracted data into the target database?
+
+#WHAT IS AN INSTANTIATED CSN?
+GG instantiation CSN feature works with Oracle Data Pump (Oracle Database data export / import utility)
+By doing so, the SCN of each table is retained in the dump file or the imported table, so the GG automatically determines when to apply the data.
+
+For details on this function, refer to the following materials.
+https://docs.oracle.com/cd/F22974_01/admin/instantiating-oracle-goldengate-initial-load.html#GUID-54ADB469-6739-4198-B093-0EDE9B442B40
+
+· Chapter 4.3.2: Set to record instantiated CSN
+• Chapter 4.6.3: ENABLE_INSTANTIATION_FILTERING parameter specifies that Replicat uses instantiated CSN
+・ Chapter 4.7.1: Data extraction at the initial load does not need to be aware of the SCN of each table.
+
+#COMPARISON WITH THE CONVENTIONAL INITIAL MIGRATION METHOD
+
+#NOTE
+By using the instance CSN method, 
+it is possible to perform initial migration more easily than the initial migration method that has been used in the past.
+
+Conventional initial migration method			Explanation of each method			                   Benefits of Instance CSN
+------------------------------------------------------- ------------------------------------------------------------------ ---------------------------------------------
+Flashback_scn Specified export				Specify Flashback_scn when exporting Data Pump			   Recognizes the SCN of each table and automatically
+							At the time of the SCN specified internally using Flashback Query  The following is a method of synchronizing
+							This is a method for exporting data. UNDO for flashback function   There are merits of.
+							You need data, so you need to consider undo management.            -SCN of each table at the time of export
+															   No need to be aware of
+Handlecollisions Use of parameters			By specifying the Handlecollisions parameter of Replicat,          -Additional management of UNDO area
+							How Replicat catches up while ignoring duplicate updates           No need to consider
+							is. There is no primary key because it is judged by the primary    ・ Initial migration method with or without primary key
+							key whether it is a duplicate line                                 No need to change the formula
+							For the table, it is necessary to consider migrating it            ・ Additional resources must be prepared 
+							by another method.                                                 No need
+
+Building a clone DB					Online backup / restore / recovery with a certain cross section
+							Create a database and export data from the clone database.
+							Su. You need to prepare additional resources 
+							to build your environment.
+

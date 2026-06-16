@@ -1,0 +1,82 @@
++++++++++++++++++++++++++++++++++++
++    MYSQL DEFRAGMENT TABLES      +
++++++++++++++++++++++++++++++++++++
+
+#IDENTIFY BIGGEST DATABASE
+mysql> SELECT table_schema AS "Database", ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS "Size (MB)" 
+FROM information_schema.TABLES GROUP BY table_schema;
+
++--------------------+-----------+
+| Database           | Size (MB) |
++--------------------+-----------+
+| test               |   4370.08 |
++--------------------+-----------+
+
+#IDENTIFY LARGEST TABLES
+mysql> SELECT table_schema AS `Database`, table_name AS `Table`, round(((data_length + index_length) / 1024 / 1024), 2) `Size in MB` 
+FROM information_schema.TABLES ORDER BY (data_length + index_length) DESC;
+
++--------------------+------------------------------------------------------------+------------+
+| Database           | Table                                                      | Size in MB |
++--------------------+------------------------------------------------------------+------------+
+| test               | test_logs                                                  |    3797.41 |
++--------------------+------------------------------------------------------------+------------+
+
+#CONNECT BIGGEST DATABASE
+mysql> use test;
+
+#DISPLAY HOW MUCH USUSED SPACE ARE AVAILABLE IN EVERY TABLE
+mysql> select table_name,round(data_length/1024/1024) as data_length_mb, round(data_free/1024/1024) as data_free_mb 
+from information_schema.tables where round(data_free/1024/1024) > 500 order by data_free_mb;
+
++------------+----------------+--------------+
+| table_name | data_length_mb | data_free_mb |
++------------+----------------+--------------+
+| test_logs  |        3797.41 |         2099 |
++------------+----------------+--------------+
+
+#OPTIMYZE TABLE IDENTIFIED
+mysql> optimize table test_logs;
+
++----------------+----------+----------+-------------------------------------------------------------------+
+| Table          | Op       | Msg_type | Msg_text                                                          |
++----------------+----------+----------+-------------------------------------------------------------------+
+| glpi.glpi_logs | optimize | note     | Table does not support optimize, doing recreate + analyze instead |
+| glpi.glpi_logs | optimize | status   | OK                                                                |
++----------------+----------+----------+-------------------------------------------------------------------+
+2 rows in set (45 min 1.67 sec)
+
+
+#DEFRAG USING MYSQLCHECK COMMAND
+mysqlcheck -o test test_logs -u root -p<password>
+test test_logs OK
+
+#DEFRAG ALL DATABASES 
+mysqlcheck -o --all-databases -u root -p<password>
+
+#IF NEEDED RUN TABLE ANALYZE, DO
+mysql> use test;
+mysql> analyze table test_logs;
+
+#RUN OPTIMYZE FOR MULTIPLE TABLES FOR SPECIFIC DATABASE
+vi <$path>/scripts/desfrag.sh
+export ISREADY=`systemctl status mariadb | grep "Active: active (running)" | wc -l`
+if [ $ISREADY -eq 1 ]; then
+for tbname in $(mysql -u root -p<password> <database> -sN -e "select table_name from information_schema.tables where round(data_free/1024/1024) > 50 order by 1 desc"); do
+echo ${tbname}
+ mysql -u root -p<password> <database> -e "optimize table ${tablename};"
+done
+export RESVACUUM=`echo -e "OK"`
+export SAIDABOT=`echo -e "Desfrag DB :" $RESVACUUM`
+curl -s -X POST https://api.telegram.org/bot$:$/sendMessage -d chat_id=$chatid -d text="$SAIDABOT"
+else
+export RESVACUUM=`echo -e "FALHA"`
+export SAIDABOT=`echo -e "Desfrag DB :" $RESVACUUM`
+curl -s -X POST https://api.telegram.org/bot$:$/sendMessage -d chat_id=$chatid -d text="$SAIDABOT"
+fi
+
+chmod +x <$path>/scripts/desfrag.sh
+crontab -e
+50 23 2 * * nohup <$path>/scripts/desfrag.sh > $path/desfrag.log 2>&1 &
+
+ 

@@ -1,0 +1,183 @@
+++++++++++++++++++++++++++++++++++++++++
++    INSTALL POSTGRES 11 + JIT OL7     +
+++++++++++++++++++++++++++++++++++++++++
+
+#NOTE
+One of the highlighted features in PostgreSQL 11. 
+There is great excitement in the community because of the many claims of up to a 30% jump in performance. 
+Not all queries and workloads get the benefit of JIT compilation. 
+So you may want to test your workload against this new feature.
+
+#DISABLE FIREWALL AND SELINUX
+sed -i 's/SELINUX=.*/SELINUX=disabled/' /etc/selinux/config && setenforce 0
+systemctl stop firewalld && systemctl disable firewalld
+
+#ADD REPOSITORIES TO YUM 
+vi /etc/yum.repos.d/oracle-linux-ol7.repo
+
+[ol7_optional_developer]
+name=Developer Preview of Oracle Linux $releasever Optional ($basearch)
+baseurl=https://yum.oracle.com/repo/OracleLinux/OL7/optional/developer/$basearch/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
+gpgcheck=1
+enabled=1
+
+[ol7_developer_EPEL]
+name=Oracle Linux $releasever Development Packages ($basearch)
+baseurl=https://yum.oracle.com/repo/OracleLinux/OL7/developer_EPEL/$basearch/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
+gpgcheck=1
+enabled=1
+
+[ol7_developer]
+name=Oracle Linux $releasever Latest Development Packages ($basearch)
+baseurl=http://yum.oracle.com/repo/OracleLinux/OL7/developer/$basearch/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
+gpgcheck=1
+enabled=1
+
+[ol7_software_collection]
+name=Oracle Linux $releasever Latest Software Collection Library Packages ($basearch)
+baseurl=http://yum.oracle.com/repo/OracleLinux/OL7/SoftwareCollections/$basearch/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
+gpgcheck=1
+enabled=1
+
+#LIST REPOSITORIES LIST
+yum repolist
+
+#INSTALL PACKAGES FOR LLVM
+yum install -y llvm-toolset-7 llvm-toolset-7-llvm-devel
+
+vi .bash_profile
+PATH=/opt/rh/devtoolset-7/root/bin/:/opt/rh/llvm-toolset-7/root/bin/:$PATH
+source .bash_profile
+
+#INSTALL PACKAGES FOR POSTGRES
+yum install openssl-devel libtermcap-devel readline-devel gcc bison flex perl libconfig-devel kernel-devel rsync -y
+yum install zlib jzlib zlib-devel -y
+yum install wget -y
+
+#NOTE 
+THIS FEATURE CAN BE USED FROM POSTGRES 11 OR ABOVE
+
+#DOWNLOAD POSTGRES 11
+wget https://ftp.postgresql.org/pub/source/v11.$/postgresql-11.$.tar.gz
+tar xvfz postgresql-11.$.tar.gz
+cd postgresql-11.$
+mkdir -p /usr/local/pgsql-11.$
+
+#INSTALL SFW DATABASE POSTGRES
+## install in default path /usr/local/pgsql using port 5432
+./configure --with-openssl
+example [./configure --prefix=$path/pgsql-11.$ --with-openssl --with-llvm]
+make
+make install
+cd contrib/
+make
+make install
+ls -l /usr/local/pgsql-11.$
+
+adduser postgres
+mkdir -p /dados/data
+chown postgres:postgres -R /dados
+cp /opt/rh/llvm-toolset-7/root/usr/lib64/libLLVM-4.0.so /usr/local/pgsql-11.4/lib/
+su - postgres -c "/usr/local/pgsql-11.$/bin/initdb --locale=pt_BR.UTF-8 -D /dados/data/"
+
+#CREATE SERVICE POSTGRESQL
+vi /usr/lib/systemd/system/postgresql.service
+
+[Unit]
+Description=PostgreSQL database server
+After=network.target
+
+[Service]
+Type=forking
+
+User=postgres
+Group=postgres
+
+# Port number for server to listen on
+Environment=PGPORT=5432
+
+# Location of database directory
+Environment=PGDATA=/dados/data
+
+# Disable OOM kill on the postmaster
+OOMScoreAdjust=-1000
+
+ExecStartPre=/usr/local/pgsql-11.4/bin/postgresql-check-db-dir ${PGDATA}
+ExecStart=/usr/local/pgsql-11.4/bin/pg_ctl start -D ${PGDATA} -s -o "-p ${PGPORT}" -w -t 300
+ExecStop=/usr/local/pgsql-11.4/bin/pg_ctl stop -D ${PGDATA} -s -m fast
+ExecReload=/usr/local/pgsql-11.4/bin/pg_ctl reload -D ${PGDATA} -s
+
+# Give a reasonable amount of time for the server to start up/shut down
+TimeoutSec=300
+
+[Install]
+WantedBy=multi-user.target
+
+systemctl daemon-reload
+systemctl enable postgresql.service
+systemctl status postgresql.service
+systemctl start postgresql.service
+
+ps -ef | grep pgsql
+postgres 28053     1  0 16:52 ?        00:00:00 /usr/local/pgsql-11.$/bin/postgres -D /dados/data
+
+#ENABLE JIT
+vi /dados/data/postgresql.conf
+shared_buffers = 2GB
+temp_buffers = 64MB
+work_mem = 32MB
+maintenance_work_mem = 1GB
+wal_level = minimal
+max_wal_senders = 0
+max_wal_size = 1GB
+random_page_cost = 1.1
+jit = on
+
+systemctl stop postgresql.service
+systemctl start postgresql.service
+
+#VALIDATE
+su - postgres
+/usr/local/pgsql-11.$/bin/psql -U postgres
+psql (11.$)
+Type "help" for help.
+postgres=# show jit;
+ jit 
+-----
+ on
+(1 row)
+
+#TEST JIT 
+postgres=# set jit=on;
+postgres=# set jit_above_cost=0;
+postgres=# set jit_inline_above_cost=0;
+postgres=# set jit_optimize_above_cost=0;
+postgres=# create table t1 (id int);
+postgres=# insert into t1 (SELECT (random()*100)::int FROM generate_series(1,800000) as g);
+postgres=# analyze t1;
+postgres=# explain select sum(id) from t1;
+                                     QUERY PLAN
+-------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=8706.88..8706.89 rows=1 width=8)
+   ->  Gather  (cost=8706.67..8706.88 rows=2 width=8)
+         Workers Planned: 2
+         ->  Partial Aggregate  (cost=7706.67..7706.68 rows=1 width=8)
+               ->  Parallel Seq Scan on t1  (cost=0.00..6873.33 rows=333333 width=4)
+ JIT:
+   Functions: 6
+   Options: Inlining false, Optimization false, Expressions true, Deforming true
+(8 rows)
+
+
+
+
+
+
+
+
+
+

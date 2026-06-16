@@ -1,0 +1,430 @@
+#########################################################################
+# POSTGRES AND ORACLE QUERY PROCESSING: IMPLICATIONS OF ONE SOLUTION  #
+#########################################################################
+
+SQL query processing in both Oracle and Postgres has a lot in common. One way or another, it is necessary to perform parsing, 
+check the semantics (which requires meta information, and it does not matter whether it is called a "data dictionary" or a "system catalog"), 
+perform some transformations, build an optimal execution plan (in both systems, based on the cost, and therefore requiring pre-collected statistics).
+
+But there is one single significant difference that fundamentally changes the whole approach to processing. Of course, 
+we are talking about the fact that Oracle uses the global parsed query cache, and Postgres stores queries locally.
+
+In the article we will try to trace how, due to the difference in one architectural solution, completely different ideology of work in queries in two DBMS logically follows.
+
+The examples provided (which were run on Oracle 11.2 XE and PostgreSQL 9.4) show the query execution time. We are only interested in relative values: 
+how many times the execution time changed after making certain changes to the query. At the same time, the absolute figures can differ by orders of magnitude, 
+depending on the equipment, load and settings. In order not to give reason for meaningless conclusions based on them, 
+all the absolute values in the article are scaled so that one of the requests is 10 seconds in both systems.
+
+------------
+-- ORACLE --
+------------
+
+Oracle uses an instance-wide library cache (library cache). The plan of any executed query is guaranteed to be in the cache: 
+either the query is executed with a ready-made plan from the cache, or a new plan is built and stored in the cache - and this happens automatically.
+
+In a simplified way, the general scheme of query execution can be represented as follows:
+
+1 - Parse the query (whether the SQL command is written correctly).
+2 - Semantic analysis (whether the specified objects exist and whether there is access to them).
+3 - If the ready plan is in the cache, then use it; otherwise - further.
+4 - Transformation (rewriting a query according to heuristic rules).
+5 - Optimization (selection of an execution plan with the lowest cost).
+6 - Putting the selected plan into the cache.
+
+The same request repeated twice in a row will be processed differently. The first time, the so-called hard parse will take place - from the first to the last point. 
+The second time, only a partial parsing (soft parse) will be performed - syntactic and semantic analysis - after which a ready-made plan will be found and used in the cache, 
+which is much more efficient.
+
+The presence of the global cache encourages us to minimize the number of entries in it. 
+One reason is that a large stream of "one-off" requests can force the plans out of the cache, while the requests themselves will never be repeated. But most importantly, 
+concurrent processes access the shared cache, therefore, it must be protected by locks and writing to it can become a bottleneck.
+
+Indeed, a process doing a lot of parsing becomes an instance-wide problem. Consider this situation with the following example: Here we create a table, 
+insert hundreds of thousands of rows into it (the "from dual connect by rowid <= N" construct is an idiom for generating a selection of N rows) and collect statistics. 
+Let's execute the following PL / SQL code that updates the table line by line in a loop using dynamically generated update queries (this example may look contrived, 
+but in practice it is not so): If you trace, then you can find out:
+
+create table t(
+id number primary key,
+n number not null);
+insert into t(id, n) select level, 1 from dual connect by rownum <= 100000; 
+exec dbms_stats.gather_table_stats(user,'T');
+alter session set statistics_level=all;
+
+begin
+for i in (select id from t) loop
+execute immediate 'update t set n = n + 1 where id = '||i.id;
+end loop;
+commit;
+end;
+/
+
+OVERALL TOTALS FOR ALL RECURSIVE STATEMENTS
+
+call    count  cpu      elapsed    disk       query      current    rows
+------- ------ -------- ---------- ---------- ---------- ---------- ----------
+Parse   100003 92.63    95.40       0         2837        0         0
+Execute 100003 13.57    14.29       0         200002      102225    100000
+Fetch   1002   0.87     0.75        0         10173       0         100000
+------- ------ -------- ---------- ---------- ---------- ---------- ----------
+total   201008 107.08   110.46      0         213012      102225    200000
+
+Misses in library cache during parse: 100001
+
+Shown here is information for all SQL queries initiated from a block of code. 
+The elapsed column shows the total elapsed time (which is the sum of cpu and various expectations), and the parse, execute, 
+fetch lines correspond to the stages of parsing, executing and getting the results of the query. 
+As you can see, most of the time (95 seconds out of 110, the elapsed column) was spent on parsing a hundred thousand (count column) queries of the same 
+type and placing their one-time plans in the cache. If you run several similar processes at the same time, 
+you will start to see expectations like "latch: shared pool" and "latch: row cache objects" (names vary from version to version), 
+indicating competition for access to the library cache.
+
+To prevent this from happening, it is customary in Oracle to use bind variables. For example, like this:
+
+begin
+for i in (select id from t) loop
+execute immediate 'update t set n = n + 1 where id = :A' using i.id;
+end loop;
+commit;
+end;
+/
+
+Or, more simply, without dynamic SQL, since PL / SQL automatically converts its variables to database bind variables: Here is what the trace will show in this case: 
+The parsing time has been reduced to a minimum - all update queries now look the same for the DBMS. "Equality", that is, in fact, the key for the cache, 
+is determined by two values:
+
+begin
+for i in (select id from t) loop
+update t set n = n + 1 where id = i.id;
+end loop;
+commit;
+end;
+/
+
+OVERALL TOTALS FOR ALL RECURSIVE STATEMENTS
+
+call    count  cpu      elapsed    disk       query      current    rows
+------- ------ -------- ---------- ---------- ---------- ---------- ----------
+Parse   3       0.02    0.03        0         297         0         0
+Execute 100002  9.08    9.28        0         201694      102315    100000
+Fetch   1001    0.77    0.68        0         10173       0         100000
+------- ------ -------- ---------- ---------- ---------- ---------- ----------
+total   101006  9.87    10.00       0         212164      102315    200000
+
+Thus, the update query is parsed only once (the 3 in the count column corresponds to the parsing of the PL / SQL block, the select query in the for clause, 
+and the update query in the loop body). His plan is placed in the cache and then everything works relatively quickly.
+(Why "relatively"? Because the correct way is to perform the update with one command "update t set n = n + 1", which runs even an order of magnitude faster.)
+However, the "general" query plan, built without taking into account the values ​​of the variables, will only be adequate for evenly distributed data.
+Let's change the table: add and index the flag field equal to "Y" for 0.1% of rows and "N" for the remaining 99.9%. 
+For the optimizer to take into account the unevenness of the data in the flag field, it is required to collect a histogram for this field. For example, like this:
+
+alter table t add (flag char(1) check (flag in ('Y','N')));
+update t set flag = case when mod(id,1000)=0 then 'Y' else 'N' end;
+create index t_flag on t(flag);
+exec dbms_stats.gather_table_stats(user,'T',method_opt=>'for columns flag size 2');
+
+Interestingly, the explain plan command (the result of which is available using the dbms_xplan.display function) 
+will still show the plan built on the assumption of uniformity, as if the optimizer expects to receive half of the table: 
+This only means that by and large use the explain plan command in Orakla it is impossible. It does not take into account either the values of variables or their types, 
+and the plan generated by it does not get into the cache and is not used in any way.
+
+explain plan for select * from t where flag = :f;
+select * from table(dbms_xplan.display);
+
+------------------------------------------------------------------------------
+| Id  | Operation         | Name  | Rows  | Bytes   | Cost (%CPU) | Time     |
+------------------------------------------------------------------------------
+| 0   | SELECT STATEMENT  |       | 50000 | 488K    | 76 (2)      | 00:00:01 |
+|* 1  | TABLE ACCESS FULL | T     | 50000 | 488K    | 76 (2)      | 00:00:01 |
+------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+1 - filter("FLAG"=:F)
+
+In fact, when executing a query, Oracle "peeks" the values of the bind variables (this is called "bind peeking") and builds a plan based on these values. 
+The real plan must be viewed directly in the cache when the request has already been sent for execution and parsed. For this, 
+the dbms_xplan.display_cursor function is used; with the parameters specified in the example, 
+it displays the plan of the last executed query and information about the bind variables: 
+Now you can see that the optimizer took into account the value of the variable (the peeked binds section), 
+adequately estimated the number of rows (135; the error does not affect the result) and chose access by index.
+
+var f char(1)
+exec :f := 'Y'
+select * from t where flag = :f;
+...
+100 rows selected.
+
+select * from table(dbms_xplan.display_cursor(format=>'typical +peeked_binds'));
+
+SQL_ID 6pncxxhknwgqc, child number 0
+
+-------------------------------------------------------------------------------------------
+| Id  | Operation                   | Name    | Rows  | Bytes   | Cost (%CPU) | Time      |
+-------------------------------------------------------------------------------------------
+| 0   | SELECT STATEMENT            |         |       |         | 2 (100)     |           |
+| 1   | TABLE ACCESS BY INDEX ROWID | T       | 135   |    1350 | 2 (0)       | 00:00:01  |
+|* 2  | INDEX RANGE SCAN            | T_FLAG  | 135   |         | 1 (0)       | 00:00:01  |
+-------------------------------------------------------------------------------------------
+
+Peeked Binds (identified by position):
+--------------------------------------
+1 - :F (CHAR(30), CSID=873): 'Y'
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+2 - filter("FLAG"=:F)
+
+The problem is that the built "private" plan gets into the cache and will be reused for the same queries - without taking into account the values of the variables. 
+This is not always a good thing: in our example, index access would be extremely inefficient for the value 'N'. 
+Traditionally, the solution has been to use dynamic SQL with literals pasted into the query text - but the solution is unfortunate: 
+in addition to the disadvantages discussed above, this approach is also dangerous due to the possibility of SQL injection. 
+Therefore (since version 11g) Oracle is able to find and specially process queries that are sensitive to the values of the binding variables 
+(this is called "adaptive cursor sharing"). When executing the query, 
+the plan already in the cache is used, but the actual resources used are tracked and compared with the statistics of previous executions.
+
+Let's look at some of the information from the library cache for our request: 
+The request is marked as bind sensitive. Buffer_gets is the number of data blocks read. If it is found that the query performed worse with different values, 
+then the next time it is executed, it will be marked as needing different plans (bind aware). 
+Let's execute the same request with a different value of the flag field: Let's make sure that the request was executed with the plan from the cache, 
+and at the same time we will demonstrate the possibility of displaying not only the expected, 
+but also actual values in terms of plan (this is why the statistics_level parameter was first set):
+
+select child_number, is_bind_sensitive, is_bind_aware, executions, buffer_gets from v$sql where sql_id='6pncxxhknwgqc';
+
+CHILD_NUMBER IS_BIND_SENSITIVE IS_BIND_AWARE EXECUTIONS BUFFER_GETS
+------------ ----------------- ------------- ---------- -----------
+0             Y                 N             1         128
+
+exec :f := 'N'
+select * from t where flag = :f;
+...
+99900 rows selected.
+
+select * from table(dbms_xplan.display_cursor(format=>'allstats last'));
+
+SQL_ID 6pncxxhknwgqc, child number 0
+
+---------------------------------------------------------------------------------------
+| Id  | Operation                   | Name    | Starts  | E-Rows  | A-Rows  | Buffers |
+---------------------------------------------------------------------------------------
+| 0   | SELECT STATEMENT            |         | 1       |         | 99900   | 41368   |
+| 1   | TABLE ACCESS BY INDEX ROWID | T       | 1       | 135     | 99900   | 41368   |
+|* 2  | INDEX RANGE SCAN            | T_FLAG  | 1       | 135     | 99900   | 6842    |
+---------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+2 - access("FLAG"=:F)
+
+There is a mismatch between the expected number of lines (135) and the real (99900). 
+In addition, you can see that for execution it was necessary to read significantly more data than the first time (buffer_gets column): 
+Let's execute the query again: Now the new plan is used, built for the new value of the bind variable (note the changed child number and the peeked section binds): 
+This time the optimizer estimated the number of rows correctly (99856, with a small margin of error) and chose a full table scan. 
+And there are now two versions of the plan for the same query in the library cache:
+
+select child_number, is_bind_sensitive, is_bind_aware, executions, buffer_gets from v$sql where sql_id='6pncxxhknwgqc';
+
+CHILD_NUMBER IS_BIND_SENSITIVE IS_BIND_AWARE EXECUTIONS BUFFER_GETS
+------------ ----------------- ------------- ---------- -----------
+0             Y                 N             2         41496
+
+select * from t where flag = :f;
+...
+99900 rows selected.
+
+select * from table(dbms_xplan.display_cursor(format=>'typical +peeked_binds'));
+
+SQL_ID 6pncxxhknwgqc, child number 1
+
+-----------------------------------------------------------------------------
+| Id  | Operation         | Name  | Rows  | Bytes | Cost (%CPU) | Time      |
+-----------------------------------------------------------------------------
+| 0   | SELECT STATEMENT  |       |       |       | 77 (100)    |           |
+|* 1  | TABLE ACCESS FULL | T     | 99856 | 975K  | 77 (3)      | 00:00:01  |
+-----------------------------------------------------------------------------
+
+Peeked Binds (identified by position):
+--------------------------------------
+1 - :F (CHAR(30), CSID=873): 'N'
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+1 - filter("FLAG"=:F)
+
+select child_number, is_bind_sensitive, is_bind_aware, executions, buffer_gets from v$sql where sql_id='6pncxxhknwgqc';
+
+CHILD_NUMBER IS_BIND_SENSITIVE IS_BIND_AWARE EXECUTIONS BUFFER_GETS
+------------ ----------------- ------------- ---------- -----------
+0             Y                 N            2          41496
+1             Y                 Y            1          6922
+
+Striving to minimize the number of plans in the cache forces the optimizer to stumble before deciding whether to have different plans for the same query. 
+Note that this can be avoided by manually prompting the optimizer in advance.
+
+--------------
+-- POSTGRES --
+--------------
+
+There is no global parsed query cache in Postgres. Moreover, if no special efforts are made, the request will not be saved locally in the process memory either.
+In particular, when repeating the same request, it will be completely parsed anew each time. Of course, a process written in this way will not work optimally, 
+but this, at least, does not directly affect other processes.
+
+Consider an example: Let's execute the following PL / pgSQL code: In order to save the parsing results, a query must be prepared, 
+and only then the saved query can be reused: This is exactly what happens if an SQL command is called in a PL / pgSQL block without using execute, 
+as in the first example. In our case, this gives a gain in speed by 3.5 times:
+
+create table t(
+id serial primary key,
+n numeric not null);
+insert into t(n) select 1 from generate_series(1,100000);
+analyze t;
+
+\timing on
+do $$
+declare
+i record;
+begin
+for i in (select id from t) loop
+execute 'update t set n = n + 1 where id = '||i.id;
+end loop;
+end;
+$$ language plpgsql;
+DO
+Time: 36164,377 ms
+
+prepare u(integer) as update t set n = n + 1 where id = $1;
+execute u(1);
+execute u(2);
+...
+execute u(100000);
+
+do $$
+declare
+i record;
+begin
+for i in (select id from t) loop
+update t set n = n + 1 where id = i.id;
+end loop;
+end;
+$$ language plpgsql;
+DO
+Time: 10000,000 ms
+
+(And the correct option - one SQL command - is three times faster.)
+
+The general scheme of parsing a query consists of the following stages:
+
+1 - Parsing;
+2 - Semantic Analysis;
+3 - Rewriting the request (according to the rules, both system and user);
+4 - Optimization.
+
+When preparing a query, it is parsed and rewritten. Optimization is performed anew each time it is executed - thus, 
+a "private" plan is built for each value of the binding variables.
+
+Let's consider an example of non-uniform distribution of data (instead of a symbolic variable, we can use a boolean type): 
+The required histogram will be automatically built when analyzing the table: Prepare a query: 
+To find out which execution plan will be selected for the true flag value, use the explain command. In Postgres, 
+it is aware of the meaning and type of bind variables and shows exactly the plan with which the command will be executed:
+
+alter table t add column
+flag boolean;
+update t
+set flag = mod(id,1000)=0;
+create index on t(flag);
+
+analyze t;
+
+prepare s1(boolean) as select * from t where flag = $1;
+
+explain execute s1(true);
+QUERY PLAN
+------------------------------------------------------------------------
+Index Scan using t_flag_idx on t (cost=0.29..14.31 rows=110 width=10)
+Index Cond: (flag = true)
+Filter: flag
+
+The optimizer assumes that 110 rows are selected (also with a small margin of error) and uses index access.
+
+The explain command is also convenient in that it allows you not only to build a plan, 
+but also to execute the command and immediately get both the expected and actual cardinality values. 
+Let's demonstrate this for a different value of flag: In this case, the optimizer expects to get 99890 rows (actually 99900) and adequately chooses a full table read. 
+This raises the opposite problem to Oracle's: what if the plan doesn't depend on the values ​​of the bind variables? In this case, 
+it would be beneficial not to optimize the query every time.
+
+explain analyze execute s1(false);
+QUERY PLAN
+------------------------------------------------------------------------------------------------------
+Seq Scan on t (cost=0.00..2958.00 rows=99890 width=10) (actual time=0.043..265.272 rows=99900 loops=1)
+Filter: (NOT flag)
+Rows Removed by Filter: 100
+Execution time: 385.455 ms
+
+Indeed, Postgres is able to move from “private” plans to “general” (generic plan), but it does not do it right away. 
+The first five times the query is optimized in any case, 
+and then the general plan is preferred if its cost (as estimated by the optimizer) does not exceed the average cost of private plans. 
+The number five here is a kind of trade-off: a small value does not provide sufficient cost statistics for different values of the binding variables, 
+and a large value negates the optimization itself.
+
+Let's consider this mechanism using an example with a uniform distribution of data: This is a private plan, 
+which can be seen from the condition "Index Cond: (id = 1)" - a specific number is indicated here.
+
+prepare s2(integer) as select * from t where id = $1;
+explain execute s2(1);
+QUERY PLAN
+-----------------------------------------------------------------
+Index Scan using t_pkey on t (cost=0.42..8.44 rows=1 width=10)
+Index Cond: (id = 1)
+
+However, if you call explain or simply execute the query four more times with any variable values, the switch to the general plan will occur: Here, 
+in the "Index Cond: (id = $ 1)" condition, instead of a specific value, 
+the number of the binding variable is indicated - this is the sign of the general plan ... Its cost in this case coincides with the cost of private plans. 
+Now, the query will use a ready-made plan, 
+which increases the efficiency of execution 
+(although it can lead to a problem in case of error in the calculation of the cost or if the first five times turn out to be "not indicative").
+
+execute s2(2);
+...
+execute s2(3);
+...
+execute s2(4);
+...
+execute s2(5);
+...
+explain execute s2(6);
+QUERY PLAN
+-----------------------------------------------------------------
+Index Scan using t_pkey on t (cost=0.42..8.44 rows=1 width=10)
+Index Cond: (id = $1)
+
+----------------
+-- CONCLUSION --
+----------------
+
+The decision to use the global cache of parsed queries in Oracle leads to the desire not to write to it more than is absolutely necessary - 
+both because of the limited size and the danger of crowding out useful plans, and because of the competition of parallel processes for access to the cache. 
+Therefore Oracle starts with one general plan for the query and only if necessary moves on to several private ones.
+
+On the contrary, the decision not to use the global cache in Postgres makes it easier to deal with unnecessary parsing. Postgres, on the contrary, 
+starts with private plans and then, if possible, moves on to the general.
+
+Oracle automatically caches query plans. In this regard, the developer is only required to remember to use the bind variables, 
+which is primarily dictated by the limitations of the global cache. Due to the severity of the problem, 
+Oracle even provides a cursor_sharing parameter that forces all constants to be replaced with variables.
+
+Postgres completely decides on the need to save the parsed request in the hands of the developer - or the development tool. 
+The use of bind variables does not play such a dramatic performance role in Postgres (although security issues from SQL injection are equally relevant for both systems).
+
+If several processes use the same request, in Oracle it will be parsed only one - the first - time. 
+The rest of the processes will use the already prepared plan in the global cache.
+
+In Postgres, each process will have to parse the request itself. On the other hand, 
+one-time requests are executed without the overhead of placing the plan in the cache.
+
+Each of the solutions has both its pros and cons; in any case, developers and administrators who design, implement, 
+and maintain application systems should take these considerations into account.
+
+
+
