@@ -2,22 +2,22 @@
 
 A loja virtual da Example Corp. apresenta um alto índice de abandono de carrinho diariamente, o que leva à exclusão desses registros do banco de dados para liberar espaço de armazenamento. Como especialista em Engenharia de Dados da empresa, você é responsável por encontrar uma solução de armazenamento de baixo custo na AWS para armazenar esses registros e permitir que a loja virtual realize processamento analítico diretamente nessa solução de armazenamento.
 
-Neste laboratório, você explorará os componentes de um data lake, organizará seus dados em camadas (ou zonas) e usará o Amazon S3 como camada de armazenamento do seu data lake.
+Neste ambiente, você explorará os componentes de um data lake, organizará seus dados em camadas (ou zonas) e usará o Amazon S3 como camada de armazenamento do seu data lake.
 
 ### Recursos AWS Descritos e Utilizados
 
-O laboratório utiliza uma arquitetura serverless e orientada a eventos, composta pelos seguintes serviços principais:
+O ambiente utiliza uma arquitetura serverless e orientada a eventos, composta pelos seguintes serviços principais:
 
 #### 📦 Amazon Simple Storage Service (S3)
 
-O Amazon S3 é um serviço de armazenamento de objetos altamente escalável, disponível e seguro, usado como a camada de armazenamento principal do data lake. No laboratório, ele é organizado em duas zonas (camadas):
+O Amazon S3 é um serviço de armazenamento de objetos altamente escalável, disponível e seguro, usado como a camada de armazenamento principal do data lake. No ambiente, ele é organizado em duas zonas (camadas):
 
 Zona de Dados Brutos (Raw Zone): Bucket S3 (raw-bucket) que armazena os dados ingeridos em seu formato original e imutável, ou seja, a cópia fiel dos dados de origem. Pode conter dados estruturados, semiestruturados ou não estruturados, como os arquivos CSV de exemplo. Este bucket serve como a fonte de dados para a função de processamento.
 Zona de Consumo (Consume Zone): Bucket S3 (consume-bucket) que armazena os dados após serem transformados e processados, prontos para serem consumidos por aplicações analíticas. É o destino final dos pipelines de ETL (Extract, Transform, Load) criados.
 
 #### ⚡ AWS Lambda
 
-O AWS Lambda é um serviço de computação serverless que permite executar código sem a necessidade de provisionar ou gerenciar servidores. Ele é ideal para arquiteturas orientadas a eventos, escalando automaticamente sob demanda. No laboratório, o Lambda executa três funções principais, cada uma com um propósito no pipeline de dados:
+O AWS Lambda é um serviço de computação serverless que permite executar código sem a necessidade de provisionar ou gerenciar servidores. Ele é ideal para arquiteturas orientadas a eventos, escalando automaticamente sob demanda. No ambiente, o Lambda executa três funções principais, cada uma com um propósito no pipeline de dados:
 
 labFunction-Data-Generator: Atua como o aplicativo de backend de e-commerce. É responsável por gerar dados sintéticos de abandono de carrinho de compras (usando a biblioteca Python Faker) e ingeri-los diretamente no bucket S3 da zona raw.
 labFunction-Data-Processor: Executa a lógica de processamento e transformação dos dados. É acionada automaticamente quando um novo arquivo chega no bucket raw, utilizando a biblioteca pandas para agregar os dados de abandono de carrinho (p. ex., por ID do produto) e salvar o resultado no bucket S3 da zona de consumo.
@@ -25,10 +25,10 @@ labFunction-Promotion-App: Consome os dados já processados. É acionada pelo Am
 
 #### 🔔 Amazon EventBridge
 
-O Amazon EventBridge é um barramento de eventos serverless que permite conectar aplicações usando eventos de diversas fontes. Ele atua como um roteador inteligente de eventos, recebendo notificações e encaminhando-as para os destinos corretos com base em regras definidas. No laboratório, ele é utilizado para criar uma regra que filtra apenas os eventos de criação de objetos no bucket S3 da zona raw e então dispara a função labFunction-Promotion-App para iniciar o processamento da camada de consumo.
+O Amazon EventBridge é um barramento de eventos serverless que permite conectar aplicações usando eventos de diversas fontes. Ele atua como um roteador inteligente de eventos, recebendo notificações e encaminhando-as para os destinos corretos com base em regras definidas. No ambiente, ele é utilizado para criar uma regra que filtra apenas os eventos de criação de objetos no bucket S3 da zona raw e então dispara a função labFunction-Promotion-App para iniciar o processamento da camada de consumo.
 
 ### Objetivos
-Ao final deste laboratório, você deverá ser capaz de fazer o seguinte:
+Ao final deste ambiente, você deverá ser capaz de fazer o seguinte:
 
 Utilize o Amazon S3 como camada de armazenamento de um data lake.
 Organize os dados em camadas (ou zonas) no Amazon S3.
@@ -36,14 +36,14 @@ Configure uma notificação de evento do S3 para invocar uma função do AWS Lam
 Crie uma regra do Amazon EventBridge para invocar a função Lambda.
 
 ### Pré-requisitos de conhecimento técnico
-Este laboratório requer os seguintes pré-requisitos:
+Este ambiente requer os seguintes pré-requisitos:
 
 Acesso a um computador com Microsoft Windows, Mac OS X ou Linux (Ubuntu, SuSE ou Red Hat)
 Um navegador de internet moderno, como o Chrome ou o Firefox.
 Conhecimento básico de nuvem e serviços da AWS.
 
 ### Legenda
-Ao longo deste laboratório, são utilizados diversos ícones para chamar a atenção para diferentes tipos de instruções e anotações. A lista a seguir explica a finalidade de cada ícone:
+Ao longo deste ambiente, são utilizados diversos ícones para chamar a atenção para diferentes tipos de instruções e anotações. A lista a seguir explica a finalidade de cada ícone:
 
 * **Resultado esperado**: Um exemplo de resultado que você pode usar para verificar a saída de um comando ou arquivo editado.
 * **Nota**: Uma dica, sugestão ou orientação importante.
@@ -53,26 +53,26 @@ Ao longo deste laboratório, são utilizados diversos ícones para chamar a aten
 * **Copiar e editar**: Uma situação em que copiar um comando, script ou outro texto para um editor de texto (para editar variáveis ​​específicas dentro dele) pode ser mais fácil do que editar diretamente na linha de comando ou no terminal.
 * **Tarefa concluída**: Um ponto de conclusão ou resumo do experimento.
 
-### Iniciar laboratório
-1. Para iniciar o laboratório, na parte superior da página, selecione Iniciar Laboratório .
+### Iniciar ambiente
+1. Para iniciar o ambiente, na parte superior da página, selecione Iniciar ambiente .
 
  Atenção: você deve aguardar até que os serviços da AWS provisionados estejam prontos antes de prosseguir.
 
-2. Para abrir o laboratório, selecione Abrir Console.
+2. Para abrir o ambiente, selecione Abrir Console.
 
 Você será conectado automaticamente ao Console de Gerenciamento da AWS em uma nova aba do navegador.
 
  Aviso: Não altere a região a menos que seja instruído a fazê-lo.
 
 ### Erros comuns de login
-Erro: Selecionar Iniciar Laboratório não tem efeito.
-Em alguns casos, certas extensões de navegador que bloqueiam pop-ups ou scripts podem impedir que o botão " Iniciar Laboratório" funcione corretamente. Se você tiver problemas para iniciar o laboratório:
+Erro: Selecionar Iniciar ambiente não tem efeito.
+Em alguns casos, certas extensões de navegador que bloqueiam pop-ups ou scripts podem impedir que o botão " Iniciar ambiente" funcione corretamente. Se você tiver problemas para iniciar o ambiente:
 
-Adicione o domínio do laboratório à lista de permissões do seu bloqueador de pop-ups ou scripts, ou desative-o.
+Adicione o domínio do ambiente à lista de permissões do seu bloqueador de pop-ups ou scripts, ou desative-o.
 Atualize a página e tente novamente.
 
-### Ambiente de laboratório
-O diagrama a seguir mostra a arquitetura básica do ambiente de laboratório:
+### Ambiente de ambiente
+O diagrama a seguir mostra a arquitetura básica do ambiente de ambiente:
 
 ![lab_diagram](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/AWS/Data%20Engineering/images/0001.png)
 
@@ -86,7 +86,7 @@ Após a ingestão dos dados brutos no data lake, a camada de processamento está
 * Um data lake normalmente possui pelo menos três camadas (ou zonas) de dados: brutos, de preparação e de consumo. Esses nomes podem variar, e você também pode adicionar camadas adicionais de acordo com suas necessidades.
 * Quando os dados estão prontos para serem utilizados, o aplicativo de promoções acessa os dados diretamente no data lake e os agrega para fornecer dados de abandono para cada cliente. Esses dados podem ser usados ​​para identificar quais descontos de produtos enviar aos clientes.
 
-### Serviços utilizados neste laboratório
+### Serviços utilizados neste ambiente
 **AWS Lambda**
 O AWS Lambda é um serviço de computação que permite executar código sem provisionar ou gerenciar servidores. O Lambda executa seu código em uma infraestrutura de computação de alta disponibilidade e realiza toda a administração dos recursos de computação, incluindo manutenção de servidores e sistemas operacionais, provisionamento de capacidade e escalonamento automático, além de registro de logs. Com o Lambda, tudo o que você precisa fazer é fornecer seu código em um dos ambientes de execução de linguagem compatíveis com o Lambda.
 
@@ -97,25 +97,25 @@ O Amazon Simple Storage Service (Amazon S3) é um serviço de armazenamento de o
 
  Saiba mais: Consulte " O que é o Amazon S3?" na seção Recursos adicionais para obter mais informações.
 
-### Serviços da AWS não utilizados neste laboratório
-As funcionalidades dos serviços da AWS utilizadas neste laboratório estão limitadas ao que o laboratório exige. Podem ocorrer erros ao acessar outros serviços ou executar ações além das descritas neste guia do laboratório.
+### Serviços da AWS não utilizados neste ambiente
+As funcionalidades dos serviços da AWS utilizadas neste ambiente estão limitadas ao que o ambiente exige. Podem ocorrer erros ao acessar outros serviços ou executar ações além das descritas neste guia do ambiente.
 
 ---
 
 #### Tarefa 1: Analisar os buckets S3 para a zona de dados brutos e a zona de consumo.
 
-Nesta tarefa, você revisará os buckets do S3 que foram pré-criados para este laboratório.
+Nesta tarefa, você revisará os buckets do S3 que foram pré-criados para este ambiente.
 
 3. Na parte superior do Console de Gerenciamento da AWS, na barra de pesquisa, procure e selecioneS3.
-Na seção **Buckets de uso geral** , você deverá ver os dois buckets a seguir, que já foram criados para este laboratório:
+Na seção **Buckets de uso geral** , você deverá ver os dois buckets a seguir, que já foram criados para este ambiente:
 
 * O primeiro bucket, cujo nome começa com **raw-bucket**, é usado como uma camada para dados brutos (zona raw).
 * O segundo bucket, cujo nome começa com **consume-bucket**, é usado como uma camada para dados consumíveis (zona de consumo).
 A zona (ou camada) de dados brutos contém os dados ingeridos das fontes de dados no formato de dados brutos, que é a cópia imutável dos dados. Essa zona pode incluir objetos de dados estruturados, semiestruturados e não estruturados, como bancos de dados, backups, arquivos, imagens e arquivos (JSON, CSV, XML, texto etc.).
 
-Após obter os dados brutos, você deseja transformá-los. As transformações podem envolver a agregação de dados de diferentes fontes ou a alteração do formato do arquivo dos dados recebidos. Neste laboratório, o bucket S3 da zona de consumo representa a camada transformada.
+Após obter os dados brutos, você deseja transformá-los. As transformações podem envolver a agregação de dados de diferentes fontes ou a alteração do formato do arquivo dos dados recebidos. Neste ambiente, o bucket S3 da zona de consumo representa a camada transformada.
 
- Tarefa concluída: Você revisou com sucesso os buckets do S3 para a zona de dados brutos e a zona de consumo que foram pré-criados para este laboratório.
+ Tarefa concluída: Você revisou com sucesso os buckets do S3 para a zona de dados brutos e a zona de consumo que foram pré-criados para este ambiente.
 
  ---
 
@@ -514,15 +514,15 @@ Você realizou com sucesso o seguinte:
 
 ---
 
-### Fim do laboratório
+### Fim do ambiente
 
-Siga estes passos para fechar o console e encerrar o seu laboratório.
+Siga estes passos para fechar o console e encerrar o seu ambiente.
 
 84. Retorne ao **Console de Gerenciamento da AWS** .
 
 85. No canto superior direito da página, selecione **AWSLabsUser** e, em seguida, selecione **Sair** .
 
-86. Selecione **"Finalizar Laboratório"** e confirme que deseja encerrar o laboratório.
+86. Selecione **"Finalizar ambiente"** e confirme que deseja encerrar o ambiente.
 
 
 
