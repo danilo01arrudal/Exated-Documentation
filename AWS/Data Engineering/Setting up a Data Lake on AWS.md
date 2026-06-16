@@ -71,7 +71,7 @@ Em alguns casos, certas extensões de navegador que bloqueiam pop-ups ou scripts
 Adicione o domínio do ambiente à lista de permissões do seu bloqueador de pop-ups ou scripts, ou desative-o.
 Atualize a página e tente novamente.
 
-### Ambiente de ambiente
+### Diagrama do ambiente
 O diagrama a seguir mostra a arquitetura básica do ambiente de ambiente:
 
 ![lab_diagram](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/AWS/Data%20Engineering/images/0001.png)
