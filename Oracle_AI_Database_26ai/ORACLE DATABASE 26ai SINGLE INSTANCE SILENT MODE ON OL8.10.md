@@ -127,34 +127,145 @@
     [oracle@ol826ai dbhome_1]$ unzip V1054592-01.zip
 	[oracle@ol826ai dbhome_1]$ rm -vf V1054592-01.zip 
 
+###### CREATE db_install.rsp INSTALL RESPONSE FILE
+
+    [oracle@ol923ai ~]$ vi db_install.rsp
+		oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v23.0.0
+		installOption=INSTALL_DB_SWONLY
+		UNIX_GROUP_NAME=oinstall
+		INVENTORY_LOCATION=/u01/app/oraInventory
+		ORACLE_HOME=/u01/app/oracle/product/23.26.1/dbhome_1
+		ORACLE_BASE=/u01/app/oracle
+		installEdition=EE
+		OSDBA=dba
+		OSOPER=oinstall
+		OSBACKUPDBA=backupdba
+		OSDGDBA=dgdba
+		OSKMDBA=kmdba
+		OSRACDBA=racdba
+		executeRootScript=false
+		configMethod=
+		sudoPath=
+		sudoUserName=
+		clusterNodes=
+		dbType=GENERAL_PURPOSE
+		gdbName=
+		dbSID=
+		pdbName=
+		charSet=
+		enableAutoMemoryManagement=
+		memoryLimit=
+		allSchemaPassword=
+		sysPassword=
+		systemPassword=
+		dbsnmpPassword=
+		pdbadminPassword=
+		managementOption=DEFAULT
+		omsHost=
+		omsPort=
+		emAdminUser=
+		emAdminPassword=
+		enableRecovery=
+		storageType=
+		dataLocation=
+		recoveryLocation=
+		diskGroup=
+		asmsnmpPassword=
+
 ###### EXECUTE runInstaller 
+    [oracle@ol923ai ~]$ cd $ORACLE_HOME
+    [oracle@ol923ai ~]$ ./runInstaller -silent -responseFile /home/oracle/db_install.rsp
+    [oracle@ol923ai ~]$ exit
+    [root@ol923ai ~]# /u01/app/oraInventory/orainstRoot.sh
+    [root@ol923ai ~]# /u01/app/oracle/product/23.5.0/dbhome_1/root.sh
 
-    [root@ol826ai ~]# xhost +
-    [oracle@ol826ai ~]$ export DISPLAY=:0.0	
-    [oracle@ol826ai ~]$ cd $ORACLE_HOME
-    [oracle@ol826ai ~]$ ./runInstaller
+###### CREATE dbca.rsp response file
 
-![oracle_database_so_si_001](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_001.png)
+	[oracle@ol923ai ~]$ vi dbca.rsp
+		responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v23.0.0
+		gdbName=appscdb
+		sid=appscdb
+		databaseConfigType=SI
+		RACOneNodeServiceName=
+		sehaServiceName=
+		policyManaged=false
+		managementPolicy=AUTOMATIC
+		createServerPool=false
+		serverPoolName=
+		cardinality=
+		force=false
+		pqPoolName=
+		pqCardinality=
+		createAsContainerDatabase=true
+		numberOfPDBs=1
+		pdbName=appspdb1
+		useLocalUndoForPDBs=true
+		pdbAdminPassword=
+		nodelist=
+		sehaNodeList=
+		templateName=/u01/app/oracle/product/23.26.1/dbhome_1/assistants/dbca/templates/General_Purpose.dbc
+		sysPassword=
+		systemPassword= 
+		serviceUserPassword=
+		emConfiguration=
+		runCVUChecks=FALSE
+		dbsnmpPassword=
+		omsHost=
+		omsPort=0
+		emUser=
+		emPassword=
+		dvConfiguration=false
+		dvUserName=
+		dvUserPassword=
+		dvAccountManagerName=
+		dvAccountManagerPassword=
+		olsConfiguration=true
+		datafileJarLocation={ORACLE_HOME}/assistants/dbca/templates/
+		datafileDestination={ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/
+		recoveryAreaDestination={ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME}
+		recoveryAreaSize=14802MB
+		configureWithOID=
+		pdbOptions=JSERVER:true,IMEDIA:false,OMS:true,SPATIAL:true,CWMLITE:true,SAMPLE_SCHEMA:false,DV:true,ORACLE_TEXT:true
+		dbOptions=JSERVER:true,IMEDIA:false,OMS:true,SPATIAL:true,CWMLITE:true,SAMPLE_SCHEMA:false,DV:true,ORACLE_TEXT:true
+		storageType=FS
+		diskGroupName=
+		asmsnmpPassword=
+		recoveryGroupName=
+		characterSet=AL32UTF8
+		nationalCharacterSet=AL16UTF16
+		registerWithDirService=false
+		dirServiceUserName=
+		dirServicePassword=
+		walletPassword=
+		listeners=
+		skipListenerRegistration=true
+		variablesFile=
+		variables=ORACLE_BASE_HOME=/u01/app/oracle/product/23.26.1/dbhome_1,DB_UNIQUE_NAME=appscdb,ORACLE_BASE=/u01/app/oracle,PDB_NAME=,DB_NAME=appscdb,ORACLE_HOME=/u01/app/oracle/product/23.26.1/dbhome_1,SID=appscdb
+		initParams=undo_tablespace=UNDOTBS1,enable_pluggable_database=true,sga_target=2979MB,db_block_size=8192BYTES,nls_language=AMERICAN,dispatchers=(PROTOCOL=TCP) (SERVICE=appscdbXDB),diagnostic_dest={ORACLE_BASE},control_files=("{ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/control01.ctl", "{ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME}/control02.ctl"),remote_login_passwordfile=EXCLUSIVE,processes=300,pga_aggregate_target=993MB,nls_territory=AMERICA,local_listener=LISTENER_APPSCDB,db_recovery_file_dest_size=14802MB,open_cursors=300,log_archive_format=%t_%s_%r.dbf,compatible=23.6.0,db_name=appscdb,db_recovery_file_dest={ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME}
+		enableArchive=true
+		useOMF=false
+		memoryPercentage=40
+		databaseType=MULTIPURPOSE
+		automaticMemoryManagement=false
+		totalMemory=0
 
-![oracle_database_so_si_002](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_002.png)
+###### CREATE netca.rsp response file
 
-![oracle_database_so_si_003](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_003.png)
-
-![oracle_database_so_si_004](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_004.png)
-
-![oracle_database_so_si_005](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_005.png)
-
-![oracle_database_so_si_006](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_006.png)
-
-![oracle_database_so_si_007](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_007.png)
-
-![oracle_database_so_si_008](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_008.png)
-
-![oracle_database_so_si_009](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_009.png)
-
-![oracle_database_so_si_010](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_010.png)
-
-![oracle_database_so_si_011](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_so_si_011.png)
+	[oracle@ol923ai ~]$ vi netca.rsp
+		[GENERAL]
+		RESPONSEFILE_VERSION="23.0"
+		CREATE_TYPE="CUSTOM"
+		INSTALLED_COMPONENTS={"server","net8","javavm"}
+		INSTALL_TYPE=""typical""
+		LISTENER_NUMBER=1
+		LISTENER_NAMES={"LISTENER"}
+		LISTENER_START=""LISTENER""
+		NAMING_METHODS={"TNSNAMES","ONAMES","HOSTNAME"}
+		NSN_NUMBER=1
+		NSN_NAMES={"EXTPROC_CONNECTION_DATA"}
+		NSN_SERVICE={"PLSExtProc"}
+		NSN_SERVICE={"PLSExtProc"}
+		NSN_PROTOCOLS={"TCP;HOSTNAME;1521"}
 
 ###### PRE REQUIREMENTS ORACLE ENVIRONMENT ( CONFIGURE HUGEPAGES FOR ORACLE DATABASE INSTANCE ) 
 
@@ -187,40 +298,11 @@
 
 ###### CREATE DATABASE 
 
-    [root@ol826ai ~]# xhost +
-    [oracle@ol826ai ~]$ export DISPLAY=:0.0	
-    [oracle@ol826ai ~]$ cd $ORACLE_HOME
-    [oracle@ol826ai ~]$ dbca
+	[oracle@ol923ai ~]$ dbca -silent -createDatabase -responseFile /home/oracle/dbca.rsp
 
-![oracle_database_dbca_si_001](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_dbca_si_001.png)
+###### CREATE LISTENER
 
-![oracle_database_dbca_si_002](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_dbca_si_002.png)
-
-![oracle_database_dbca_si_003](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_dbca_si_003.png)
-
-![oracle_database_dbca_si_004](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_dbca_si_004.png)
-
-![oracle_database_dbca_si_005](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_dbca_si_005.png)
-
-![oracle_database_dbca_si_006](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_dbca_si_006.png)
-
-![oracle_database_dbca_si_007](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_dbca_si_007.png)
-
-![oracle_database_dbca_si_008](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_dbca_si_008.png)
-
-![oracle_database_dbca_si_009](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_dbca_si_009.png)
-
-![oracle_database_dbca_si_010](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_dbca_si_010.png)
-
-![oracle_database_dbca_si_011](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_dbca_si_011.png)
-
-![oracle_database_dbca_si_012](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_dbca_si_012.png)
-
-![oracle_database_dbca_si_013](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_dbca_si_013.png)
-
-![oracle_database_dbca_si_014](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_dbca_si_014.png)
-
-![oracle_database_dbca_si_015](https://github.com/danilo01arrudal/Exated-Documentation/blob/main/Oracle_AI_Database_26ai/images/oracle_database_dbca_si_015.png)
+	[oracle@ol923ai ~]$ netca -silent -responsefile /home/oracle/netca.rsp
 
 ###### START LISTENER
 
